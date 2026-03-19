@@ -1,12 +1,17 @@
 using UnityEngine;
+using UnityEngine.Pool;
 
 public interface IBullet 
 {
-    public string id { get; }
+    string id { get; }
 
-    public void ResetState();
+    IObjectPool<GameObject> BulletPool { set; }
+
+    public void ResetState(BulletTypeScriptable type);
 
     public void Movement();
 
-    void DestroyBullet();
+    public void Deactivate();
+
+    public void Initialize(BulletTypeScriptable type);
 }

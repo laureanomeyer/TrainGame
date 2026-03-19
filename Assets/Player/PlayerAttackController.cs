@@ -4,10 +4,10 @@ using UnityEngine.InputSystem;
 public class PlayerAttackController : MonoBehaviour
 {
     [Header("Bullet Spawn")]
-    [SerializeField] Transform spawnPoint;
+    [SerializeField] private Transform spawnPoint;
 
     [Header("Weapon")]
-    [SerializeField] GameObject weaponItem;
+    [SerializeField] private GameObject weaponItem;
     private IWeapons weapon;
 
     void Start()
@@ -22,7 +22,6 @@ public class PlayerAttackController : MonoBehaviour
 
     void OnAttack(InputValue value)
     {
-        Debug.Log("Attack");
         Attack();
     }
 
