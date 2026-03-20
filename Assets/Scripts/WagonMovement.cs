@@ -20,8 +20,8 @@ public class WagonMovement : MonoBehaviour, IWagon
 
     void Move()
     {
-        transform.position = head.position;
-        transform.rotation = head.rotation;
+        transform.position = Vector3.MoveTowards(transform.position,head.position, speed * Time.deltaTime);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, head.rotation, speed * 10 * Time.deltaTime);
     }
     void Interact()
     {
