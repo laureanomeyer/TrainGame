@@ -24,16 +24,6 @@ public class BulletScript : MonoBehaviour, IBullet
         bc = GetComponent<BoxCollider>();
     }
 
-    public void Initialize(BulletTypeScriptable type)
-    {
-        bulletType = type;
-
-        
-        currentLife = bulletType.duration;
-
-        isActive = true;
-    }
-
     void Update()
     {
         if (isActive)
@@ -68,7 +58,6 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public void Deactivate()
     {
-        //Destroy(this.gameObject);
         if (!isActive) return;
 
         isActive = false;

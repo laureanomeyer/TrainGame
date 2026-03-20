@@ -43,7 +43,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void RotateToMouse()
     {
-        // Leemos la posicion del mouse directamente, sin depender de OnLook
+        // Lee la posicion del mouse directamente
         Vector2 mousePosition = Mouse.current.position.ReadValue();
 
         Ray ray = playerCamera.ScreenPointToRay(mousePosition);

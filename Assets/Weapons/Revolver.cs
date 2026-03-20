@@ -5,32 +5,20 @@ public class Revolver : MonoBehaviour, IWeapons
 {
     public string id => "revolver";
 
-    [Header("Bullet")]
-    [SerializeField] private GameObject bulletPrefap;
-
+    //Tipos de balas que utiliza el arma
     [Header("BulletType")]
     [SerializeField] private BulletTypeScriptable bulletScriptable;
 
-    //private BulletFactory bulletFactory;
+    //Referencia a la pool de balas
     private BulletPool bulletPool;
 
     public void Shoot(Transform spawnPoint)
     {
-        /*
-        if (bulletFactory == null)
-        {
-            bulletFactory = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletFactory>();
-        }
-        */
+        bulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletScriptable);
+    }
 
-        if (bulletPool == null)
-        {
-            bulletPool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
-        }
-
-        //GameObject bulletInstance = bulletFactory.Create(bulletPrefap.GetComponent<IBullet>().id);
-        //bulletInstance.GetComponent<BulletScript>().Initialize(bulletScriptable);
-
-        bulletPool.ShootObject(transform.position, spawnPoint.rotation, bulletScriptable);
+    public void SetPool(BulletPool pool)
+    {
+        bulletPool = pool;
     }
 }
