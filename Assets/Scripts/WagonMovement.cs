@@ -4,6 +4,7 @@ using UnityEngine;
 public class WagonMovement : MonoBehaviour, IWagon
 {
     [SerializeField] private Transform head;
+    [SerializeField] private Transform wagonObj;
     [SerializeField] private Transform tail;
     public Transform Tail => tail;
 
@@ -21,6 +22,8 @@ public class WagonMovement : MonoBehaviour, IWagon
     void Move()
     {
         transform.position = Vector3.MoveTowards(transform.position,head.position, speed * Time.deltaTime);
+        Quaternion rotation = new Quaternion(0f, head.rotation.y, 0f, 0f);
+
         transform.rotation = Quaternion.RotateTowards(transform.rotation, head.rotation, speed * 10 * Time.deltaTime);
     }
     void Interact()
