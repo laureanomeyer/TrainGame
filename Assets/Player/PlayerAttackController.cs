@@ -11,10 +11,12 @@ public class PlayerAttackController : MonoBehaviour
     private IWeapons weapon;
 
     private BulletPool pool;
+    private LookObjectToMouse lookToMouseController;
 
     void Start()
     {
         //se busca la pool de objetos
+        lookToMouseController = GetComponent<LookObjectToMouse>();
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
 
         //Se establece el arma equipada
@@ -24,7 +26,12 @@ public class PlayerAttackController : MonoBehaviour
 
     void Update()
     {
-        
+        AidToMouseDirection();
+    }
+
+    private void AidToMouseDirection()
+    {
+        spawnPoint.forward = lookToMouseController.GetMouseDirection(spawnPoint);
     }
 
     //Funcion utiliza por el Player Inputs para atacar 

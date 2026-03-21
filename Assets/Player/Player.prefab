@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 7116384346465008739}
   - component: {fileID: 3804712878829111598}
   - component: {fileID: 1084008011257188204}
+  - component: {fileID: 9173773505589081166}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -221,9 +222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   speed: 5
-  showRay: 1
-  rayColor: {r: 1, g: 0, b: 0, a: 1}
-  playerCamera: {fileID: 0}
 --- !u!114 &1084008011257188204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,6 +236,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackController
   spawnPoint: {fileID: 4376919442636921631}
   weaponItem: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
+--- !u!114 &9173773505589081166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6058667659620982090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9438af7420ecc047ba4c53081f768c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MousePosition
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &6947113026186938357
 GameObject:
   m_ObjectHideFlags: 0
