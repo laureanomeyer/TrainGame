@@ -4,16 +4,23 @@ public class TrainManager : MonoBehaviour
 {
     [SerializeField] private Transform tail;
     [SerializeField] private GameObject WagonPrefab;
-    float timer = 0;
-    
+
+    private void Start()
+    {
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+        CreateWagon();
+    }
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > 2) 
-        {
-            CreateWagon();
-            timer = 0;
-        }
+       
     }
     void CreateWagon()
     {

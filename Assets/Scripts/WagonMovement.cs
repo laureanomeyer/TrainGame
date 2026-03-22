@@ -4,14 +4,14 @@ using UnityEngine;
 public class WagonMovement : MonoBehaviour, IWagon
 {
     [SerializeField] private Transform head;
-    [SerializeField] private Transform wagonObj;
     [SerializeField] private Transform tail;
     public Transform Tail => tail;
 
+    private Transform targetTail;
     [SerializeField] private float speed;
-    public void Initialize(Transform head)
+    public void Initialize(Transform target)
     {
-        this.head = head;
+        this.targetTail = target;
     }
     
     void LateUpdate()
@@ -21,10 +21,11 @@ public class WagonMovement : MonoBehaviour, IWagon
 
     void Move()
     {
-        transform.position = Vector3.MoveTowards(transform.position,head.position, speed * Time.deltaTime);
-        Quaternion rotation = new Quaternion(0f, head.rotation.y, 0f, 0f);
+        if (targetTail == null) return;   
+        transform.position = targetTail.position;
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetTail.rotation, 0.07f);
+        tail.rotation = transform.rotation;
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, head.rotation, speed * 10 * Time.deltaTime);
     }
     void Interact()
     {
