@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] private Transform finalLoc;
-    [SerializeField] private Transform startLoc;
-    [SerializeField] private GameObject Tile;
+    [SerializeField] private SharedData sharedData;
+    [SerializeField] private Transform endLocation;
+    [SerializeField] private Transform startLocation;
+    private MapTile[] tiles;
 
     void Start()
     {
-        
+        endLocation = sharedData.tailPosition;
     }
 
     void Update()
@@ -18,10 +19,11 @@ public class MapManager : MonoBehaviour
 
     void Move()
     {
-        Tile.transform.position = Vector3.MoveTowards(Tile.transform.position, finalLoc.position, 10 * Time.deltaTime);
-        if (Vector3.Magnitude(finalLoc.position - Tile.transform.position) < 0.1f)
-        {
-            Tile.transform.position = startLoc.position;
-        }
+
+    }
+
+    void CreateTile()
+    {
+
     }
 }

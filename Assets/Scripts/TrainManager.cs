@@ -3,7 +3,9 @@ using UnityEngine;
 public class TrainManager : MonoBehaviour
 {
     [SerializeField] private Transform tail; //Final del tren
-    [SerializeField] private GameObject WagonPrefab; 
+    [SerializeField] private GameObject WagonPrefab;
+    [SerializeField] private SharedData sharedData;
+    public float GlobalSpeed => sharedData.speed;
 
     private void Start()
     {
@@ -31,5 +33,10 @@ public class TrainManager : MonoBehaviour
     {
         wagon.Initialize(head);
         tail = wagon.Tail;
+        sharedData.tailPosition = tail;
     }
+    public void ChangeGlobalSpeed()
+    {
+    }
+
 }
