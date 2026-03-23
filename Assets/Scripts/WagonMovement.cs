@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class WagonMovement : MonoBehaviour, IWagon
 {
-    [SerializeField] private Transform head;
+    //Referencias a los transforms
     [SerializeField] private Transform tail;
+    private Transform targetTail;
     public Transform Tail => tail;
 
-    private Transform targetTail;
     [SerializeField] private float speed;
-    public void Initialize(Transform target)
+    public void Initialize(Transform target) //Setea la cabeza de los vagones
     {
         this.targetTail = target;
     }
@@ -22,9 +22,9 @@ public class WagonMovement : MonoBehaviour, IWagon
     void Move()
     {
         if (targetTail == null) return;   
-        transform.position = targetTail.position;
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetTail.rotation, 0.07f);
-        tail.rotation = transform.rotation;
+        transform.position = targetTail.position; //Se pega a la cola del vagon de adelante
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetTail.rotation, 0.07f); //Copia la rotacion de la cola del vagon de adelante en menor escala
+        tail.rotation = transform.rotation; //Fija la rotación de su cola
 
     }
     void Interact()
