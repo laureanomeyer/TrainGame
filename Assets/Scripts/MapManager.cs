@@ -10,11 +10,6 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
 
-    [SerializeField] private Vector3 moveDirection = Vector3.left;
-
-
-    private MapTile[] tiles;
-
     void Start()
     {
         endLocation = sharedData.tailPosition;
@@ -23,7 +18,11 @@ public class MapManager : MonoBehaviour
 
         for (int i = 0; i < tilesMap.Count; i++) 
         {
-            tilesMap[i].PlaceAfter(tilesMap[i - 1]);
+            if (!tilesMap[i].IsTail)
+            {
+                tilesMap[i].SetHead(tilesMap[i - 1].Tail);
+                tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
+            }
         }
     }
 
@@ -37,11 +36,10 @@ public class MapManager : MonoBehaviour
 
     void MoveTiles()
     {
-        float movement = sharedData.speed * Time.deltaTime;
-        Vector3 delta = moveDirection.normalized * sharedData.speed * Time.deltaTime;
         foreach (MapTile tile in tilesMap) 
         {
-            tile.transform.position += delta;
+            tile.MoveHead(endLocation, sharedData.speed);
+            tile.Move();
         }
     }
 

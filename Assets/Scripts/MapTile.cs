@@ -30,11 +30,18 @@ public class MapTile : MonoBehaviour
             transform.position = head.position;
         }
     }
+    public void MoveHead(Transform target, float speed)
+    {
+        if (isTail) 
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+        }
+        
+    }
 
     public void PlaceHeadAt(Vector3 worldPosition)
     {
-        Vector3 offset = transform.position - head.position;
-        transform.position = worldPosition + offset;
+        transform.position = worldPosition;
     }
 
     public void PlaceAfter(MapTile otherTile)
@@ -45,6 +52,10 @@ public class MapTile : MonoBehaviour
     {
         Debug.Log("Hola");
         return head.position.x < recycleX;
+    }
+    public void SetHead (Transform head)
+    {
+        this.head = head;
     }
 
  
