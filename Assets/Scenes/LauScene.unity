@@ -514,6 +514,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2119014215}
   - component: {fileID: 2119014216}
+  - component: {fileID: 2119014217}
   m_Layer: 0
   m_Name: TilesMap
   m_TagString: Untagged
@@ -553,6 +554,18 @@ MonoBehaviour:
   endLocation: {fileID: 0}
   startLocation: {fileID: 902026377}
   tilesMap: []
+--- !u!114 &2119014217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2119014214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b31f37c28564bb429d59b00f3791cc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
 --- !u!1001 &5581601825840868483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -600,6 +613,10 @@ PrefabInstance:
     - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2391027984473339525, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+      propertyPath: fuelOptimizer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6346519829465554337, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_Layer

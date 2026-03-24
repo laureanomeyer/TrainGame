@@ -5,14 +5,13 @@ using UnityEngine.InputSystem;
 
 public class LocomotiveMovement : MonoBehaviour, IWagon
 {
-    //[SerializeField] private float baseSpeed;
-    [SerializeField] private SharedData speedData;
-
     [SerializeField] private float maxFuel = 100f;
     [SerializeField] private float currentFuel = 100f;
-    [SerializeField] private float fuelUseXSecond = 5f;
+    [SerializeField] private float fuelOptimizer = 1;
+    [SerializeField] private float fuelUseXSecond;
     [SerializeField] private Vector3 moveDirection = Vector3.right;
     [SerializeField] private float baseSpeed = 5f;
+    private float actualSpeed;
     [SerializeField] private float debugFuelAmount = 20f;
     public float CurrentFuel => currentFuel;
     public float MaxFuel => maxFuel;
@@ -21,9 +20,11 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     void Start()
     {
         currentFuel = Mathf.Clamp(currentFuel, 0f, maxFuel);
-        //speedData.speed = baseSpeed;
+        GameManager.Instance.SetSpeed(baseSpeed);
+        actualSpeed = baseSpeed;
         UpdateSharedSpeed();
 
+       fuelUseXSecond = actualSpeed / ( 2 * fuelOptimizer);
     }
 
     void Update()
@@ -36,27 +37,16 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     {
         if (!HasFuel) 
         {
-            speedData.speed = 0f;
+            GameManager.Instance.SetSpeed(0);
             return;
         }
-        speedData.speed = baseSpeed;
-        transform.position += moveDirection.normalized * speedData.speed * Time.deltaTime;
-        ConsumeFuel(fuelUseXSecond * Time.deltaTime);
-
-        
+        ConsumeFuel(fuelUseXSecond * Time.deltaTime);  
     }
 
     void Interact()
     {
 
     }
-
-    /*void ChangeSpeed(float additive)
-    {
-        baseSpeed = Mathf.Max(0f, baseSpeed + additive);
-        //speedData.speed += additive;
-        UpdateSharedSpeed();
-    }*/
 
     public void AddFuel(float amount)
     {
@@ -78,15 +68,22 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
         UpdateSharedSpeed();
     }
 
+    private void ModifySpeed(float speedToAdd)
+    {
+        actualSpeed += speedToAdd;
+        fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
+        UpdateSharedSpeed();
+    }
+
     private void UpdateSharedSpeed()
     {
         if (HasFuel) 
         {
-            speedData.speed = baseSpeed;
+            GameManager.Instance.SetSpeed(actualSpeed);
         }
         else
         {
-            speedData.speed = 0f;
+            GameManager.Instance.SetSpeed(0);
         }
     }
 
@@ -95,6 +92,7 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
             AddFuel(debugFuelAmount);
+            ModifySpeed(10);
         }
         if (Keyboard.current.tKey.wasPressedThisFrame)
         {

@@ -18,9 +18,9 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
-        endLocation = sharedData.tailPosition;
+        endLocation = GameManager.Instance.TailPosition;
 
-        for (int i = 0; i < sharedData.wagonList.Count; i++)
+        for (int i = 0; i < GameManager.Instance.WagonList.Count; i++)
         {
             GenerateMap();
         }
@@ -49,7 +49,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (MapTile tile in tilesMap) 
         {
-            tile.MoveHead(endLocation, sharedData.speed);
+            tile.MoveHead(endLocation, GameManager.Instance.Speed);
             tile.Move();
         }
     }
@@ -58,7 +58,7 @@ public class MapManager : MonoBehaviour
     {
         if (tilesMap.Count == 0) return;
 
-        if (Vector3.Distance (head.transform.position, endLocation.transform.position) < 0.1f)
+        if (Vector3.Distance (head.Tail.transform.position, endLocation.transform.position) < 0.1f)
         {
             tilesMap.RemoveAt(0);
             head.SetUp(tilesMap[tilesMap.Count-1].Tail);

@@ -8,8 +8,6 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private SharedData sharedData;
 
     private List<IWagon> wagonsList;
-
-    public float GlobalSpeed => sharedData.speed;
     public List<IWagon> WagonList => wagonsList;
 
     private void Start()
@@ -37,16 +35,12 @@ public class TrainManager : MonoBehaviour
         WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
-        sharedData.wagonList = wagonsList;
+        GameManager.Instance.SetWagonList(wagonsList);
     }
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {
         wagon.Initialize(head);
         tail = wagon.Tail;
-        sharedData.tailPosition = tail;
+        GameManager.Instance.SetTrainTail(tail);
     }
-    public void ChangeGlobalSpeed()
-    {
-    }
-
 }
