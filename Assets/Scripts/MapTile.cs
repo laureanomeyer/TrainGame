@@ -13,7 +13,7 @@ public class MapTile : MonoBehaviour
 
     public float Width => Vector3.Distance(head.position, tail.position);   
 
-    public void setUp(Transform followTransform)
+    public void SetUp(Transform followTransform)
     {
         head = followTransform;
         isTail = false;
@@ -50,8 +50,7 @@ public class MapTile : MonoBehaviour
     }
     public bool IsPastPoint(float recycleX)
     {
-        Debug.Log("Hola");
-        return head.position.x < recycleX;
+        return transform.position.x < recycleX;
     }
     public void SetHead (Transform head)
     {

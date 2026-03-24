@@ -10,13 +10,15 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
 
+    private float timer = 0;
+
+
     void Start()
     {
         endLocation = sharedData.tailPosition;
-
         tilesMap[0].PlaceHeadAt(startLocation.position);
 
-        for (int i = 0; i < tilesMap.Count; i++) 
+        for (int i = 1; i < tilesMap.Count; i++)  // empieza en 1
         {
             if (!tilesMap[i].IsTail)
             {
@@ -26,11 +28,17 @@ public class MapManager : MonoBehaviour
         }
     }
 
+
     void Update()
     {
+
+        timer += Time.deltaTime;
         MoveTiles();
-        RecycleTile();
-        Debug.Log(sharedData.tailPosition.position.x);
+        if (timer > 3) 
+        {
+            RecycleTile();
+        }
+        
 
     }
 
@@ -47,16 +55,26 @@ public class MapManager : MonoBehaviour
     {
         if (tilesMap.Count == 0) return;
 
-        MapTile firstTile = tilesMap[0];
-
-        if (firstTile.IsPastPoint(sharedData.tailPosition.position.x))
+        for (int i = 0; i < tilesMap.Count; i++)
         {
-            MapTile lastTile = tilesMap[tilesMap.Count - 1];
+            if (tilesMap[i].IsPastPoint(sharedData.tailPosition.position.x)) 
+            {
+                MapTile recycledTile = tilesMap[i];
 
-            firstTile.PlaceAfter(lastTile);
-            tilesMap.RemoveAt(0);
-            tilesMap.Add(firstTile);
+                tilesMap.RemoveAt(i);
+                tilesMap.Insert(0, recycledTile);
 
-        }  
+                recycledTile.PlaceHeadAt(startLocation.position);
+
+                tilesMap[0].SetTail();
+
+                for (int j = 1; j < tilesMap.Count; j++)
+                {
+                    tilesMap[j].SetUp(tilesMap[j - 1].Tail);
+                }
+
+                break;
+            }
+        }
     }
 }
