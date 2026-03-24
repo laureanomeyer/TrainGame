@@ -1,14 +1,21 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TrainManager : MonoBehaviour
 {
     [SerializeField] private Transform tail; //Final del tren
     [SerializeField] private GameObject WagonPrefab;
     [SerializeField] private SharedData sharedData;
+
+    private List<IWagon> wagonsList;
+
     public float GlobalSpeed => sharedData.speed;
+    public List<IWagon> WagonList => wagonsList;
 
     private void Start()
     {
+        wagonsList = new List<IWagon>();
+
         CreateWagon();
         CreateWagon();
         CreateWagon();
@@ -27,7 +34,10 @@ public class TrainManager : MonoBehaviour
     void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
     {
         GameObject WagonInstance = Instantiate(WagonPrefab);
-        AddWagon(tail, WagonInstance.GetComponent<WagonMovement>());
+        WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
+        AddWagon(tail, wagon);
+        wagonsList.Add(wagon);
+        sharedData.wagonList = wagonsList;
     }
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {

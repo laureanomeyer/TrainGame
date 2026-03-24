@@ -2,13 +2,16 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 public class MapManager : MonoBehaviour
 {
     [SerializeField] private SharedData sharedData;
+    [SerializeField] private GameObject tilePrefab;
     [SerializeField] private Transform endLocation;
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
+    private MapTile head;
 
     private float timer = 0;
 
@@ -16,30 +19,30 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         endLocation = sharedData.tailPosition;
-        tilesMap[0].PlaceHeadAt(startLocation.position);
+
+        for (int i = 0; i < sharedData.wagonList.Count; i++)
+        {
+            GenerateMap();
+        }
 
         for (int i = 1; i < tilesMap.Count; i++)  // empieza en 1
         {
-            if (!tilesMap[i].IsTail)
+            if (!tilesMap[i].IsMapHead)
             {
-                tilesMap[i].SetHead(tilesMap[i - 1].Tail);
+                tilesMap[i].SetUp(tilesMap[i - 1].Tail);
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
         }
     }
 
-
     void Update()
     {
-
         timer += Time.deltaTime;
         MoveTiles();
         if (timer > 3) 
         {
             RecycleTile();
         }
-        
-
     }
 
     void MoveTiles()
@@ -55,26 +58,29 @@ public class MapManager : MonoBehaviour
     {
         if (tilesMap.Count == 0) return;
 
-        for (int i = 0; i < tilesMap.Count; i++)
+        if (Vector3.Distance (head.transform.position, endLocation.transform.position) < 0.1f)
         {
-            if (tilesMap[i].IsPastPoint(sharedData.tailPosition.position.x)) 
-            {
-                MapTile recycledTile = tilesMap[i];
-
-                tilesMap.RemoveAt(i);
-                tilesMap.Insert(0, recycledTile);
-
-                recycledTile.PlaceHeadAt(startLocation.position);
-
-                tilesMap[0].SetTail();
-
-                for (int j = 1; j < tilesMap.Count; j++)
-                {
-                    tilesMap[j].SetUp(tilesMap[j - 1].Tail);
-                }
-
-                break;
-            }
+            tilesMap.RemoveAt(0);
+            head.SetUp(tilesMap[tilesMap.Count-1].Tail);
+            tilesMap.Add(head);
+            head = tilesMap[0];
+            tilesMap[0].SetTail();
         }
+    }
+
+    void GenerateMap()
+    {
+        GameObject tile = Instantiate(tilePrefab);
+        MapTile mapTile = tile.GetComponent<MapTile>();
+        if (tilesMap.Count == 0) 
+        {
+            mapTile.SetTail();
+            head = mapTile;
+        }
+        else
+        {
+            mapTile.SetUp(tilesMap[tilesMap.Count - 1].Tail);
+        }
+        tilesMap.Add(mapTile);
     }
 }

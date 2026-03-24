@@ -2,60 +2,40 @@ using UnityEngine;
 
 public class MapTile : MonoBehaviour
 {
-    [SerializeField] private bool isTail;
+    [SerializeField] private bool isMapHead;
     [SerializeField] private Transform head;
     [SerializeField] private Transform tail;
 
     public Transform Tail => tail;
     public Transform Head => head;
 
-    public bool IsTail => isTail;   
+    public bool IsMapHead => isMapHead;   
 
     public float Width => Vector3.Distance(head.position, tail.position);   
 
     public void SetUp(Transform followTransform)
     {
         head = followTransform;
-        isTail = false;
+        isMapHead = false;
     }
     public void SetTail()
     {
-        isTail = true;
+        isMapHead = true;
         head = null;
     }
     public void Move()
     {
-        if (!isTail)
+        if (!isMapHead)
         {
             transform.position = head.position;
         }
     }
     public void MoveHead(Transform target, float speed)
     {
-        if (isTail) 
+        if (isMapHead) 
         {
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
         }
         
     }
-
-    public void PlaceHeadAt(Vector3 worldPosition)
-    {
-        transform.position = worldPosition;
-    }
-
-    public void PlaceAfter(MapTile otherTile)
-    {
-        PlaceHeadAt(otherTile.Tail.position);
-    }
-    public bool IsPastPoint(float recycleX)
-    {
-        return transform.position.x < recycleX;
-    }
-    public void SetHead (Transform head)
-    {
-        this.head = head;
-    }
-
- 
 }

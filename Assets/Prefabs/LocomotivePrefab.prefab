@@ -121,8 +121,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1432992804342217495}
-  - component: {fileID: 5926487651241785347}
   - component: {fileID: 6355820676514034549}
+  - component: {fileID: 2391027984473339525}
   m_Layer: 0
   m_Name: LocomotivePrefab
   m_TagString: Untagged
@@ -146,21 +146,6 @@ Transform:
   - {fileID: 4494156972422177445}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5926487651241785347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7750482621701771139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ebf53b9cd01b64fa1de7a1bbc9381b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  finalLoc: {fileID: 0}
-  startLoc: {fileID: 0}
-  Tile: {fileID: 0}
 --- !u!114 &6355820676514034549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,7 +159,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainManager
   tail: {fileID: 6399958636989872220}
-  WagonPrefab: {fileID: 0}
+  WagonPrefab: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  sharedData: {fileID: 11400000, guid: 114692e88939ca246ace1bf769604f43, type: 2}
+--- !u!114 &2391027984473339525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6dbde402c9b55048b7b699b3b396e80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocomotiveMovement
+  baseSpeed: 20
+  speedData: {fileID: 11400000, guid: 114692e88939ca246ace1bf769604f43, type: 2}
 --- !u!1001 &4167178248954627406
 PrefabInstance:
   m_ObjectHideFlags: 0
