@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2298694450790059078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7258263255524300021}
+  - component: {fileID: 4347391575282356394}
+  m_Layer: 0
+  m_Name: Wagon right wall Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7258263255524300021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2298694450790059078}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: -0.49999997, z: -0.5, w: -0.5}
+  m_LocalPosition: {x: 9.14, y: 4.58, z: -0.06}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3155765260527467040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4347391575282356394
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2298694450790059078}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.11087798, y: 1.3842387, z: 16.594305}
+  m_Center: {x: 0.052480225, y: 0.6704577, z: -0.8430691}
 --- !u!1 &3221274974295192296
 GameObject:
   m_ObjectHideFlags: 0
@@ -45,10 +98,114 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96f47f7cbf95ce0469f31864b1f4edb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WagonMovement
-  head: {fileID: 8917738351512944331}
   tail: {fileID: 8613865420993095345}
-  spacing: 20
   speed: 100
+--- !u!1 &6687713990175208699
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5801940310202737341}
+  - component: {fileID: 350560518496160149}
+  m_Layer: 0
+  m_Name: Wagon floor Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5801940310202737341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6687713990175208699}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.67, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3155765260527467040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &350560518496160149
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6687713990175208699}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.44012, y: 9.119027, z: 0.15133801}
+  m_Center: {x: -1.3907208, y: -0.013293743, z: -0.009329677}
+--- !u!1 &8072523016144029896
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3848222974809308152}
+  - component: {fileID: 2968443622511949849}
+  m_Layer: 0
+  m_Name: Wagon left wall Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3848222974809308152
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8072523016144029896}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: -0.49999997, z: -0.5, w: -0.5}
+  m_LocalPosition: {x: 9.14, y: -4.68, z: -0.06}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3155765260527467040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2968443622511949849
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8072523016144029896}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.11087798, y: 1.3842387, z: 16.594305}
+  m_Center: {x: 0.052480225, y: 0.6704577, z: -0.8430691}
 --- !u!1001 &1625634570731117475
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,7 +308,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4414915010850201987, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5801940310202737341}
+    - targetCorrespondingSourceObject: {fileID: 4414915010850201987, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3848222974809308152}
+    - targetCorrespondingSourceObject: {fileID: 4414915010850201987, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7258263255524300021}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
 --- !u!4 &1226618994698009672 stripped
@@ -159,13 +325,13 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
   m_PrefabInstance: {fileID: 1625634570731117475}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &3155765260527467040 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4414915010850201987, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
+  m_PrefabInstance: {fileID: 1625634570731117475}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8613865420993095345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2232110922815128302, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
-  m_PrefabInstance: {fileID: 1625634570731117475}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8917738351512944331 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7876023681238672744, guid: 2302f1d1637c4d948890c8f90eaafa8d, type: 3}
   m_PrefabInstance: {fileID: 1625634570731117475}
   m_PrefabAsset: {fileID: 0}
