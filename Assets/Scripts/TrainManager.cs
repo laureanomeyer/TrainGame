@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class TrainManager : MonoBehaviour
 {
     [SerializeField] private Transform tail; //Final del tren
+    private WagonMovement lastWagon;
     [SerializeField] private GameObject WagonPrefab;
     [SerializeField] private SharedData sharedData;
 
@@ -33,6 +34,7 @@ public class TrainManager : MonoBehaviour
     {
         GameObject WagonInstance = Instantiate(WagonPrefab);
         WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
+
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
         GameManager.Instance.SetWagonList(wagonsList);
@@ -40,7 +42,16 @@ public class TrainManager : MonoBehaviour
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {
         wagon.Initialize(head);
+
+        if (lastWagon)
+        {
+            lastWagon.wagonBack.SetActive(false);
+        }
+        
         tail = wagon.Tail;
+        wagon.wagonBack.SetActive(true);
         GameManager.Instance.SetTrainTail(tail);
+
+        lastWagon = wagon;
     }
 }

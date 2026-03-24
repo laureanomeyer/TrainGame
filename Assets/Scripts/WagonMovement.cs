@@ -9,6 +9,9 @@ public class WagonMovement : MonoBehaviour, IWagon
     public Transform Tail => tail;
 
     [SerializeField] private float speed;
+
+    [SerializeField] public GameObject wagonBack;
+
     public void Initialize(Transform target) //Setea la cabeza de los vagones
     {
         this.targetTail = target;
