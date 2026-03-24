@@ -18,11 +18,9 @@ public class LookObjectToMouse : MonoBehaviour
         var (success, position) = GetMousePosition();
         if (success)
         {
-            // Direction is usually normalized, 
-            // but it does not matter in this case.
+
             Vector3 direction = position - objectTransform.position;
 
-            // Make the transform look at the mouse position.
             return direction;
         }
         else
