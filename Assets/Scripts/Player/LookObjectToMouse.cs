@@ -16,17 +16,9 @@ public class LookObjectToMouse : MonoBehaviour
     public Vector3 GetMouseDirection(Transform objectTransform)
     {
         var (success, position) = GetMousePosition();
-        if (success)
-        {
 
-            Vector3 direction = position - objectTransform.position;
-
-            return direction;
-        }
-        else
-        {
-            return Vector3.zero;
-        }
+        Vector3 direction = position - objectTransform.position;
+        return direction;
     }
 
     private (bool success, Vector3 position) GetMousePosition()

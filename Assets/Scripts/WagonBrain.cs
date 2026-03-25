@@ -9,6 +9,9 @@ public class WagonBrain : MonoBehaviour
     [SerializeField] private string wagonType;
     private WagonHP hpController;
 
+    [SerializeField] private Material materialDeVagonDestruido;
+    [SerializeField] private Renderer rendererWagon;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,6 +30,11 @@ public class WagonBrain : MonoBehaviour
     {
         hpController.TakeDamage(damageAmount);
         Debug.Log(hpController.CurrentHp);
+
+        if (hpController.CurrentHp <= 0)
+        {
+            rendererWagon.material = materialDeVagonDestruido;
+        }
     }
 
     public void Repair(float repairAmount)
