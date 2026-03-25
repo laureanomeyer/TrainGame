@@ -282,9 +282,11 @@ GameObject:
   - component: {fileID: 1432992804342217495}
   - component: {fileID: 6355820676514034549}
   - component: {fileID: 2391027984473339525}
+  - component: {fileID: 2900975310691610324}
+  - component: {fileID: 1038731131388850925}
   m_Layer: 0
   m_Name: LocomotivePrefab
-  m_TagString: Untagged
+  m_TagString: Train
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -332,8 +334,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6dbde402c9b55048b7b699b3b396e80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveMovement
-  baseSpeed: 20
-  speedData: {fileID: 11400000, guid: 114692e88939ca246ace1bf769604f43, type: 2}
+  maxFuel: 100
+  currentFuel: 100
+  fuelOptimizer: 10
+  fuelUseXSecond: 0
+  moveDirection: {x: 1, y: 0, z: 0}
+  baseSpeed: 7.5
+--- !u!114 &2900975310691610324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10cba5d7d70bf44bbec7e28b6a7175b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocomotiveBrain
+  hp: 10
+  currentHp: 0
+  defense: 0
+  wagonType: 
+  materialDeVagonDestruido: {fileID: 0}
+  rendererWagon: {fileID: 0}
+--- !u!65 &1038731131388850925
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10.940067, y: 3.161767, z: 15.900163}
+  m_Center: {x: -0.2065754, y: 1.0808835, z: 7.806545}
 --- !u!1001 &4167178248954627406
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!23 &288066715 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5053052488372952912, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  m_PrefabInstance: {fileID: 5581601825840868483}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &301139764
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,22 +935,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2391027984473339525, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: baseSpeed
-      value: 7.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2391027984473339525, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: fuelOptimizer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6346519829465554337, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7140174118155908298, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
+    - target: {fileID: 2900975310691610324, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+      propertyPath: rendererWagon
+      value: 
+      objectReference: {fileID: 288066715}
+    - target: {fileID: 2900975310691610324, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+      propertyPath: materialDeVagonDestruido
+      value: 
+      objectReference: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
     - target: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_Name
       value: LocomotivePrefab

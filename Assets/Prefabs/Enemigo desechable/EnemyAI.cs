@@ -172,7 +172,12 @@ public class EnemyAI : MonoBehaviour
         }
         if (other.gameObject.CompareTag("Train"))
         {
-            other.GetComponent<WagonBrain>().TakeDamage(10);
+            other.TryGetComponent<WagonBrain>(out WagonBrain wagonBrain);
+            if (wagonBrain != null)
+            wagonBrain.TakeDamage(10);
+            other.TryGetComponent<LocomotiveBrain>(out LocomotiveBrain locomotiveBrain);
+            if(locomotiveBrain != null)
+            locomotiveBrain.TakeDamage(10);
         }
     }
 

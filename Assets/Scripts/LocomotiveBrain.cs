@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class WagonBrain : MonoBehaviour
+public class LocomotiveBrain : MonoBehaviour
 {
 
     [SerializeField] private float hp;
@@ -44,5 +45,6 @@ public class WagonBrain : MonoBehaviour
     public void BreakDown()
     {
         rendererWagon.material = materialDeVagonDestruido;
+        SceneManager.LoadScene("LauScene");
     }
 }

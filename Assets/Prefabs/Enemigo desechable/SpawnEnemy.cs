@@ -26,7 +26,6 @@ public class EnemySpawner : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, train.transform.position);
 
-        Debug.Log(distance);
         if (distance <= activationDistance)
         {
             timer += Time.deltaTime;

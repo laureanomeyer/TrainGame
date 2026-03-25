@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class WagonHP : IDamagable
@@ -6,16 +7,18 @@ public class WagonHP : IDamagable
     private float currentHp;
     private float defense;
     private bool isBroken;
+    private Action die;
 
     public bool IsBroken => isBroken;
     public float CurrentHp => currentHp;
 
-    public WagonHP(float hp, float defense)
+    public WagonHP(float hp, float defense, Action deathAction)
     {
         this.maxHp = hp;
         currentHp = maxHp;
         this.defense = defense;
         isBroken = false;
+        die = deathAction;
     }
 
     public void TakeDamage(float damageToTake) 
@@ -36,5 +39,9 @@ public class WagonHP : IDamagable
     {
         isBroken = true;
         Debug.Log("BrokenWagon!");
+    }
+    public void BreakDown() 
+    {
+        die();
     }
 }
