@@ -33,11 +33,14 @@ public class MapTile : MonoBehaviour
     }
     public void MoveHead(Transform target, float speed)
     {
-        if (isMapHead) 
+        if (isMapHead)
         {
-            Vector3 adjustedTarget = new Vector3 (target.transform.position.x - offset, target.transform.position.y, target.transform.position.z);
+            Vector3 adjustedTarget = new Vector3(
+                target.position.x - offset,
+                transform.position.y,
+                transform.position.z
+            );
             transform.position = Vector3.MoveTowards(transform.position, adjustedTarget, speed * Time.deltaTime);
         }
-        
     }
 }
