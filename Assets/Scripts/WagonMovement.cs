@@ -30,8 +30,5 @@ public class WagonMovement : MonoBehaviour, IWagon
         tail.rotation = transform.rotation; //Fija la rotación de su cola
 
     }
-    void Interact()
-    {
 
-    }
 }

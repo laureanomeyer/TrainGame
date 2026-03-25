@@ -1,0 +1,40 @@
+using UnityEngine;
+
+public class WagonHP : IDamagable
+{
+    private float maxHp;
+    private float currentHp;
+    private float defense;
+    private bool isBroken;
+
+    public bool IsBroken => isBroken;
+    public float CurrentHp => currentHp;
+
+    public WagonHP(float hp, float defense)
+    {
+        this.maxHp = hp;
+        currentHp = maxHp;
+        this.defense = defense;
+        isBroken = false;
+    }
+
+    public void TakeDamage(float damageToTake) 
+    {
+        currentHp -= damageToTake * 100 / (100 + defense);
+
+        if (currentHp < 0) 
+        {
+            Break();
+        }
+
+    }
+    public void Repair(float deltaTime, float repairAmount) 
+    {
+        currentHp += repairAmount * deltaTime;
+    }
+    public void Break() 
+    {
+        isBroken = true;
+        Debug.Log("BrokenWagon!");
+    }
+}

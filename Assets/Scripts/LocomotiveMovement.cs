@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
 public class LocomotiveMovement : MonoBehaviour, IWagon
 {
@@ -12,7 +11,6 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     [SerializeField] private Vector3 moveDirection = Vector3.right;
     [SerializeField] private float baseSpeed = 5f;
     private float actualSpeed;
-    [SerializeField] private float debugFuelAmount = 20f;
     public float CurrentFuel => currentFuel;
     public float MaxFuel => maxFuel;
     public bool HasFuel => currentFuel > 0f;
@@ -29,7 +27,6 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
 
     void Update()
     {
-        HandleDebugFuel();
         Move();
     }
 
@@ -42,12 +39,6 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
         }
         ConsumeFuel(fuelUseXSecond * Time.deltaTime);  
     }
-
-    void Interact()
-    {
-
-    }
-
     public void AddFuel(float amount)
     {
         currentFuel = Mathf.Clamp(currentFuel + amount, amount, maxFuel);
@@ -87,16 +78,4 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
         }
     }
 
-    private void HandleDebugFuel()
-    {
-        if (Keyboard.current.rKey.wasPressedThisFrame)
-        {
-            AddFuel(debugFuelAmount);
-            ModifySpeed(10);
-        }
-        if (Keyboard.current.tKey.wasPressedThisFrame)
-        {
-            RemoveFuel(debugFuelAmount);
-        }
-    }
 }
