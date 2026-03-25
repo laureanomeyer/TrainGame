@@ -14,10 +14,13 @@ public class MapManager : MonoBehaviour
     private MapTile head;
 
     private float timer = 0;
+    private bool initialized = false;
+   
 
-
-    void Start()
+    public void Initialize(Transform startLocation)
     {
+        this.startLocation = startLocation;
+
         endLocation = GameManager.Instance.TailPosition;
 
         for (int i = 0; i < GameManager.Instance.WagonList.Count; i++)
@@ -33,13 +36,15 @@ public class MapManager : MonoBehaviour
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
         }
+        initialized = true;
     }
-
     void Update()
     {
+        if (!initialized) return;
+
         timer += Time.deltaTime;
         MoveTiles();
-        if (timer > 3) 
+        if (timer > 3)
         {
             RecycleTile();
         }
