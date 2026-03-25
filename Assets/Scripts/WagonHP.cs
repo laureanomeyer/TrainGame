@@ -38,7 +38,6 @@ public class WagonHP : IDamagable
     public void Break() 
     {
         isBroken = true;
-        Debug.Log("BrokenWagon!");
     }
     public void BreakDown() 
     {

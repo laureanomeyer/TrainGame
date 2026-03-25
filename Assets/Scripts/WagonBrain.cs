@@ -12,6 +12,9 @@ public class WagonBrain : MonoBehaviour
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
 
+    public float CurrentHp => currentHp;
+    public float MaxHp => hp;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
