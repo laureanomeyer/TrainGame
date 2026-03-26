@@ -294,11 +294,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10cba5d7d70bf44bbec7e28b6a7175b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveBrain
-  hp: 10
+  hp: 150
   currentHp: 0
   defense: 0
   wagonType: 
-  materialDeVagonDestruido: {fileID: 0}
+  materialDeVagonDestruido: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
   rendererWagon: {fileID: 0}
 --- !u!65 &1038731131388850925
 BoxCollider:
@@ -505,6 +505,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 1d2c70ff60be5154d9b618fd70f22b3b, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4769601377362182737, guid: 1d2c70ff60be5154d9b618fd70f22b3b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.007
       objectReference: {fileID: 0}
     - target: {fileID: -4769601377362182737, guid: 1d2c70ff60be5154d9b618fd70f22b3b, type: 3}
       propertyPath: m_LocalRotation.w
