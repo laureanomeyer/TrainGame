@@ -13,30 +13,19 @@ public class PlayerInteractions : MonoBehaviour
     private float maxAmountProgressBarFuel;
     [SerializeField] private float currentProgress;
     [SerializeField] private float currentProgressFuel;
-    [SerializeField] private bool isInWagon;
     [SerializeField] private LocomotiveMovement locomotiveMovement;
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        isInWagon = false;
         maxAmountProgressBar = 100;
-        currentProgress = maxAmountProgressBar;
-        
+        currentProgress = maxAmountProgressBar;       
     }
 
     // Update is called once per frame
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.R)) 
-        {
-            Repair();
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Interact();
-        }*/
         currentProgressFuel = locomotiveMovement.CurrentFuel / locomotiveMovement.MaxFuel;
         progressBarFuel.value = currentProgressFuel;
 
@@ -44,8 +33,7 @@ public class PlayerInteractions : MonoBehaviour
         {
             currentProgress = currentWagon.CurrentHp  / currentWagon.MaxHp;
             progressBar.value = currentProgress;
-        }
-        
+        }       
     }
 
     public void SetUpWagonHP()
@@ -61,20 +49,9 @@ public class PlayerInteractions : MonoBehaviour
         {
             other.TryGetComponent<WagonBrain>(out WagonBrain wagon);
             currentWagon = wagon;
-            isInWagon = true;
             SetUpWagonHP();
-        }
-        
+        }       
     }
-    /*private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Train"))
-        {
-            currentWagon = null;
-            Debug.Log("Outside of Wagon");
-            isInWagon = false;
-        }
-    }*/
 
     public void OnInteract()
     {
@@ -88,19 +65,15 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (currentWagon != null) 
         {
-
-        currentWagon.TakeDamage(10);
+            currentWagon.TakeDamage(10);
         }
     }
     void Repair()
     {
         if (currentWagon != null) 
         {
-        currentWagon.Repair(repairCapacity);
+            currentWagon.Repair(repairCapacity);
 
         }
     }
-
-
-
 }
