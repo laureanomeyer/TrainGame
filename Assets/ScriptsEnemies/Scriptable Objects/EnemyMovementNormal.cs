@@ -7,14 +7,20 @@ public class EnemyMovementNormal : EnemyMovementSO
 {
     public float desiredDistance = 5f;
     public float tolerance = 0.5f;
+    private Transform train;
 
     public override void Move(Enemy enemy)
     {
-        GameObject train = enemy.Target; //Temporal. Cambiar cuando se mergee con el train de lau
+        train = enemy.Target; //Temporal. Cambiar cuando se mergee con el train de lau
 
-        if (train == null) return;
+        if (train == null)
+        {
+            Debug.Log("estoy seco hermano");
+            return;
 
-        Vector3 dir = train.transform.position - enemy.transform.position;
+        }
+
+        Vector3 dir = train.position - enemy.transform.position;
         float distance = dir.magnitude;
 
         dir.Normalize();

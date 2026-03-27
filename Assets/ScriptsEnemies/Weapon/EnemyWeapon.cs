@@ -11,10 +11,33 @@ public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
     [SerializeField] private float chanceToHit;
 
     [SerializeField] private GameObject bulletType;
-    [SerializeField] private Transform bulletSpawn;
+    Transform bulletSpawn;
 
-    public void Execute(GameObject target)
+    private void Start()
     {
-        Instantiate(bulletType, bulletSpawn.position, Quaternion.identity);
+        bulletSpawn = GetComponentInChildren<Transform>();
     }
+
+    public void Execute(Transform target)
+    {
+        Shoot(target);
+    }
+
+    public void Shoot(Transform target)
+    {
+        if (target == null) return;
+
+        Vector3 dir = (target.transform.position - bulletSpawn.position).normalized;
+
+        GameObject bulletGO = Instantiate(
+            bulletType,
+            bulletSpawn.position,
+            Quaternion.LookRotation(dir)
+        );
+
+        EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
+        bullet.Init(dir);
+
+    }
+
 }
