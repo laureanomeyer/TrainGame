@@ -6,7 +6,6 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private Transform tail; //Final del tren
     private WagonMovement lastWagon;
     [SerializeField] private GameObject WagonPrefab;
-    [SerializeField] private SharedData sharedData;
 
     private List<IWagon> wagonsList;
     public List<IWagon> WagonList => wagonsList;
@@ -28,10 +27,7 @@ public class TrainManager : MonoBehaviour
 
         GameManager.Instance.OnTrainReady();
     }
-    void Update()
-    {
-       
-    }
+
     void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
     {
         GameObject WagonInstance = Instantiate(WagonPrefab);

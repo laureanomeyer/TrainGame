@@ -6,20 +6,20 @@ using Unity.VisualScripting;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] private SharedData sharedData;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private Transform endLocation;
+    [SerializeField] private float speed;
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
-    private MapTile head;
+    [SerializeField] private MapTile head;
 
-    private float timer = 0;
     private bool initialized = false;
    
 
     public void Initialize(Transform startLocation)
     {
         this.startLocation = startLocation;
+        speed = GameManager.Instance.Speed;
 
         endLocation = GameManager.Instance.TailPosition;
 
@@ -42,19 +42,16 @@ public class MapManager : MonoBehaviour
     {
         if (!initialized) return;
 
-        timer += Time.deltaTime;
         MoveTiles();
-        if (timer > 3)
-        {
-            RecycleTile();
-        }
+        RecycleTile();
+
     }
 
     void MoveTiles()
     {
         foreach (MapTile tile in tilesMap) 
         {
-            tile.MoveHead(endLocation, GameManager.Instance.Speed);
+            tile.MoveHead(endLocation,speed);
             tile.Move();
         }
     }
@@ -63,10 +60,10 @@ public class MapManager : MonoBehaviour
     {
         if (tilesMap.Count == 0) return;
 
-        if (Vector3.Distance (head.Tail.transform.position, endLocation.transform.position) < 0.1f)
+        if (head.Tail.position.x <= endLocation.position.x)
         {
-            tilesMap.RemoveAt(0);
-            head.SetUp(tilesMap[tilesMap.Count-1].Tail);
+            tilesMap.RemoveAt(0); 
+            head.SetUp(tilesMap[tilesMap.Count - 1].Tail);
             tilesMap.Add(head);
             head = tilesMap[0];
             tilesMap[0].SetTail();

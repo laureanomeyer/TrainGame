@@ -3,43 +3,31 @@ using UnityEngine.SceneManagement;
 
 public class LocomotiveBrain : MonoBehaviour
 {
-
-    [SerializeField] private float hp;
-    [SerializeField] private float currentHp;
-    [SerializeField] private float defense;
-    [SerializeField] private string wagonType;
-    private WagonHP hpController;
+    [SerializeField] private LocomotiveStats stats;
+    private LocomotiveFuel fuelController;
 
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        hpController = new WagonHP(hp, defense, BreakDown);
+        fuelController = new LocomotiveFuel(stats.defense * 2, stats.maxFuel, stats.baseSpeed, stats.defense);
     }
 
-
-    // Update is called once per frame
     void Update()
     {
-        currentHp = hpController.CurrentHp;
+        fuelController.Move(Time.deltaTime);
+        fuelController.UpdateShield(Time.deltaTime);
     }
-
 
     public void TakeDamage(float damageAmount)
     {
-        hpController.TakeDamage(damageAmount);
-
-        if (hpController.CurrentHp <= 0)
-        {
-            BreakDown();
-        }
+        fuelController.TakeDamage(damageAmount);
     }
 
     public void Repair(float repairAmount)
     {
-        hpController.Repair(Time.deltaTime, repairAmount);
+        return;
     }
 
     public void BreakDown()

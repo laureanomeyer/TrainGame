@@ -11,8 +11,12 @@ public class MapTile : MonoBehaviour
 
     public bool IsMapHead => isMapHead;   
 
-    public float Width => Vector3.Distance(head.position, tail.position);   
+    public float Width => Vector3.Distance(head.position, tail.position);
 
+    private void Awake()
+    {
+        offset = Vector3.Distance(transform.position, tail.position);
+    }
     public void SetUp(Transform followTransform)
     {
         head = followTransform;
@@ -22,7 +26,7 @@ public class MapTile : MonoBehaviour
     {
         isMapHead = true;
         head = null;
-        offset = Vector3.Distance(transform.position, tail.position);          
+            
     }
     public void Move()
     {

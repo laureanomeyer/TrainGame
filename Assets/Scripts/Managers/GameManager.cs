@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    private void Update()
+    {
+        Debug.Log(speed);
+    }
 
     public void OnTrainReady()
     {

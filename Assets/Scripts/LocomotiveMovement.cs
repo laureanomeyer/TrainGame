@@ -8,7 +8,6 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     [SerializeField] private float currentFuel = 100f;
     [SerializeField] private float fuelOptimizer = 1;
     [SerializeField] private float fuelUseXSecond;
-    [SerializeField] private Vector3 moveDirection = Vector3.right;
     [SerializeField] private float baseSpeed = 5f;
     private float actualSpeed;
     public float CurrentFuel => currentFuel;
@@ -22,7 +21,7 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
         actualSpeed = baseSpeed;
         UpdateSharedSpeed();
 
-       fuelUseXSecond = actualSpeed / ( 2 * fuelOptimizer);
+        fuelUseXSecond = actualSpeed / ( 2 * fuelOptimizer);
     }
 
     void Update()
@@ -37,7 +36,8 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
             GameManager.Instance.SetSpeed(0);
             return;
         }
-        ConsumeFuel(fuelUseXSecond * Time.deltaTime);  
+        ConsumeFuel(fuelUseXSecond * Time.deltaTime);
+        Debug.Log(currentFuel);
     }
     public void AddFuel(float amount)
     {

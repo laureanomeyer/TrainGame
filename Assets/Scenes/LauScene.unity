@@ -1251,17 +1251,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 834336553}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1053992926 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2391027984473339525, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-  m_PrefabInstance: {fileID: 5581601825840868483}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6dbde402c9b55048b7b699b3b396e80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LocomotiveMovement
 --- !u!1 &1127572942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,7 +1522,7 @@ PrefabInstance:
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: locomotiveMovement
       value: 
-      objectReference: {fileID: 1053992926}
+      objectReference: {fileID: 0}
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: maxAmountProgressBar
       value: 100
@@ -2075,67 +2064,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043740327}
   m_CullTransparentMesh: 1
---- !u!1001 &5224328925395317898
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 83741717018209245, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: startLocation
-      value: 
-      objectReference: {fileID: 902026377}
-    - target: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_Name
-      value: TilesMap
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.38088
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.93405
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5.39228
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3175136908442350366, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
 --- !u!1001 &5581601825840868483
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2184,10 +2112,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2391027984473339525, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: baseSpeed
-      value: 15
-      objectReference: {fileID: 0}
     - target: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_Name
       value: LocomotivePrefab
@@ -2205,7 +2129,6 @@ SceneRoots:
   - {fileID: 301139766}
   - {fileID: 834336553}
   - {fileID: 5581601825840868483}
-  - {fileID: 5224328925395317898}
   - {fileID: 1558271857}
   - {fileID: 1724918361}
   - {fileID: 1704942728}
