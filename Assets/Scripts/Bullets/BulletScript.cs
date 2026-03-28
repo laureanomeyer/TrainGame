@@ -6,6 +6,12 @@ public class BulletScript : MonoBehaviour, IBullet
 {
     public string id => "Normal";
     public IObjectPool<GameObject> BulletPool { set => bulletPool = value; }
+    public int Damage { get => damage; set => damage = value; }
+    private int damage;
+
+    public int Speed { get => speed; set => speed = value; }
+    private int speed;
+
     private IObjectPool<GameObject> bulletPool;
 
     public BulletTypeScriptable bulletType;
@@ -38,6 +44,8 @@ public class BulletScript : MonoBehaviour, IBullet
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
         currentLife = bulletType.duration;
+        Damage = bulletType.damage;
+        Speed = speed;
         isActive = true;
     }
 

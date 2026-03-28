@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,8 @@ public class PlayerAttackController : MonoBehaviour
     private BulletPool pool;
     private LookObjectToMouse lookToMouseController;
 
+    private float waitToFire;
+
     void Start()
     {
         //se busca la pool de objetos
@@ -22,11 +25,14 @@ public class PlayerAttackController : MonoBehaviour
         //Se establece el arma equipada
         SetWeapon(weaponItem);
         weapon.SetPool(pool);
+
+        waitToFire = weapon.RateOfFire;
     }
 
     void Update()
     {
         AidToMouseDirection();
+        ChargeTimers();
     }
 
     private void AidToMouseDirection()
@@ -37,7 +43,18 @@ public class PlayerAttackController : MonoBehaviour
     //Funcion utiliza por el Player Inputs para atacar 
     void OnAttack(InputValue value)
     {
-        Attack();
+        if (waitToFire > weapon.RateOfFire)
+        {
+            if (weapon.CurrentAmmunition <= 0)
+            {
+                CallReload();
+            }
+            else
+            {
+                Attack();
+                waitToFire = 0;
+            }
+        }
     }
 
     //Llama a la funcion de ataque del arma
@@ -50,11 +67,36 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
+    private void ChargeTimers()
+    {
+        if (waitToFire <= weapon.RateOfFire)
+        {
+            waitToFire += Time.deltaTime;
+        }
+
+        
+    }
+
     //Funcion para setear el arma equipada
     public void SetWeapon(GameObject weaponObtein)
     {
         weaponItem = weaponObtein;
         weapon = weaponItem.GetComponent<IWeapons>();
+        weapon.Relood();
         weapon.SetPool(pool);
-    } 
+    }
+
+    private void CallReload()
+    {
+        StartCoroutine(ActivateReload(weapon.ReloadDuration));
+    }
+
+    IEnumerator ActivateReload(float segundos)
+    {
+        weapon.Relood();
+
+        yield return new WaitForSeconds(segundos);
+
+        Debug.Log("Entre");
+    }
 }

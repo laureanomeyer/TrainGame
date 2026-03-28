@@ -6,6 +6,10 @@ public interface IBullet
     //Nombre de la bala
     string id { get; }
 
+    public int Damage { get; set; }
+
+    public int Speed { get; set; }
+
     //Referencia para utlizar la pool de unity 
     IObjectPool<GameObject> BulletPool { set; }
 
