@@ -8,12 +8,17 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] private WagonBrain currentWagon;
     [SerializeField] private float repairCapacity;
     [SerializeField] private Slider progressBar;
-    [SerializeField] private Slider progressBarFuel;
-    [SerializeField] private float maxAmountProgressBar;
-    private float maxAmountProgressBarFuel;
     [SerializeField] private float currentProgress;
     [SerializeField] private float currentProgressFuel;
+    [SerializeField] private float maxAmountProgressBar;
+    private float maxAmountProgressBarFuel;
+
     //[SerializeField] private LocomotiveMovement locomotiveMovement;
+    [SerializeField] private LocomotiveBrain locomotiveBrain;
+    [SerializeField] private Image fuelFillImage;
+
+
+
     
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,13 +32,18 @@ public class PlayerInteractions : MonoBehaviour
     void Update()
     {
         //currentProgressFuel = locomotiveMovement.CurrentFuel / locomotiveMovement.MaxFuel;
-        progressBarFuel.value = currentProgressFuel;
 
+        if (locomotiveBrain != null)
+        {
+            fuelFillImage.fillAmount = locomotiveBrain.fuelController.CurrentFuel / locomotiveBrain.fuelController.MaxFuel;
+            Debug.Log(fuelFillImage.fillAmount.ToString());
+        }
         if (currentWagon != null) 
         {
             currentProgress = currentWagon.CurrentHp  / currentWagon.MaxHp;
             progressBar.value = currentProgress;
         }       
+
     }
 
     public void SetUpWagonHP()
@@ -77,3 +87,4 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 }
+  

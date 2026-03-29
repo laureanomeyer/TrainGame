@@ -21,6 +21,12 @@ public class LocomotiveFuel
     private float timer = 0;
     private bool hasFuel => currentFuel > 0f;
 
+    public float CurrentFuel => currentFuel;
+    public float MaxFuel => maxFuel;
+
+
+
+
     public LocomotiveFuel(float shield, float maxFuel, float baseSpeed, float defense, float fuelOptimizer)
     {
         this.maxShield = shield;

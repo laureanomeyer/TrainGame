@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class LocomotiveBrain : MonoBehaviour
 {
     [SerializeField] private LocomotiveStats stats;
-    private LocomotiveFuel fuelController;
+    public LocomotiveFuel fuelController;
 
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
