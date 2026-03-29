@@ -33,9 +33,6 @@ public class LocomotiveFuel
     public float FuelCapacity => fuelCapacity;
     public float FuelMaxCapaciy => fuelMaxCapacity;
 
-
-
-
     public LocomotiveFuel(float shield, float maxFuel, float baseSpeed, float defense, float fuelOptimizer)
     {
         this.maxShield = shield;

@@ -28,6 +28,11 @@ public class LocomotiveBrain : MonoBehaviour
         fuelController.TakeDamage(damageAmount);
     }
 
+    public void AddFuel()
+    {
+        fuelController.AddFuel(stats.maxFuel);
+    }
+
     public void Repair(float repairAmount)
     {
         return;
