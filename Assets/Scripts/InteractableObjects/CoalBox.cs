@@ -15,15 +15,28 @@ public class CoalBox: IInteractable
     {
         hasCoal = true;
     }
+    
 
     public void Interact(IInventory playerRef)
     {      
-        HandleCoal(playerRef.DepositCoal());
-        Debug.Log(hasCoal);
+        HandleCoal(playerRef);
     }
 
-    public void HandleCoal(bool playerHasCoal)
+    public void HandleCoal(IInventory playerRef)
     {
-        hasCoal = !playerHasCoal;
+        if ((!hasCoal && !playerRef.HasCoal) || (hasCoal && playerRef.HasCoal)) return;
+
+        else if(!hasCoal && playerRef.HasCoal)
+        {
+            hasCoal = true;
+            playerRef.DepositCoal();
+        }
+        else if (hasCoal && !playerRef.HasCoal)
+        {
+            hasCoal = false;
+            playerRef.CollectCoal();
+        }
+
+
     }
 }

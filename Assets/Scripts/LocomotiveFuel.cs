@@ -12,7 +12,7 @@ public class LocomotiveFuel
     private float maxShield;
     private float currentShield;
     private float currentFuel;
-    private float maxFuel;
+    private float currentMaxFuel;
     private bool shieldTakenDamage;
     private float actualSpeed;
     private float fuelOptimizer;
@@ -20,9 +20,18 @@ public class LocomotiveFuel
     private float defense;
     private float timer = 0;
 
+    private float fuelCapacity;
+    private float fuelMaxCapacity;
+
     private bool hasFuel => currentFuel > 0f;
     public float CurrentFuel => currentFuel;
-    public float MaxFuel => maxFuel;
+    public float CurrentMaxFuel => currentMaxFuel;
+
+    public float CurrentShield => currentShield;
+    public float MaxShield => maxShield;    
+
+    public float FuelCapacity => fuelCapacity;
+    public float FuelMaxCapaciy => fuelMaxCapacity;
 
 
 
@@ -31,13 +40,14 @@ public class LocomotiveFuel
     {
         this.maxShield = shield;
         this.currentShield = shield;
-        this.maxFuel = maxFuel;
+        this.currentMaxFuel = maxFuel;
         currentFuel = maxFuel;
         this.actualSpeed = baseSpeed;
         this.fuelOptimizer = fuelOptimizer; 
         fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
         this.defense = defense;
         shieldTakenDamage = false;
+        fuelMaxCapacity = maxFuel;
 
         GameManager.Instance.SetSpeed(actualSpeed);
     }
@@ -45,13 +55,14 @@ public class LocomotiveFuel
     {
         this.maxShield = shield;
         this.currentShield = shield;
-        this.maxFuel = maxFuel;
+        this.currentMaxFuel = maxFuel;
         currentFuel = maxFuel;
         this.actualSpeed = baseSpeed;
         fuelOptimizer = 1;
         fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
         this.defense = defense;
         shieldTakenDamage = false;
+        fuelMaxCapacity = maxFuel;
 
         GameManager.Instance.SetSpeed(actualSpeed);
     }
@@ -68,20 +79,20 @@ public class LocomotiveFuel
     }
     public void AddFuel(float amount)
     {
-        currentFuel = Mathf.Clamp(currentFuel + amount, amount, maxFuel);
+        currentFuel = Mathf.Clamp(currentFuel + amount, amount, currentMaxFuel);
         UpdateSharedSpeed();
     }
 
     public void RemoveFuel(float amount) //llamar a esta funcion x si hay alguien o algo que te reste nafta 
     {
-        currentFuel = Mathf.Clamp(currentFuel - amount, 0f, maxFuel);
+        currentFuel = Mathf.Clamp(currentFuel - amount, 0f, currentMaxFuel);
         UpdateSharedSpeed();
         Debug.Log("Current Fuel: " + currentFuel);
     }
 
     private void ConsumeFuel(float amount) //gasto natural del tren
     {
-        currentFuel = Mathf.Clamp(currentFuel - amount, 0f, maxFuel);
+        currentFuel = Mathf.Clamp(currentFuel - amount, 0f, currentMaxFuel);
         UpdateSharedSpeed();
     }
 
@@ -108,8 +119,8 @@ public class LocomotiveFuel
     {
         if (currentShield <= 0)
         {
-            maxFuel -= amount * 100 / (100 + defense);
-            currentFuel = Mathf.Clamp(currentFuel, 0, maxFuel);
+            currentMaxFuel -= amount * 100 / (100 + defense);
+            currentFuel = Mathf.Clamp(currentFuel, 0, currentMaxFuel);
         }
         else
         {

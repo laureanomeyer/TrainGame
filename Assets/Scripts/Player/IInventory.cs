@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 public interface IInventory
 {
     float DepositGold();
-    bool DepositCoal();
+    void DepositCoal();
+    void CollectCoal();
+    bool HasCoal {  get; }
+    
 }
 

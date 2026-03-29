@@ -19,7 +19,6 @@ public class GoldBox : IInteractable
     public void Interact(IInventory playerRef) 
     {
         AddGold(playerRef.DepositGold());
-        Debug.Log(currentGold);
     }
 
     public void AddGold(float amount) 

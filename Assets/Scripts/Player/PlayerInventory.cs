@@ -1,4 +1,8 @@
-﻿public class PlayerInventory : IInventory
+﻿using UnityEditor.Experimental.GraphView;
+using UnityEditor.Rendering;
+using UnityEngine;
+
+public class PlayerInventory : IInventory
 {
     private float goldAmount;
     private bool hasCoal;
@@ -9,7 +13,7 @@
     public PlayerInventory()
     {
         goldAmount = 100f;
-        hasCoal = true;
+        hasCoal = false;
     }
 
     public float DepositGold()
@@ -19,10 +23,14 @@
         return goldToAdd;
     }
 
-    public bool DepositCoal()
+    
+     public void DepositCoal()
+     {
+        hasCoal = false;
+    }
+
+    public void CollectCoal()
     {
-        hasCoal = !hasCoal;
-        return hasCoal;
+        hasCoal = true;
     }
 }
-

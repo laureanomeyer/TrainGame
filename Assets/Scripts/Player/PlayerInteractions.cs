@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -16,16 +17,31 @@ public class PlayerInteractions : MonoBehaviour
     //[SerializeField] private LocomotiveMovement locomotiveMovement;
     [SerializeField] private LocomotiveBrain locomotiveBrain;
     [SerializeField] private Image fuelFillImage;
+    [SerializeField] private Image fuelMaxCapacityImage;
+    [SerializeField] private Image shieldImage;
 
+    private float fuelMaxCapacity;
 
+    [SerializeField] private Image coalImage;
 
-    
+    private PlayerInventory playerInventory;
+    private PlayerBrain playerBrain;    
+
+    public PlayerInventory Inventory => playerInventory;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         maxAmountProgressBar = 100;
-        currentProgress = maxAmountProgressBar;       
+        currentProgress = maxAmountProgressBar;
+
+        playerBrain = GetComponent<PlayerBrain>();
+
+        playerInventory = playerBrain.Inventory;
+
+        UpdateCoalUI();
+
     }
 
     // Update is called once per frame
@@ -35,16 +51,34 @@ public class PlayerInteractions : MonoBehaviour
 
         if (locomotiveBrain != null)
         {
-            fuelFillImage.fillAmount = locomotiveBrain.fuelController.CurrentFuel / locomotiveBrain.fuelController.MaxFuel;
+            fuelFillImage.fillAmount = locomotiveBrain.fuelController.CurrentFuel / locomotiveBrain.fuelController.CurrentMaxFuel;
+            fuelMaxCapacityImage.fillAmount = locomotiveBrain.fuelController.CurrentMaxFuel / locomotiveBrain.fuelController.FuelMaxCapaciy;
+            shieldImage.fillAmount = locomotiveBrain.fuelController.CurrentShield / locomotiveBrain.fuelController.MaxShield;
         }
         if (currentWagon != null) 
         {
             currentProgress = currentWagon.CurrentHp  / currentWagon.MaxHp;
             progressBar.value = currentProgress;
-        }       
+        }    
 
+        UpdateCoalUI(); 
     }
 
+
+    void UpdateCoalUI()
+    {
+        if (playerInventory != null)
+        {
+            if (playerInventory.HasCoal) 
+            {
+                coalImage.color = Color.black;
+            }
+            else 
+            { 
+                coalImage.color = Color.white;
+            }
+        }
+    }
     public void SetUpWagonHP()
     {
         if (currentWagon != null)

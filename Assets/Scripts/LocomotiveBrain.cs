@@ -9,6 +9,9 @@ public class LocomotiveBrain : MonoBehaviour
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
 
+    public float CurrentShield => fuelController.CurrentShield;
+    public float MaxShield => fuelController.MaxShield;
+
     void Start()
     {
         fuelController = new LocomotiveFuel(stats.defense * 2, stats.maxFuel, stats.baseSpeed, stats.defense);
