@@ -19,8 +19,8 @@ public class LocomotiveFuel
     private float fuelUseXSecond;
     private float defense;
     private float timer = 0;
-    private bool hasFuel => currentFuel > 0f;
 
+    private bool hasFuel => currentFuel > 0f;
     public float CurrentFuel => currentFuel;
     public float MaxFuel => maxFuel;
 

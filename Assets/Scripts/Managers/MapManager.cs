@@ -19,7 +19,6 @@ public class MapManager : MonoBehaviour
     public void Initialize(Transform startLocation)
     {
         this.startLocation = startLocation;
-        speed = GameManager.Instance.Speed;
 
         endLocation = GameManager.Instance.TailPosition;
 
@@ -51,7 +50,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (MapTile tile in tilesMap) 
         {
-            tile.MoveHead(endLocation,speed);
+            tile.MoveHead(endLocation, GameManager.Instance.Speed);
             tile.Move();
         }
     }

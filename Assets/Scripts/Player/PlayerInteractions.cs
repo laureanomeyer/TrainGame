@@ -36,7 +36,6 @@ public class PlayerInteractions : MonoBehaviour
         if (locomotiveBrain != null)
         {
             fuelFillImage.fillAmount = locomotiveBrain.fuelController.CurrentFuel / locomotiveBrain.fuelController.MaxFuel;
-            Debug.Log(fuelFillImage.fillAmount.ToString());
         }
         if (currentWagon != null) 
         {

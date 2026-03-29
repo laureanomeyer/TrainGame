@@ -31,10 +31,10 @@ public class GameManager : MonoBehaviour
         }
 
     }
-    private void Update()
+   /* private void Update()
     {
-
-    }
+        Debug.Log(Speed);
+    }*/
 
     public void OnTrainReady()
     {
