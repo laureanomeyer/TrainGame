@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInteractions : MonoBehaviour
 {
@@ -13,10 +14,23 @@ public class PlayerInteractions : MonoBehaviour
     public WagonBrain CurrentWagon => currentWagon;
     public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
 
+    private InputAction repairAction;
+    private bool buttonIsHold = false;
+
     void Start()
     {
         playerBrain = GetComponent<PlayerBrain>();
         playerInventory = playerBrain.Inventory;
+
+        repairAction = InputSystem.actions.FindAction("Repair");
+        repairAction.performed += ActiveInput;
+        repairAction.canceled += DeactiveInput;
+
+    }
+
+    private void Update()
+    {
+        Repair();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,10 +58,12 @@ public class PlayerInteractions : MonoBehaviour
         Interact();
     }
 
+    /*
     public void OnRepair()
     {
         Repair();
     }
+    */
 
     void Interact()
     {
@@ -57,9 +73,19 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 
+    public void ActiveInput(InputAction.CallbackContext context)
+    {
+        buttonIsHold = true;
+    }
+
+    public void DeactiveInput(InputAction.CallbackContext context)
+    {
+        buttonIsHold = false;
+    }
+
     void Repair()
     {
-        if (currentWagon != null)
+        if (buttonIsHold && currentWagon != null)
         {
             currentWagon.Repair(repairCapacity);
         }
