@@ -623,6 +623,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &468169246 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 813814704754815069, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  m_PrefabInstance: {fileID: 5581601825840868483}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &491946919
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,7 +991,6 @@ GameObject:
   m_Component:
   - component: {fileID: 631446770}
   - component: {fileID: 631446769}
-  - component: {fileID: 631446771}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1006,6 +1010,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b31f37c28564bb429d59b00f3791cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  tailPosition: {fileID: 0}
+  initialTailPosition: {fileID: 468169246}
   mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
   mapStartLocation: {fileID: 902026377}
 --- !u!4 &631446770
@@ -1023,20 +1029,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &631446771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 631446768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6b03e1311cecd54d85e0ce6678569c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectBrain
-  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  behaviorType: 0
 --- !u!1 &724556876
 GameObject:
   m_ObjectHideFlags: 0
@@ -2391,6 +2383,10 @@ PrefabInstance:
     - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6355820676514034549, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+      propertyPath: tail
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_Name
