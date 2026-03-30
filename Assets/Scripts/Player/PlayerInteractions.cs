@@ -13,8 +13,6 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] private float currentProgressFuel;
     [SerializeField] private float maxAmountProgressBar;
     private float maxAmountProgressBarFuel;
-
-    //[SerializeField] private LocomotiveMovement locomotiveMovement;
     [SerializeField] private LocomotiveBrain locomotiveBrain;
     [SerializeField] private Image fuelFillImage;
     [SerializeField] private Image fuelMaxCapacityImage;
@@ -47,7 +45,6 @@ public class PlayerInteractions : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //currentProgressFuel = locomotiveMovement.CurrentFuel / locomotiveMovement.MaxFuel;
 
         if (locomotiveBrain != null)
         {

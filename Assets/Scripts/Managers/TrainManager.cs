@@ -23,7 +23,6 @@ public class TrainManager : MonoBehaviour
         CreateWagon();
         CreateWagon();
         CreateWagon();
-        CreateWagon();
 
         GameManager.Instance.OnTrainReady();
     }

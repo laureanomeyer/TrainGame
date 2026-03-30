@@ -59,7 +59,7 @@ public class MapManager : MonoBehaviour
     {
         if (tilesMap.Count == 0) return;
 
-        if (head.Tail.position.x <= endLocation.position.x)
+        if (head.Tail.position.x <= endLocation.position.x )
         {
             tilesMap.RemoveAt(0); 
             head.SetUp(tilesMap[tilesMap.Count - 1].Tail);
