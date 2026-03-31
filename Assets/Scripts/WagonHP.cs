@@ -33,7 +33,10 @@ public class WagonHP : IDamagable
     }
     public void Repair(float deltaTime, float repairAmount) 
     {
-        currentHp += repairAmount * deltaTime;
+        if (!IsBroken)
+        {
+            currentHp += repairAmount * deltaTime;
+        }
     }
     public void Break() 
     {
