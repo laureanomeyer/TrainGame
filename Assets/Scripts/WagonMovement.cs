@@ -17,6 +17,9 @@ public class WagonMovement : MonoBehaviour, IWagon
     public void Initialize(Transform target) //Setea la cabeza de los vagones
     {
         this.targetTail = target;
+        transform.position = target.position;
+        transform.rotation = target.rotation;
+        tail.rotation = target.rotation;
     }
     
     void LateUpdate()

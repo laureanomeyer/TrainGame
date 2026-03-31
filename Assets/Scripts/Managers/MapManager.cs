@@ -1,14 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEngine.EventSystems;
-using Unity.VisualScripting;
 
 public class MapManager : MonoBehaviour
 {
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private Transform endLocation;
-    [SerializeField] private float speed;
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
     [SerializeField] private MapTile head;
@@ -22,7 +18,7 @@ public class MapManager : MonoBehaviour
 
         endLocation = GameManager.Instance.TailPosition;
 
-        for (int i = 0; i < GameManager.Instance.WagonList.Count; i++)
+        for (int i = 0; i < GameManager.Instance.WagonList.Count + 5; i++)
         {
             GenerateMap();
         }
@@ -43,7 +39,6 @@ public class MapManager : MonoBehaviour
 
         MoveTiles();
         RecycleTile();
-
     }
 
     void MoveTiles()
@@ -58,11 +53,11 @@ public class MapManager : MonoBehaviour
     void RecycleTile()
     {
         if (tilesMap.Count == 0) return;
-
-        if (head.Tail.position.x <= endLocation.position.x )
+        if (head.Tail.position.x <= endLocation.position.x - tilesMap[0].Offset / 2)
         {
             tilesMap.RemoveAt(0); 
             head.SetUp(tilesMap[tilesMap.Count - 1].Tail);
+            head.transform.position = tilesMap[tilesMap.Count - 1].Tail.position;
             tilesMap.Add(head);
             head = tilesMap[0];
             tilesMap[0].SetTail();
@@ -71,9 +66,23 @@ public class MapManager : MonoBehaviour
 
     void GenerateMap()
     {
-        GameObject tile = Instantiate(tilePrefab);
+        Vector3 spawnPosition;
+        if (tilesMap.Count == 0)
+            spawnPosition = new Vector3 (GameManager.Instance.TailPosition.position.x - 250, GameManager.Instance.TailPosition.position.y, GameManager.Instance.TailPosition.position.z);
+        else
+        {
+            MapTile last = tilesMap[tilesMap.Count - 1];
+            spawnPosition = tilesMap[tilesMap.Count - 1].Tail.position;
+        }
+
+        Vector3 direction = (GameManager.Instance.InitialTailPosition.position -
+                     GameManager.Instance.TailPosition.position).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+
+        GameObject tile = Instantiate(tilePrefab, spawnPosition, rotation);
         MapTile mapTile = tile.GetComponent<MapTile>();
-        if (tilesMap.Count == 0) 
+
+        if (tilesMap.Count == 0)
         {
             mapTile.SetTail();
             head = mapTile;
@@ -82,6 +91,7 @@ public class MapManager : MonoBehaviour
         {
             mapTile.SetUp(tilesMap[tilesMap.Count - 1].Tail);
         }
+
         tilesMap.Add(mapTile);
     }
 }

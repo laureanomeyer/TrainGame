@@ -11,11 +11,12 @@ public class MapTile : MonoBehaviour
 
     public bool IsMapHead => isMapHead;   
 
-    public float Width => Vector3.Distance(head.position, tail.position);
+    public float Offset => offset;
 
     private void Awake()
     {
         offset = Vector3.Distance(transform.position, tail.position);
+        //Debug.Log($"offset: {offset} | tail local: {tail.localPosition} | tail world: {tail.position}");
     }
     public void SetUp(Transform followTransform)
     {
@@ -40,7 +41,7 @@ public class MapTile : MonoBehaviour
         if (isMapHead)
         {
             Vector3 adjustedTarget = new Vector3(
-                target.position.x - offset,
+                target.position.x - offset * 5,
                 transform.position.y,
                 transform.position.z
             );
