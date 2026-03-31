@@ -5,7 +5,12 @@ public class EnemyChaseBrain : EnemyBrainSO
 {
     public override void Begin(Enemy enemy)
     {
-        Debug.Log("sinapsis");
+        Debug.Log("existo");
+    }
+
+    public override Transform SetTarget(Enemy enemy)
+    {
+        return enemy.TargetList[Random.Range(0 , enemy.TargetList.Count)].Transform;
     }
 
     public override void Tick(Enemy enemy)

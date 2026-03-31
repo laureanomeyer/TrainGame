@@ -8,6 +8,8 @@ public class WagonMovement : MonoBehaviour, IWagon
     private Transform targetTail;
     public Transform Tail => tail;
 
+    public Transform Transform => transform;
+
     [SerializeField] private float speed;
 
     [SerializeField] public GameObject wagonBack;

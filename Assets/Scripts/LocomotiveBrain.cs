@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LocomotiveBrain : MonoBehaviour
+public class LocomotiveBrain : MonoBehaviour, ITrainBrain 
 {
     [SerializeField] private LocomotiveStats stats;
     public LocomotiveFuel fuelController;

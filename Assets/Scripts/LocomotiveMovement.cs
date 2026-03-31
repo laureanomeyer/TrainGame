@@ -14,6 +14,9 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     public float MaxFuel => maxFuel;
     public bool HasFuel => currentFuel > 0f;
 
+    public Transform Transform => transform;
+
+
     void Start()
     {
         currentFuel = Mathf.Clamp(currentFuel, 0f, maxFuel);

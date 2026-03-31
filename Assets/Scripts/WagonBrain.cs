@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class WagonBrain : MonoBehaviour
+public class WagonBrain : MonoBehaviour , ITrainBrain
 {
 
     [SerializeField] private float hp;

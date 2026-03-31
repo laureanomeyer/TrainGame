@@ -1,8 +1,9 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] Transform target;
 
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] float spawnInterval = 2f;
@@ -11,10 +12,11 @@ public class EnemySpawner : MonoBehaviour
     float timer;
     int currentEnemies;
 
-    public Transform Target => target;
+    private List<IWagon> trainList = new();
 
     private void Start()
     {
+        trainList = GameManager.Instance.WagonList;
         Spawn();
     }
 
@@ -32,7 +34,7 @@ public class EnemySpawner : MonoBehaviour
     void Spawn()
     {
         GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
-        enemy.GetComponent<Enemy>().SetTarget(target);
+        enemy.GetComponent<Enemy>().SetTargetList(trainList);
         currentEnemies++;
     }
 }

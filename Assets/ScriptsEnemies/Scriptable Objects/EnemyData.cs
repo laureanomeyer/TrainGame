@@ -5,6 +5,7 @@ public enum WagonTypes { coal, gold }
 [CreateAssetMenu(menuName = "Enemy/Data")]
 public class EnemyData : ScriptableObject
 {
+    public float health;
     public float range;
     public float speed;
     public float distance;
