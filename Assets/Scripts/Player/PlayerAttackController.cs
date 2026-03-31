@@ -82,7 +82,7 @@ public class PlayerAttackController : MonoBehaviour
     {
         weaponItem = weaponObtein;
         weapon = weaponItem.GetComponent<IWeapons>();
-        weapon.Relood();
+        weapon.Reload();
         weapon.SetPool(pool);
     }
 
@@ -93,10 +93,7 @@ public class PlayerAttackController : MonoBehaviour
 
     IEnumerator ActivateReload(float segundos)
     {
-        weapon.Relood();
-
         yield return new WaitForSeconds(segundos);
-
-        Debug.Log("Entre");
+        weapon.Reload();
     }
 }

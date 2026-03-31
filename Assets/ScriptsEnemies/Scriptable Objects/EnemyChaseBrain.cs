@@ -5,7 +5,7 @@ public class EnemyChaseBrain : EnemyBrainSO
 {
     public override void Begin(Enemy enemy)
     {
-        Debug.Log("existo");
+
     }
 
     public override Transform SetTarget(Enemy enemy)

@@ -68,7 +68,7 @@ public class MapManager : MonoBehaviour
     {
         Vector3 spawnPosition;
         if (tilesMap.Count == 0)
-            spawnPosition = new Vector3 (GameManager.Instance.TailPosition.position.x - 250, GameManager.Instance.TailPosition.position.y, GameManager.Instance.TailPosition.position.z);
+            spawnPosition = new Vector3 (GameManager.Instance.TailPosition.position.x - 250, 0, 0);
         else
         {
             MapTile last = tilesMap[tilesMap.Count - 1];
@@ -78,6 +78,8 @@ public class MapManager : MonoBehaviour
         Vector3 direction = (GameManager.Instance.InitialTailPosition.position -
                      GameManager.Instance.TailPosition.position).normalized;
         Quaternion rotation = Quaternion.LookRotation(direction);
+        rotation = new Quaternion(0, 1, 0, 1f);
+        //Debug.Log(rotation);
 
         GameObject tile = Instantiate(tilePrefab, spawnPosition, rotation);
         MapTile mapTile = tile.GetComponent<MapTile>();

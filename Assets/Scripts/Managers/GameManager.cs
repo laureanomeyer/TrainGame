@@ -40,8 +40,7 @@ public class GameManager : MonoBehaviour
 
     public void OnTrainReady()
     {
-        Debug.Log($"TailPosition al crear mapa: {tailPosition.position}");
-        Debug.Log($"InitialTailPosition: {initialTailPosition.position}");
+
         GameObject obj = Instantiate(mapManagerPrefab, tailPosition.position, tailPosition.rotation);
         mapManager = obj.GetComponent<MapManager>();
         mapManager.Initialize(mapStartLocation);
@@ -54,7 +53,7 @@ public class GameManager : MonoBehaviour
     public void SetTrainTail(Transform tail)
     {
         tailPosition = tail;
-        Debug.Log($"SetTrainTail llamado: {tail.position}");
+
     }
     public void SetWagonList(List<IWagon> wagonList)
     {

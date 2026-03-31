@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] EnemyData data;
     [SerializeField] GameObject weapon;
+    [SerializeField] float CurrentH;
 
     private List<IWagon> targetList;
     private Transform target;
@@ -47,7 +48,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         attackCooldownTimer -= Time.deltaTime;
-
+        CurrentH = currentHealth;
         Movement?.Move(this);
         Attack?.Attack(this);
     }

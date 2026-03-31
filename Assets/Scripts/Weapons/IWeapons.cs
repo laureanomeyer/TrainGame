@@ -17,6 +17,6 @@ public interface IWeapons
     //Establece la pool
     public void SetPool(BulletPool pool);
 
-    public void Relood();
+    public void Reload();
 
 }

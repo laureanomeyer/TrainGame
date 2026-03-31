@@ -41,7 +41,7 @@ public class Revolver : MonoBehaviour, IWeapons
         bulletPool = pool;
     }
 
-    public void Relood()
+    public void Reload()
     {
         currentAmmunition = bulletAmmunition;
     }

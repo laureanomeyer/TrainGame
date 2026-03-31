@@ -6,8 +6,8 @@ public class EnemySpawner : MonoBehaviour
 {
 
     [SerializeField] GameObject enemyPrefab;
-    [SerializeField] float spawnInterval = 2f;
-    [SerializeField] int maxEnemies = 5;
+    [SerializeField] float spawnInterval = 5f;
+    //[SerializeField] int maxEnemies = 5;
 
     float timer;
     int currentEnemies;
@@ -22,13 +22,14 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        //timer += Time.deltaTime;
+        timer += Time.deltaTime;
 
-        //if (timer >= spawnInterval && currentEnemies < maxEnemies)
-        //{
-        //    Spawn();
-        //    timer = 0f;
-        //}
+        if (timer >= spawnInterval)
+        {
+            Spawn();
+            timer = 0f;
+            spawnInterval += 1;
+        }
     }
 
     void Spawn()
