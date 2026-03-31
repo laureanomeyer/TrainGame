@@ -32,7 +32,6 @@ public class WagonBrain : MonoBehaviour , ITrainBrain
     public void TakeDamage(float damageAmount)
     {
         hpController.TakeDamage(damageAmount);
-
         if (hpController.CurrentHp <= 0)
         {
             BreakDown();

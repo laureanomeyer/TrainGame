@@ -9,6 +9,7 @@ public class EnemyData : ScriptableObject
     public float range;
     public float speed;
     public float distance;
+    public float attackCooldown;
     public WagonTypes target;
 
     public EnemyAttackSO attack;     // logica ataque

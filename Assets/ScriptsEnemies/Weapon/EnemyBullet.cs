@@ -14,4 +14,19 @@ public class EnemyBullet : MonoBehaviour
     {
         transform.position += direction * speed * Time.deltaTime;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        var components = other.GetComponents<MonoBehaviour>();
+
+        foreach (var comp in components)
+        {
+            if (comp is ITrainBrain brain)
+            {
+                brain.TakeDamage(10);
+                Destroy(gameObject);
+                return;
+            }
+        }
+    }
 }

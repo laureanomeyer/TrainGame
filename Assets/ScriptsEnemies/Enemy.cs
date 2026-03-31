@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,6 +27,8 @@ public class Enemy : MonoBehaviour
 
     private float currentHealth;
 
+    public bool CanAttack => attackCooldownTimer <= 0f;
+    float attackCooldownTimer;
 
     void Awake()
     {
@@ -36,15 +39,17 @@ public class Enemy : MonoBehaviour
         Brain.Begin(this);
     }
 
-    private void Update()
+    public void ResetAttackCooldown(float cooldown)
     {
-        if (Movement != null)
-        {
-            Movement.Move(this);
-        }
+        attackCooldownTimer = cooldown;
+    }
 
-        Attack.Attack(this);
+    void Update()
+    {
+        attackCooldownTimer -= Time.deltaTime;
 
+        Movement?.Move(this);
+        Attack?.Attack(this);
     }
 
     public void SetTargetList(List<IWagon> targetList)
@@ -56,6 +61,13 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        if (currentHealth <= 0)
+            Dead();
+    }
+
+    private void Dead()
+    {
+        Destroy(this.gameObject);
     }
     //---------------------GIZMOS-------------------------
 
@@ -70,5 +82,19 @@ public class Enemy : MonoBehaviour
             Gizmos.DrawLine(transform.position, target.transform.position);
         }
     }
+    //---------------------TRIGGER----------------------
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("deadWall"))
+        {
+            Dead();
+        }
+        if (other.gameObject.CompareTag("bullet"))
+        {
+            TakeDamage(10);
+        }
+
+    }
+
 
 }
