@@ -7,12 +7,14 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] GameObject enemyPrefab;
     [SerializeField] float spawnInterval = 5f;
-    //[SerializeField] int maxEnemies = 5;
+    [SerializeField] int maxEnemies = 10;
 
     float timer;
     int currentEnemies;
 
     private List<IWagon> trainList = new();
+
+    public float activationDistance = 20f;
 
     private void Start()
     {
@@ -22,14 +24,21 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
 
-        if (timer >= spawnInterval)
+        float distance = Vector3.Distance(transform.position, trainList[0].Transform.position);
+
+        if (distance >= activationDistance)
         {
-            Spawn();
-            timer = 0f;
-            spawnInterval += 1;
+            timer += Time.deltaTime;
+
+            if (timer >= spawnInterval && currentEnemies < maxEnemies)
+            {
+                Spawn();
+                timer = 0f;
+
+            }
         }
+
     }
 
     void Spawn()
@@ -37,5 +46,6 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
         enemy.GetComponent<Enemy>().SetTargetList(trainList);
         currentEnemies++;
+        Debug.Log("Cant enemies: " + currentEnemies);
     }
 }

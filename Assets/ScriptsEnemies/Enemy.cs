@@ -70,6 +70,7 @@ public class Enemy : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
+
     //---------------------GIZMOS-------------------------
 
     void OnDrawGizmosSelected()
@@ -94,7 +95,6 @@ public class Enemy : MonoBehaviour
         {
             int damage = other.GetComponent<BulletScript>().Damage;
             TakeDamage(damage);
-            Debug.Log(damage);
         }
 
     }
