@@ -39,8 +39,8 @@ public class EnemyMovementNormal : EnemyMovementSO
             pos.z = limitZ;
         
 
-        if(pos.y < 5)
-           pos.y = 5; 
+        if(pos.y < 0)
+           pos.y = 0; 
 
         enemy.transform.position = pos;
     }
