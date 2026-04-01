@@ -108,6 +108,12 @@ public class LocomotiveFuel
         if (currentShield <= 0)
         {
             currentMaxFuel -= amount * 100 / (100 + defense);
+
+            if (currentMaxFuel <= 0)
+            {
+                GameManager.Instance.ResetScene();
+            }
+
             currentFuel = Mathf.Clamp(currentFuel, 0, currentMaxFuel);
         }
         else

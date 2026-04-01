@@ -1,7 +1,4 @@
-﻿using UnityEditor.Experimental.GraphView;
-using UnityEditor.Rendering;
-using UnityEngine;
-
+﻿
 public class PlayerInventory : IInventory
 {
     private float goldAmount;

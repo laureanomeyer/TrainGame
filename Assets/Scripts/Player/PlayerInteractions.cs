@@ -103,4 +103,13 @@ public class PlayerInteractions : MonoBehaviour
         fuelO = fuelO / 2;
         GameManager.Instance.LocomotiveBrain.fuelController.ModifyOptimizer( fuelO);
     }
+
+    void OnReloadScene()
+    {
+        ReloadScene();
+    }
+    void ReloadScene()
+    {
+        GameManager.Instance.ResetScene();
+    }
 }

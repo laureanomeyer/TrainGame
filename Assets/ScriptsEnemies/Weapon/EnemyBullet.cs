@@ -23,7 +23,7 @@ public class EnemyBullet : MonoBehaviour
         {
             if (comp is ITrainBrain brain)
             {
-                brain.TakeDamage(10);
+                brain.TakeDamage(5);
                 Destroy(gameObject);
                 return;
             }

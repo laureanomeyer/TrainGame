@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
@@ -38,5 +39,10 @@ public class GameManager : MonoBehaviour
     public void SetLocoBrain(LocomotiveBrain locomotion)
     {
         this.locomotiveBrain = locomotion;
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
