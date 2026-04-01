@@ -8,5 +8,4 @@ public interface ITrainBrain
 
     public void BreakDown();
 
-
 }

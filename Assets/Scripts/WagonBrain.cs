@@ -47,4 +47,9 @@ public class WagonBrain : MonoBehaviour, ITrainBrain
     {
         rendererWagon.material = materialDeVagonDestruido;
     }
+
+    public void AddWagon()
+    {
+        return;
+    }
 }

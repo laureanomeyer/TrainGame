@@ -20,7 +20,7 @@ public class TrainManager : MonoBehaviour
         
         CreateWagon();
 
-
+        GameManager.Instance.trainM = this;
         GameManager.Instance.OnTrainReady();
     }
 
@@ -32,7 +32,7 @@ public class TrainManager : MonoBehaviour
         wagonsList.Add(foo);
         tail = foo.TailRef;
     }
-    void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
+    public void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
     {
         GameObject WagonInstance = Instantiate(WagonPrefab, tail.position, tail.rotation);
         WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();

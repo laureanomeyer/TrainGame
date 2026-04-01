@@ -8,4 +8,6 @@ public class LocomotiveStats : ScriptableObject
     public float goldMultyplier;
     public float damageMultyplier;
     public float attackSpeed;
+    public float fuelOptimizer;
+
 }

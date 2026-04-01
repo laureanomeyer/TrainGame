@@ -15,7 +15,7 @@ public class LocomotiveFuel
     private float currentMaxFuel;
     private bool shieldTakenDamage;
     private float actualSpeed;
-    private float fuelOptimizer;
+    public float fuelOptimizer;
     private float fuelUseXSecond;
     private float defense;
     private float timer = 0;
@@ -40,22 +40,7 @@ public class LocomotiveFuel
         this.currentMaxFuel = maxFuel;
         currentFuel = maxFuel;
         this.actualSpeed = baseSpeed;
-        this.fuelOptimizer = fuelOptimizer; 
-        fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
-        this.defense = defense;
-        shieldTakenDamage = false;
-        fuelMaxCapacity = maxFuel;
-
-        GameManager.Instance.TrainData.SetSpeed(actualSpeed);
-    }
-    public LocomotiveFuel(float shield, float maxFuel, float baseSpeed, float defense)
-    {
-        this.maxShield = shield;
-        this.currentShield = shield;
-        this.currentMaxFuel = maxFuel;
-        currentFuel = maxFuel;
-        this.actualSpeed = baseSpeed;
-        fuelOptimizer = 1;
+        this.fuelOptimizer = fuelOptimizer;
         fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
         this.defense = defense;
         shieldTakenDamage = false;
@@ -73,6 +58,7 @@ public class LocomotiveFuel
         }
         ConsumeFuel(fuelUseXSecond * deltaTime);
 
+
     }
     public void AddFuel(float amount)
     {
@@ -84,7 +70,6 @@ public class LocomotiveFuel
     {
         currentFuel = Mathf.Clamp(currentFuel - amount, 0f, currentMaxFuel);
         UpdateSharedSpeed();
-        Debug.Log("Current Fuel: " + currentFuel);
     }
 
     private void ConsumeFuel(float amount) //gasto natural del tren
@@ -98,6 +83,12 @@ public class LocomotiveFuel
         actualSpeed += speedToAdd;
         fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
         UpdateSharedSpeed();
+    }
+    public void ModifyOptimizer(float wagonEffect)
+    {
+        fuelOptimizer = fuelOptimizer + wagonEffect;
+        fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
+        Debug.Log(fuelOptimizer);
     }
 
     private void UpdateSharedSpeed()

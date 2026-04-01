@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private LocomotiveBrain locomotiveBrain;
     private MapManager mapManager;
     private TrainData trainData;
+    public TrainManager trainM;
+    public LocomotiveBrain locoM;
 
     public TrainData TrainData => trainData;
     public LocomotiveBrain LocomotiveBrain => locomotiveBrain;

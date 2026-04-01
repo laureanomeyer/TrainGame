@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerInteractions : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class PlayerInteractions : MonoBehaviour
 
     private PlayerInventory playerInventory;
     private PlayerBrain playerBrain;
-
+    private float fuelO;
     public PlayerInventory Inventory => playerInventory;
     public WagonBrain CurrentWagon => currentWagon;
 
@@ -25,6 +26,7 @@ public class PlayerInteractions : MonoBehaviour
         repairAction = InputSystem.actions.FindAction("Repair");
         repairAction.performed += ActiveInput;
         repairAction.canceled += DeactiveInput;
+        fuelO = GameManager.Instance.LocomotiveBrain.stats.fuelOptimizer;
 
     }
 
@@ -89,5 +91,16 @@ public class PlayerInteractions : MonoBehaviour
         {
             currentWagon.Repair(repairCapacity);
         }
+    }
+
+    void OnAddWag()
+    {
+        AddWag();
+    } 
+    void AddWag()
+    {
+        GameManager.Instance.trainM.CreateWagon();
+        fuelO = fuelO / 2;
+        GameManager.Instance.LocomotiveBrain.fuelController.ModifyOptimizer( fuelO);
     }
 }
