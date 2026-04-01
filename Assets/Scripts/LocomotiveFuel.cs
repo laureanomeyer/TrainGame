@@ -100,6 +100,7 @@ public class LocomotiveFuel
         else
         {
             GameManager.Instance.TrainData.SetSpeed(0);
+            GameManager.Instance.ResetScene();
         }
     }
 
@@ -128,7 +129,7 @@ public class LocomotiveFuel
     {
         if (!shieldTakenDamage) 
         {
-            currentShield += 1 * deltaTime;
+            currentShield += 5 * deltaTime;
             Mathf.Clamp(currentShield, 0, maxShield);
 
             if (currentShield >= maxShield)
