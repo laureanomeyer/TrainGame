@@ -3,24 +3,35 @@ using System.Collections.Generic;
 
 public class TrainManager : MonoBehaviour
 {
-    [SerializeField] private Transform tail; //Final del tren
+    [SerializeField] private Transform tail;
     [SerializeField] private GameObject WagonPrefab;
+    [SerializeField] private GameObject LocomotivePrefab;
+    private List<IWagon> wagonsList;
+    private TrainData trainData;
     private WagonMovement lastWagon;
 
-    private List<IWagon> wagonsList;
-    public List<IWagon> WagonList => wagonsList;
+    public TrainData TrainData => trainData;
 
     private void Awake()
     {
         wagonsList = new List<IWagon>();
-        tail = GameManager.Instance.InitialTailPosition;
 
+        CreateLocomotive();
+        
         CreateWagon();
 
 
         GameManager.Instance.OnTrainReady();
     }
 
+    void CreateLocomotive()
+    {
+        GameObject LocomotiveInstance = Instantiate(LocomotivePrefab);
+        var foo = LocomotiveInstance.GetComponent<LocomotiveBrain>();
+        GameManager.Instance.SetLocoBrain(foo);
+        wagonsList.Add(foo);
+        tail = foo.TailRef;
+    }
     void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
     {
         GameObject WagonInstance = Instantiate(WagonPrefab, tail.position, tail.rotation);
@@ -28,13 +39,13 @@ public class TrainManager : MonoBehaviour
 
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
-        GameManager.Instance.SetWagonList(wagonsList);
+        GameManager.Instance.TrainData.SetWagonList(wagonsList);
     }
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {
         wagon.Initialize(head);
         tail = wagon.Tail;
-        GameManager.Instance.SetTrainTail(tail);
+        GameManager.Instance.TrainData.SetTrainTail(tail);
 
         if (lastWagon)
         {

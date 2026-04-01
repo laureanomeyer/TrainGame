@@ -50,11 +50,11 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateLocomotiveUI()
     {
-        LocomotiveBrain locomotive = playerInteractions.LocomotiveBrain;
+        LocomotiveBrain locomotive = GameManager.Instance.LocomotiveBrain;
 
         if (locomotive != null && locomotive.fuelController != null)
         {
-            fuelFillImage.fillAmount = locomotive.fuelController.CurrentFuel / locomotive.fuelController.CurrentMaxFuel;
+            fuelFillImage.fillAmount = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
             fuelMaxCapacityImage.fillAmount = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
             shieldImage.fillAmount = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
         }

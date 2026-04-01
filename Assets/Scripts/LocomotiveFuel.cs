@@ -46,7 +46,7 @@ public class LocomotiveFuel
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
 
-        GameManager.Instance.SetSpeed(actualSpeed);
+        GameManager.Instance.TrainData.SetSpeed(actualSpeed);
     }
     public LocomotiveFuel(float shield, float maxFuel, float baseSpeed, float defense)
     {
@@ -61,14 +61,14 @@ public class LocomotiveFuel
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
 
-        GameManager.Instance.SetSpeed(actualSpeed);
+        GameManager.Instance.TrainData.SetSpeed(actualSpeed);
     }
 
     public void Move(float deltaTime)
     {
         if (!hasFuel)
         {
-            GameManager.Instance.SetSpeed(0);
+            GameManager.Instance.TrainData.SetSpeed(0);
             return;
         }
         ConsumeFuel(fuelUseXSecond * deltaTime);
@@ -104,11 +104,11 @@ public class LocomotiveFuel
     {
         if (hasFuel)
         {
-            GameManager.Instance.SetSpeed(actualSpeed);
+            GameManager.Instance.TrainData.SetSpeed(actualSpeed);
         }
         else
         {
-            GameManager.Instance.SetSpeed(0);
+            GameManager.Instance.TrainData.SetSpeed(0);
         }
     }
 

@@ -5,14 +5,14 @@ public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField] private WagonBrain currentWagon;
     [SerializeField] private float repairCapacity;
-    [SerializeField] private LocomotiveBrain locomotiveBrain;
+
 
     private PlayerInventory playerInventory;
     private PlayerBrain playerBrain;
 
     public PlayerInventory Inventory => playerInventory;
     public WagonBrain CurrentWagon => currentWagon;
-    public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
+
 
     private InputAction repairAction;
     private bool buttonIsHold = false;

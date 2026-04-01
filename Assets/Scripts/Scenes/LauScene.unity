@@ -119,17 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &4831561 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2900975310691610324, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-  m_PrefabInstance: {fileID: 5581601825840868483}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c10cba5d7d70bf44bbec7e28b6a7175b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LocomotiveBrain
 --- !u!1 &146008483
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,6 +827,7 @@ GameObject:
   - component: {fileID: 631446770}
   - component: {fileID: 631446769}
   - component: {fileID: 631446771}
+  - component: {fileID: 631446772}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -857,8 +847,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b31f37c28564bb429d59b00f3791cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  tailPosition: {fileID: 0}
-  initialTailPosition: {fileID: 1856252406}
   mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
   mapStartLocation: {fileID: 902026377}
 --- !u!4 &631446770
@@ -890,6 +878,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectBrain
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   behaviorType: 0
+--- !u!114 &631446772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631446768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefbea979dd9e774b8011365f90dc4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrainManager
+  tail: {fileID: 0}
+  WagonPrefab: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  LocomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
 --- !u!1 &676596387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1632,7 +1635,7 @@ PrefabInstance:
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: locomotiveBrain
       value: 
-      objectReference: {fileID: 4831561}
+      objectReference: {fileID: 0}
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: progressBarFuel
       value: 
@@ -2034,11 +2037,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1856252406 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 813814704754815069, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-  m_PrefabInstance: {fileID: 5581601825840868483}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2043740327
 GameObject:
   m_ObjectHideFlags: 0
@@ -2176,67 +2174,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043740327}
   m_CullTransparentMesh: 1
---- !u!1001 &5581601825840868483
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 813814704754815069, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 2.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 1432992804342217495, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-      propertyPath: m_Name
-      value: LocomotivePrefab
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2244,7 +2181,6 @@ SceneRoots:
   - {fileID: 498928609}
   - {fileID: 301139766}
   - {fileID: 834336553}
-  - {fileID: 5581601825840868483}
   - {fileID: 1558271857}
   - {fileID: 1724918361}
   - {fileID: 1704942728}

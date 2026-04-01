@@ -4,20 +4,14 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
-    private float speed;
-    [SerializeField] private Transform tailPosition;
-    [SerializeField] private Transform initialTailPosition;
     [SerializeField] private GameObject mapManagerPrefab;
     [SerializeField] private Transform mapStartLocation;
-    private List<IWagon> wagonList;
+    private LocomotiveBrain locomotiveBrain;
     private MapManager mapManager;
+    private TrainData trainData;
 
-    public float Speed => speed;
-    public Transform TailPosition => tailPosition;
-    public List<IWagon> WagonList => wagonList;
-    public Transform InitialTailPosition => initialTailPosition;
-
+    public TrainData TrainData => trainData;
+    public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
 
     void Awake()
     {
@@ -29,34 +23,18 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-
+            trainData = new TrainData();
         }
 
     }
-   /* private void Update()
-    {
-        Debug.Log(Speed);
-    }*/
-
     public void OnTrainReady()
     {
-
-        GameObject obj = Instantiate(mapManagerPrefab, tailPosition.position, tailPosition.rotation);
+        GameObject obj = Instantiate(mapManagerPrefab, TrainData.TailPosition.position, TrainData.TailPosition.rotation);
         mapManager = obj.GetComponent<MapManager>();
         mapManager.Initialize(mapStartLocation);
     }
-
-    public void SetSpeed(float speed)
+    public void SetLocoBrain(LocomotiveBrain locomotion)
     {
-        this.speed = speed;
-    }
-    public void SetTrainTail(Transform tail)
-    {
-        tailPosition = tail;
-
-    }
-    public void SetWagonList(List<IWagon> wagonList)
-    {
-        this.wagonList = wagonList;
+        this.locomotiveBrain = locomotion;
     }
 }

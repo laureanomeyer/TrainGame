@@ -33,7 +33,7 @@ public class CoalBox: IInteractable
         }
         else if (hasCoal && !playerRef.HasCoal)
         {
-            hasCoal = false;
+            hasCoal = true;
             playerRef.CollectCoal();
         }
 

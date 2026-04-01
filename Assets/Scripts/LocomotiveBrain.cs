@@ -1,16 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LocomotiveBrain : MonoBehaviour, ITrainBrain 
+public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
 {
     [SerializeField] private LocomotiveStats stats;
     public LocomotiveFuel fuelController;
 
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
+    [SerializeField] public Transform TailRef;
 
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
+    public Transform Transform => transform;
 
     void Start()
     {
