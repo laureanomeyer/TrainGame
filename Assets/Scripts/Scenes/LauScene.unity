@@ -893,56 +893,6 @@ MonoBehaviour:
   tail: {fileID: 0}
   WagonPrefab: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
   LocomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
---- !u!1 &676596387
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 676596389}
-  - component: {fileID: 676596388}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &676596388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 676596387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 267f14dd57c89a040b89bc62031e41e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UIPlayerManager
-  playerInteractions: {fileID: 1558271858}
-  wagonHpImage: {fileID: 498791291}
-  fuelFillImage: {fileID: 869730420}
-  fuelMaxCapacityImage: {fileID: 1314287956}
-  shieldImage: {fileID: 982978262}
-  CoalImage: {fileID: 1312346803}
---- !u!4 &676596389
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 676596387}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1024.6406, y: 0.00001, z: 7589.5796}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &779351314 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7431540458986960683, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
@@ -2174,6 +2124,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043740327}
   m_CullTransparentMesh: 1
+--- !u!1001 &511059817397968244
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: CoalImage
+      value: 
+      objectReference: {fileID: 1312346803}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: shieldImage
+      value: 
+      objectReference: {fileID: 982978262}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: wagonHpImage
+      value: 
+      objectReference: {fileID: 498791291}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: fuelFillImage
+      value: 
+      objectReference: {fileID: 869730420}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: playerInteractions
+      value: 
+      objectReference: {fileID: 1558271858}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: fuelMaxCapacityImage
+      value: 
+      objectReference: {fileID: 1314287956}
+    - target: {fileID: 6501800450670150854, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_Name
+      value: UIManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1024.6406
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7589.5796
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833815937731509768, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2188,4 +2219,4 @@ SceneRoots:
   - {fileID: 187030149}
   - {fileID: 491946923}
   - {fileID: 631446770}
-  - {fileID: 676596389}
+  - {fileID: 511059817397968244}
