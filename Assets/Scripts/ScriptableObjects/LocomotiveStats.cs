@@ -3,6 +3,7 @@ using UnityEngine;
 public class LocomotiveStats : ScriptableObject
 {
     public float maxFuel;
+    public float maxHp;
     public float defense;
     public float baseSpeed;
     public float goldMultyplier;

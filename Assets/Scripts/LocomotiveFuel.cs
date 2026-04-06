@@ -6,6 +6,28 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
+public struct TrainStats
+{
+    public readonly float maxFuel;
+    public readonly float fuelOptimizer;
+    public readonly float trainMaxHp;
+    public readonly float shields;
+    public readonly float goldBonus;
+    public readonly float damageBonus;
+    public readonly float attackSpeed;
+    public readonly float baseSpeed;
+    public TrainStats(float maxFuel, float trainMaxHp, float shields, float goldBonus, float damageBonus, float attackSpeed, float fuelOptimizer, float baseSpeed)
+    {
+        this.maxFuel = maxFuel;
+        this.trainMaxHp = trainMaxHp;
+        this.shields = shields;
+        this.goldBonus = goldBonus;
+        this.damageBonus = damageBonus;
+        this.attackSpeed = attackSpeed;
+        this.fuelOptimizer = fuelOptimizer;
+        this.baseSpeed = baseSpeed;
+    }
+}
 
 public class LocomotiveFuel
 {
@@ -46,14 +68,14 @@ public class LocomotiveFuel
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
 
-        GameManager.Instance.TrainData.SetSpeed(actualSpeed);
+        RunManager.Instance.TrainData.SetSpeed(actualSpeed);
     }
 
     public void Move(float deltaTime)
     {
         if (!hasFuel)
         {
-            GameManager.Instance.TrainData.SetSpeed(0);
+            RunManager.Instance.TrainData.SetSpeed(0);
             return;
         }
         ConsumeFuel(fuelUseXSecond * deltaTime);
@@ -95,11 +117,11 @@ public class LocomotiveFuel
     {
         if (hasFuel)
         {
-            GameManager.Instance.TrainData.SetSpeed(actualSpeed);
+            RunManager.Instance.TrainData.SetSpeed(actualSpeed);
         }
         else
         {
-            GameManager.Instance.TrainData.SetSpeed(0);
+            RunManager .Instance.TrainData.SetSpeed(0);
             GameManager.Instance.ResetScene();
         }
     }

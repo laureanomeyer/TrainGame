@@ -20,7 +20,7 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     void Start()
     {
         currentFuel = Mathf.Clamp(currentFuel, 0f, maxFuel);
-        GameManager.Instance.TrainData.SetSpeed(baseSpeed);
+        RunManager.Instance.TrainData.SetSpeed(baseSpeed);
         actualSpeed = baseSpeed;
         UpdateSharedSpeed();
 
@@ -36,7 +36,7 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     {
         if (!HasFuel) 
         {
-            GameManager.Instance.TrainData.SetSpeed(0);
+            RunManager.Instance.TrainData.SetSpeed(0);
             return;
         }
         ConsumeFuel(fuelUseXSecond * Time.deltaTime);
@@ -73,11 +73,11 @@ public class LocomotiveMovement : MonoBehaviour, IWagon
     {
         if (HasFuel) 
         {
-            GameManager.Instance.TrainData.SetSpeed(actualSpeed);
+            RunManager.Instance.TrainData.SetSpeed(actualSpeed);
         }
         else
         {
-            GameManager.Instance.TrainData.SetSpeed(0);
+            RunManager.Instance.TrainData.SetSpeed(0);
         }
     }
 

@@ -50,7 +50,7 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateLocomotiveUI()
     {
-        LocomotiveBrain locomotive = GameManager.Instance.LocomotiveBrain;
+        LocomotiveBrain locomotive = RunManager.Instance.LocomotiveBrain;
 
         if (locomotive != null && locomotive.fuelController != null)
         {

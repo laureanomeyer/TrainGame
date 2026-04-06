@@ -5,17 +5,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    [SerializeField] private GameObject mapManagerPrefab;
-    [SerializeField] private Transform mapStartLocation;
-    private LocomotiveBrain locomotiveBrain;
-    private MapManager mapManager;
-    private TrainData trainData;
-    public TrainManager trainM;
-    public LocomotiveBrain locoM;
-
-    public TrainData TrainData => trainData;
-    public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
-
+    [SerializeField] public readonly LocomotiveStats baseStats;
+    
     void Awake()
     {
         if (Instance != null && Instance != this) 
@@ -26,20 +17,11 @@ public class GameManager : MonoBehaviour
         else
         {
             Instance = this;
-            trainData = new TrainData();
+            
         }
 
     }
-    public void OnTrainReady()
-    {
-        GameObject obj = Instantiate(mapManagerPrefab, TrainData.TailPosition.position, TrainData.TailPosition.rotation);
-        mapManager = obj.GetComponent<MapManager>();
-        mapManager.Initialize(mapStartLocation);
-    }
-    public void SetLocoBrain(LocomotiveBrain locomotion)
-    {
-        this.locomotiveBrain = locomotion;
-    }
+   
 
     public void ResetScene()
     {

@@ -20,15 +20,15 @@ public class TrainManager : MonoBehaviour
         
         CreateWagon();
 
-        GameManager.Instance.trainM = this;
-        GameManager.Instance.OnTrainReady();
+        RunManager.Instance.trainM = this;
+        RunManager.Instance.OnTrainReady();
     }
 
     void CreateLocomotive()
     {
         GameObject LocomotiveInstance = Instantiate(LocomotivePrefab);
         var foo = LocomotiveInstance.GetComponent<LocomotiveBrain>();
-        GameManager.Instance.SetLocoBrain(foo);
+        RunManager.Instance.SetLocoBrain(foo);
         wagonsList.Add(foo);
         tail = foo.TailRef;
     }
@@ -39,13 +39,13 @@ public class TrainManager : MonoBehaviour
 
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
-        GameManager.Instance.TrainData.SetWagonList(wagonsList);
+        RunManager.Instance.TrainData.SetWagonList(wagonsList);
     }
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {
         wagon.Initialize(head);
         tail = wagon.Tail;
-        GameManager.Instance.TrainData.SetTrainTail(tail);
+        RunManager.Instance.TrainData.SetTrainTail(tail);
 
         if (lastWagon)
         {

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class TrainData 
+public class TrainData
 {
     private float speed;
+    public readonly TrainStats stats;
+    private LocomotiveStats baseStats;
     private Transform tailPosition;
     private List<IWagon> wagonsList;
 
@@ -13,6 +15,12 @@ public class TrainData
     public Transform TailPosition => tailPosition;
     public float Speed => speed;
 
+    public TrainData(LocomotiveStats stats)
+    {
+        this.baseStats = stats;
+        this.stats = new TrainStats(baseStats.maxFuel, baseStats.maxHp, baseStats.defense, baseStats.goldMultyplier,
+                                    baseStats.damageMultyplier, baseStats.attackSpeed, baseStats.fuelOptimizer, baseStats.baseSpeed);
+    }
     public void SetSpeed(float speed)
     {
         this.speed = speed;

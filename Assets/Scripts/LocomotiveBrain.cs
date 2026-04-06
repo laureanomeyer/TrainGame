@@ -3,9 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
 {
-    [SerializeField] public LocomotiveStats stats;
     public LocomotiveFuel fuelController;
-
+    private TrainData dataRef;
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
     [SerializeField] public Transform TailRef;
@@ -16,7 +15,8 @@ public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
 
     void Start()
     {
-        fuelController = new LocomotiveFuel(stats.defense * 2, stats.maxFuel, stats.baseSpeed, stats.defense, stats.fuelOptimizer);
+        dataRef = RunManager.Instance.TrainData;
+        fuelController = new LocomotiveFuel(dataRef.stats.shields * 2, dataRef.stats.maxFuel, dataRef.stats.baseSpeed, dataRef.stats.shields, dataRef.stats.fuelOptimizer);
     }
 
     void Update()
@@ -32,7 +32,7 @@ public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
 
     public void AddFuel()
     {
-        fuelController.AddFuel(stats.maxFuel);
+        fuelController.AddFuel(dataRef.stats.maxFuel);
     }
 
     public void Repair(float repairAmount)
