@@ -20,16 +20,14 @@ public class TrainManager : MonoBehaviour
         wagonsList = new List<IWagon>();
         trainBrainList = new List<ITrainBrain>();
         BufferList = new List<IBuffer>();
+    }
 
+    private void Start()
+    {
         CreateLocomotive();
-        
         CreateWagon();
-
         RunManager.Instance.trainM = this;
         RunManager.Instance.OnTrainReady();
-
-        //Ejemplo de suma de structs
-
     }
 
     void CreateLocomotive()
@@ -57,7 +55,7 @@ public class TrainManager : MonoBehaviour
         //NO FUNCIONA - PERO PARA SUMAR LAS STATS DE UN VAGON LA IDEA ES ESTA !!!!!!
         //RunManager.Instance.trainM.trainData.stats += BufferList[0].StatsBuff;
 
-        Debug.Log(trainData.stats.maxFuel);
+        
     }
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {

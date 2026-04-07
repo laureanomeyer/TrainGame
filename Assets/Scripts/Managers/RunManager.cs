@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-
+[DefaultExecutionOrder(-99)]
 public class RunManager : MonoBehaviour
 {
     public static RunManager Instance;
@@ -29,8 +29,8 @@ public class RunManager : MonoBehaviour
         else
         {
             Instance = this;
-            trainData = new TrainData(GameManager.Instance.baseStats);
         }
+            trainData = new TrainData(GameManager.Instance.baseStats);
 
     }
     public void OnTrainReady()
