@@ -1,18 +1,20 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField] private WagonBrain currentWagon;
     [SerializeField] private float repairCapacity;
+    [SerializeField] private InteractionUIManager interactionUIManager;
 
+    private ShopButton currentButton;
+    private ShopZone currentShopZone;
 
     private PlayerInventory playerInventory;
     private PlayerBrain playerBrain;
+
     public PlayerInventory Inventory => playerInventory;
     public WagonBrain CurrentWagon => currentWagon;
-
 
     private InputAction repairAction;
     private bool buttonIsHold = false;
@@ -26,6 +28,10 @@ public class PlayerInteractions : MonoBehaviour
         repairAction.performed += ActiveInput;
         repairAction.canceled += DeactiveInput;
 
+        if (interactionUIManager != null)
+        {
+            interactionUIManager.HideAll();
+        }
     }
 
     private void Update()
@@ -40,6 +46,28 @@ public class PlayerInteractions : MonoBehaviour
             other.TryGetComponent(out WagonBrain wagon);
             currentWagon = wagon;
         }
+
+        if (other.CompareTag("ShopButton"))
+        {
+            other.TryGetComponent(out ShopButton shopButton);
+            currentButton = shopButton;
+
+            if (currentButton != null && interactionUIManager != null)
+            {
+                interactionUIManager.ShowText(currentButton.ButtonText);
+            }
+        }
+
+        if (other.CompareTag("ShopZone"))
+        {
+            other.TryGetComponent(out ShopZone shopZone);
+            currentShopZone = shopZone;
+
+            if (currentShopZone != null && interactionUIManager != null)
+            {
+                interactionUIManager.ShowButtons();
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -51,6 +79,32 @@ public class PlayerInteractions : MonoBehaviour
                 currentWagon = null;
             }
         }
+
+        if (other.CompareTag("ShopButton"))
+        {
+            if (other.TryGetComponent(out ShopButton shopButton) && shopButton == currentButton)
+            {
+                currentButton = null;
+
+                if (interactionUIManager != null)
+                {
+                    interactionUIManager.HideAll();
+                }
+            }
+        }
+
+        if (other.CompareTag("ShopZone"))
+        {
+            if (other.TryGetComponent(out ShopZone shopZone) && shopZone == currentShopZone)
+            {
+                currentShopZone = null;
+
+                if (interactionUIManager != null)
+                {
+                    interactionUIManager.HideAll();
+                }
+            }
+        }
     }
 
     public void OnInteract()
@@ -58,15 +112,13 @@ public class PlayerInteractions : MonoBehaviour
         Interact();
     }
 
-    /*
-    public void OnRepair()
-    {
-        Repair();
-    }
-    */
-
     void Interact()
     {
+        if (currentButton != null)
+        {
+            currentButton.Interact();
+        }
+
         if (currentWagon != null)
         {
             currentWagon.TakeDamage(10);
