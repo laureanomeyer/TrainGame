@@ -828,6 +828,7 @@ GameObject:
   - component: {fileID: 631446769}
   - component: {fileID: 631446771}
   - component: {fileID: 631446772}
+  - component: {fileID: 631446773}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -847,6 +848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b31f37c28564bb429d59b00f3791cc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  baseStats: {fileID: 11400000, guid: 119675ca747a4af4a9fbee5852b7949e, type: 2}
 --- !u!4 &631446770
 Transform:
   m_ObjectHideFlags: 0
@@ -891,6 +893,22 @@ MonoBehaviour:
   tail: {fileID: 0}
   WagonPrefab: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
   LocomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+--- !u!114 &631446773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631446768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a8acd9f4e290304ea00ad1333764717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RunManager
+  mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
+  mapStartLocation: {fileID: 902026377}
+  trainM: {fileID: 0}
+  locoM: {fileID: 0}
 --- !u!4 &779351314 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7431540458986960683, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}

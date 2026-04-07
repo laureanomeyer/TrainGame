@@ -7,6 +7,9 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private GameObject WagonPrefab;
     [SerializeField] private GameObject LocomotivePrefab;
     private List<IWagon> wagonsList;
+    private List<ITrainBrain> trainBrainList;
+    private List<IBuffer> BufferList;
+
     private TrainData trainData;
     private WagonMovement lastWagon;
 
@@ -15,6 +18,8 @@ public class TrainManager : MonoBehaviour
     private void Awake()
     {
         wagonsList = new List<IWagon>();
+        trainBrainList = new List<ITrainBrain>();
+        BufferList = new List<IBuffer>();
 
         CreateLocomotive();
         
@@ -22,6 +27,9 @@ public class TrainManager : MonoBehaviour
 
         RunManager.Instance.trainM = this;
         RunManager.Instance.OnTrainReady();
+
+        //Ejemplo de suma de structs
+
     }
 
     void CreateLocomotive()
@@ -36,10 +44,19 @@ public class TrainManager : MonoBehaviour
     {
         GameObject WagonInstance = Instantiate(WagonPrefab, tail.position, tail.rotation);
         WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
+        WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
 
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
-        RunManager.Instance.TrainData.SetWagonList(wagonsList);
+        trainBrainList.Add(wagonBrain);
+        BufferList.Add(wagonBrain);
+
+        RunManager.Instance.TrainData.SetWagonList(wagonsList, trainBrainList);
+
+        //NO FUNCIONA - PERO PARA SUMAR LAS STATS DE UN VAGON LA IDEA ES ESTA !!!!!!
+        RunManager.Instance.trainM.trainData.stats += BufferList[0].StatsBuff;
+
+        Debug.Log(trainData.stats.maxFuel);
     }
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {

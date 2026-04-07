@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
+
+
 public struct TrainStats
+
 {
-    public readonly float maxFuel;
-    public readonly float fuelOptimizer;
-    public readonly float trainMaxHp;
-    public readonly float shields;
-    public readonly float goldBonus;
-    public readonly float damageBonus;
-    public readonly float attackSpeed;
-    public readonly float baseSpeed;
+    public float maxFuel;
+    public float fuelOptimizer;
+    public float trainMaxHp;
+    public float shields;
+    public float goldBonus;
+    public float damageBonus;
+    public float attackSpeed;
+    public float baseSpeed;
     public TrainStats(float maxFuel, float trainMaxHp, float shields, float goldBonus, float damageBonus, float attackSpeed, float fuelOptimizer, float baseSpeed)
     {
         this.maxFuel = maxFuel;
@@ -27,7 +30,23 @@ public struct TrainStats
         this.fuelOptimizer = fuelOptimizer;
         this.baseSpeed = baseSpeed;
     }
+    public static TrainStats operator +(TrainStats x, TrainStats y)
+    {
+        return new TrainStats
+        {
+            maxFuel = x.maxFuel + y.maxFuel,
+            fuelOptimizer = x.fuelOptimizer + y.fuelOptimizer,
+            trainMaxHp = x.trainMaxHp + y.trainMaxHp,
+            shields = x.shields + y.shields,
+            goldBonus = x.goldBonus + y.goldBonus,
+            damageBonus = x.damageBonus + y.damageBonus,
+            attackSpeed = x.attackSpeed + y.attackSpeed,
+            baseSpeed = x.baseSpeed + y.baseSpeed
+        };
+    }
 }
+
+
 
 public class LocomotiveFuel
 {

@@ -46,6 +46,6 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
         enemy.GetComponent<Enemy>().SetTargetList(trainList);
         currentEnemies++;
-        Debug.Log("Cant enemies: " + currentEnemies);
+        //Debug.Log("Cant enemies: " + currentEnemies);
     }
 }

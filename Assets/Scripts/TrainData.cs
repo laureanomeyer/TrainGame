@@ -6,12 +6,15 @@ using UnityEngine;
 public class TrainData
 {
     private float speed;
-    public readonly TrainStats stats;
+    public  TrainStats stats;
     private LocomotiveStats baseStats;
     private Transform tailPosition;
     private List<IWagon> wagonsList;
+    private List<ITrainBrain> trainBrainList;
 
     public List<IWagon> WagonList => wagonsList;
+    public List<ITrainBrain> TrainBrainList => trainBrainList;
+
     public Transform TailPosition => tailPosition;
     public float Speed => speed;
 
@@ -29,9 +32,11 @@ public class TrainData
     {
         tailPosition = tail;
     }
-    public void SetWagonList(List<IWagon> wagonList)
+    public void SetWagonList(List<IWagon> wagonList, List<ITrainBrain> trainBrains)
     {
         this.wagonsList = wagonList;
+        this.trainBrainList = trainBrains;
+
     }
 }
 

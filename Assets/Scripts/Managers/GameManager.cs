@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    [SerializeField] public readonly LocomotiveStats baseStats;
+    [SerializeField] public LocomotiveStats baseStats;
     
     void Awake()
     {
