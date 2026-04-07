@@ -30,6 +30,9 @@ public struct TrainStats
         this.fuelOptimizer = fuelOptimizer;
         this.baseSpeed = baseSpeed;
     }
+
+
+    //Funcion encargada de sumar las varibles de dos TrainsStats
     public static TrainStats operator +(TrainStats x, TrainStats y)
     {
         return new TrainStats

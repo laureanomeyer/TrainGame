@@ -53,8 +53,9 @@ public class TrainManager : MonoBehaviour
 
         RunManager.Instance.TrainData.SetWagonList(wagonsList, trainBrainList);
 
+        //Actualmente no funciona, pero, deberia sumar los TrainStats de TrainData con los TrainStats de los vagones que posea buffers
         //NO FUNCIONA - PERO PARA SUMAR LAS STATS DE UN VAGON LA IDEA ES ESTA !!!!!!
-        RunManager.Instance.trainM.trainData.stats += BufferList[0].StatsBuff;
+        //RunManager.Instance.trainM.trainData.stats += BufferList[0].StatsBuff;
 
         Debug.Log(trainData.stats.maxFuel);
     }
