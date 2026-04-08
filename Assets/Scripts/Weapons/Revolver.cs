@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Net.Sockets;
+
 using UnityEngine;
 
 public class Revolver : MonoBehaviour, IWeapons

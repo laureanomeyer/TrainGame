@@ -1,11 +1,12 @@
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponShopButtonManager : MonoBehaviour
 {
-    [SerializeField] public IShopButton[] uttons;
-    [SerializeField] private IShopButton[] buttons;
+    [SerializeField] public GameObject[] shopButtons;
+    private List<IShopButton> buttons = new List<IShopButton>();
 
     [SerializeField] private int level;
 
@@ -16,31 +17,39 @@ public class WeaponShopButtonManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        PlayerAttackController playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttackController>();
+       PlayerAttackController playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttackController>();
+
+       for (int i = 0; i < shopButtons.Length; i++)
+       {
+            buttons.Add(shopButtons[i].GetComponent<WeaponShopButton>()); 
+       }
+
+       buttons[0].WeaponInStock = firtsSlotWeapons;
+       buttons[1].WeaponInStock = secondSlotWeapons;
+       buttons[2].WeaponInStock = thirdSlotWeapons;
 
        foreach (IShopButton button in buttons)
        {
             button.PlayerReference = playerAtk;
             button.ButtonManager = this;
             button.Level = level;
-       }
 
-        buttons[0].WeaponInStock = firtsSlotWeapons;
-        buttons[1].WeaponInStock = secondSlotWeapons;
-        buttons[2].WeaponInStock = thirdSlotWeapons;
+            button.SetValuesInStock();
+       }
     }
 
     public void UpdateButtons(IShopButton button)
     {
-        for (int i = 0; i < buttons.Length; i++)
+        for (int i = 0; i < buttons.Count; i++)
         {
             if (button == buttons[i])
             {
                 buttons[i].DeactivateButton();
-                return;
             }
-
-            buttons[i].ActivateButton();
+            else
+            {
+                buttons[i].ActivateButton();
+            }
         }
     }
 }

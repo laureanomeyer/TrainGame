@@ -18,13 +18,14 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     [SerializeField] private TextMeshProUGUI buttonText;
     private Button button;
 
-    private void Start()
+    public void SetValuesInStock()
     {
         button = GetComponent<Button>();
 
         if (level > weaponInStock.Length)
         {
-            currentWeapon = weaponInStock[weaponInStock.Length - 1]; 
+            Debug.Log(weaponInStock[weaponInStock.Length]);
+            currentWeapon = weaponInStock[weaponInStock.Length];
         }
         else
         {

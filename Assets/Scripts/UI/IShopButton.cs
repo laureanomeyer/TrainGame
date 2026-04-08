@@ -16,4 +16,6 @@ public interface IShopButton
     public void ActivateButton();
 
     public void DeactivateButton();
+
+    public void SetValuesInStock();
 }
