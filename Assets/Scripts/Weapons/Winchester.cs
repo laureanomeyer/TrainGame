@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Remington : MonoBehaviour, IWeapons
+public class Winchester : MonoBehaviour, IWeapons
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
