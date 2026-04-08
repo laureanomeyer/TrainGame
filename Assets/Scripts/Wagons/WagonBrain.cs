@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class WagonBrain : MonoBehaviour, ITrainBrain, IBuffer
+public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 {
 
-    [SerializeField] private float hp;
-    [SerializeField] private float currentHp;
-    [SerializeField] private float defense;
-    [SerializeField] private string wagonType;
     [SerializeField] private LocomotiveStats wagonBuffStats;
+
+    private float hp;
+    private float currentHp;
+    private float defense;
 
     private TrainStats statsBuff;
     private WagonHP hpController;
@@ -24,7 +24,9 @@ public class WagonBrain : MonoBehaviour, ITrainBrain, IBuffer
     void Start()
     {
         statsBuff = new TrainStats(wagonBuffStats.maxFuel, 0,0,0,0,0,0,0);
-        hpController = new WagonHP(hp, defense, BreakDown);
+        hp = RunManager.Instance.TrainCopyData.stats.trainMaxHp;
+        defense = RunManager.Instance.TrainCopyData.stats.shields;
+        hpController = new WagonHP(hp, defense, Break);
     }
 
 
@@ -40,7 +42,7 @@ public class WagonBrain : MonoBehaviour, ITrainBrain, IBuffer
         hpController.TakeDamage(damageAmount);
         if (hpController.CurrentHp <= 0)
         {
-            BreakDown();
+            Break();
         }
     }
 
@@ -49,7 +51,7 @@ public class WagonBrain : MonoBehaviour, ITrainBrain, IBuffer
         hpController.Repair(Time.deltaTime, repairAmount);
     }
 
-    public void BreakDown()
+    public void Break()
     {
         rendererWagon.material = materialDeVagonDestruido;
     }

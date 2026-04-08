@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
+public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 {
     public LocomotiveFuel fuelController;
     private TrainData dataRef;
@@ -15,7 +15,7 @@ public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
 
     void Start()
     {
-        dataRef = RunManager.Instance.TrainData;
+        dataRef = RunManager.Instance.TrainCopyData;
         fuelController = new LocomotiveFuel(dataRef.stats.shields * 2, dataRef.stats.maxFuel, dataRef.stats.baseSpeed, dataRef.stats.shields, dataRef.stats.fuelOptimizer);
     }
 
@@ -39,7 +39,7 @@ public class LocomotiveBrain : MonoBehaviour, ITrainBrain, IWagon
     {
     }
 
-    public void BreakDown()
+    public void Break()
     {
         if(fuelController.CurrentMaxFuel >= 0)
         {

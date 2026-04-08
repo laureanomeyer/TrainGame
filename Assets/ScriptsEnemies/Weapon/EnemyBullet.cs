@@ -21,7 +21,7 @@ public class EnemyBullet : MonoBehaviour
 
         foreach (var comp in components)
         {
-            if (comp is ITrainBrain brain)
+            if (comp is IDamagable brain)
             {
                 brain.TakeDamage(5);
                 Destroy(gameObject);

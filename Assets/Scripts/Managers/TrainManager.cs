@@ -7,7 +7,7 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private GameObject WagonPrefab;
     [SerializeField] private GameObject LocomotivePrefab;
     private List<IWagon> wagonsList;
-    private List<ITrainBrain> trainBrainList;
+
     private List<IBuffer> BufferList;
 
     private TrainData trainData;
@@ -18,7 +18,6 @@ public class TrainManager : MonoBehaviour
     private void Awake()
     {
         wagonsList = new List<IWagon>();
-        trainBrainList = new List<ITrainBrain>();
         BufferList = new List<IBuffer>();
     }
 
@@ -30,6 +29,12 @@ public class TrainManager : MonoBehaviour
         RunManager.Instance.OnTrainReady();
     }
 
+    public void CreateTrain()
+    {
+        CreateLocomotive();
+        CreateWagons();
+    }
+
     void CreateLocomotive()
     {
         GameObject LocomotiveInstance = Instantiate(LocomotivePrefab);
@@ -37,6 +42,10 @@ public class TrainManager : MonoBehaviour
         RunManager.Instance.SetLocoBrain(foo);
         wagonsList.Add(foo);
         tail = foo.TailRef;
+    }
+    public void CreateWagons()
+    {
+        CreateWagon();
     }
     public void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
     {
@@ -46,10 +55,8 @@ public class TrainManager : MonoBehaviour
 
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
-        trainBrainList.Add(wagonBrain);
-        BufferList.Add(wagonBrain);
 
-        RunManager.Instance.TrainData.SetWagonList(wagonsList, trainBrainList);
+        RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
 
         //Actualmente no funciona, pero, deberia sumar los TrainStats de TrainData con los TrainStats de los vagones que posea buffers
         //NO FUNCIONA - PERO PARA SUMAR LAS STATS DE UN VAGON LA IDEA ES ESTA !!!!!!
@@ -57,11 +64,12 @@ public class TrainManager : MonoBehaviour
 
         
     }
+
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
     {
         wagon.Initialize(head);
         tail = wagon.Tail;
-        RunManager.Instance.TrainData.SetTrainTail(tail);
+        RunManager.Instance.TrainCopyData.SetTrainTail(tail);
 
         if (lastWagon)
         {

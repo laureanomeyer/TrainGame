@@ -16,8 +16,8 @@ public class RunManager : MonoBehaviour
     public TrainManager trainM;
     public LocomotiveBrain locoM;
 
-    private TrainData trainData;
-    public TrainData TrainData => trainData;
+    private TrainData trainCopyData;
+    public TrainData TrainCopyData => trainCopyData;
     public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
     void Awake()
     {
@@ -30,12 +30,12 @@ public class RunManager : MonoBehaviour
         {
             Instance = this;
         }
-            trainData = new TrainData(GameManager.Instance.baseStats);
+        trainCopyData = GameManager.Instance.TrainData;
 
     }
     public void OnTrainReady()
     {
-        GameObject obj = Instantiate(mapManagerPrefab, TrainData.TailPosition.position, TrainData.TailPosition.rotation);
+        GameObject obj = Instantiate(mapManagerPrefab, TrainCopyData.TailPosition.position, TrainCopyData.TailPosition.rotation);
         mapManager = obj.GetComponent<MapManager>();
         mapManager.Initialize(mapStartLocation);
     }

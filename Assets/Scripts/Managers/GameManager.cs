@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField] public LocomotiveStats baseStats;
+    private TrainData trainData;
+    public TrainData TrainData => trainData;
     
     void Awake()
     {
@@ -19,10 +21,17 @@ public class GameManager : MonoBehaviour
             Instance = this;
             
         }
-
+        trainData = new TrainData(baseStats);
     }
    
-
+    public void AddBufferToList(IBuffer buff)
+    {
+        trainData.AddToBufferList(buff);
+    }
+    public void UpdateTrainData()
+    {
+        trainData.UpdateStats();
+    }
     public void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
