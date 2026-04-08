@@ -5,7 +5,7 @@ public class FuelWagonBrain : WagonBrain
     [SerializeField] private float fuelOpt;
     new void Awake()
     {
-        base.statsBuff = new TrainStats(fuelOpt,0,0,0,0,0,fuelOpt,0);
+        base.statsBuff = new TrainStats(fuelOpt,0,0,0,0,0,0,0);
 
     }
 

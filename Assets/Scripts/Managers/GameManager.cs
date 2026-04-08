@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
             
         }
         trainData = new TrainData(baseStats);
-
+        DontDestroyOnLoad(gameObject);
 
     }
 
