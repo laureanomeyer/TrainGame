@@ -16,10 +16,9 @@ public class EnemySpawner : MonoBehaviour
 
     public float activationDistance = 20f;
 
-    private void Start()
+    private void Awake()
     {
         trainList = RunManager.Instance.TrainCopyData.WagonList;
-        Spawn();
     }
 
     void Update()

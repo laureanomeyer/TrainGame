@@ -18,19 +18,23 @@ public class TrainManager : MonoBehaviour
     {
         wagonsList = new List<IWagon>();
         BufferList = new List<IBuffer>();
+        RunManager.Instance.trainM = this;
+        CreateTrain();
     }
 
     private void Start()
     {
-        RunManager.Instance.trainM = this;
-        CreateTrain();
         RunManager.Instance.OnTrainReady();
+
     }
 
     public void CreateTrain()
     {
         CreateLocomotive();
+        CreateWagon();
         CreateWagons();
+        RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
+
     }
 
     void CreateLocomotive()
@@ -40,25 +44,17 @@ public class TrainManager : MonoBehaviour
         RunManager.Instance.SetLocoBrain(foo);
         wagonsList.Add(foo);
         tail = foo.TailRef;
+        RunManager.Instance.TrainCopyData.SetTrainTail(tail);
+
     }
     public void CreateWagons()
     {
-        CreateWagon();
-        CreateWagon();
+        foreach (var wagon in GameManager.Instance.TrainData.WagonsIDList)
+        {
+            CreateWagon();
+        }
     }
-    /*public void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
-    {
-        GameObject WagonInstance = Instantiate(WagonPrefab, tail.position, tail.rotation);
-        WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
-        WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
 
-        AddWagon(tail, wagon);
-        wagonsList.Add(wagon);
-
-        GameManager.Instance.AddBufferToList(wagonBrain);
-        GameManager.Instance.UpdateTrainData();
-        RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
-    }*/
 
     public void CreateWagon()
     {
@@ -66,11 +62,12 @@ public class TrainManager : MonoBehaviour
         WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
         WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
 
-        AddWagon(tail, wagon);
+        wagonsList.Add(wagon);
 
-        GameManager.Instance.TrainData.WagonList.Add(wagon);
         GameManager.Instance.TrainData.AddToBufferList(wagonBrain);
         GameManager.Instance.UpdateTrainData();
+        AddWagon(tail, wagon);
+
     }
 
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
