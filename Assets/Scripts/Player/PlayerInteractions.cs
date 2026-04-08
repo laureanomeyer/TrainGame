@@ -120,11 +120,6 @@ public class PlayerInteractions : MonoBehaviour
         {
             currentButton.Interact();
         }
-
-        if (currentWagon != null)
-        {
-            currentWagon.TakeDamage(10);
-        }
     }
 
     public void ActiveInput(InputAction.CallbackContext context)

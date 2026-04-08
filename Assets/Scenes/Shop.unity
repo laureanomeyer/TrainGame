@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 21.675522, y: -345.92273}
+  m_AnchoredPosition: {x: 274, y: -345.92273}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4923871
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "Press F to buy Wagon \nPress O to Restart"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -5.1105347, y: -125.335785, z: 3.4320068, w: 56.888824}
+  m_margin: {x: -46.27655, y: -123.04593, z: 72.87451, w: 63.98909}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -698,7 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  buttonText: Wagon 3
+  buttonText: Press F to buy Wagon,  press O to Restart
 --- !u!65 &464905827
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -805,7 +805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
   zoneType: 0
-  message: Wagon 3
+  message: Press F to buy Wagon,  press O to Restart
 --- !u!1 &469501462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1213,7 +1213,7 @@ Transform:
   m_GameObject: {fileID: 588764837}
   serializedVersion: 2
   m_LocalRotation: {x: 0.40653804, y: -0, z: -0, w: 0.91363394}
-  m_LocalPosition: {x: 0, y: 27.51, z: -20.56}
+  m_LocalPosition: {x: 0, y: 43.44, z: -34.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1281,7 +1281,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &718338757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1399,7 +1399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  buttonText: Wagon 2
+  buttonText: Press F to buy Wagon,  press O to Restart
 --- !u!65 &800090912
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1506,7 +1506,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
   zoneType: 0
-  message: Wagon 2
+  message: Press F to buy Wagon,  press O to Restart
 --- !u!1001 &917034658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1606,7 +1606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -133.84665, y: 322.58057}
+  m_AnchoredPosition: {x: -39, y: 424}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &939790129
@@ -1629,7 +1629,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'WagonUpgrade
+  m_text: 'Wagon Store
+
 
 '
   m_isRightToLeft: 0
@@ -1697,7 +1698,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -80.16229, w: 0}
+  m_margin: {x: 0, y: 0, z: -16.63813, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -2373,7 +2374,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1852318032
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2776,12 +2777,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: buttonText
+      value: Press F to buy Wagon,  press O to Restart
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: trainManager
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3574913483160136529, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Name
       value: WagonUpgrade1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9200360204539160305, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: message
+      value: Press F to buy Wagon,  press O to Restart
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

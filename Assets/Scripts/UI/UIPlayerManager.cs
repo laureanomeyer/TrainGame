@@ -66,7 +66,7 @@ public class UIPlayerManager : MonoBehaviour
 
         if (inventory != null)
         {
-            CoalImage.color = inventory.HasCoal ? Color.black : Color.white;
+            CoalImage.color = inventory.HasCoal ? Color.green : Color.red;
         }
 
     }
