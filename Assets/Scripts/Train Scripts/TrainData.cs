@@ -10,7 +10,9 @@ public class TrainData
     private LocomotiveStats baseStats;
     private Transform tailPosition;
     private List<IWagon> wagonsList = new();
-    private List<IBuffer> BufferList = new();
+
+    public List<IBuffer> BufferList { get => bufferList; set => bufferList = value; }
+    private List<IBuffer> bufferList = new();
 
     public List<IWagon> WagonList => wagonsList;
     public Transform TailPosition => tailPosition;
@@ -38,14 +40,25 @@ public class TrainData
     {
         BufferList.Add(buffToAdd);
     }
-    public void UpdateStats()
+    public TrainStats UpdateStats()
     {
+        stats = new TrainStats(
+        baseStats.maxFuel,
+        baseStats.maxHp,
+        baseStats.defense,
+        baseStats.goldMultyplier,
+        baseStats.damageMultyplier,
+        baseStats.attackSpeed,
+        baseStats.fuelOptimizer,
+        baseStats.baseSpeed
+        );
+
         foreach (IBuffer buff in BufferList) 
         {
             stats += buff.StatsBuff;
-
         }
 
+        return stats;
     }
 }
 

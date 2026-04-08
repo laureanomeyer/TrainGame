@@ -40,7 +40,8 @@ public class GameManager : MonoBehaviour
     }
     public void UpdateTrainData()
     {
-        trainData.UpdateStats();
+        //trainData.UpdateStats();
+        trainData.stats = trainData.UpdateStats();
     }
     public void ResetScene()
     {

@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class Revolver : MonoBehaviour, IWeapons
 {
-    public string id => "revolver";
+    [Header("Name")]
+    [SerializeField] private string weaponName;
+    public string Id => weaponName;
+
+    [Header("Type")]
+    [SerializeField] private WeaponType weponType;
+    public WeaponType WeaponType { get => weponType; }
 
     //Tipos de balas que utiliza el arma
     [Header("BulletType")]
@@ -26,6 +32,11 @@ public class Revolver : MonoBehaviour, IWeapons
     public float RateOfFire { get => rateOfFire; }
 
 
+    [Header("Pool")]
+    [SerializeField] private int maxCapacity;
+    [SerializeField] private int defaultCapacity;
+
+
     //Referencia a la pool de balas
     private BulletPool bulletPool;
 
@@ -39,6 +50,9 @@ public class Revolver : MonoBehaviour, IWeapons
     public void SetPool(BulletPool pool)
     {
         bulletPool = pool;
+
+        pool.MaxCapacity = maxCapacity;
+        pool.DefaultCapacity = defaultCapacity;
     }
 
     public void Reload()

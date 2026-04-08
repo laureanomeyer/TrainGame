@@ -56,7 +56,11 @@ public class TrainManager : MonoBehaviour
         wagonsList.Add(wagon);
 
         GameManager.Instance.AddBufferToList(wagonBrain);
+
         GameManager.Instance.UpdateTrainData();
+
+        Debug.Log(GameManager.Instance.TrainData.BufferList.Count);
+
         //Debug.Log(RunManager.Instance.TrainCopyData.stats.fuelOptimizer + "Run manager");
         Debug.Log(RunManager.Instance.TrainCopyData.stats.maxFuel + "Run manager");
         //Debug.Log(GameManager.Instance.TrainData.stats.fuelOptimizer + "Game manager");

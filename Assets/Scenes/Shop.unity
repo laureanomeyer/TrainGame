@@ -256,23 +256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4923869}
   m_CullTransparentMesh: 1
---- !u!1 &186088527 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
-  m_PrefabInstance: {fileID: 917034658}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &186088538
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186088527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f319f3222fb9e474d9f941ace11f4f28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBrain
 --- !u!1 &190004246
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,6 +268,7 @@ GameObject:
   - component: {fileID: 190004250}
   - component: {fileID: 190004249}
   - component: {fileID: 190004248}
+  - component: {fileID: 190004251}
   m_Layer: 5
   m_Name: Button Weapons 1
   m_TagString: Untagged
@@ -394,6 +378,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 190004246}
   m_CullTransparentMesh: 1
+--- !u!114 &190004251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 190004246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4a3c8cd35264f408bb5a1c2332d401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButton
+  weaponInStock: []
+  buttonText: {fileID: 1232477910}
+--- !u!1001 &252329277
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -21.44607
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 13.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.84994
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 832348111444456446, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1029710963935770635, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
+      propertyPath: m_Name
+      value: Factory
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fba3b69ee056cc543838cb3a91409161, type: 3}
 --- !u!1 &260921953
 GameObject:
   m_ObjectHideFlags: 0
@@ -947,6 +1002,7 @@ GameObject:
   - component: {fileID: 581339026}
   - component: {fileID: 581339025}
   - component: {fileID: 581339024}
+  - component: {fileID: 581339027}
   m_Layer: 5
   m_Name: Button Weapons 2
   m_TagString: Untagged
@@ -1056,6 +1112,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581339022}
   m_CullTransparentMesh: 1
+--- !u!114 &581339027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581339022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4a3c8cd35264f408bb5a1c2332d401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButton
+  weaponInStock: []
+  buttonText: {fileID: 260921955}
 --- !u!1 &588764837
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,13 +1415,14 @@ GameObject:
   - component: {fileID: 718338759}
   - component: {fileID: 718338758}
   - component: {fileID: 718338757}
+  - component: {fileID: 718338760}
   m_Layer: 5
   m_Name: ButtonPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &718338757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1413,6 +1484,25 @@ RectTransform:
   m_AnchoredPosition: {x: 8, y: 9}
   m_SizeDelta: {x: -861.8554, y: -327.3146}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &718338760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718338756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1f755857321f294d945bfe2555aee4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButtonManager
+  level: 1
+  firtsSlotWeapons:
+  - {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
+  secondSlotWeapons:
+  - {fileID: 0}
+  thirdSlotWeapons:
+  - {fileID: 0}
 --- !u!1 &800090910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1614,14 +1704,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1084008011257188204, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 186088538}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
 --- !u!1 &939790127
 GameObject:
@@ -2496,6 +2582,7 @@ GameObject:
   - component: {fileID: 1954991140}
   - component: {fileID: 1954991139}
   - component: {fileID: 1954991138}
+  - component: {fileID: 1954991141}
   m_Layer: 5
   m_Name: Button Weapons 3
   m_TagString: Untagged
@@ -2605,6 +2692,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1954991136}
   m_CullTransparentMesh: 1
+--- !u!114 &1954991141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954991136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba4a3c8cd35264f408bb5a1c2332d401, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButton
+  weaponInStock: []
+  buttonText: {fileID: 948594218}
 --- !u!1 &2079726173
 GameObject:
   m_ObjectHideFlags: 0
@@ -2671,7 +2772,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2733,3 +2834,4 @@ SceneRoots:
   - {fileID: 464905830}
   - {fileID: 1383411887}
   - {fileID: 1375272490}
+  - {fileID: 252329277}

@@ -1,9 +1,13 @@
 using UnityEngine;
 
+public enum WeaponType { Revolver, Rifle, Escopeta }
+
 public interface IWeapons
 {
     //Nombre de identificacion de armas
-    public string id { get; }
+    public string Id { get; }
+
+    public WeaponType WeaponType { get; }
 
     public float RateOfFire { get; }
 

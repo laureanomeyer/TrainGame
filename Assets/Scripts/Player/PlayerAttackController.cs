@@ -24,7 +24,6 @@ public class PlayerAttackController : MonoBehaviour
 
         //Se establece el arma equipada
         SetWeapon(weaponItem);
-        weapon.SetPool(pool);
 
         waitToFire = weapon.RateOfFire;
     }

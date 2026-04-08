@@ -20,6 +20,11 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 
     public TrainStats StatsBuff => statsBuff;
 
+    public void Awake()
+    {
+        
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Start()
     {
