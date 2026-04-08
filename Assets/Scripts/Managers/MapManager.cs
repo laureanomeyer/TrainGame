@@ -79,7 +79,7 @@ public class MapManager : MonoBehaviour
                      RunManager.Instance.TrainCopyData.TailPosition.position).normalized;
         Quaternion rotation = Quaternion.LookRotation(direction);
         rotation = new Quaternion(0, 1, 0, 1f);
-        //Debug.Log(rotation);
+        
 
         GameObject tile = Instantiate(tilePrefab, spawnPosition, rotation);
         MapTile mapTile = tile.GetComponent<MapTile>();

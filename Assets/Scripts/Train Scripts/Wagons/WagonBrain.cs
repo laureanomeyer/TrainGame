@@ -9,7 +9,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     private float currentHp;
     private float defense;
 
-    private TrainStats statsBuff;
+    protected TrainStats statsBuff;
     private WagonHP hpController;
 
     [SerializeField] private Material materialDeVagonDestruido;
@@ -21,9 +21,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     public TrainStats StatsBuff => statsBuff;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void Start()
     {
-        statsBuff = new TrainStats(wagonBuffStats.maxFuel, 0,0,0,0,0,0,0);
+
         hp = RunManager.Instance.TrainCopyData.stats.trainMaxHp;
         defense = RunManager.Instance.TrainCopyData.stats.shields;
         hpController = new WagonHP(hp, defense, Break);
@@ -60,4 +60,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     {
         return;
     }
+
+
 }

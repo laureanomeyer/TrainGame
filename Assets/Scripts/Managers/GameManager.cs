@@ -8,7 +8,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] public LocomotiveStats baseStats;
     private TrainData trainData;
     public TrainData TrainData => trainData;
-    
+
+    bool hello = true;
+
+
     void Awake()
     {
         if (Instance != null && Instance != this) 
@@ -22,8 +25,15 @@ public class GameManager : MonoBehaviour
             
         }
         trainData = new TrainData(baseStats);
+
+
     }
-   
+
+    private void Update()
+    {
+
+    }
+
     public void AddBufferToList(IBuffer buff)
     {
         trainData.AddToBufferList(buff);

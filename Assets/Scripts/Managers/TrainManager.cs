@@ -7,8 +7,7 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private GameObject WagonPrefab;
     [SerializeField] private GameObject LocomotivePrefab;
     private List<IWagon> wagonsList;
-
-    private List<IBuffer> BufferList;
+    private List<IBuffer> BufferList; 
 
     private TrainData trainData;
     private WagonMovement lastWagon;
@@ -23,9 +22,8 @@ public class TrainManager : MonoBehaviour
 
     private void Start()
     {
-        CreateLocomotive();
-        CreateWagon();
         RunManager.Instance.trainM = this;
+        CreateTrain();
         RunManager.Instance.OnTrainReady();
     }
 
@@ -46,6 +44,7 @@ public class TrainManager : MonoBehaviour
     public void CreateWagons()
     {
         CreateWagon();
+        CreateWagon();
     }
     public void CreateWagon() //Instancia un vagon REEMPLAZAR POR UNA POOL
     {
@@ -56,13 +55,18 @@ public class TrainManager : MonoBehaviour
         AddWagon(tail, wagon);
         wagonsList.Add(wagon);
 
+        GameManager.Instance.AddBufferToList(wagonBrain);
+        GameManager.Instance.UpdateTrainData();
+        //Debug.Log(RunManager.Instance.TrainCopyData.stats.fuelOptimizer + "Run manager");
+        Debug.Log(RunManager.Instance.TrainCopyData.stats.maxFuel + "Run manager");
+        //Debug.Log(GameManager.Instance.TrainData.stats.fuelOptimizer + "Game manager");
+        Debug.Log(GameManager.Instance.TrainData.stats.maxFuel + "Game manager");
         RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
 
-        //Actualmente no funciona, pero, deberia sumar los TrainStats de TrainData con los TrainStats de los vagones que posea buffers
-        //NO FUNCIONA - PERO PARA SUMAR LAS STATS DE UN VAGON LA IDEA ES ESTA !!!!!!
-        //RunManager.Instance.trainM.trainData.stats += BufferList[0].StatsBuff;
+        //RunManager.Instance.trainM.trainData.UpdateStats();
+        //RunManager.Instance.LocomotiveBrain.AddTrainStats(RunManager.Instance.trainM.TrainData);
+        //RunManager.Instance.TrainCopyData.AddToBufferList(wagonBrain);
 
-        
     }
 
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon

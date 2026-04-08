@@ -47,4 +47,10 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             SceneManager.LoadScene("LauScene");
         }
     }
+
+    public void AddTrainStats( TrainData newStats)
+    {
+        dataRef.stats += newStats.stats;
+    }
+
 }

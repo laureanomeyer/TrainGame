@@ -9,11 +9,10 @@ public class TrainData
     public TrainStats stats;
     private LocomotiveStats baseStats;
     private Transform tailPosition;
-    private List<IWagon> wagonsList;
-    private List<IBuffer> BufferList;
+    private List<IWagon> wagonsList = new();
+    private List<IBuffer> BufferList = new();
 
     public List<IWagon> WagonList => wagonsList;
-
     public Transform TailPosition => tailPosition;
     public float Speed => speed;
 
@@ -44,7 +43,9 @@ public class TrainData
         foreach (IBuffer buff in BufferList) 
         {
             stats += buff.StatsBuff;
+
         }
+
     }
 }
 
