@@ -10,11 +10,13 @@ public class TrainData
     private LocomotiveStats baseStats;
     private Transform tailPosition;
     private List<IWagon> wagonsList = new();
+    private List<IWagonID> wagonsIDList = new();
 
     public List<IBuffer> BufferList { get => bufferList; set => bufferList = value; }
     private List<IBuffer> bufferList = new();
 
     public List<IWagon> WagonList => wagonsList;
+    public List<IWagonID> WagonsIDList => wagonsIDList; 
     public Transform TailPosition => tailPosition;
     public float Speed => speed;
 
@@ -24,6 +26,12 @@ public class TrainData
         this.stats = new TrainStats(baseStats.maxFuel, baseStats.maxHp, baseStats.defense, baseStats.goldMultyplier,
                                     baseStats.damageMultyplier, baseStats.attackSpeed, baseStats.fuelOptimizer, baseStats.baseSpeed);
     }
+
+    public void AddWagon(IWagonID wagon)
+    {
+        wagonsIDList.Add(wagon);
+    }
+
     public void SetSpeed(float speed)
     {
         this.speed = speed;

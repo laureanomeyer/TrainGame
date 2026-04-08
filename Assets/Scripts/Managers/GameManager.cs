@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     }
     public void ResetScene()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene("Shop");
+        Debug.Log("Scene Reset");
     }
 }
