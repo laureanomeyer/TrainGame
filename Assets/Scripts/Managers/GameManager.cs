@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
     private TrainData trainData;
     public TrainData TrainData => trainData;
 
+    private PlayerData playerData;
+    public PlayerData PlayerData => playerData;
+
     bool hello = true;
 
 
@@ -25,6 +28,8 @@ public class GameManager : MonoBehaviour
             
         }
         trainData = new TrainData(baseStats);
+        playerData = new PlayerData();
+
         DontDestroyOnLoad(gameObject);
 
     }

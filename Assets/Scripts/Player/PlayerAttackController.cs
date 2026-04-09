@@ -23,7 +23,18 @@ public class PlayerAttackController : MonoBehaviour
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
 
         //Se establece el arma equipada
-        SetWeapon(weaponItem);
+        if (GameManager.Instance.PlayerData.CheckWeapon() == false)
+        {
+            SetWeapon(weaponItem);
+            Debug.Log("Crea");
+        }
+        else
+        {
+            SetWeapon(GameManager.Instance.PlayerData.PlayerWeapon);
+            Debug.Log("Carga");
+        }
+
+        
 
         waitToFire = weapon.RateOfFire;
     }
@@ -80,6 +91,7 @@ public class PlayerAttackController : MonoBehaviour
     public void SetWeapon(GameObject weaponObtein)
     {
         weaponItem = weaponObtein;
+        GameManager.Instance.PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.Reload();
         weapon.SetPool(pool);
