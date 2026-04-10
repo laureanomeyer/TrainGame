@@ -2,11 +2,8 @@ using UnityEngine;
 
 public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 {
-
-    [SerializeField] private LocomotiveStats wagonBuffStats;
-
     private float hp;
-    private float currentHp;
+    [SerializeField]private float currentHp;
     private float defense;
 
     protected TrainStats statsBuff;
@@ -41,7 +38,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         currentHp = hpController.CurrentHp;
     }
 
-
     public void TakeDamage(float damageAmount)
     {
         hpController.TakeDamage(damageAmount);
@@ -60,11 +56,4 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     {
         rendererWagon.material = materialDeVagonDestruido;
     }
-
-    public void AddWagon()
-    {
-        return;
-    }
-
-
 }

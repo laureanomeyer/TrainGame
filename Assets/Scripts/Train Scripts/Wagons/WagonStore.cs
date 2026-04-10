@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class WagonStore : IWagonID
 {
-    private int id;
-    public int Id => id;
+    private GameObject prefab;
+    public GameObject Prefab => prefab;
 
-    public WagonStore(int Id)
+    public WagonStore(GameObject prefab)
     {
-        this.id = Id;
+        this.prefab = prefab;
     }
 
 

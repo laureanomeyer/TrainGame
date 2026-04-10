@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class FuelWagonBrain : WagonBrain
 {
-    [SerializeField] private float fuelOpt;
+    [SerializeField] private LocomotiveStats stats;
     new void Awake()
     {
-        base.statsBuff = new TrainStats(fuelOpt,0,0,0,0,0,0,0);
-
+        base.statsBuff = new TrainStats(stats);
     }
 
 }
