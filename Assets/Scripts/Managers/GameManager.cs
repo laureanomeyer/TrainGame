@@ -12,8 +12,6 @@ public class GameManager : MonoBehaviour
     private PlayerData playerData;
     public PlayerData PlayerData => playerData;
 
-    bool hello = true;
-
 
     void Awake()
     {
