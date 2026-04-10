@@ -30,6 +30,17 @@ public struct TrainStats
         this.fuelOptimizer = fuelOptimizer;
         this.baseSpeed = baseSpeed;
     }
+    public TrainStats(LocomotiveStats trainData)
+    {
+        maxFuel = trainData.maxFuel;
+        trainMaxHp = trainData.maxHp;
+        shields = trainData.defense;
+        goldBonus = trainData.goldMultyplier;
+        damageBonus = trainData.damageMultyplier;
+        attackSpeed = trainData.attackSpeed;
+        fuelOptimizer = trainData.fuelOptimizer;
+        baseSpeed = trainData.baseSpeed;
+    }
 
 
     //Funcion encargada de sumar las varibles de dos TrainsStats

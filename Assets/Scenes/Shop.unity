@@ -752,6 +752,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
   buttonText: Press F to buy Wagon,  press O to Restart
+  wagonPrefab: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
 --- !u!65 &464905827
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1028,6 +1029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIShopManager
   buttonText: 
+  wagonPrefab: {fileID: 0}
 --- !u!4 &479400439
 Transform:
   m_ObjectHideFlags: 0
@@ -1506,6 +1508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
   buttonText: Press F to buy Wagon,  press O to Restart
+  wagonPrefab: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
 --- !u!65 &800090912
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2996,6 +2999,10 @@ PrefabInstance:
       propertyPath: buttonText
       value: Press F to buy Wagon,  press O to Restart
       objectReference: {fileID: 0}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: wagonPrefab
+      value: 
+      objectReference: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: trainManager
       value: 

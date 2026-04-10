@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public PlayerData PlayerData => playerData;
 
 
+
     void Awake()
     {
         if (Instance != null && Instance != this) 
