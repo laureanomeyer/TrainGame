@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 public class TrainManager : MonoBehaviour
 {
+    [Header("Ending point")]
     [SerializeField] private Transform tail;
+
+    [Header("Wagons")]
     [SerializeField] private GameObject WagonPrefab;
+    [SerializeField] private GameObject GoldWagonPrefab;
+
     [SerializeField] private GameObject LocomotivePrefab;
     private List<IWagon> wagonsList;
     private List<IBuffer> BufferList; 
