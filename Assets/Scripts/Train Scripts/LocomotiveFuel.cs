@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-
-
 public struct TrainStats
 
 {

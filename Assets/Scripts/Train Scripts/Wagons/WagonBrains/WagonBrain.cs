@@ -3,7 +3,7 @@ using UnityEngine;
 public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 {
     private float hp;
-    [SerializeField]private float currentHp;
+    [SerializeField] private float currentHp;
     private float defense;
 
     protected TrainStats statsBuff;
@@ -11,11 +11,13 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
+    [SerializeField] protected bool canBreak;
 
     public float CurrentHp => currentHp;
     public float MaxHp => hp;
 
     public TrainStats StatsBuff => statsBuff;
+    public WagonHP HPController => hpController;
 
     public void Awake()
     {
@@ -28,7 +30,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 
         hp = RunManager.Instance.TrainCopyData.stats.trainMaxHp;
         defense = RunManager.Instance.TrainCopyData.stats.shields;
-        hpController = new WagonHP(hp, defense, Break);
+        hpController = new WagonHP(hp, defense, Break, canBreak);
     }
 
 

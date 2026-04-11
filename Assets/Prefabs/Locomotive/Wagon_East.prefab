@@ -1,0 +1,133 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2869363281390905482
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.9016
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.9016
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.9016
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -57.163616
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.0000004373219
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.039892
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_Name
+      value: Wagon_East
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2928276591534527016}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8783682575282614284}
+  m_SourcePrefab: {fileID: 100100000, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+--- !u!1 &3103947036141524443 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+  m_PrefabInstance: {fileID: 2869363281390905482}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2928276591534527016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3103947036141524443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96f47f7cbf95ce0469f31864b1f4edb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonMovement
+  tail: {fileID: 5281296858576885448}
+  speed: 100
+  wagonBack: {fileID: 6755035979998437454}
+--- !u!114 &8783682575282614284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3103947036141524443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a399d19dfb39ef42a02347c1e1c331f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EastWagonBrain
+  currentHp: 0
+  materialDeVagonDestruido: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
+  rendererWagon: {fileID: 9040696934598930119}
+  canBreak: 1
+  hpBonus: 1.05
+--- !u!4 &5281296858576885448 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -1253996098385199550, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+  m_PrefabInstance: {fileID: 2869363281390905482}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6755035979998437454 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8821623529969584324, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+  m_PrefabInstance: {fileID: 2869363281390905482}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9040696934598930119 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6531634831571404365, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+  m_PrefabInstance: {fileID: 2869363281390905482}
+  m_PrefabAsset: {fileID: 0}

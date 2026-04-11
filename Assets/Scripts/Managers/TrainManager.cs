@@ -37,6 +37,7 @@ public class TrainManager : MonoBehaviour
     {
         CreateLocomotive();
         CreateWagons();
+        CreateGoldWagon();
         RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
 
     }
@@ -72,6 +73,18 @@ public class TrainManager : MonoBehaviour
         GameManager.Instance.UpdateTrainData();
         AddWagon(tail, wagon);
 
+    }
+    public void CreateGoldWagon()
+    {
+        GameObject WagonInstance = Instantiate(GoldWagonPrefab, tail.position, tail.rotation);
+        WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
+        WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
+
+        wagonsList.Add(wagon);
+
+        GameManager.Instance.TrainData.AddToBufferList(wagonBrain);
+        GameManager.Instance.UpdateTrainData();
+        AddWagon(tail, wagon);
     }
 
     void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
