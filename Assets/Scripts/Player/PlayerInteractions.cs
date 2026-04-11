@@ -27,8 +27,8 @@ public class PlayerInteractions : MonoBehaviour
         playerInventory = playerBrain.Inventory;
 
         repairAction = InputSystem.actions.FindAction("Repair");
-        repairAction.performed += ActiveInput;
-        repairAction.canceled += DeactiveInput;
+        repairAction.performed += ActiveRepairInput;
+        repairAction.canceled += DeactiveRepairInput;
 
         if (interactionUIManager != null)
         {
@@ -122,12 +122,12 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 
-    public void ActiveInput(InputAction.CallbackContext context)
+    public void ActiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = true;
     }
 
-    public void DeactiveInput(InputAction.CallbackContext context)
+    public void DeactiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = false;
     }

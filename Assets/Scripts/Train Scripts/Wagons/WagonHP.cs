@@ -7,18 +7,21 @@ public class WagonHP : IDamagable
     private float currentHp;
     private float defense;
     private bool isBroken;
+    private bool canBreak;
+
     private Action die;
 
     public bool IsBroken => isBroken;
     public float CurrentHp => currentHp;
 
-    public WagonHP(float hp, float defense, Action deathAction)
+    public WagonHP(float hp, float defense, Action deathAction, bool canBreak)
     {
         this.maxHp = hp;
         currentHp = maxHp;
         this.defense = defense;
         isBroken = false;
         die = deathAction;
+        this.canBreak = canBreak;
     }
 
     public void TakeDamage(float damageToTake) 
@@ -40,7 +43,9 @@ public class WagonHP : IDamagable
     }
     public void Break() 
     {
-        isBroken = true;
+        if(canBreak) isBroken = true;
+
+        BreakDown();
     }
     public void BreakDown() 
     {

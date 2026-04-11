@@ -12,6 +12,8 @@ public class EnemyData : ScriptableObject
     public float attackCooldown;
     public WagonTypes target;
 
+    public int gold;
+
     public EnemyAttackSO attack;     // logica ataque
     public EnemyBrainSO brain;       // logica targeteo
     public EnemyMovementSO movement; //logica movimiento
