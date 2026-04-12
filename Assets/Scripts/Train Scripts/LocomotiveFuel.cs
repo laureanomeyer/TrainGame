@@ -148,7 +148,7 @@ public class LocomotiveFuel
         else
         {
             RunManager .Instance.TrainCopyData.SetSpeed(0);
-            GameManager.Instance.ResetScene();
+            GameManager.Instance.GoToStore();
         }
     }
 
@@ -160,7 +160,7 @@ public class LocomotiveFuel
 
             if (currentMaxFuel <= 0)
             {
-                GameManager.Instance.ResetScene();
+                GameManager.Instance.GoToStore();
             }
 
             currentFuel = Mathf.Clamp(currentFuel, 0, currentMaxFuel);

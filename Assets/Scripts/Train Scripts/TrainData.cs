@@ -67,5 +67,10 @@ public class TrainData
 
         return stats;
     }
+
+    public void ResetValuesToDefault()
+    {
+        wagonsIDList = new List<IWagonID>();
+    }
 }
 

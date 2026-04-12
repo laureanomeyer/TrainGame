@@ -1,7 +1,6 @@
-using Unity.VisualScripting;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerInteractions : MonoBehaviour
 {
@@ -145,6 +144,6 @@ public class PlayerInteractions : MonoBehaviour
     }
     public void ReloadScene()
     {
-        SceneManager.LoadScene("LauScene");
+        GameManager.Instance.GoToRun();
     }
 }
