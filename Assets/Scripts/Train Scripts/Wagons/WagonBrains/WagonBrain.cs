@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 {
-    private float hp;
+    protected float hp;
     [SerializeField] private float currentHp;
-    private float defense;
+    protected float defense;
 
     protected TrainStats statsBuff;
-    private WagonHP hpController;
+    protected WagonHP hpController;
 
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;

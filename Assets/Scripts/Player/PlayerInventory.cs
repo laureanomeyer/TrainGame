@@ -1,10 +1,12 @@
 ﻿
+using System.Diagnostics;
+
 public class PlayerInventory : IInventory
 {
     private float goldAmount;
     private bool hasCoal;
 
-    public float GoldAmount => goldAmount;
+    public float GoldAmount { get => goldAmount; set => goldAmount = value; }
     public bool HasCoal => hasCoal;
 
     public PlayerInventory()

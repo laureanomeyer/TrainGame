@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class GoldenWagonBrain : WagonBrain
 {
-    public void Awake()
-    {
-        
-    }
+    private GoldCollector collector;
+    public GoldCollector Collector => collector;
 
-    // Update is called once per frame
-    void Update()
+    new public void Start()
     {
-        
+        hp = RunManager.Instance.TrainCopyData.stats.trainMaxHp;
+        defense = RunManager.Instance.TrainCopyData.stats.shields;
+        hpController = new WagonHP(hp, defense, Break, canBreak);
+        collector = new GoldCollector(hpController);
     }
 }

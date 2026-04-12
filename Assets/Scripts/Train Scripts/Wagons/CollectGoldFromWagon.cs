@@ -1,34 +1,27 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InteractableObjectBrain : MonoBehaviour
+public class CollectGoldFromWagon : MonoBehaviour
 {
-    [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private InteractableType behaviorType;
-    private IInteractable objectBehavior;
-    InteractInputHandler inputHandler;
     PlayerBrain playerRef;
+    [SerializeField] private InputActionAsset inputActions;
+    [SerializeField] private GoldenWagonBrain goldBrain;
+    InteractInputHandler inputHandler;
 
     void Start()
     {
-        objectBehavior = BehaviorFactory.Create(behaviorType);
-
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
-        inputHandler = new InteractInputHandler(interactAction, OnInteract);
+        inputHandler = new InteractInputHandler(interactAction, SetGoldInPlayerInventory);
     }
 
-    void OnInteract()
+    private void SetGoldInPlayerInventory()
     {
-        if (playerRef != null)
+        if (playerRef  != null)
         {
-            objectBehavior.Interact(playerRef.Inventory);
-            Debug.Log("Hecho" + objectBehavior);
-        } 
-    }
-    private void OnDestroy()
-    {
-        inputHandler.Dispose();
+            playerRef.Inventory.GoldAmount = goldBrain.Collector.GiveGold();
+            Debug.Log("Oro in player inventory" + playerRef.Inventory.GoldAmount);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

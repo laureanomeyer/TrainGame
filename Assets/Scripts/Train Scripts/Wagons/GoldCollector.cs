@@ -1,31 +1,35 @@
-using UnityEngine;
 
-public class GoldCollector : MonoBehaviour
+using System.Diagnostics;
+
+public class GoldCollector
 {
     private WagonHP wagonHP;
 
-    private int gold;
-    public int Gold => gold;
+    private float gold;
+    public float Gold => gold;
 
-    private void Start()
+    public GoldCollector(WagonHP hpController)
     {
-        wagonHP = GetComponent<WagonBrain>().HPController;
+        wagonHP = hpController;
         GameEvents.OnGoldEarned += CollectGold;
     }
     void OnDestroy() => GameEvents.OnGoldEarned -= CollectGold;
 
     public void CollectGold(int amount)
     {
-        if (wagonHP.IsBroken)
+        if (wagonHP.IsBroken == false)
         {
-            return;
+            gold += amount;
         }
-        gold += amount;
+        else
+        {
+            EmptyGold();
+        }
     }
 
-    public int GiveGold()
+    public float GiveGold()
     {
-        int goldToGive = gold;
+        float goldToGive = gold;
         EmptyGold();
 
         return goldToGive;
