@@ -2,10 +2,19 @@ using UnityEngine;
 
 public class SouthWagonBrain : WagonBrain
 {
-    [SerializeField] private float shieldsBouns;
-    void Awake()
+    [SerializeField] private float hpBonus;
+
+    public override TrainStats GetStatsBuff(LocomotiveStats baseStats)
     {
-        base.statsBuff = new TrainStats(0, (GameManager.Instance.TrainData.stats.shields * shieldsBouns), 0, 0, 0, 0,0);
+        return new TrainStats(
+            baseStats.maxHp * hpBonus,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        );
     }
 
 }

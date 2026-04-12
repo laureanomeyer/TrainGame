@@ -48,22 +48,27 @@ public class TrainData
     {
         BufferList.Add(buffToAdd);
     }
+
     public TrainStats UpdateStats()
     {
         stats = new TrainStats(
-        baseStats.maxHp,
-        baseStats.defense,
-        baseStats.goldMultyplier,
-        baseStats.damageMultyplier,
-        baseStats.attackSpeed,
-        baseStats.fuelOptimizer,
-        baseStats.baseSpeed
+            baseStats.maxHp,
+            baseStats.defense,
+            baseStats.goldMultyplier,
+            baseStats.damageMultyplier,
+            baseStats.attackSpeed,
+            baseStats.fuelOptimizer,
+            baseStats.baseSpeed
         );
 
-        foreach (IBuffer buff in BufferList) 
+
+        foreach (IBuffer buff in BufferList)
         {
-            stats += buff.StatsBuff;
+            TrainStats buffStats = buff.GetStatsBuff(baseStats);
+            stats += buffStats;
         }
+
+        Debug.Log("HP FINAL DEL TREN: " + stats.trainMaxHp);
 
         return stats;
     }
