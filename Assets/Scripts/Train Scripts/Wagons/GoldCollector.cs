@@ -15,7 +15,7 @@ public class GoldCollector
     }
     void OnDestroy() => GameEvents.OnGoldEarned -= CollectGold;
 
-    public void CollectGold(int amount)
+    public void CollectGold(float amount)
     {
         if (wagonHP.CurrentHp > 0)
         {

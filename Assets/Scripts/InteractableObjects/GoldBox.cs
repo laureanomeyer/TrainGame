@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using System.Text;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 
 public class GoldBox : IInteractable
@@ -14,6 +15,7 @@ public class GoldBox : IInteractable
     public GoldBox()
     {
         currentGold = 0;
+        GameEvents.OnChangeGold += ChangeGoldInData;
     }
 
     public void Interact(IInventory playerRef) 
@@ -25,5 +27,12 @@ public class GoldBox : IInteractable
     {
         currentGold += amount;
     }
+
+    public void ChangeGoldInData()
+    {
+        GameManager.Instance.PlayerData.ChangePlayerGold(currentGold);
+    }
+
+    public void OnDestroyObject() => GameEvents.OnChangeGold -= ChangeGoldInData;
 }
 

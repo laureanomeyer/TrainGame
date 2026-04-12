@@ -39,4 +39,9 @@ public class CoalBox: IInteractable
 
 
     }
+
+    public void OnDestroyObject()
+    {
+
+    }
 }

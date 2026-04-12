@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,6 +30,7 @@ public class InteractableObjectBrain : MonoBehaviour
     private void OnDestroy()
     {
         inputHandler.Dispose();
+        objectBehavior.OnDestroyObject();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,4 +47,5 @@ public class InteractableObjectBrain : MonoBehaviour
             playerRef = null;
         }
     }
+
 }

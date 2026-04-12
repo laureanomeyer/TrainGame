@@ -21,8 +21,6 @@ public class GoldenWagonBrain : WagonBrain
         {
             rendererWagon.material = baseWagonMaterial;
             hpController.IsBroken = false;
-
-            Debug.Log("ENTREEEEEE");
         }
 
         hpController.Repair(Time.deltaTime, repairAmount);

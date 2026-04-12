@@ -30,4 +30,15 @@ public class PlayerData
     {
         playerGold = gold;
     }
+
+    public float ShowGold()
+    {
+        return playerGold;
+    }
+
+    public void ResetValuesToDefault()
+    {
+        playerWeapon = null;
+        playerGold = 0;
+    }
 }

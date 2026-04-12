@@ -2,10 +2,17 @@ using System;
 
 public static class GameEvents
 {
-    public static event Action<int> OnGoldEarned;
+    public static event Action<float> OnGoldEarned;
 
-    public static void GoldEarned(int amount)
+    public static event Action OnChangeGold;
+
+    public static void GoldEarned(float amount)
     {
         OnGoldEarned?.Invoke(amount);
+    }
+
+    public static void ChangeGold()
+    {
+        OnChangeGold?.Invoke();
     }
 }

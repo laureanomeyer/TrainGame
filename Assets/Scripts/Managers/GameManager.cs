@@ -33,11 +33,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-
-    }
-
     public void AddBufferToList(IBuffer buff)
     {
         trainData.AddToBufferList(buff);
@@ -47,9 +42,25 @@ public class GameManager : MonoBehaviour
         //trainData.UpdateStats();
         trainData.stats = trainData.UpdateStats();
     }
-    public void ResetScene()
+
+    public void GoToStore()
     {
+        GameEvents.ChangeGold();
+        Debug.Log("Se guardo la informacion" + playerData.ShowGold());
         SceneManager.LoadScene("Shop");
+    }
+
+    public void GoToRun()
+    {
+        SceneManager.LoadScene("LauScene");
+    }
+
+    public void ResetGame()
+    {
+        trainData.ResetValuesToDefault();
+        playerData.ResetValuesToDefault();
+
+        SceneManager.LoadScene("LauScene");
         Debug.Log("Scene Reset");
     }
 }
