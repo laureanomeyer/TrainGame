@@ -26,7 +26,7 @@ public class WagonHP : IDamagable
 
     public void TakeDamage(float damageToTake) 
     {
-        currentHp -= damageToTake * 100 / (100 + defense);
+        currentHp -= damageToTake / defense;
 
         if (currentHp < 0) 
         {

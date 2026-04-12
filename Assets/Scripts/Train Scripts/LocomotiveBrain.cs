@@ -16,7 +16,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     void Start()
     {
         dataRef = RunManager.Instance.TrainCopyData;
-        fuelController = new LocomotiveFuel(dataRef.stats.shields * 2, dataRef.stats.maxFuel, dataRef.stats.baseSpeed, dataRef.stats.shields, dataRef.stats.fuelOptimizer);
+        fuelController = new LocomotiveFuel(dataRef.stats.shields * 2, dataRef.stats.trainMaxHp * 10, dataRef.stats.baseSpeed, dataRef.stats.shields, dataRef.stats.fuelOptimizer);
     }
 
     void Update()
@@ -32,7 +32,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     public void AddFuel()
     {
-        fuelController.AddFuel(dataRef.stats.maxFuel);
+        fuelController.AddFuel();
     }
 
     public void Repair(float repairAmount)

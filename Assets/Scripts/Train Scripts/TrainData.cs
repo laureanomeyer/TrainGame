@@ -23,7 +23,7 @@ public class TrainData
     public TrainData(LocomotiveStats stats)
     {
         this.baseStats = stats;
-        this.stats = new TrainStats(baseStats.maxFuel, baseStats.maxHp, baseStats.defense, baseStats.goldMultyplier,
+        this.stats = new TrainStats(baseStats.maxHp, baseStats.defense, baseStats.goldMultyplier,
                                     baseStats.damageMultyplier, baseStats.attackSpeed, baseStats.fuelOptimizer, baseStats.baseSpeed);
     }
 
@@ -51,7 +51,6 @@ public class TrainData
     public TrainStats UpdateStats()
     {
         stats = new TrainStats(
-        baseStats.maxFuel,
         baseStats.maxHp,
         baseStats.defense,
         baseStats.goldMultyplier,

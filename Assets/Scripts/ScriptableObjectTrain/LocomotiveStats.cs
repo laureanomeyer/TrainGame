@@ -2,7 +2,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "LocomotiveStats", menuName = "Scriptable Objects/LocomotiveStats")]
 public class LocomotiveStats : ScriptableObject
 {
-    public float maxFuel;
     public float maxHp;
     public float defense;
     public float baseSpeed;

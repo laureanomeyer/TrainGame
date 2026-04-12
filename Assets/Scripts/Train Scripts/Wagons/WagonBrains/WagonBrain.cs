@@ -32,7 +32,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     // Update is called once per frame
     void Update()
     {
-        currentHp = hpController.CurrentHp;
     }
 
     public void TakeDamage(float damageAmount)

@@ -7,9 +7,7 @@ using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 public struct TrainStats
-
 {
-    public float maxFuel;
     public float fuelOptimizer;
     public float trainMaxHp;
     public float shields;
@@ -17,9 +15,8 @@ public struct TrainStats
     public float damageBonus;
     public float attackSpeed;
     public float baseSpeed;
-    public TrainStats(float maxFuel, float trainMaxHp, float shields, float goldBonus, float damageBonus, float attackSpeed, float fuelOptimizer, float baseSpeed)
-    {
-        this.maxFuel = maxFuel;
+    public TrainStats(float trainMaxHp, float shields, float goldBonus, float damageBonus, float attackSpeed, float fuelOptimizer, float baseSpeed)
+    { 
         this.trainMaxHp = trainMaxHp;
         this.shields = shields;
         this.goldBonus = goldBonus;
@@ -30,7 +27,6 @@ public struct TrainStats
     }
     public TrainStats(LocomotiveStats trainData)
     {
-        maxFuel = trainData.maxFuel;
         trainMaxHp = trainData.maxHp;
         shields = trainData.defense;
         goldBonus = trainData.goldMultyplier;
@@ -46,7 +42,6 @@ public struct TrainStats
     {
         return new TrainStats
         {
-            maxFuel = x.maxFuel + y.maxFuel,
             fuelOptimizer = x.fuelOptimizer + y.fuelOptimizer,
             trainMaxHp = x.trainMaxHp + y.trainMaxHp,
             shields = x.shields + y.shields,
@@ -113,9 +108,9 @@ public class LocomotiveFuel
 
 
     }
-    public void AddFuel(float amount)
+    public void AddFuel()
     {
-        currentFuel = Mathf.Clamp(currentFuel + amount, amount, currentMaxFuel);
+        currentFuel = currentMaxFuel;
         UpdateSharedSpeed();
     }
 
@@ -161,7 +156,7 @@ public class LocomotiveFuel
     {
         if (currentShield <= 0)
         {
-            currentMaxFuel -= amount * 100 / (100 + defense);
+            currentMaxFuel -= amount / defense;
 
             if (currentMaxFuel <= 0)
             {
