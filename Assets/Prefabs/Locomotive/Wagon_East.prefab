@@ -1,5 +1,279 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &235047320188100091
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2382323504992169218}
+  - component: {fileID: 1456144774304846669}
+  m_Layer: 0
+  m_Name: Wagon left wall Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2382323504992169218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235047320188100091}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -0.86, y: 0.2, z: 4.5594}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.48102}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2330823702144864097}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!65 &1456144774304846669
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 235047320188100091}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3113436, y: 5.6723824, z: 18.339794}
+  m_Center: {x: 1.3388026, y: 2.8145294, z: 0.02967453}
+--- !u!1 &277159916866920822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7969817385539490437}
+  - component: {fileID: 7716257316588205280}
+  m_Layer: 0
+  m_Name: Wagon Right wall Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7969817385539490437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277159916866920822}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 2.3, y: 0.2, z: 4.5594}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.48102}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2330823702144864097}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!65 &7716257316588205280
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277159916866920822}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3113436, y: 5.6723824, z: 18.339794}
+  m_Center: {x: 1.3388026, y: 2.8145294, z: 0.02967453}
+--- !u!1 &2183965193491700175
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7193213187072097747}
+  m_Layer: 0
+  m_Name: Front
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7193213187072097747
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2183965193491700175}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.50000006, y: -0.49999997, z: -0.50000006, w: 0.49999997}
+  m_LocalPosition: {x: -0.001, y: 0.161, z: 9.273}
+  m_LocalScale: {x: 95.08001, y: 95.079994, z: 95.079994}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2330823702144864097}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2662088977778753937
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2271434506428919637}
+  - component: {fileID: 1082121186097127364}
+  m_Layer: 0
+  m_Name: Wagon floor Hitbox
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2271434506428919637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2662088977778753937}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: 0.07, y: 0.06, z: 4.19}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2330823702144864097}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 90}
+--- !u!65 &1082121186097127364
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2662088977778753937}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 18.008017, y: 6.379009, z: 0.81910336}
+  m_Center: {x: -0.63793087, y: 0.10647178, z: -0.07142049}
+--- !u!1 &6486020781180000612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8573109265813295740}
+  m_Layer: 0
+  m_Name: Back
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8573109265813295740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6486020781180000612}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0.079, y: -0, z: 0.002}
+  m_LocalScale: {x: 95.08001, y: 95.079994, z: 95.08001}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2330823702144864097}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &7543002486778272083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4277985751475487967}
+  - component: {fileID: 1680103861453613623}
+  m_Layer: 0
+  m_Name: Wagon back
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4277985751475487967
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543002486778272083}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: -0.7071068, w: 0}
+  m_LocalPosition: {x: -1.61, y: 1.59, z: -0.364}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.6981573}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2330823702144864097}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: -180}
+--- !u!65 &1680103861453613623
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543002486778272083}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.33030903, y: 6.483366, z: 4.8090105}
+  m_Center: {x: 0.91953653, y: -0.009216082, z: 2.3100152}
 --- !u!1001 &2869363281390905482
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -64,13 +338,35 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -4561427392293109147, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_Name
+      value: Wagon_Mesh
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
       propertyPath: m_Name
       value: Wagon_East
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 4277985751475487967}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 8573109265813295740}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 7193213187072097747}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 2271434506428919637}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 2382323504992169218}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 7969817385539490437}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
       insertIndex: -1
@@ -79,6 +375,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8783682575282614284}
   m_SourcePrefab: {fileID: 100100000, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+--- !u!4 &2330823702144864097 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+  m_PrefabInstance: {fileID: 2869363281390905482}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3103947036141524443 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
@@ -98,7 +399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WagonMovement
   tail: {fileID: 5281296858576885448}
   speed: 100
-  wagonBack: {fileID: 6755035979998437454}
+  wagonBack: {fileID: 7543002486778272083}
 --- !u!114 &8783682575282614284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,11 +420,6 @@ MonoBehaviour:
 --- !u!4 &5281296858576885448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1253996098385199550, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
-  m_PrefabInstance: {fileID: 2869363281390905482}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6755035979998437454 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8821623529969584324, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
   m_PrefabInstance: {fileID: 2869363281390905482}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &9040696934598930119 stripped
