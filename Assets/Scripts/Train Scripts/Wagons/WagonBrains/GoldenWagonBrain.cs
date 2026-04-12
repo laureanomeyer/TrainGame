@@ -5,7 +5,7 @@ public class GoldenWagonBrain : WagonBrain
     private GoldCollector collector;
     public GoldCollector Collector => collector;
 
-    [SerializeField] private Material materialDeVagonDestruido;
+    [SerializeField] private Material baseWagonMaterial;
 
     new public void Start()
     {
@@ -19,8 +19,10 @@ public class GoldenWagonBrain : WagonBrain
     {
         if (hpController.IsBroken == true & hpController.CurrentHp > 0)
         {
-            rendererWagon.material = materialDeVagonDestruido;
+            rendererWagon.material = baseWagonMaterial;
             hpController.IsBroken = false;
+
+            Debug.Log("ENTREEEEEE");
         }
 
         hpController.Repair(Time.deltaTime, repairAmount);
