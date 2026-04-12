@@ -26,8 +26,10 @@ public class WagonHP : IDamagable
 
     public void TakeDamage(float damageToTake) 
     {
-        currentHp -= damageToTake * 100 / (100 + defense);
-
+        if (!isBroken)
+        {
+            currentHp -= damageToTake * 100 / (100 + defense);
+        }
         if (currentHp < 0) 
         {
             Break();
@@ -36,7 +38,7 @@ public class WagonHP : IDamagable
     }
     public void Repair(float deltaTime, float repairAmount) 
     {
-        if (!IsBroken)
+        if (!IsBroken || !canBreak)
         {
             currentHp += repairAmount * deltaTime;
         }
