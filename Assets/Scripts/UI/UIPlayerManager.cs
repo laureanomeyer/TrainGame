@@ -1,11 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class UIPlayerManager : MonoBehaviour
 {
-
     [Header("References")]
     [SerializeField] private PlayerInteractions playerInteractions;
+
+    [Header("UI Groups")]
+    [SerializeField] private GameObject gameplayUI;
+    [SerializeField] private GameObject shopUI;
 
     [Header("Wagon UI")]
     [SerializeField] private Image wagonHpImage;
@@ -16,21 +21,39 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private Image shieldImage;
 
     [Header("Inventory UI")]
-    [SerializeField] private Image CoalImage;
+    [SerializeField] private Image coalImage;
+    [SerializeField] private TMP_Text goldText;
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        UpdateUIByScene();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        UpdateWagonUI();
-        UpdateLocomotiveUI();
-        UpdateCoalUI();
+        UpdateUIByScene();
+
+        if (shopUI.activeSelf)
+        {
+            UpdateGoldUI();
+        }
+        else
+        {
+            UpdateWagonUI();
+            UpdateLocomotiveUI();
+            UpdateCoalUI();
+            UpdateGoldUI(); // opcional, si también querés ver oro durante gameplay
+        }
+    }
+
+    void UpdateUIByScene()
+    {
+        string sceneName = SceneManager.GetActiveScene().name;
+
+        bool isShopScene = sceneName == "ShopScene"; // cambiá esto por el nombre real
+
+        gameplayUI.SetActive(!isShopScene);
+        shopUI.SetActive(isShopScene);
     }
 
     void UpdateWagonUI()
@@ -66,15 +89,17 @@ public class UIPlayerManager : MonoBehaviour
 
         if (inventory != null)
         {
-            if (inventory.HasCoal)
-            {
-                CoalImage.fillAmount = 1;
-            }
-            else
-            {
-                CoalImage.fillAmount = 0;
-            }
+            coalImage.fillAmount = inventory.HasCoal ? 1 : 0;
         }
+    }
 
+    void UpdateGoldUI()
+    {
+        PlayerInventory inventory = playerInteractions.Inventory;
+
+        if (inventory != null)
+        {
+            goldText.text = "Gold: " + inventory.GoldAmount.ToString("0");
+        }
     }
 }
