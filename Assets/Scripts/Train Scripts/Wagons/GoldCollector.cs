@@ -17,7 +17,7 @@ public class GoldCollector
 
     public void CollectGold(int amount)
     {
-        if (wagonHP.IsBroken == false)
+        if (wagonHP.CurrentHp > 0)
         {
             gold += amount;
         }
@@ -29,10 +29,17 @@ public class GoldCollector
 
     public float GiveGold()
     {
-        float goldToGive = gold;
-        EmptyGold();
+        if (wagonHP.CurrentHp > 0)
+        {
+            float goldToGive = gold;
+            EmptyGold();
 
-        return goldToGive;
+            return goldToGive;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public void EmptyGold()

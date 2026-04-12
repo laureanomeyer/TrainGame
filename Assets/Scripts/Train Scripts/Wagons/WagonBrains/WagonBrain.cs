@@ -9,8 +9,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     protected TrainStats statsBuff;
     protected WagonHP hpController;
 
-    [SerializeField] private Material materialDeVagonDestruido;
-    [SerializeField] private Renderer rendererWagon;
+    [SerializeField] private Material destroyWagonMaterial;
+    [SerializeField] private protected Renderer rendererWagon;
     [SerializeField] protected bool canBreak;
 
     public float CurrentHp => currentHp;
@@ -18,11 +18,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 
     public TrainStats StatsBuff => statsBuff;
     public WagonHP HPController => hpController;
-
-    public void Awake()
-    {
-        
-    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Start()
@@ -49,13 +44,13 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         }
     }
 
-    public void Repair(float repairAmount)
+    public virtual void Repair(float repairAmount)
     {
         hpController.Repair(Time.deltaTime, repairAmount);
     }
 
     public void Break()
     {
-        rendererWagon.material = materialDeVagonDestruido;
+        rendererWagon.material = destroyWagonMaterial;
     }
 }

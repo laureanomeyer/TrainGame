@@ -11,7 +11,7 @@ public class WagonHP : IDamagable
 
     private Action die;
 
-    public bool IsBroken => isBroken;
+    public bool IsBroken { get => isBroken; set => isBroken = value; }
     public float CurrentHp => currentHp;
 
     public WagonHP(float hp, float defense, Action deathAction, bool canBreak)
@@ -43,7 +43,7 @@ public class WagonHP : IDamagable
     }
     public void Break() 
     {
-        if(canBreak) isBroken = true;
+        isBroken = true;
 
         BreakDown();
     }
