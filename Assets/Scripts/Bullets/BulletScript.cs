@@ -6,8 +6,8 @@ public class BulletScript : MonoBehaviour, IBullet
 {
     public string id => "Normal";
     public IObjectPool<GameObject> BulletPool { set => bulletPool = value; }
-    public int Damage { get => damage; set => damage = value; }
-    private int damage;
+    public float Damage { get => damage; set => damage = value; }
+    private float damage;
 
     public int Speed { get => speed; set => speed = value; }
     private int speed;
@@ -19,6 +19,8 @@ public class BulletScript : MonoBehaviour, IBullet
     private Rigidbody rb;
     private BoxCollider bc;
     private MeshFilter meshFilter;
+
+    private TrainData dataRef;
 
     private bool isActive = true;
     private float currentLife;
@@ -41,10 +43,12 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public void ResetState(BulletTypeScriptable type)
     {
+        dataRef = RunManager.Instance.TrainCopyData;
+
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
         currentLife = bulletType.duration;
-        Damage = bulletType.damage;
+        Damage = bulletType.damage * (dataRef.LocomotiveStatsMultiplicator.damageBonus + dataRef.WagonBuffedStats.damageBonus);
         Speed = speed;
         isActive = true;
     }
