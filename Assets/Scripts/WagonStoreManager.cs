@@ -2,15 +2,25 @@ using UnityEngine;
 
 public class WagonStoreManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [Header("Level of progress")]
+    [SerializeField] private int level;
+    public int Level => level;
+
+    [Header("MoneyManager reference")]
+    [SerializeField] private MoneyManager moneyManager;
+
+    public void ConsumeGold(float amount)
     {
-        
+        moneyManager.ConsumePlayerGold(amount);
     }
 
-    // Update is called once per frame
-    void Update()
+    public float ShowPlayerGold()
     {
-        
+        return moneyManager.ShowPlayerGold();
+    }
+
+    public float ShowGold()
+    {
+        return moneyManager.PlayerMoney;
     }
 }

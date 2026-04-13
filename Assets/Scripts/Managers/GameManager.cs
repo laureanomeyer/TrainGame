@@ -46,12 +46,14 @@ public class GameManager : MonoBehaviour
     public void GoToStore()
     {
         GameEvents.ChangeGold();
-        Debug.Log("Se guardo la informacion" + playerData.ShowGold());
+        Debug.Log("Oro actual del jugador " + playerData.GivePlayerGold());
         SceneManager.LoadScene("Shop");
     }
 
     public void GoToRun()
     {
+        GameEvents.ChangeGold();
+        Debug.Log("Oro actual del jugador " + playerData.GivePlayerGold());
         SceneManager.LoadScene("LauScene");
     }
 

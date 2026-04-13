@@ -5,14 +5,20 @@ using UnityEngine;
 
 public class WeaponShopButtonManager : MonoBehaviour
 {
+    [Header("Button from HUD")]
     [SerializeField] public GameObject[] shopButtons;
     private List<IShopButton> buttons = new List<IShopButton>();
 
+    [Header("Level of progress")]
     [SerializeField] private int level;
 
-    [SerializeField] public GameObject[] firtsSlotWeapons;
-    [SerializeField] public GameObject[] secondSlotWeapons;
-    [SerializeField] public GameObject[] thirdSlotWeapons;
+    [Header("List of weapons in Stock")]
+    [SerializeField] public WeaponInStocSO[] firtsSlotWeapons;
+    [SerializeField] public WeaponInStocSO[] secondSlotWeapons;
+    [SerializeField] public WeaponInStocSO[] thirdSlotWeapons;
+
+    [Header("MoneyManager reference")]
+    [SerializeField] private MoneyManager moneyManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,5 +57,15 @@ public class WeaponShopButtonManager : MonoBehaviour
                 buttons[i].ActivateButton();
             }
         }
+    }
+
+    public void ConsumeGold(float amount)
+    {
+       moneyManager.ConsumePlayerGold(amount);
+    }
+
+    public float ShowPlayerGold()
+    {
+        return moneyManager.ShowPlayerGold();
     }
 }

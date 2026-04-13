@@ -26,12 +26,17 @@ public class PlayerData
         }
     }
 
+    public void AddPlayerGold(float gold)
+    {
+        playerGold += gold;
+    }
+
     public void ChangePlayerGold(float gold)
     {
         playerGold = gold;
     }
 
-    public float ShowGold()
+    public float GivePlayerGold()
     {
         return playerGold;
     }

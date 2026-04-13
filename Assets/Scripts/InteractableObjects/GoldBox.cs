@@ -30,7 +30,7 @@ public class GoldBox : IInteractable
 
     public void ChangeGoldInData()
     {
-        GameManager.Instance.PlayerData.ChangePlayerGold(currentGold);
+        GameManager.Instance.PlayerData.AddPlayerGold(currentGold);
     }
 
     public void OnDestroyObject() => GameEvents.OnChangeGold -= ChangeGoldInData;

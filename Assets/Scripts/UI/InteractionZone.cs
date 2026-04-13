@@ -9,7 +9,7 @@ public class InteractionZone : MonoBehaviour
     }
 
     [SerializeField] private ZoneType zoneType;
-    [SerializeField] private string message;
+    public string message;
 
     private void OnTriggerEnter(Collider other)
     {

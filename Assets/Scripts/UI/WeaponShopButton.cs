@@ -10,10 +10,11 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     private WeaponShopButtonManager buttonManager;
     public int Level { get => level; set => level = value; }
     private int level;
-    public GameObject[] WeaponInStock { get => weaponInStock; set => weaponInStock = value; }
-    public GameObject[] weaponInStock;
+    public WeaponInStocSO[] WeaponInStock { get => weaponInStock; set => weaponInStock = value; }
+    public WeaponInStocSO[] weaponInStock;
 
     private GameObject currentWeapon;
+    private float currentWeaponprice = 0;
 
     [SerializeField] private TextMeshProUGUI buttonText;
     private Button button;
@@ -25,22 +26,33 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         if (level > weaponInStock.Length)
         {
             Debug.Log(weaponInStock[weaponInStock.Length]);
-            currentWeapon = weaponInStock[weaponInStock.Length];
+            currentWeapon = weaponInStock[weaponInStock.Length].Weapon;
+            currentWeaponprice = weaponInStock[weaponInStock.Length].Price;
         }
         else
         {
-            currentWeapon = weaponInStock[level - 1];
+            currentWeapon = weaponInStock[level - 1].Weapon;
+            currentWeaponprice = weaponInStock[level - 1].Price;
         }
 
-        buttonText.text = currentWeapon.name;
+        buttonText.text = currentWeapon.name + "   $" + currentWeaponprice;
 
         button.onClick.AddListener(BuyWeapon);
     }
 
     private void BuyWeapon()
     {
-        playerReference.SetWeapon(currentWeapon);
-        buttonManager.UpdateButtons(this);
+        if (buttonManager.ShowPlayerGold() < currentWeaponprice)
+        {
+            Debug.Log("No se posee el dinero suficiente");
+        }
+        else
+        {
+            buttonManager.ConsumeGold(currentWeaponprice);
+            playerReference.SetWeapon(currentWeapon);
+            buttonManager.UpdateButtons(this);
+        }
+       
     }
 
     public void ActivateButton()

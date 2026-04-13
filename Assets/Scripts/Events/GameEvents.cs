@@ -15,4 +15,5 @@ public static class GameEvents
     {
         OnChangeGold?.Invoke();
     }
+
 }

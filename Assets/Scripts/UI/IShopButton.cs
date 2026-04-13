@@ -11,7 +11,7 @@ public interface IShopButton
     public int Level { get; set; }
 
 
-    public GameObject[] WeaponInStock { get; set; }
+    public WeaponInStocSO[] WeaponInStock { get; set; }
 
     public void ActivateButton();
 
