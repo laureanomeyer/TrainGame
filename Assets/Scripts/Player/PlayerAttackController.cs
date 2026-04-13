@@ -20,8 +20,6 @@ public class PlayerAttackController : MonoBehaviour
 
     void Start()
     {
-        dataRef = RunManager.Instance.TrainCopyData;
-
         //se busca la pool de objetos
         lookToMouseController = GetComponent<LookObjectToMouse>();
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
@@ -38,7 +36,7 @@ public class PlayerAttackController : MonoBehaviour
             Debug.Log("Carga");
         }
 
-        waitToFire = weapon.RateOfFire / (dataRef.LocomotiveStatsMultiplicator.attackSpeed + dataRef.WagonBuffedStats.attackSpeed);
+        waitToFire = weapon.RateOfFire;
     }
 
     void Update()
@@ -49,6 +47,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void AidToMouseDirection()
     {
+        if (lookToMouseController == null) return;
         spawnPoint.forward = lookToMouseController.GetMouseDirection(spawnPoint);
     }
 
@@ -81,7 +80,7 @@ public class PlayerAttackController : MonoBehaviour
 
     private void ChargeTimers()
     {
-        if (waitToFire <= weapon.RateOfFire / (dataRef.LocomotiveStatsMultiplicator.attackSpeed + dataRef.WagonBuffedStats.attackSpeed))
+        if (waitToFire <= weapon.RateOfFire)
         {
             waitToFire += Time.deltaTime;
         }

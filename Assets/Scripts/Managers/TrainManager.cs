@@ -111,24 +111,27 @@ public class TrainManager : MonoBehaviour
 
     private void ChangeWagonsInTrainData()
     {
-        if (wagonsList.Count > 0)
+        List<IWagonID> wagonInDataReference = GameManager.Instance.TrainData.WagonsIDList;
+
+       List <IWagonID> newWagonList = new List<IWagonID>(); 
+
+        if (wagonsCreated.Count > 0)
         {
-            foreach (var wagon in wagonsCreated)
+            for (int i = 0; i <= wagonsCreated.Count - 1; i++)
             {
-                if (wagon.GetComponent<WagonBrain>().HPController.IsBroken)
+                if (wagonsCreated[i].GetComponent<WagonBrain>().HPController.IsBroken)
                 {
-                    wagonsCreated.Remove(wagon);
                     Debug.Log("Se removio un vagon");
                 }
                 else
                 {
+                    newWagonList.Add(new WagonStore(wagonInDataReference[i].Prefab));
                     Debug.Log("No se removio ningun vagon");
                 }
-
             }
 
-            Debug.Log("Elementos en la lista" + wagonsCreated.Count);
-            //GameManager.Instance.TrainData.ChangedWagonIDList(wagonsCreated);
+            Debug.Log("Elementos en la lista" + newWagonList.Count);
+            GameManager.Instance.TrainData.ChangedWagonIDList(newWagonList);
         }
        
     }

@@ -83,14 +83,9 @@ public class TrainData
         wagonsIDList = new List<IWagonID>();
     }
 
-    public void ChangedWagonIDList(List<GameObject> wagonIDs)
+    public void ChangedWagonIDList(List<IWagonID> wagonIDs)
     {
-        wagonsIDList.Clear();
-
-        for (int i = 0; i < wagonIDs.Count; i++)
-        {
-            AddWagon(new WagonStore(wagonIDs[i]));
-        }
+        wagonsIDList = wagonIDs;
     }
 }
 

@@ -43,7 +43,7 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public void ResetState(BulletTypeScriptable type)
     {
-        dataRef = RunManager.Instance.TrainCopyData;
+        dataRef = GameManager.Instance.TrainData;
 
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
