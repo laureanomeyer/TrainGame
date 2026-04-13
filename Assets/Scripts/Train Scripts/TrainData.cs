@@ -6,25 +6,30 @@ using UnityEngine;
 public class TrainData
 {
     private float speed;
-    public TrainStats stats;
-    private LocomotiveStats baseStats;
+
+    private LocomotiveStatsSO baseStats;
+    public TrainStats locomotiveStatsMultiplicator;
+    private TrainStats wagonBuffedStats;
+
     private Transform tailPosition;
+
     private List<IWagon> wagonsList = new();
     private List<IWagonID> wagonsIDList = new();
-
-    public List<IBuffer> BufferList { get => bufferList; set => bufferList = value; }
     private List<IBuffer> bufferList = new();
 
+    public TrainStats LocomotiveStatsMultiplicator => locomotiveStatsMultiplicator;
+    public TrainStats WagonBuffedStats => wagonBuffedStats;
+    public List<IBuffer> BufferList { get => bufferList; set => bufferList = value; }
     public List<IWagon> WagonList => wagonsList;
     public List<IWagonID> WagonsIDList => wagonsIDList; 
     public Transform TailPosition => tailPosition;
     public float Speed => speed;
 
-    public TrainData(LocomotiveStats stats)
+    public TrainData(LocomotiveStatsSO stats)
     {
-        this.baseStats = stats;
-        this.stats = new TrainStats(baseStats.maxHp, baseStats.defense, baseStats.goldMultyplier,
-                                    baseStats.damageMultyplier, baseStats.attackSpeed, baseStats.fuelOptimizer, baseStats.baseSpeed);
+        baseStats = stats;
+        locomotiveStatsMultiplicator = new TrainStats(baseStats);
+        wagonBuffedStats = new TrainStats(baseStats);
     }
 
     public void AddWagon(IWagonID wagon)
@@ -51,7 +56,7 @@ public class TrainData
 
     public TrainStats UpdateStats()
     {
-        stats = new TrainStats(
+        wagonBuffedStats = new TrainStats(
             baseStats.maxHp,
             baseStats.defense,
             baseStats.goldMultyplier,
@@ -65,12 +70,12 @@ public class TrainData
         foreach (IBuffer buff in BufferList)
         {
             TrainStats buffStats = buff.GetStatsBuff(baseStats);
-            stats += buffStats;
+            wagonBuffedStats += buffStats;
         }
 
-        Debug.Log("HP FINAL DEL TREN: " + stats.trainMaxHp);
+        Debug.Log("HP FINAL DEL TREN: " + wagonBuffedStats.trainMaxHp);
 
-        return stats;
+        return wagonBuffedStats;
     }
 
     public void ResetValuesToDefault()

@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IBuffer
 {
     //Alamacena los buffers para los trainstats de train data
-    TrainStats GetStatsBuff(LocomotiveStats baseStats);
+    TrainStats GetStatsBuff(LocomotiveStatsSO baseStats);
 }

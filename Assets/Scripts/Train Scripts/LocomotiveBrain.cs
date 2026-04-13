@@ -3,11 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 {
-    public LocomotiveFuel fuelController;
-    private TrainData dataRef;
     [SerializeField] private Material materialDeVagonDestruido;
     [SerializeField] private Renderer rendererWagon;
     [SerializeField] public Transform TailRef;
+
+    [SerializeField] private float CM;
+    [SerializeField] private float EM;
+    [SerializeField] private float RES;
+
+    public LocomotiveFuel fuelController;
+    private TrainData dataRef;
 
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
@@ -16,7 +21,13 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     void Start()
     {
         dataRef = RunManager.Instance.TrainCopyData;
-        fuelController = new LocomotiveFuel(dataRef.stats.shields * 2, dataRef.stats.trainMaxHp * 10, dataRef.stats.baseSpeed, dataRef.stats.shields, dataRef.stats.fuelOptimizer);
+        fuelController = new LocomotiveFuel(
+            (EM * (dataRef.LocomotiveStatsMultiplicator.shields + dataRef.WagonBuffedStats.shields)),
+            (CM * (dataRef.LocomotiveStatsMultiplicator.trainMaxHp + dataRef.WagonBuffedStats.trainMaxHp)),
+            dataRef.LocomotiveStatsMultiplicator.baseSpeed,
+            (RES * (dataRef.LocomotiveStatsMultiplicator.shields + dataRef.WagonBuffedStats.shields)),
+            dataRef.LocomotiveStatsMultiplicator.fuelOptimizer
+            );
     }
 
     void Update()
@@ -47,10 +58,4 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             SceneManager.LoadScene("LauScene");
         }
     }
-
-    public void AddTrainStats( TrainData newStats)
-    {
-        dataRef.stats += newStats.stats;
-    }
-
 }

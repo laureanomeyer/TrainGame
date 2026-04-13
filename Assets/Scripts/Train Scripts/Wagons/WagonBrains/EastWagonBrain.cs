@@ -4,7 +4,7 @@ public class EastWagonBrain : WagonBrain
 {
     [SerializeField] private float hpBonus;
 
-    public override TrainStats GetStatsBuff(LocomotiveStats baseStats)
+    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
     {
         return new TrainStats(
             baseStats.maxHp * hpBonus,

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
+﻿using UnityEngine;
 
 public struct TrainStats
 {
@@ -26,7 +20,7 @@ public struct TrainStats
         this.fuelOptimizer = fuelOptimizer;
         this.baseSpeed = baseSpeed;
     }
-    public TrainStats(LocomotiveStats trainData)
+    public TrainStats(LocomotiveStatsSO trainData)
     {
         trainMaxHp = trainData.maxHp;
         shields = trainData.defense;
@@ -90,7 +84,7 @@ public class LocomotiveFuel
         currentFuel = maxFuel;
         this.actualSpeed = baseSpeed;
         this.fuelOptimizer = fuelOptimizer;
-        fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
+        fuelUseXSecond = (actualSpeed * 0.01f) / (2 * fuelOptimizer);
         this.defense = defense;
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;

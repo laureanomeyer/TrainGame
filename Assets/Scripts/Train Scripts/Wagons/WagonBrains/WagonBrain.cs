@@ -3,30 +3,37 @@ using UnityEngine;
 public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 {
     protected float hp;
-    [SerializeField] private float currentHp;
     protected float defense;
 
     protected WagonHP hpController;
+    private TrainData dataRef;
 
+    [SerializeField] private float currentHp;
     [SerializeField] private Material destroyWagonMaterial;
     [SerializeField] protected Renderer rendererWagon;
     [SerializeField] protected bool canBreak;
+    [SerializeField] private float SM;
+    [SerializeField] private float RES;
 
     public float CurrentHp => currentHp;
     public float MaxHp => hp;
 
     public WagonHP HPController => hpController;
 
-    public virtual TrainStats GetStatsBuff(LocomotiveStats baseStats)
+    public virtual TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
     {
         return new TrainStats(0, 0, 0, 0, 0, 0, 0);
     }
 
     public void Start()
     {
-        hp = RunManager.Instance.TrainCopyData.stats.trainMaxHp;
-        defense = RunManager.Instance.TrainCopyData.stats.shields;
-        hpController = new WagonHP(hp, defense, Break, canBreak);
+        dataRef = RunManager.Instance.TrainCopyData;
+        hpController = new WagonHP(
+            (SM * (dataRef.LocomotiveStatsMultiplicator.trainMaxHp * dataRef.WagonBuffedStats.trainMaxHp)),
+            (RES * (dataRef.LocomotiveStatsMultiplicator.shields * dataRef.WagonBuffedStats.shields)),
+            Break,
+            canBreak
+            );
     }
     public void Update()
     {

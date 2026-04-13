@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    [SerializeField] public LocomotiveStats baseStats;
+    [SerializeField] public LocomotiveStatsSO baseStats;
     private TrainData trainData;
     public TrainData TrainData => trainData;
 
@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
     public void UpdateTrainData()
     {
         //trainData.UpdateStats();
-        trainData.stats = trainData.UpdateStats();
+        trainData.locomotiveStatsMultiplicator = trainData.UpdateStats();
     }
 
     public void GoToStore()

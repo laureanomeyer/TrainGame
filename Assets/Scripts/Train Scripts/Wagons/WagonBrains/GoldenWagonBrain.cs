@@ -9,8 +9,8 @@ public class GoldenWagonBrain : WagonBrain
 
     new public void Start()
     {
-        hp = RunManager.Instance.TrainCopyData.stats.trainMaxHp;
-        defense = RunManager.Instance.TrainCopyData.stats.shields;
+        hp = RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.trainMaxHp;
+        defense = RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.shields;
         hpController = new WagonHP(hp, defense, Break, canBreak);
         collector = new GoldCollector(hpController);
     }

@@ -4,7 +4,7 @@ public class LowHeatWagonBrain : WagonBrain
 {
     [SerializeField] private float optimizer;
 
-    public override TrainStats GetStatsBuff(LocomotiveStats baseStats)
+    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
     {
         return new TrainStats(
             0,

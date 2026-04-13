@@ -4,7 +4,7 @@ public class SouthWagonBrain : WagonBrain
 {
     [SerializeField] private float shieldsBonus;
 
-    public override TrainStats GetStatsBuff(LocomotiveStats baseStats)
+    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
     {
         return new TrainStats(
             0,
