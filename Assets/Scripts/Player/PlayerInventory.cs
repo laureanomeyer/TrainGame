@@ -11,7 +11,7 @@ public class PlayerInventory : IInventory
 
     public PlayerInventory()
     {
-        goldAmount = 100f;
+        goldAmount = 0f;
         hasCoal = false;
     }
 

@@ -346,6 +346,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wagon_East
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_TagString
+      value: Train
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -374,6 +378,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8783682575282614284}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8770853818642890087}
   m_SourcePrefab: {fileID: 100100000, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
 --- !u!4 &2330823702144864097 stripped
 Transform:
@@ -413,10 +420,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EastWagonBrain
   currentHp: 0
-  destroyWagonMaterial: {fileID: 0}
+  destroyWagonMaterial: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
   rendererWagon: {fileID: 9040696934598930119}
   canBreak: 1
   hpBonus: 0.05
+--- !u!65 &8770853818642890087
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3103947036141524443}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.083206, y: 2.752903, z: 8.734289}
+  m_Center: {x: -0.09207535, y: 0.87645197, z: 4.5573997}
 --- !u!4 &5281296858576885448 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1253996098385199550, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}

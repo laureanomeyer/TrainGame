@@ -46,7 +46,9 @@ public class GameManager : MonoBehaviour
     public void GoToStore()
     {
         GameEvents.ChangeGold();
+        GameEvents.ChangeTrainData();
         Debug.Log("Oro actual del jugador " + playerData.GivePlayerGold());
+
         SceneManager.LoadScene("Shop");
     }
 

@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface IWagonID 
 {
-    GameObject Prefab { get;}
+    GameObject Prefab { get; set; }
 
 }

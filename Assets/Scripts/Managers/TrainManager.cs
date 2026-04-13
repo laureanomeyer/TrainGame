@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class TrainManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private GameObject GoldWagonPrefab;
 
     [SerializeField] private GameObject LocomotivePrefab;
+
+    private List<GameObject> wagonsCreated = new List<GameObject>();
+
     private List<IWagon> wagonsList;
     private List<IBuffer> BufferList; 
 
@@ -25,6 +29,8 @@ public class TrainManager : MonoBehaviour
         BufferList = new List<IBuffer>();
         RunManager.Instance.trainM = this;
         CreateTrain();
+
+        GameEvents.OnChangeTrainData += ChangeWagonsInTrainData;
     }
 
     private void Start()
@@ -63,9 +69,9 @@ public class TrainManager : MonoBehaviour
 
     public void CreateWagon(GameObject wagonToCreate)
     {
-        GameObject WagonInstance = Instantiate(wagonToCreate, tail.position, tail.rotation);
-        WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
-        WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
+        GameObject wagonInstance = Instantiate(wagonToCreate, tail.position, tail.rotation);
+        WagonMovement wagon = wagonInstance.GetComponent<WagonMovement>();
+        WagonBrain wagonBrain = wagonInstance.GetComponent<WagonBrain>();
 
         wagonsList.Add(wagon);
 
@@ -73,6 +79,7 @@ public class TrainManager : MonoBehaviour
         GameManager.Instance.UpdateTrainData();
         AddWagon(tail, wagon);
 
+        wagonsCreated.Add(wagonInstance);
     }
     public void CreateGoldWagon()
     {
@@ -100,5 +107,34 @@ public class TrainManager : MonoBehaviour
 
         wagon.wagonBack.SetActive(true);
         lastWagon = wagon;
+    }
+
+    private void ChangeWagonsInTrainData()
+    {
+        if (wagonsList.Count > 0)
+        {
+            foreach (var wagon in wagonsCreated)
+            {
+                if (wagon.GetComponent<WagonBrain>().HPController.IsBroken)
+                {
+                    wagonsCreated.Remove(wagon);
+                    Debug.Log("Se removio un vagon");
+                }
+                else
+                {
+                    Debug.Log("No se removio ningun vagon");
+                }
+
+            }
+
+            Debug.Log("Elementos en la lista" + wagonsCreated.Count);
+            //GameManager.Instance.TrainData.ChangedWagonIDList(wagonsCreated);
+        }
+       
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnChangeTrainData -= ChangeWagonsInTrainData;
     }
 }
