@@ -5,12 +5,16 @@ public class EnemyMovementNormal : EnemyMovementSO
 {
     public float desiredDistance = 5f;
     public float tolerance = 0.5f;
-    public float limitZ;
 
-    
+
     private Transform train;
 
-    public override void Move(Enemy enemy)
+    public override float SetLimitZ()
+    {
+        return Random.Range(-5, -1.5f);
+    }
+
+    public override void Move(Enemy enemy, float limitZ)
     {
         train = enemy.Target;
 
@@ -35,11 +39,16 @@ public class EnemyMovementNormal : EnemyMovementSO
             pos -= dir * enemy.Speed * Time.deltaTime;
         }
 
-        if (pos.z < limitZ)
-            pos.z = limitZ;
-        
+        float stopZ = limitZ + enemy.Range;
 
-        if(pos.y < 0)
+
+        if (pos.z < stopZ)
+        {
+            pos.z = stopZ;
+        }
+
+
+        if (pos.y < 0)
            pos.y = 0; 
 
         enemy.transform.position = pos;

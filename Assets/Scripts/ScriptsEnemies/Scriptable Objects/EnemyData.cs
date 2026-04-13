@@ -8,7 +8,6 @@ public class EnemyData : ScriptableObject
     public float health;
     public float range;
     public float speed;
-    public float distance;
     public float attackCooldown;
     public WagonTypes target;
 
