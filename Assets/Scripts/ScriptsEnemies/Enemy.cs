@@ -97,7 +97,7 @@ public class Enemy : MonoBehaviour
         }
         if (other.gameObject.CompareTag("bullet"))
         {
-            int damage = other.GetComponent<BulletScript>().Damage;
+            float damage = other.GetComponent<BulletScript>().Damage;
             TakeDamage(damage);
         }
 
