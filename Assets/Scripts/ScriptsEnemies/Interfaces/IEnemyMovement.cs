@@ -2,5 +2,7 @@ using UnityEngine;
 
 public interface IEnemyMovement
 {
-    void Move(Enemy enemy);
+
+    float SetLimitZ();
+    void Move(Enemy enemy, float limitZ);
 }

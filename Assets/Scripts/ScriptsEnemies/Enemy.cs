@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     private List<IWagon> targetList;
     private Transform target;
     private Transform weaponPosition;
+    private float limitZ;
+
 
     public IEnemyWeapon Weapon;
     public IEnemyMovement Movement => data.movement;
@@ -26,7 +28,9 @@ public class Enemy : MonoBehaviour
 
     public float Range => data.range;
 
+
     private float currentHealth;
+   
 
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
@@ -38,6 +42,7 @@ public class Enemy : MonoBehaviour
         var WeaponGO = Instantiate(weapon, weaponPosition);
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         Brain.Begin(this);
+        limitZ = Movement.SetLimitZ();
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -49,7 +54,7 @@ public class Enemy : MonoBehaviour
     {
         attackCooldownTimer -= Time.deltaTime;
         CurrentH = currentHealth;
-        Movement?.Move(this);
+        Movement?.Move(this, limitZ);
         Attack?.Attack(this);
     }
 
