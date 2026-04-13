@@ -6,7 +6,7 @@ public interface IBullet
     //Nombre de la bala
     string id { get; }
 
-    public int Damage { get; set; }
+    public float Damage { get; set; }
 
     public int Speed { get; set; }
 
