@@ -73,8 +73,6 @@ public class TrainData
             wagonBuffedStats += buffStats;
         }
 
-        Debug.Log("HP FINAL DEL TREN: " + wagonBuffedStats.trainMaxHp);
-
         return wagonBuffedStats;
     }
 

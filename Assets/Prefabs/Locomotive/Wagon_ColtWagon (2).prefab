@@ -516,6 +516,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d006a02aff417c346844535e5c28b82f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4566149035561282480}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d006a02aff417c346844535e5c28b82f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5211743071578810440}
   m_SourcePrefab: {fileID: 100100000, guid: d006a02aff417c346844535e5c28b82f, type: 3}
 --- !u!23 &1507636723249488290 stripped
 MeshRenderer:
@@ -574,7 +577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WagonMovement
   tail: {fileID: 1603602210439358000}
   speed: 100
-  wagonBack: {fileID: 9171517187858447401}
+  wagonBack: {fileID: 7001133425233111481}
 --- !u!114 &2765749237097656151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,6 +620,27 @@ MonoBehaviour:
   shootAngle: 35
   defaultCapacity: 10
   maxSize: 30
+--- !u!65 &5211743071578810440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4501369629086111137}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.7487223, y: 4.380185, z: 8.978752}
+  m_Center: {x: 0.05571711, y: 1.0400567, z: 4.4908295}
 --- !u!4 &6638749180261291698 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1253996098385199550, guid: d006a02aff417c346844535e5c28b82f, type: 3}

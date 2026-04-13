@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     {
         GameEvents.ChangeGold();
         GameEvents.ChangeTrainData();
-        Debug.Log("Oro actual del jugador " + playerData.GivePlayerGold());
 
         SceneManager.LoadScene("Shop");
     }
@@ -55,7 +54,6 @@ public class GameManager : MonoBehaviour
     public void GoToRun()
     {
         GameEvents.ChangeGold();
-        Debug.Log("Oro actual del jugador " + playerData.GivePlayerGold());
         SceneManager.LoadScene("LauScene");
     }
 
@@ -65,6 +63,5 @@ public class GameManager : MonoBehaviour
         playerData.ResetValuesToDefault();
 
         SceneManager.LoadScene("LauScene");
-        Debug.Log("Scene Reset");
     }
 }

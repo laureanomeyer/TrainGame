@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
 {
-
-    //[SerializeField] private float bulletSpeed;
     [SerializeField] private float bulletDistance;
-    //[SerializeField] private float chanceToHit;
-
     [SerializeField] private GameObject bulletType;
     Transform bulletSpawn;
 

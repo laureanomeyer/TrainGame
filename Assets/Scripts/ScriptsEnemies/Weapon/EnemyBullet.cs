@@ -19,16 +19,13 @@ public class EnemyBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var components = other.GetComponents<MonoBehaviour>();
-
-        foreach (var comp in components)
+        IDamagable component = other.GetComponent<IDamagable>();
+        Debug.Log("peguye");
+        if (component != null) 
         {
-            if (comp is IDamagable brain)
-            {
-                brain.TakeDamage(damage);
-                Destroy(gameObject);
-                return;
-            }
+            Debug.Log("Hice daño");
+            component.TakeDamage(damage);
+            Destroy(gameObject);
         }
     }
 }

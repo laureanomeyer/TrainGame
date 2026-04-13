@@ -24,7 +24,6 @@ public class InteractableObjectBrain : MonoBehaviour
         if (playerRef != null)
         {
             objectBehavior.Interact(playerRef.Inventory);
-            Debug.Log("Hecho" + objectBehavior);
         } 
     }
     private void OnDestroy()

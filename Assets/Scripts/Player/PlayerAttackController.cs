@@ -28,12 +28,10 @@ public class PlayerAttackController : MonoBehaviour
         if (GameManager.Instance.PlayerData.CheckWeapon() == false)
         {
             SetWeapon(weaponItem);
-            Debug.Log("Crea");
         }
         else
         {
             SetWeapon(GameManager.Instance.PlayerData.PlayerWeapon);
-            Debug.Log("Carga");
         }
 
         waitToFire = weapon.RateOfFire;

@@ -27,7 +27,6 @@ public class MoneyManager : MonoBehaviour
             playerMoney = 0;
         }
 
-        Debug.Log("Se consumio oro");
     }
 
     public float ShowPlayerGold()

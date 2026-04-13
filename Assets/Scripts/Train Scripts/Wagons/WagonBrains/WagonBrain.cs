@@ -42,6 +42,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     public void TakeDamage(float damageAmount)
     {
         hpController.TakeDamage(damageAmount);
+        Debug.Log("took " + damageAmount + " damage");
         if (hpController.CurrentHp <= 0)
         {
             Break();

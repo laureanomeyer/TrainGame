@@ -54,7 +54,6 @@ public class PlayerInteractions : MonoBehaviour
         {
             other.TryGetComponent(out WagonBrain wagon);
             currentWagon = wagon;
-            Debug.Log(currentWagon);
         }
 
         if (other.CompareTag("ShopButton"))
