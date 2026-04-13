@@ -1085,37 +1085,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7431540458986960683, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
   m_PrefabInstance: {fileID: 1558271857}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &782004578
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 782004579}
-  m_Layer: 0
-  m_Name: OliArreglaUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &782004579
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 782004578}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1005.4176, y: -0.00002, z: 689.5491}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &834336552
 GameObject:
   m_ObjectHideFlags: 0
@@ -2508,7 +2477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdcbb32f19fc7984d897200c665323c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  sceneDuration: 10
+  sceneDuration: 10000
 --- !u!1001 &511059817397968244
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2520,7 +2489,7 @@ PrefabInstance:
     - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
       propertyPath: shopUI
       value: 
-      objectReference: {fileID: 782004578}
+      objectReference: {fileID: 0}
     - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
       propertyPath: goldText
       value: 
@@ -2623,4 +2592,3 @@ SceneRoots:
   - {fileID: 511059817397968244}
   - {fileID: 72369570}
   - {fileID: 2083077569}
-  - {fileID: 782004579}
