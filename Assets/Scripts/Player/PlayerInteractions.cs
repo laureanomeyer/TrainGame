@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,19 +9,27 @@ public class PlayerInteractions : MonoBehaviour
 
     private ShopButton currentButton;
     private ShopZone currentShopZone;
+    private ActiveTurretStation currentTurretStation;
+    private ActiveTurretStation usingTurretStation;
 
     private PlayerInventory playerInventory;
     private PlayerBrain playerBrain;
+    private PlayerMovementController playerMovementController;
+    private LookObjectToMouse lookObjectToMouse;
 
     public PlayerInventory Inventory => playerInventory;
     public WagonBrain CurrentWagon => currentWagon;
 
     private InputAction repairAction;
     private bool buttonIsHold = false;
+    private bool isUsingTurret = false;
 
     void Start()
     {
         playerBrain = GetComponent<PlayerBrain>();
+        playerMovementController = GetComponent<PlayerMovementController>();
+        lookObjectToMouse = GetComponent<LookObjectToMouse>();
+
         playerInventory = playerBrain.Inventory;
 
         repairAction = InputSystem.actions.FindAction("Repair");
@@ -38,6 +45,7 @@ public class PlayerInteractions : MonoBehaviour
     private void Update()
     {
         Repair();
+        HandleTurretUse();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -70,6 +78,17 @@ public class PlayerInteractions : MonoBehaviour
                 interactionUIManager.ShowButtons();
             }
         }
+
+        if (other.CompareTag("ActiveTurret"))
+        {
+            other.TryGetComponent(out ActiveTurretStation turretStation);
+            currentTurretStation = turretStation;
+
+            if (!isUsingTurret && currentTurretStation != null && interactionUIManager != null)
+            {
+                interactionUIManager.ShowText("Usar torreta");
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -88,7 +107,7 @@ public class PlayerInteractions : MonoBehaviour
             {
                 currentButton = null;
 
-                if (interactionUIManager != null)
+                if (!isUsingTurret && interactionUIManager != null)
                 {
                     interactionUIManager.HideAll();
                 }
@@ -101,7 +120,20 @@ public class PlayerInteractions : MonoBehaviour
             {
                 currentShopZone = null;
 
-                if (interactionUIManager != null)
+                if (!isUsingTurret && interactionUIManager != null)
+                {
+                    interactionUIManager.HideAll();
+                }
+            }
+        }
+
+        if (other.CompareTag("ActiveTurret"))
+        {
+            if (other.TryGetComponent(out ActiveTurretStation turretStation) && turretStation == currentTurretStation)
+            {
+                currentTurretStation = null;
+
+                if (!isUsingTurret && interactionUIManager != null)
                 {
                     interactionUIManager.HideAll();
                 }
@@ -116,9 +148,72 @@ public class PlayerInteractions : MonoBehaviour
 
     void Interact()
     {
+        if (isUsingTurret)
+        {
+            StopUsingTurret();
+            return;
+        }
+
+        if (currentTurretStation != null)
+        {
+            StartUsingTurret(currentTurretStation);
+            return;
+        }
+
         if (currentButton != null)
         {
             currentButton.Interact();
+        }
+    }
+
+    void StartUsingTurret(ActiveTurretStation turretStation)
+    {
+        usingTurretStation = turretStation;
+        isUsingTurret = true;
+
+        if (playerMovementController != null)
+        {
+            playerMovementController.SetCanMove(false);
+        }
+
+        if (interactionUIManager != null)
+        {
+            interactionUIManager.ShowText("Salir de torreta");
+        }
+    }
+
+    void StopUsingTurret()
+    {
+        isUsingTurret = false;
+        usingTurretStation = null;
+
+        if (playerMovementController != null)
+        {
+            playerMovementController.SetCanMove(true);
+        }
+
+        if (interactionUIManager != null)
+        {
+            interactionUIManager.HideAll();
+        }
+    }
+
+    void HandleTurretUse()
+    {
+        if (!isUsingTurret) return;
+        if (usingTurretStation == null) return;
+        if (usingTurretStation.Turret == null) return;
+        if (lookObjectToMouse == null) return;
+
+        if (Mouse.current.leftButton.isPressed)
+        {
+            Vector3 direction = lookObjectToMouse.GetMouseDirection(usingTurretStation.Turret.transform);
+            direction.y = 0f;
+
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                usingTurretStation.Turret.TryShoot(direction);
+            }
         }
     }
 
@@ -134,15 +229,19 @@ public class PlayerInteractions : MonoBehaviour
 
     void Repair()
     {
+        if (isUsingTurret) return;
+
         if (buttonIsHold && currentWagon != null)
         {
             currentWagon.Repair(repairCapacity);
         }
     }
+
     public void OnReloadScene()
     {
         ReloadScene();
     }
+
     public void ReloadScene()
     {
         GameManager.Instance.GoToRun();

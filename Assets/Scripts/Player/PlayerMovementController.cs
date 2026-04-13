@@ -11,6 +11,8 @@ public class PlayerMovementController : MonoBehaviour
     private LookObjectToMouse lookToMouseController;
     private Vector2 moveInput;
 
+    private bool canMove = true;
+
     void Start()
     {
         lookToMouseController = GetComponent<LookObjectToMouse>();
@@ -18,9 +20,16 @@ public class PlayerMovementController : MonoBehaviour
     }
     void FixedUpdate()
     {
+        if (!canMove)
+        {
+            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+            return;
+        }
+
         MovePlayer();
         RotateToMouse();
     }
+
 
 
     void OnMove(InputValue value)
@@ -40,6 +49,17 @@ public class PlayerMovementController : MonoBehaviour
         var direction = lookToMouseController.GetMouseDirection(transform);
         direction.y = 0f;
         transform.forward = direction;
+    }
+
+    public void SetCanMove(bool value)
+    {
+        canMove = value;
+
+        if(!canMove)
+        {
+            moveInput = Vector2.zero;
+            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+        }
     }
 
 }

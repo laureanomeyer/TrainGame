@@ -5,6 +5,7 @@ public class WagonFixedTurret : MonoBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Transform detectPoint;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private BulletTypeScriptable bulletType;
 
@@ -101,6 +102,8 @@ public class WagonFixedTurret : MonoBehaviour
 
     private Enemy FindTargetInCone()
     {
+        if(detectPoint == null) return null;
+
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
         Enemy bestTarget = null;
@@ -110,14 +113,14 @@ public class WagonFixedTurret : MonoBehaviour
         {
             if (enemy == null) continue;
 
-            Vector3 toEnemy = enemy.transform.position - firePoint.position;
+            Vector3 toEnemy = enemy.transform.position - detectPoint.position;
             toEnemy.y = 0f;
 
             float distance = toEnemy.magnitude;
             if (distance > range) continue;
             if (distance <= 0.01f) continue;
 
-            float angle = Vector3.Angle(firePoint.forward, toEnemy.normalized);
+            float angle = Vector3.Angle(detectPoint.forward, toEnemy.normalized);
             if (angle > shootAngle) continue;
 
             if (distance < closestDistance)
@@ -135,7 +138,7 @@ public class WagonFixedTurret : MonoBehaviour
         if (firePoint == null) return;
 
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(firePoint.position, range);
+        Gizmos.DrawWireSphere(detectPoint.position, range);
 
         Vector3 forward = firePoint.forward;
         Quaternion leftRot = Quaternion.AngleAxis(-shootAngle, Vector3.up);
@@ -145,10 +148,10 @@ public class WagonFixedTurret : MonoBehaviour
         Vector3 rightDir = rightRot * forward;
 
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(firePoint.position, firePoint.position + forward * range);
+        Gizmos.DrawLine(detectPoint.position, detectPoint.position + forward * range);
 
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(firePoint.position, firePoint.position + leftDir * range);
-        Gizmos.DrawLine(firePoint.position, firePoint.position + rightDir * range);
+        Gizmos.DrawLine(detectPoint.position, detectPoint.position + leftDir * range);
+        Gizmos.DrawLine(detectPoint.position, detectPoint.position + rightDir * range);
     }
 }
