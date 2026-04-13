@@ -57,13 +57,13 @@ public class TrainData
     public TrainStats UpdateStats()
     {
         wagonBuffedStats = new TrainStats(
-            baseStats.maxHp,
-            baseStats.defense,
-            baseStats.goldMultyplier,
-            baseStats.damageMultyplier,
-            baseStats.attackSpeed,
-            baseStats.fuelOptimizer,
-            baseStats.baseSpeed
+            locomotiveStatsMultiplicator.trainMaxHp,
+            locomotiveStatsMultiplicator.shields,
+            locomotiveStatsMultiplicator.goldBonus,
+            locomotiveStatsMultiplicator.damageBonus,
+            locomotiveStatsMultiplicator.attackSpeed,
+            locomotiveStatsMultiplicator.fuelOptimizer,
+            locomotiveStatsMultiplicator.baseSpeed
         );
 
 
