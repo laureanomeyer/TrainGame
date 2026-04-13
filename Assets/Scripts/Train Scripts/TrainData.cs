@@ -66,7 +66,7 @@ public class TrainData
             locomotiveStatsMultiplicator.baseSpeed
         );
 
-
+        
         foreach (IBuffer buff in BufferList)
         {
             TrainStats buffStats = buff.GetStatsBuff(baseStats);

@@ -46,6 +46,19 @@ public struct TrainStats
             baseSpeed = x.baseSpeed + y.baseSpeed
         };
     }
+    public static TrainStats operator -(TrainStats x, TrainStats y)
+    {
+        return new TrainStats
+        {
+            fuelOptimizer = x.fuelOptimizer - y.fuelOptimizer,
+            trainMaxHp = x.trainMaxHp - y.trainMaxHp,
+            shields = x.shields - y.shields,
+            goldBonus = x.goldBonus - y.goldBonus,
+            damageBonus = x.damageBonus - y.damageBonus,
+            attackSpeed = x.attackSpeed - y.attackSpeed,
+            baseSpeed = x.baseSpeed - y.baseSpeed
+        };
+    }
 }
 
 
