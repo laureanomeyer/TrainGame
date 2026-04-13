@@ -21,7 +21,7 @@ public class EnemyRangeAttack : EnemyAttackSO
 
             if (dist <= enemy.Range)
             {
-                enemy.Weapon.Execute(enemy.Target);
+                enemy.Weapon.Execute(enemy.Target, enemy.Damage);
                 enemy.ResetAttackCooldown(cooldown);
             }
         }

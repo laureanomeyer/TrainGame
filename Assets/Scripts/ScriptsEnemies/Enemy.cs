@@ -21,16 +21,14 @@ public class Enemy : MonoBehaviour
     public IEnemyBrain Brain => data.brain;
     public float Speed => data.speed;
     public float MaxHealth => data.health;
+    public float Damage => data.damage;
 
     public List<IWagon> TargetList => targetList;
 
     public Transform Target => target;
-
     public float Range => data.range;
 
-
     private float currentHealth;
-   
 
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
