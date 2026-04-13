@@ -5,10 +5,9 @@ using UnityEngine;
 public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
 {
 
-    [SerializeField] private float bulletSpeed;
-    [SerializeField] private float bulletDamage;
+    //[SerializeField] private float bulletSpeed;
     [SerializeField] private float bulletDistance;
-    [SerializeField] private float chanceToHit;
+    //[SerializeField] private float chanceToHit;
 
     [SerializeField] private GameObject bulletType;
     Transform bulletSpawn;
@@ -18,12 +17,12 @@ public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
         bulletSpawn = GetComponentInChildren<Transform>();
     }
 
-    public void Execute(Transform target)
+    public void Execute(Transform target, float damage)
     {
-        Shoot(target);
+        Shoot(target, damage);
     }
 
-    public void Shoot(Transform target)
+    public void Shoot(Transform target, float damage)
     {
         if (target == null) return;
 
@@ -36,7 +35,7 @@ public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
         );
 
         EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
-        bullet.Init(dir, bulletDamage);
+        bullet.Init(dir, damage);
 
     }
 
