@@ -36,7 +36,7 @@ public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
         );
 
         EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
-        bullet.Init(dir);
+        bullet.Init(dir, bulletDamage);
 
     }
 

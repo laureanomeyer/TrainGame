@@ -39,6 +39,7 @@ public class WagonHP : IDamagable
         if (!IsBroken)
         {
             currentHp += repairAmount * deltaTime;
+            currentHp = Mathf.Clamp(currentHp, 0, maxHp);
         }
     }
     public void Break() 

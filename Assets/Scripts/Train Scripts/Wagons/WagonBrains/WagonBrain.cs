@@ -28,7 +28,10 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         defense = RunManager.Instance.TrainCopyData.stats.shields;
         hpController = new WagonHP(hp, defense, Break, canBreak);
     }
-
+    public void Update()
+    {
+        currentHp = HPController.CurrentHp;
+    }
     public void TakeDamage(float damageAmount)
     {
         hpController.TakeDamage(damageAmount);

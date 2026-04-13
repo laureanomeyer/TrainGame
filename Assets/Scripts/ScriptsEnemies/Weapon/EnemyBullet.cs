@@ -4,10 +4,12 @@ public class EnemyBullet : MonoBehaviour
 {
     public float speed = 10f;
     Vector3 direction;
+    float damage;
 
-    public void Init(Vector3 dir)
+    public void Init(Vector3 dir, float damage)
     {
         direction = dir.normalized;
+        this.damage = damage;
     }
 
     void Update()
@@ -23,7 +25,7 @@ public class EnemyBullet : MonoBehaviour
         {
             if (comp is IDamagable brain)
             {
-                brain.TakeDamage(5);
+                brain.TakeDamage(damage);
                 Destroy(gameObject);
                 return;
             }
