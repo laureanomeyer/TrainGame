@@ -42,6 +42,8 @@ public class WagonFixedTurret : MonoBehaviour
 
         if (target != null && cooldownTimer <= 0f)
         {
+
+            Debug.Log("Shooting at target");
             Shoot(target);
             cooldownTimer = fireCooldown;
         }
@@ -79,6 +81,7 @@ public class WagonFixedTurret : MonoBehaviour
     private void Shoot(Enemy target)
     {
         if (target == null) return;
+        if (firePoint == null) return;
 
         GameObject bulletGO = bulletPool.Get();
         bulletGO.transform.position = firePoint.position;
@@ -98,11 +101,13 @@ public class WagonFixedTurret : MonoBehaviour
         {
             bullet.ResetState(bulletType);
         }
+
+
     }
 
     private Enemy FindTargetInCone()
     {
-        if(detectPoint == null) return null;
+        if (detectPoint == null) return null;
 
         Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
 
@@ -135,12 +140,12 @@ public class WagonFixedTurret : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        if (firePoint == null) return;
+        if (detectPoint == null) return;
 
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(detectPoint.position, range);
 
-        Vector3 forward = firePoint.forward;
+        Vector3 forward = detectPoint.forward;
         Quaternion leftRot = Quaternion.AngleAxis(-shootAngle, Vector3.up);
         Quaternion rightRot = Quaternion.AngleAxis(shootAngle, Vector3.up);
 

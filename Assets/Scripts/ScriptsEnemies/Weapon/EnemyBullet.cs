@@ -20,7 +20,7 @@ public class EnemyBullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         IDamagable component = other.GetComponent<IDamagable>();
-        Debug.Log("peguye");
+        Debug.Log("pegue");
         if (component != null) 
         {
             Debug.Log("Hice daño");
