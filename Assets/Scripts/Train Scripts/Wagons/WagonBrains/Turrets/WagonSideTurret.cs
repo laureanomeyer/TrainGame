@@ -32,6 +32,7 @@ public class WagonFixedTurret : MonoBehaviour
             defaultCapacity,
             maxSize
         );
+        WarmUp(defaultCapacity);
     }
 
     void Update()
@@ -77,7 +78,12 @@ public class WagonFixedTurret : MonoBehaviour
     {
         Destroy(bulletGO);
     }
-
+    private void WarmUp(int count)
+    {
+        var prewarm = new GameObject[count];
+        for (int i = 0; i < count; i++) prewarm[i] = bulletPool.Get();
+        for (int i = 0; i < count; ++i) bulletPool.Release(prewarm[i]);
+    }
     private void Shoot(Enemy target)
     {
         if (target == null) return;

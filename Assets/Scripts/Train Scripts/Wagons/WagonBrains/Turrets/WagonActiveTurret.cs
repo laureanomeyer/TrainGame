@@ -18,7 +18,7 @@ public class WagonActiveTurret : MonoBehaviour
     private float cooldownTimer;
     private IObjectPool<GameObject> bulletPool;
 
-    private void Awake()
+    private void Start()
     {
         bulletPool = new ObjectPool<GameObject>(
             CreateBullet,
@@ -29,6 +29,7 @@ public class WagonActiveTurret : MonoBehaviour
             defaultCapacity,
             maxSize
         );
+        WarmUp(defaultCapacity);
     }
 
     private void Update()
@@ -72,14 +73,13 @@ public class WagonActiveTurret : MonoBehaviour
     private GameObject CreateBullet()
     {
         GameObject bulletGO = Instantiate(bulletPrefab);
-
         IBullet bullet = bulletGO.GetComponent<IBullet>();
+
         if (bullet != null)
         {
             bullet.BulletPool = bulletPool;
         }
 
-        bulletGO.SetActive(false);
         return bulletGO;
     }
 
@@ -96,5 +96,11 @@ public class WagonActiveTurret : MonoBehaviour
     private void OnDestroyBullet(GameObject bulletGO)
     {
         Destroy(bulletGO);
+    }
+    private void WarmUp(int count)
+    {
+        var prewarm = new GameObject[count];
+        for (int i = 0; i < count; i++) prewarm[i] = bulletPool.Get();
+        for (int i = 0; i < count; ++i) bulletPool.Release(prewarm[i]);
     }
 }

@@ -10,7 +10,7 @@ public class BulletFactory : MonoBehaviour
     //Diccionario utilizado para llamar a los objetos que quieren se creado por nombre
     private Dictionary<string, GameObject> obstaclesDictionary;
 
-    private void Start()
+    private void Awake()
     {
         obstaclesDictionary = new Dictionary<string, GameObject>();
 
