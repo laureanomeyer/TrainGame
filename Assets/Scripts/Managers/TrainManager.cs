@@ -62,18 +62,19 @@ public class TrainManager : MonoBehaviour
     {
         foreach (var wagon in GameManager.Instance.TrainData.WagonsIDList)
         {
-            CreateWagon(wagon.Prefab);
+            CreateWagon(wagon.Prefab, wagon);
         }
     }
 
 
-    public void CreateWagon(GameObject wagonToCreate)
+    public void CreateWagon(GameObject wagonToCreate, IWagonID id)
     {
         GameObject wagonInstance = Instantiate(wagonToCreate, tail.position, tail.rotation);
         WagonMovement wagon = wagonInstance.GetComponent<WagonMovement>();
         WagonBrain wagonBrain = wagonInstance.GetComponent<WagonBrain>();
 
         wagonsList.Add(wagon);
+        wagonBrain.SetWagonID(id);
 
         GameManager.Instance.TrainData.AddToBufferList(wagonBrain);
         GameManager.Instance.UpdateTrainData();

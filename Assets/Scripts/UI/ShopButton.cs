@@ -37,7 +37,7 @@ public class ShopButton : MonoBehaviour
             else
             {
                 storeManager.ConsumeGold(10f);
-                GameManager.Instance.TrainData.AddWagon(new WagonStore(currentWagonInStock.Wagon));
+                GameManager.Instance.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
                 SetWagonInStock();
             }
         }

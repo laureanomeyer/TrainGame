@@ -7,6 +7,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
 
     protected WagonHP hpController;
     private TrainData dataRef;
+    private IWagonID wagonID;
 
     [SerializeField] private float currentHp;
     [SerializeField] private Material destroyWagonMaterial;
@@ -19,6 +20,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     public float MaxHp => hp;
 
     public WagonHP HPController => hpController;
+    public IWagonID WagonID => wagonID;
 
     public virtual TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
     {
@@ -53,9 +55,16 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     {
         hpController.Repair(Time.deltaTime, repairAmount);
     }
+    public void SetWagonID (IWagonID wagon)
+    {
+        this.wagonID = wagon;
+    }
 
     public void Break()
     {
         rendererWagon.material = destroyWagonMaterial;
+        if (wagonID != null ) 
+            GameManager.Instance.TrainData.RemoveWagonID(this.wagonID);
+        else return;
     }
 }

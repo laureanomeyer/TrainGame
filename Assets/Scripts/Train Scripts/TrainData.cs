@@ -32,9 +32,13 @@ public class TrainData
         wagonBuffedStats = new TrainStats(baseStats);
     }
 
-    public void AddWagon(IWagonID wagon)
+    public void AddWagonID(IWagonID wagon)
     {
         wagonsIDList.Add(wagon);
+    }
+    public void RemoveWagonID(IWagonID wagon)
+    {
+        wagonsIDList.Remove(wagon);
     }
 
     public void SetSpeed(float speed)
