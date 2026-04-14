@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class LocomotiveUpgradeButton : MonoBehaviour
+public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private LocomotivesUpgradesButtonController buttonManager;
     public LocomotivesUpgradesButtonController ButtonManager {  get => buttonManager; set => buttonManager = value; }
@@ -19,6 +20,7 @@ public class LocomotiveUpgradeButton : MonoBehaviour
     [SerializeField] private float attackSpeed;
 
     [SerializeField] private TextMeshProUGUI description;
+    [SerializeField] private string textDescription;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,6 +29,8 @@ public class LocomotiveUpgradeButton : MonoBehaviour
         button = GetComponent<Button>();
 
         upgrades = new TrainStats(maxHp, defense, goldMultyplier, damageMultyplier, attackSpeed, 0, 0);
+
+        button.onClick.AddListener(adquireUpgrade);
     }
 
     public void adquireUpgrade()
@@ -43,5 +47,18 @@ public class LocomotiveUpgradeButton : MonoBehaviour
     public void DeactivateButton()
     {
         button.interactable = false;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (button.interactable == true)
+        {
+            description.text = textDescription;
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        description.text = "";
     }
 }
