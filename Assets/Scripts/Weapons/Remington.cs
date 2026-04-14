@@ -39,9 +39,11 @@ public class Remington : MonoBehaviour, IWeapons
 
     public void Shoot(Transform spawnPoint)
     {
+        if (currentAmmunition <= 0)
+            return;
+
         bulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletScriptable);
         currentAmmunition -= 1;
-
     }
 
     public void SetPool(BulletPool pool)
