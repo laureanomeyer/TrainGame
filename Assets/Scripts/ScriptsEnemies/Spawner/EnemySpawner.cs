@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
 
-    [SerializeField] GameObject enemyPrefab;
+    [SerializeField] List<GameObject> enemyPrefab;
     [SerializeField] float spawnInterval = 5f;
     [SerializeField] int maxEnemies = 10;
 
@@ -42,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
 
     void Spawn()
     {
-        GameObject enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], transform.position, Quaternion.identity);
         enemy.GetComponent<Enemy>().SetTargetList(trainList);
         currentEnemies++;
         //Debug.Log("Cant enemies: " + currentEnemies);
