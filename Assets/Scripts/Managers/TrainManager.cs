@@ -29,8 +29,6 @@ public class TrainManager : MonoBehaviour
         BufferList = new List<IBuffer>();
         RunManager.Instance.trainM = this;
         CreateTrain();
-
-        GameEvents.OnChangeTrainData += ChangeWagonsInTrainData;
     }
 
     private void Start()
@@ -108,37 +106,5 @@ public class TrainManager : MonoBehaviour
 
         wagon.wagonBack.SetActive(true);
         lastWagon = wagon;
-    }
-
-    private void ChangeWagonsInTrainData()
-    {
-        List<IWagonID> wagonInDataReference = GameManager.Instance.TrainData.WagonsIDList;
-
-       List <IWagonID> newWagonList = new List<IWagonID>(); 
-
-        if (wagonsCreated.Count > 0)
-        {
-            for (int i = 0; i <= wagonsCreated.Count - 1; i++)
-            {
-                if (wagonsCreated[i].GetComponent<WagonBrain>().HPController.IsBroken)
-                {
-                    Debug.Log("Se removio un vagon");
-                }
-                else
-                {
-                    newWagonList.Add(new WagonStore(wagonInDataReference[i].Prefab));
-                    Debug.Log("No se removio ningun vagon");
-                }
-            }
-
-            Debug.Log("Elementos en la lista" + newWagonList.Count);
-            GameManager.Instance.TrainData.ChangedWagonIDList(newWagonList);
-        }
-       
-    }
-
-    private void OnDestroy()
-    {
-        GameEvents.OnChangeTrainData -= ChangeWagonsInTrainData;
     }
 }
