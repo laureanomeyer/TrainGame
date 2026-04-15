@@ -7,6 +7,8 @@ public class SceneRunController : MonoBehaviour
 
     private float currentTime;
 
+    public float Progress => 1f - Mathf.Clamp01(currentTime / sceneDuration);
+
     private void Awake()
     {
         currentTime = sceneDuration;
