@@ -63,7 +63,7 @@ public class PlayerInteractions : MonoBehaviour
 
             if (currentButton != null && interactionUIManager != null)
             {
-                interactionUIManager.ShowText(currentButton.ButtonText);
+                interactionUIManager.ShowText(currentButton.DescriptionText);
             }
         }
 

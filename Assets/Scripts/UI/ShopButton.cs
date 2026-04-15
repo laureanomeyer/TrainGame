@@ -1,20 +1,25 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class ShopButton : MonoBehaviour
 {
-    [SerializeField] private string buttonText;
+    [SerializeField] private string descriptionText;
     [SerializeField] private WagonInStockSO[] wagonsInStock;
 
     private WagonInStockSO currentWagonInStock;
     public WagonInStockSO CurrentWagonInStock => currentWagonInStock;
 
-    public string ButtonText => buttonText;
+    public string DescriptionText => descriptionText;
 
     [SerializeField] private WagonStoreManager storeManager;
 
+    private TextMeshProUGUI textUI;
+
     private void Start()
     {
+        textUI = storeManager.descriptionTextUI;
+
         if (wagonsInStock.Length > 0)
         {
             SetWagonInStock();
@@ -22,7 +27,7 @@ public class ShopButton : MonoBehaviour
         else
         {
             string closeText = "No hay vagones actualmente. \n\n¡Vuelva Pronto!";
-            buttonText = closeText;
+            descriptionText = closeText;
         }
     }
 
@@ -50,7 +55,8 @@ public class ShopButton : MonoBehaviour
     private void SetWagonInStock()
     {
         currentWagonInStock = SelectRandomWagon();
-        buttonText = (currentWagonInStock.Wagon.name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
+        descriptionText = (currentWagonInStock.Wagon.name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
+        textUI.text = descriptionText;
     }
 
     private WagonInStockSO SelectRandomWagon()

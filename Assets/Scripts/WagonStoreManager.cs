@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class WagonStoreManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class WagonStoreManager : MonoBehaviour
 
     [Header("MoneyManager reference")]
     [SerializeField] private MoneyManager moneyManager;
+
+    [SerializeField] public TextMeshProUGUI descriptionTextUI;
 
     public void ConsumeGold(float amount)
     {
