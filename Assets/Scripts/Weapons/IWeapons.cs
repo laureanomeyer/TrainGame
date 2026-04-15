@@ -15,12 +15,14 @@ public interface IWeapons
 
     public float CurrentAmmunition { get; }
 
+    public bool IsReloading { get; }
+
     //Funcion de ataque, requiere un punto de spawneo de balas
     public void Shoot(Transform spawnPoint);
 
     //Establece la pool
     public void SetPool(BulletPool pool);
 
-    public void Reload();
+    public void RestockBullets();
 
 }

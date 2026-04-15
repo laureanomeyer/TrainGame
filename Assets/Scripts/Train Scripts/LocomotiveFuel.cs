@@ -133,12 +133,6 @@ public class LocomotiveFuel
         UpdateSharedSpeed();
     }
 
-    private void ModifySpeed(float speedToAdd)
-    {
-        actualSpeed += speedToAdd;
-        fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
-        UpdateSharedSpeed();
-    }
     public void ModifyOptimizer(float wagonEffect)
     {
         fuelOptimizer = fuelOptimizer + wagonEffect;
@@ -167,7 +161,7 @@ public class LocomotiveFuel
 
             if (currentMaxFuel <= 0)
             {
-                //GameManager.Instance.GoToStore();
+                GameManager.Instance.ResetGame();
             }
 
             currentFuel = Mathf.Clamp(currentFuel, 0, currentMaxFuel);

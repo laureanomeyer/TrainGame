@@ -28,11 +28,8 @@ public class Winchester : MonoBehaviour, IWeapons
     [SerializeField] private float rateOfFire;
     public float RateOfFire { get => rateOfFire; }
 
-
-    [Header("Pool")]
-    [SerializeField] private int maxCapacity;
-    [SerializeField] private int defaultCapacity;
-
+    private bool isReloading = false;
+    public bool IsReloading => isReloading;
 
     //Referencia a la pool de balas
     private BulletPool bulletPool;
@@ -50,12 +47,9 @@ public class Winchester : MonoBehaviour, IWeapons
     public void SetPool(BulletPool pool)
     {
         bulletPool = pool;
-
-        pool.MaxCapacity = maxCapacity;
-        pool.DefaultCapacity = defaultCapacity;
     }
 
-    public void Reload()
+    public void RestockBullets()
     {
         currentAmmunition = bulletAmmunition;
     }
