@@ -15,5 +15,9 @@ public class BulletCollision : MonoBehaviour
         {
             bulletScript.Deactivate();
         }
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            bulletScript.Deactivate();
+        }
     }
 }
