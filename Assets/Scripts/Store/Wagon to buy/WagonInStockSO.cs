@@ -7,6 +7,8 @@ public class WagonInStockSO : ScriptableObject
     [SerializeField] private GameObject wagon;
     public GameObject Wagon => wagon;
 
+    [SerializeField] public string Name;
+
     [Header("Price")]
     [SerializeField] private float price;
     public float Price => price;
