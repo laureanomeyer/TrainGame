@@ -5,13 +5,15 @@ public class MoneyManager : MonoBehaviour
     private float playerMoney;
 
     public float PlayerMoney {  get { return playerMoney; } }
+
+    [SerializeField] private GoldUIDisplay goldDisplay;
     
     void Start()
     {
         playerMoney = GameManager.Instance.PlayerData.GivePlayerGold();
         GameEvents.OnChangeGold += ChangePlayerGoldData;
 
-        playerMoney += 100f;
+        Debug.Log("player gold: " + playerMoney);
     }
 
     private void ChangePlayerGoldData()
@@ -27,6 +29,7 @@ public class MoneyManager : MonoBehaviour
             playerMoney = 0;
         }
 
+        goldDisplay.UpdatedGold(playerMoney);
     }
 
     public float ShowPlayerGold()

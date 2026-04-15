@@ -18,9 +18,14 @@ public class PlayerAttackController : MonoBehaviour
 
     private TrainData dataRef;
 
+    private InputAction repairAction;
+
     void Start()
     {
         //se busca la pool de objetos
+        repairAction = InputSystem.actions.FindAction("Attack");
+        repairAction.performed += Attack;
+
         lookToMouseController = GetComponent<LookObjectToMouse>();
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
 
@@ -50,7 +55,7 @@ public class PlayerAttackController : MonoBehaviour
     }
 
     //Funcion utiliza por el Player Inputs para atacar 
-    void OnAttack(InputValue value)
+    void Attack(InputAction.CallbackContext context)
     {
         if (waitToFire > weapon.RateOfFire)
         {
@@ -60,19 +65,9 @@ public class PlayerAttackController : MonoBehaviour
             }
             else
             {
-                Attack();
+                weapon.Shoot(spawnPoint);
                 waitToFire = 0;
             }
-        }
-    }
-
-    //Llama a la funcion de ataque del arma
-    private void Attack()
-    {
-        //Verifica si se posee una arma equipada
-        if (weapon != null)
-        {
-            weapon.Shoot(spawnPoint);
         }
     }
 
@@ -92,7 +87,7 @@ public class PlayerAttackController : MonoBehaviour
         weaponItem = weaponObtein;
         GameManager.Instance.PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
-        weapon.Reload();
+        weapon.RestockBullets();
         weapon.SetPool(pool);
     }
 
@@ -104,6 +99,6 @@ public class PlayerAttackController : MonoBehaviour
     IEnumerator ActivateReload(float segundos)
     {
         yield return new WaitForSeconds(segundos);
-        weapon.Reload();
+        weapon.RestockBullets();
     }
 }
