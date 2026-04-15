@@ -1565,7 +1565,7 @@ GameObject:
   - component: {fileID: 557648909}
   - component: {fileID: 557648908}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Tutorial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2393,6 +2393,7 @@ MonoBehaviour:
   wagonsInStock:
   - {fileID: 11400000, guid: eca4772a8c0c5fe47b79d30a891736b0, type: 2}
   - {fileID: 11400000, guid: 13756da67bf6f34488262dfd59734305, type: 2}
+  - {fileID: 11400000, guid: 2bda8e7a182aee1458f2d3054110342f, type: 2}
   storeManager: {fileID: 505731350}
 --- !u!65 &800090912
 BoxCollider:
@@ -2833,7 +2834,7 @@ PrefabInstance:
     - target: {fileID: 1084008011257188204, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: weaponItem
       value: 
-      objectReference: {fileID: 3090599529195725496, guid: 92c811b5ae80b044eb3bee718ef93490, type: 3}
+      objectReference: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: shopText
       value: 
@@ -2856,7 +2857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7431540458986960683, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.530811
+      value: 13.71
       objectReference: {fileID: 0}
     - target: {fileID: 7431540458986960683, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5078,6 +5079,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GoldUIDisplay
   GoldTextUI: {fileID: 921080836}
+  BuyDoneText: {fileID: 0}
+  speed: 1
+  minAlpha: 0
+  maxAlpha: 1
 --- !u!1 &1852318031
 GameObject:
   m_ObjectHideFlags: 0
