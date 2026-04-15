@@ -30,6 +30,7 @@ public class RunManager : MonoBehaviour
         {
             Instance = this;
         }
+        if (trainCopyData != null) trainCopyData.ResetBuffsList();
         trainCopyData = GameManager.Instance.TrainData;
 
     }

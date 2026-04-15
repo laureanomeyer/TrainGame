@@ -19,7 +19,7 @@ public class GoldCollector
     {
         if (wagonHP.CurrentHp > 0)
         {
-            gold += amount * RunManager.Instance.TrainCopyData.locomotiveStatsMultiplicator.goldBonus;
+            gold += amount * RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.goldBonus;
         }
         else
         {

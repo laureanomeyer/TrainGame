@@ -40,14 +40,14 @@ public class GameManager : MonoBehaviour
     public void UpdateTrainData()
     {
         //trainData.UpdateStats();
-        trainData.locomotiveStatsMultiplicator = trainData.UpdateStats();
+        trainData.UpdateStats();
     }
 
     public void GoToStore()
     {
         GameEvents.ChangeGold();
         GameEvents.ChangeTrainData();
-
+        trainData.ResetBuffsList();
         SceneManager.LoadScene("Shop");
     }
 

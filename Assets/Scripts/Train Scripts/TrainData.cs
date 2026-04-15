@@ -8,7 +8,7 @@ public class TrainData
     private float speed;
 
     private LocomotiveStatsSO baseStats;
-    public TrainStats locomotiveStatsMultiplicator;
+    private TrainStats locomotiveStatsMultiplicator;
     private TrainStats wagonBuffedStats;
 
     private Transform tailPosition;
@@ -61,13 +61,13 @@ public class TrainData
     public TrainStats UpdateStats()
     {
         wagonBuffedStats = new TrainStats(
-            locomotiveStatsMultiplicator.trainMaxHp,
-            locomotiveStatsMultiplicator.shields,
-            locomotiveStatsMultiplicator.goldBonus,
-            locomotiveStatsMultiplicator.damageBonus,
-            locomotiveStatsMultiplicator.attackSpeed,
-            locomotiveStatsMultiplicator.fuelOptimizer,
-            locomotiveStatsMultiplicator.baseSpeed
+            baseStats.maxHp,
+            baseStats.defense,
+            baseStats.goldMultyplier,
+            baseStats.damageMultyplier,
+            baseStats.attackSpeed,
+            baseStats.fuelOptimizer,
+            baseStats.baseSpeed
         );
 
         
@@ -83,6 +83,11 @@ public class TrainData
     public void ResetValuesToDefault()
     {
         wagonsIDList = new List<IWagonID>();
+        bufferList = new List<IBuffer>();
+    }
+    public void ResetBuffsList() 
+    {
+        bufferList = new List<IBuffer>();
     }
 
     public void ChangedWagonIDList(List<IWagonID> wagonIDs)
