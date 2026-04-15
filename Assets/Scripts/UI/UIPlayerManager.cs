@@ -30,11 +30,12 @@ public class UIPlayerManager : MonoBehaviour
     void UpdateWagonUI()
     {
         WagonBrain wagon = playerInteractions.CurrentWagon;
+        Debug.Log(playerInteractions.CurrentWagon);
 
         if (wagon != null)
         {
             wagonHpImage.gameObject.SetActive(true);
-            wagonHpImage.fillAmount = wagon.CurrentHp / wagon.MaxHp;
+            wagonHpImage.fillAmount = wagon.HPController.CurrentHp / wagon.HPController.MaxHp;
         }
         else
         {
