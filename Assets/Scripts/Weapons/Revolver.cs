@@ -30,7 +30,7 @@ public class Revolver : MonoBehaviour, IWeapons
     public float RateOfFire { get => rateOfFire; }
 
     private bool isReloading =false;
-    public bool IsReloading => isReloading;
+    public bool IsReloading { get => isReloading; set => isReloading = value; }
 
 
     //Referencia a la pool de balas
@@ -38,17 +38,23 @@ public class Revolver : MonoBehaviour, IWeapons
 
     public void Shoot(Transform spawnPoint)
     {
-        if (currentAmmunition <= 0)
-            return;
+        if (isReloading) return;
 
         bulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletScriptable);
         currentAmmunition -= 1;
+
+        if (currentAmmunition <= 0)
+        {
+            isReloading = true;
+        }
     }
 
     public void SetPool(BulletPool pool)
     {
         bulletPool = pool;
     }
+
+
 
     public void RestockBullets()
     {

@@ -20,6 +20,8 @@ public class PlayerAttackController : MonoBehaviour
 
     private InputAction repairAction;
 
+    private float currentReloadTime = 0;
+
     void Start()
     {
         //se busca la pool de objetos
@@ -59,15 +61,10 @@ public class PlayerAttackController : MonoBehaviour
     {
         if (waitToFire > weapon.RateOfFire)
         {
-            if (weapon.CurrentAmmunition <= 0)
-            {
-                CallReload();
-            }
-            else
-            {
-                weapon.Shoot(spawnPoint);
-                waitToFire = 0;
-            }
+            if (weapon.IsReloading) return;
+
+            weapon.Shoot(spawnPoint);
+            waitToFire = 0;
         }
     }
 
@@ -78,6 +75,17 @@ public class PlayerAttackController : MonoBehaviour
             waitToFire += Time.deltaTime;
         }
 
+        if (weapon.IsReloading)
+        {
+            currentReloadTime += Time.deltaTime;
+
+            if(currentReloadTime > weapon.ReloadDuration)
+            {
+                currentReloadTime = 0;
+                weapon.RestockBullets();
+                weapon.IsReloading = false;
+            }
+        }
         
     }
 
@@ -89,16 +97,5 @@ public class PlayerAttackController : MonoBehaviour
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.RestockBullets();
         weapon.SetPool(pool);
-    }
-
-    private void CallReload()
-    {
-        StartCoroutine(ActivateReload(weapon.ReloadDuration));
-    }
-
-    IEnumerator ActivateReload(float segundos)
-    {
-        yield return new WaitForSeconds(segundos);
-        weapon.RestockBullets();
     }
 }

@@ -15,7 +15,7 @@ public interface IWeapons
 
     public float CurrentAmmunition { get; }
 
-    public bool IsReloading { get; }
+    public bool IsReloading { get; set; }
 
     //Funcion de ataque, requiere un punto de spawneo de balas
     public void Shoot(Transform spawnPoint);
