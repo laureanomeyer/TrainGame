@@ -30,7 +30,7 @@ public class MoneyManager : MonoBehaviour
             playerMoney = 0;
         }
 
-        goldDisplay.UpdatedGold(playerMoney);
+        goldDisplay.UpdatedGoldMesseg(playerMoney);
     }
 
     public float ShowPlayerGold()
