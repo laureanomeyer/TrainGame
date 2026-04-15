@@ -41,7 +41,7 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
 
     public virtual void adquiere()
     {
-        GameManager.Instance.TrainData.locomotiveStatsMultiplicator += upgrades;
+        //GameManager.Instance.TrainData.LocomotiveStatsMultiplicator += upgrades;
     }
 
     public void DeactivateButton()

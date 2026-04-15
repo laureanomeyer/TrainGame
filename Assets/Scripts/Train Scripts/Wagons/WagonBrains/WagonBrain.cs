@@ -27,15 +27,12 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         return new TrainStats(0, 0, 0, 0, 0, 0, 0);
     }
 
-    private void Awake()
+    public void Start()
     {
         dataRef = RunManager.Instance.TrainCopyData;
         SetUpWagonHP();
     }
 
-    public void Start()
-    {
-    }
     public void Update()
     {
         currentHp = HPController.CurrentHp;

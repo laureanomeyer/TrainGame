@@ -7,19 +7,12 @@ public class GoldenWagonBrain : WagonBrain
 
     [SerializeField] private Material baseWagonMaterial;
 
-    new public void Start()
+    public void Start()
     {
-        hp = RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.trainMaxHp;
-        defense = RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.shields;
-
-        SetUpWagonHP();
+        base.Start();
 
         collector = new GoldCollector(hpController);
-
-
-        //Debug.Log("Base HP SO: " + SM*(RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.trainMaxHp * RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.shields));
     }
-
     public override void Repair(float repairAmount)
     {
         if (hpController.IsBroken == true & hpController.CurrentHp > 0)

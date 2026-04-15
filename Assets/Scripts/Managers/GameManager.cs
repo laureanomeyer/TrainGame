@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     }
     public void UpdateTrainData()
     {
-        //trainData.UpdateStats();
         trainData.UpdateStats();
     }
 

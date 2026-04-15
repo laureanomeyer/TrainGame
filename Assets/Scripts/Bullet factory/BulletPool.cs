@@ -12,7 +12,7 @@ public class BulletPool : MonoBehaviour
 
     private bool collectionCheck = true;
 
-    private int defaultCapacity = 10;
+    private int defaultCapacity;
     private int maxCapacity = 50; //For evading MaxSizeError
 
     public int DefaultCapacity { set => defaultCapacity = value; }
