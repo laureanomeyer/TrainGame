@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -22,6 +23,7 @@ public class Enemy : MonoBehaviour
     public float Speed => data.speed;
     public float MaxHealth => data.health;
     public float Damage => data.damage;
+    public float Cooldown => data.attackCooldown;
 
     public List<IWagon> TargetList => targetList;
 
@@ -32,6 +34,7 @@ public class Enemy : MonoBehaviour
 
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
+
 
     void Awake()
     {

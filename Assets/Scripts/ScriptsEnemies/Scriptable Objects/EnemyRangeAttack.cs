@@ -4,7 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Attack/Ranged")]
 public class EnemyRangeAttack : EnemyAttackSO
 {
-    [SerializeField] float cooldown = 1f;
 
     public override void Attack(Enemy enemy)
     {
@@ -19,10 +18,10 @@ public class EnemyRangeAttack : EnemyAttackSO
                 enemy.Target.position
             );
 
-            if (dist <= enemy.Range)
+            if (dist <= enemy.Range + 5)
             {
                 enemy.Weapon.Execute(enemy.Target, enemy.Damage);
-                enemy.ResetAttackCooldown(cooldown);
+                enemy.ResetAttackCooldown(enemy.Cooldown);
             }
         }
         catch
