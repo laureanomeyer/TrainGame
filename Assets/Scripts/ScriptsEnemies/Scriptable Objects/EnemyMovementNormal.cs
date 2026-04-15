@@ -22,7 +22,7 @@ public class EnemyMovementNormal : EnemyMovementSO
 
         Vector3 pos = enemy.transform.position;
 
-        float stopZ = limitZ + enemy.Range * 2;
+        float stopZ = limitZ + enemy.Range;
 
         Vector3 dirToTarget = (train.position - pos).normalized;
 
