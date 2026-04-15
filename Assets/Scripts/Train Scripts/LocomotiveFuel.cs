@@ -9,8 +9,7 @@ public struct TrainStats
     public float damageBonus;
     public float attackSpeed;
     public float baseSpeed;
-    public 
-        TrainStats(float trainMaxHp, float shields, float goldBonus, float damageBonus, float attackSpeed, float fuelOptimizer, float baseSpeed)
+    public TrainStats(float trainMaxHp, float shields, float goldBonus, float damageBonus, float attackSpeed, float fuelOptimizer, float baseSpeed)
     { 
         this.trainMaxHp = trainMaxHp;
         this.shields = shields;

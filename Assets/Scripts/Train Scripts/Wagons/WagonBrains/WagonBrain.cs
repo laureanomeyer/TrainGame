@@ -6,15 +6,15 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     protected float defense;
 
     protected WagonHP hpController;
-    private TrainData dataRef;
+    protected TrainData dataRef;
     private IWagonID wagonID;
 
     [SerializeField] private float currentHp;
     [SerializeField] private Material destroyWagonMaterial;
     [SerializeField] protected Renderer rendererWagon;
     [SerializeField] protected bool canBreak;
-    [SerializeField] private float SM;
-    [SerializeField] private float RES;
+    [SerializeField] protected float SM;
+    [SerializeField] protected float RES;
 
     public float CurrentHp => currentHp;
     public float MaxHp => hp;
@@ -27,15 +27,14 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         return new TrainStats(0, 0, 0, 0, 0, 0, 0);
     }
 
-    public void Start()
+    private void Awake()
     {
         dataRef = RunManager.Instance.TrainCopyData;
-        hpController = new WagonHP(
-            (SM * (dataRef.LocomotiveStatsMultiplicator.trainMaxHp * dataRef.WagonBuffedStats.trainMaxHp)),
-            (RES * (dataRef.LocomotiveStatsMultiplicator.shields * dataRef.WagonBuffedStats.shields)),
-            Break,
-            canBreak
-            );
+        SetUpWagonHP();
+    }
+
+    public void Start()
+    {
     }
     public void Update()
     {
@@ -49,6 +48,16 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         {
             Break();
         }
+    }
+
+    protected void SetUpWagonHP() 
+    {
+        hpController = new WagonHP(
+        (SM * (dataRef.LocomotiveStatsMultiplicator.trainMaxHp * dataRef.WagonBuffedStats.trainMaxHp)),
+        (RES * (dataRef.LocomotiveStatsMultiplicator.shields * dataRef.WagonBuffedStats.shields)),
+        Break,
+        canBreak
+        );
     }
 
     public virtual void Repair(float repairAmount)

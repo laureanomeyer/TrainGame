@@ -20,10 +20,9 @@ public class EnemyBullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         IDamagable component = other.GetComponent<IDamagable>();
-        Debug.Log("pegue");
         if (component != null) 
         {
-            Debug.Log("Hice daño");
+            Debug.Log("Hice daño" + damage);
             component.TakeDamage(damage);
             Destroy(gameObject);
         }

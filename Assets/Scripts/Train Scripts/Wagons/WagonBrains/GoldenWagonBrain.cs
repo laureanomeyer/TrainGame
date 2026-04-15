@@ -11,8 +11,13 @@ public class GoldenWagonBrain : WagonBrain
     {
         hp = RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.trainMaxHp;
         defense = RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.shields;
-        hpController = new WagonHP(hp, defense, Break, canBreak);
+
+        SetUpWagonHP();
+
         collector = new GoldCollector(hpController);
+
+
+        //Debug.Log("Base HP SO: " + SM*(RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.trainMaxHp * RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.shields));
     }
 
     public override void Repair(float repairAmount)
