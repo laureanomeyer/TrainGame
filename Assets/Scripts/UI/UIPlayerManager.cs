@@ -19,22 +19,31 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private Image CoalImage;
     [SerializeField] private TMP_Text goldText;
 
+    [Header("Run Progress")]
+    [SerializeField] private SceneRunController sceneRunController;
+    [SerializeField] private Image runProgressFill;
+    [SerializeField] private RectTransform trainIcon;
+    [SerializeField] private RectTransform startPoint;
+    [SerializeField] private RectTransform endPoint;
+
     void Update()
     {
         UpdateWagonUI();
         UpdateLocomotiveUI();
         UpdateCoalUI();
         UpdateGoldUI();
+        UpdateRunProgress();
     }
 
     void UpdateWagonUI()
     {
         WagonBrain wagon = playerInteractions.CurrentWagon;
+        Debug.Log(playerInteractions.CurrentWagon);
 
         if (wagon != null)
         {
             wagonHpImage.gameObject.SetActive(true);
-            wagonHpImage.fillAmount = wagon.CurrentHp / wagon.MaxHp;
+            wagonHpImage.fillAmount = wagon.HPController.CurrentHp / wagon.HPController.MaxHp;
         }
         else
         {
@@ -79,5 +88,21 @@ public class UIPlayerManager : MonoBehaviour
         {
             goldText.text = "Gold: " + inventory.GoldAmount;
         }
+    }
+
+    void UpdateRunProgress()
+    {
+        if (playerInteractions.Inventory == null) return;
+
+            float progress = sceneRunController.Progress;
+
+            trainIcon.position = Vector3.Lerp(startPoint.position, endPoint.position, progress);
+
+        if (runProgressFill != null)
+        {
+            runProgressFill.fillAmount = progress;
+        Debug.Log("Run Progress: " + progress);
+        }
+
     }
 }

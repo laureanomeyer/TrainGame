@@ -13,6 +13,7 @@ public class WagonHP : IDamagable
 
     public bool IsBroken { get => isBroken; set => isBroken = value; }
     public float CurrentHp => currentHp;
+    public float MaxHp => maxHp;
 
     public WagonHP(float hp, float defense, Action deathAction, bool canBreak)
     {
@@ -41,6 +42,11 @@ public class WagonHP : IDamagable
             currentHp += repairAmount * deltaTime;
             currentHp = Mathf.Clamp(currentHp, 0, maxHp);
         }
+    }
+    public void ReapirGoldenWagon(float deltaTime, float repairAmount)
+    {
+        currentHp += repairAmount * deltaTime;
+        currentHp = Mathf.Clamp(currentHp, currentHp, maxHp);
     }
     public void Break() 
     {
