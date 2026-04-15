@@ -35,13 +35,13 @@ public class ShopButton : MonoBehaviour
     {
         if (wagonsInStock.Length > 0)
         {
-            if (storeManager.ShowPlayerGold() < 10f)
+            if (storeManager.ShowPlayerGold() < currentWagonInStock.Price)
             {
                 Debug.Log("No se posee el dinero suficiente");
             }
             else
             {
-                storeManager.ConsumeGold(10f);
+                storeManager.ConsumeGold(currentWagonInStock.Price);
                 GameManager.Instance.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
                 SetWagonInStock();
             }

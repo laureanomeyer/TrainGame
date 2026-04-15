@@ -18,7 +18,8 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private Image shieldImage;
 
     [Header("Inventory UI")]
-    [SerializeField] private Image CoalImage;
+    [SerializeField] private Image coalImage;
+    [SerializeField] private Image goldImage;
     [SerializeField] private TMP_Text goldText;
 
     [Header("Run Progress")]
@@ -38,7 +39,7 @@ public class UIPlayerManager : MonoBehaviour
     {
         UpdateWagonUI();
         UpdateLocomotiveUI();
-        UpdateCoalUI();
+        UpdateInventoryUI();
         UpdateRunProgress();
     }
 
@@ -71,7 +72,7 @@ public class UIPlayerManager : MonoBehaviour
         }
     }
 
-    void UpdateCoalUI()
+    void UpdateInventoryUI()
     {
         PlayerInventory inventory = playerInteractions.Inventory;
 
@@ -79,11 +80,19 @@ public class UIPlayerManager : MonoBehaviour
         {
             if (inventory.HasCoal)
             {
-                CoalImage.fillAmount = 1;
+                coalImage.fillAmount = 1;
             }
             else
             {
-                CoalImage.fillAmount = 0;
+                coalImage.fillAmount = 0;
+            }
+            if (inventory.GoldAmount > 0)
+            {
+                goldImage.fillAmount = 1;
+            }
+            else
+            {
+                goldImage.fillAmount = 0;
             }
         }
     }
