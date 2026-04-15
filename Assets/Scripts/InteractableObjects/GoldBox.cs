@@ -26,6 +26,7 @@ public class GoldBox : IInteractable
     public void AddGold(float amount) 
     {
         currentGold += amount;
+        GameEvents.GoldBoxChanged(currentGold);
     }
 
     public void ChangeGoldInData()

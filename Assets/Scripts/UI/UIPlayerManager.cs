@@ -28,19 +28,23 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private RectTransform startPoint;
     [SerializeField] private RectTransform endPoint;
 
+
+    private void Start()
+    {
+        UpdateGoldUI(0);
+    }
+
     void Update()
     {
         UpdateWagonUI();
         UpdateLocomotiveUI();
         UpdateCoalUI();
-        UpdateGoldUI();
         UpdateRunProgress();
     }
 
     void UpdateWagonUI()
     {
         WagonBrain wagon = playerInteractions.CurrentWagon;
-        Debug.Log(playerInteractions.CurrentWagon);
 
         if (wagon != null)
         {
@@ -84,14 +88,21 @@ public class UIPlayerManager : MonoBehaviour
         }
     }
 
-    void UpdateGoldUI()
+    private void OnEnable()
     {
-        PlayerInventory inventory = playerInteractions.Inventory;
+        GameEvents.OnGoldBoxChanged += UpdateGoldUI;
+    }
 
-        if (inventory != null)
-        {
-            goldText.text = "Gold: " + inventory.GoldAmount;
-        }
+    private void OnDisable()
+    {
+        GameEvents.OnGoldBoxChanged -= UpdateGoldUI;
+    }
+
+
+
+    void UpdateGoldUI(float currentGold)
+    {
+            goldText.text = "Gold: " + currentGold; 
     }
 
     void UpdateRunProgress()
