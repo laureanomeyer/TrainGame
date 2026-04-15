@@ -27,7 +27,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         return new TrainStats(0, 0, 0, 0, 0, 0, 0);
     }
 
-    public void Start()
+    public virtual void Start()
     {
         dataRef = RunManager.Instance.TrainCopyData;
         SetUpWagonHP();

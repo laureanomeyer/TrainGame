@@ -55,6 +55,7 @@ public class ShopButton : MonoBehaviour
     private void SetWagonInStock()
     {
         currentWagonInStock = SelectRandomWagon();
+        Debug.Log(currentWagonInStock.name);
         descriptionText = (currentWagonInStock.Wagon.name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
         textUI.text = descriptionText;
     }

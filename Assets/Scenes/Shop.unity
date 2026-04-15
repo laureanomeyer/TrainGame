@@ -1110,7 +1110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  buttonText: Press F to buy Wagon,  press O to Restart
+  descriptionText: .
   wagonsInStock: []
   storeManager: {fileID: 505731350}
 --- !u!65 &464905827
@@ -1390,6 +1390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   level: 0
   moneyManager: {fileID: 1670977926}
+  descriptionTextUI: {fileID: 4923871}
 --- !u!4 &505731351
 Transform:
   m_ObjectHideFlags: 0
@@ -2262,7 +2263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  buttonText: 
+  descriptionText: .
   wagonsInStock:
   - {fileID: 11400000, guid: eca4772a8c0c5fe47b79d30a891736b0, type: 2}
   - {fileID: 11400000, guid: 13756da67bf6f34488262dfd59734305, type: 2}
@@ -4154,7 +4155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  buttonText: Press F to buy Wagon,  press O to Restart
+  descriptionText: .
   wagonsInStock:
   - {fileID: 11400000, guid: 98eacd1c34655eb418ba7e1afb6df679, type: 2}
   storeManager: {fileID: 505731350}
@@ -5384,6 +5385,10 @@ PrefabInstance:
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: trainManager
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: descriptionText
+      value: .
       objectReference: {fileID: 0}
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: wagonsInStock.Array.size

@@ -7,7 +7,7 @@ public class GoldenWagonBrain : WagonBrain
 
     [SerializeField] private Material baseWagonMaterial;
 
-    public void Start()
+    public override void Start()
     {
         base.Start();
 

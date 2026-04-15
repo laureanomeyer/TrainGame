@@ -9,6 +9,8 @@ public class UIPlayerManager : MonoBehaviour
 
     [Header("Wagon UI")]
     [SerializeField] private Image wagonHpImage;
+    [SerializeField] private Image wagonHpBackground;
+
 
     [Header("Locomotive UI")]
     [SerializeField] private Image fuelFillImage;
@@ -43,11 +45,13 @@ public class UIPlayerManager : MonoBehaviour
         if (wagon != null)
         {
             wagonHpImage.gameObject.SetActive(true);
+            wagonHpBackground.gameObject.SetActive(true);
             wagonHpImage.fillAmount = wagon.HPController.CurrentHp / wagon.HPController.MaxHp;
         }
         else
         {
             wagonHpImage.gameObject.SetActive(false);
+            wagonHpBackground.gameObject.SetActive(false);
         }
     }
 
@@ -101,7 +105,6 @@ public class UIPlayerManager : MonoBehaviour
         if (runProgressFill != null)
         {
             runProgressFill.fillAmount = progress;
-        Debug.Log("Run Progress: " + progress);
         }
 
     }
