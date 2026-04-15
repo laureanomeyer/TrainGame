@@ -5,6 +5,8 @@ public class MoneyManager : MonoBehaviour
     private float playerMoney;
 
     public float PlayerMoney {  get { return playerMoney; } }
+
+    [SerializeField] private GoldUIDisplay goldDisplay;
     
     void Start()
     {
@@ -27,6 +29,7 @@ public class MoneyManager : MonoBehaviour
             playerMoney = 0;
         }
 
+        goldDisplay.UpdatedGold(playerMoney);
     }
 
     public float ShowPlayerGold()
