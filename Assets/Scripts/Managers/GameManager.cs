@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [SerializeField] public LocomotiveStatsSO baseStats;
     private TrainData trainData;
+    public float runduration;
     public TrainData TrainData => trainData;
 
     private PlayerData playerData;
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
     {
         GameEvents.ChangeGold();
         SceneManager.LoadScene("LauScene");
+        runduration += 10f;
     }
 
     public void ResetGame()

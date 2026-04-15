@@ -3,7 +3,7 @@ using UnityEngine;
 public class SceneRunController : MonoBehaviour
 {
     [Header("Scene duration")]
-    [SerializeField] private float sceneDuration;
+    private float sceneDuration;
 
     private float currentTime;
 
@@ -11,6 +11,7 @@ public class SceneRunController : MonoBehaviour
 
     private void Awake()
     {
+        sceneDuration = GameManager.Instance.runduration;
         currentTime = sceneDuration;
     }
 
