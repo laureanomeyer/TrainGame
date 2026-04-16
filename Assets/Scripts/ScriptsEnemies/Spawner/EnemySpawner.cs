@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
 
     private List<IWagon> trainList = new();
 
-    public float activationDistance = 20f;
+    public float activationDistance = 60f;
 
     private void Awake()
     {
@@ -23,10 +23,11 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
+        if (trainList == null || trainList.Count == 0) return;
 
         float distance = Vector3.Distance(transform.position, trainList[0].Transform.position);
 
-        if (distance >= activationDistance)
+        if (distance > activationDistance)
         {
             timer += Time.deltaTime;
 
@@ -34,9 +35,10 @@ public class EnemySpawner : MonoBehaviour
             {
                 Spawn();
                 timer = 0f;
-
             }
-        }
+        } 
+             
+
 
     }
 
@@ -45,6 +47,15 @@ public class EnemySpawner : MonoBehaviour
         GameObject enemy = Instantiate(enemyPrefab[Random.Range(0, enemyPrefab.Count)], transform.position, Quaternion.identity);
         enemy.GetComponent<Enemy>().SetTargetList(trainList);
         currentEnemies++;
-        //Debug.Log("Cant enemies: " + currentEnemies);
+
     }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, activationDistance);
+    }
+
+
 }
