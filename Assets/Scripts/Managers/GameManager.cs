@@ -7,12 +7,13 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     [SerializeField] public LocomotiveStatsSO baseStats;
     private TrainData trainData;
+    private StatSystem statSystem;
     public float runduration;
-    public TrainData TrainData => trainData;
-
     private PlayerData playerData;
-    public PlayerData PlayerData => playerData;
 
+    public TrainData TrainData => trainData;
+    public PlayerData PlayerData => playerData;
+    public StatSystem StatsSystem => statSystem;
 
 
     void Awake()
@@ -24,30 +25,20 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Instance = this;
-            
+            Instance = this;    
         }
         trainData = new TrainData(baseStats);
         playerData = new PlayerData();
-
+        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
         DontDestroyOnLoad(gameObject);
 
-    }
-
-    public void AddBufferToList(IBuffer buff)
-    {
-        trainData.AddToBufferList(buff);
-    }
-    public void UpdateTrainData()
-    {
-        trainData.UpdateStats();
     }
 
     public void GoToStore()
     {
         GameEvents.ChangeGold();
         GameEvents.ChangeTrainData();
-        trainData.ResetBuffsList();
+        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
         SceneManager.LoadScene("Shop");
     }
 
@@ -62,7 +53,7 @@ public class GameManager : MonoBehaviour
     {
         trainData.ResetValuesToDefault();
         playerData.ResetValuesToDefault();
-
+        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
         SceneManager.LoadScene("LauScene");
     }
 }

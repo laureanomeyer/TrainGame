@@ -1,19 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LowHeatWagonBrain : WagonBrain
 {
     [SerializeField] private float optimizer;
 
-    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
+    public override IEnumerable<StatModifier> GetModifiers()
     {
-        return new TrainStats(
-            0,
-            0,
-            0,
-            0,
-            0,
-            baseStats.fuelOptimizer * optimizer,
-            0
-        );
+        yield return new StatModifier(StatType.FuelOptimizer, optimizer, ModifierType.Additive, this);
     }
 }

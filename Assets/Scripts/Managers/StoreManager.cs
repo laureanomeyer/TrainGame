@@ -11,6 +11,6 @@ public class StoreManager : MonoBehaviour
     }
     public void AddBuff()
     {
-        GameManager.Instance.AddBufferToList(buff);
+        
     }
 }

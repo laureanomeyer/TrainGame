@@ -14,7 +14,7 @@ public class TrainManager : MonoBehaviour
     [SerializeField] private GameObject LocomotivePrefab;
 
     private List<GameObject> wagonsCreated = new List<GameObject>();
-
+    private List<WagonBrain> wagonBrains;
     private List<IWagon> wagonsList;
     private List<IBuffer> BufferList; 
 
@@ -27,6 +27,7 @@ public class TrainManager : MonoBehaviour
     {
         wagonsList = new List<IWagon>();
         BufferList = new List<IBuffer>();
+        wagonBrains = new List<WagonBrain>();
         RunManager.Instance.trainM = this;
         CreateTrain();
     }
@@ -42,6 +43,14 @@ public class TrainManager : MonoBehaviour
         CreateLocomotive();
         CreateWagons();
         CreateGoldWagon();
+        foreach (var brain in wagonBrains)
+        {
+            brain.RegisterModifiers();
+        }
+        foreach (var brain in wagonBrains)
+        {
+            brain.SetUpWagonHP();
+        }
         RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
 
     }
@@ -72,12 +81,10 @@ public class TrainManager : MonoBehaviour
         WagonBrain wagonBrain = wagonInstance.GetComponent<WagonBrain>();
 
         wagonsList.Add(wagon);
+        wagonBrains.Add(wagonBrain);
         wagonBrain.SetWagonID(id);
 
-        GameManager.Instance.TrainData.AddToBufferList(wagonBrain);
-        GameManager.Instance.UpdateTrainData();
         AddWagon(tail, wagon);
-
         wagonsCreated.Add(wagonInstance);
     }
     public void CreateGoldWagon()
@@ -87,9 +94,6 @@ public class TrainManager : MonoBehaviour
         WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
 
         wagonsList.Add(wagon);
-
-        GameManager.Instance.TrainData.AddToBufferList(wagonBrain);
-        GameManager.Instance.UpdateTrainData();
         AddWagon(tail, wagon);
     }
 
