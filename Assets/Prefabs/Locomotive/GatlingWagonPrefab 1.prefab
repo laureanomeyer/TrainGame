@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3571385295439089154}
   - component: {fileID: 3493918421790633782}
   - component: {fileID: 2769434726012333797}
+  - component: {fileID: 3330091335726141192}
   m_Layer: 0
   m_Name: HandleTurret
   m_TagString: ActiveTurret
@@ -126,6 +127,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActiveTurretStation
   turret: {fileID: 5901074936556939558}
+--- !u!114 &3330091335726141192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478670597442007170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cd53223bfeb3c046bdc0e79a5941e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionTrigger
+  playerInteractionText: {fileID: 0}
 --- !u!1 &2298694450790059078
 GameObject:
   m_ObjectHideFlags: 0
