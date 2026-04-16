@@ -11,7 +11,7 @@ public class BulletCollision : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.gameObject.CompareTag("deadWall"))
         {
             bulletScript.Deactivate();
         }
