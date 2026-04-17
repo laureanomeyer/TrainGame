@@ -10,7 +10,7 @@ public class MoneyManager : MonoBehaviour
     
     void Start()
     {
-        playerMoney = GameManager.Instance.PlayerData.GivePlayerGold() + 10;
+        playerMoney = GameManager.Instance.PlayerData.GivePlayerGold();
         GameEvents.OnChangeGold += ChangePlayerGoldData;
 
         goldDisplay.UpdatedGold(playerMoney);
