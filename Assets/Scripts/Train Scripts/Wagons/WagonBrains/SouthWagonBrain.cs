@@ -1,20 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SouthWagonBrain : WagonBrain
 {
     [SerializeField] private float shieldsBonus;
 
-    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
+    public override IEnumerable<StatModifier> GetModifiers()
     {
-        return new TrainStats(
-            0,
-            baseStats.defense * shieldsBonus,
-            0,
-            0,
-            0,
-            0,
-            0
-        );
+        yield return new StatModifier(StatType.Defense, shieldsBonus, ModifierType.Additive, this);
     }
 
 }

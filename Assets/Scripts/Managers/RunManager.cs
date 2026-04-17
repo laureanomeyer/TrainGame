@@ -15,10 +15,12 @@ public class RunManager : MonoBehaviour
     private MapManager mapManager;
     public TrainManager trainM;
     public LocomotiveBrain locoM;
-
+    private StatSystem statSystem;
     private TrainData trainCopyData;
+
     public TrainData TrainCopyData => trainCopyData;
     public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
+    public StatSystem StatSystem => statSystem;
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -30,9 +32,8 @@ public class RunManager : MonoBehaviour
         {
             Instance = this;
         }
-        if (trainCopyData != null) trainCopyData.ResetBuffsList();
         trainCopyData = GameManager.Instance.TrainData;
-
+        statSystem = GameManager.Instance.StatsSystem;
     }
     public void OnTrainReady()
     {

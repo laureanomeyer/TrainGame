@@ -21,13 +21,16 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     void Start()
     {
         dataRef = RunManager.Instance.TrainCopyData;
+        var stats = RunManager.Instance.StatSystem;
+
         fuelController = new LocomotiveFuel(
-            (EM * (dataRef.LocomotiveStatsMultiplicator.shields + dataRef.WagonBuffedStats.shields)),
-            (CM * (dataRef.LocomotiveStatsMultiplicator.trainMaxHp + dataRef.WagonBuffedStats.trainMaxHp)),
+            EM * stats.GetStat(StatType.Defense),
+            CM * stats.GetStat(StatType.MaxHp),
             dataRef.LocomotiveStatsMultiplicator.baseSpeed,
-            (RES * (dataRef.LocomotiveStatsMultiplicator.shields + dataRef.WagonBuffedStats.shields)),
+            RES * stats.GetStat(StatType.Defense),
             dataRef.LocomotiveStatsMultiplicator.fuelOptimizer
             );
+        stats.OnStatChanged += OnStatChanged;
     }
 
     void Update()
@@ -57,5 +60,14 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             rendererWagon.material = materialDeVagonDestruido;
             SceneManager.LoadScene("LauScene");
         }
+    }
+    private void OnStatChanged(StatType type, float newValue)
+    {
+    }
+
+    private void OnDestroy()
+    {
+        if (RunManager.Instance != null)
+            RunManager.Instance.StatSystem.OnStatChanged -= OnStatChanged;
     }
 }

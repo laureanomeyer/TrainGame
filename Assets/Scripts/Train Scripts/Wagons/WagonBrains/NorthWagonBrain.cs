@@ -1,20 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NorthWagonBrain : WagonBrain
 {
     [SerializeField] private float dmgBonus;
 
-    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
+    public override IEnumerable<StatModifier> GetModifiers()
     {
-        return new TrainStats(
-            0,
-            0,
-            0,
-            baseStats.damageMultyplier * dmgBonus,
-            0,
-            0,
-            0
-        );
+        yield return new StatModifier(StatType.DamageMultiplier, dmgBonus, ModifierType.Additive, this);
     }
 
 }

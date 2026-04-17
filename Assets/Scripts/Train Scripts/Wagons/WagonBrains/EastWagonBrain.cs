@@ -1,19 +1,12 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EastWagonBrain : WagonBrain
 {
     [SerializeField] private float hpBonus;
-
-    public override TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
+    public override IEnumerable<StatModifier> GetModifiers()
     {
-        return new TrainStats(
-            baseStats.maxHp * hpBonus,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        );
+        yield return new StatModifier(StatType.MaxHp, hpBonus, ModifierType.Additive, this);
     }
 }

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
+public class WagonBrain : MonoBehaviour, IDamagable
 {
     protected float hp;
     protected float defense;
@@ -8,6 +10,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     protected WagonHP hpController;
     protected TrainData dataRef;
     private IWagonID wagonID;
+
 
     [SerializeField] private float currentHp;
     [SerializeField] private Material destroyWagonMaterial;
@@ -22,21 +25,29 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
     public WagonHP HPController => hpController;
     public IWagonID WagonID => wagonID;
 
-    public virtual TrainStats GetStatsBuff(LocomotiveStatsSO baseStats)
-    {
-        return new TrainStats(0, 0, 0, 0, 0, 0, 0);
-    }
-
     public virtual void Start()
     {
         dataRef = RunManager.Instance.TrainCopyData;
-        SetUpWagonHP();
+        var statSystem = RunManager.Instance.StatSystem;
+        statSystem.OnStatChanged += OnStatChanged;
     }
 
     public void Update()
     {
         currentHp = HPController.CurrentHp;
     }
+
+    public virtual IEnumerable<StatModifier> GetModifiers()
+    {
+        yield break;
+    }
+
+    public void RegisterModifiers()
+    {
+        foreach (var mod in GetModifiers())
+            RunManager.Instance.StatSystem.AddModifier(mod);
+    }
+
     public void TakeDamage(float damageAmount)
     {
         hpController.TakeDamage(damageAmount);
@@ -47,30 +58,37 @@ public class WagonBrain : MonoBehaviour, IDamagable, IBuffer
         }
     }
 
-    protected void SetUpWagonHP() 
+    public void SetUpWagonHP() 
     {
-        hpController = new WagonHP(
-        (SM * (dataRef.LocomotiveStatsMultiplicator.trainMaxHp * dataRef.WagonBuffedStats.trainMaxHp)),
-        (RES * (dataRef.LocomotiveStatsMultiplicator.shields * dataRef.WagonBuffedStats.shields)),
-        Break,
-        canBreak
-        );
+        var stats = RunManager.Instance.StatSystem;
+        float maxHp = SM * stats.GetStat(StatType.MaxHp);
+        float def = RES * stats.GetStat(StatType.Defense);
+        hpController = new WagonHP(maxHp, def, Break, canBreak);
     }
 
     public virtual void Repair(float repairAmount)
     {
-        hpController.Repair(Time.deltaTime, repairAmount);
+        hpController.Repair(Time.deltaTime, -repairAmount);
     }
     public void SetWagonID (IWagonID wagon)
     {
         this.wagonID = wagon;
     }
+    private void OnStatChanged(StatType type, float newValue)
+    {
+        hpController.OnMaxHpChanged(SM * RunManager.Instance.StatSystem.GetStat(StatType.MaxHp));
+    }
 
     public void Break()
     {
+        RunManager.Instance.StatSystem.RemoveModifiersFromSource(this);
         rendererWagon.material = destroyWagonMaterial;
-        if (wagonID != null ) 
-            GameManager.Instance.TrainData.RemoveWagonID(this.wagonID);
-        else return;
+        if (wagonID != null)
+            GameManager.Instance.TrainData.RemoveWagonID(wagonID);
+    }
+    public void OnDestroy()
+    {
+        var statSystem = RunManager.Instance.StatSystem;
+        statSystem.OnStatChanged -= OnStatChanged;
     }
 }

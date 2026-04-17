@@ -48,7 +48,7 @@ public class BulletScript : MonoBehaviour, IBullet
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
         currentLife = bulletType.duration;
-        Damage = bulletType.damage * (dataRef.LocomotiveStatsMultiplicator.damageBonus + dataRef.WagonBuffedStats.damageBonus);
+        Damage = bulletType.damage * (GameManager.Instance.StatsSystem.GetStat(StatType.DamageMultiplier));
         Speed = speed;
         isActive = true;
     }
