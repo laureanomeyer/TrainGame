@@ -1,20 +1,21 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public enum WagonTypes { coal, gold }
-public enum RangeType { close, distance , medium }
+public enum TargetType { Random, Passives, Locomotive, Gold, Actives }
+public enum RangeType { Close, Medium, Long }
+public enum AttackType { Shoot, Explosion, None}
 
 [CreateAssetMenu(menuName = "Enemy/Data")]
 public class EnemyData : ScriptableObject
 {
     public float health;
-    public float range;
     public float speed;
     public float damage;
     public float attackCooldown;
-    
-    //public WagonTypes target;
+    public float range;
 
     public RangeType rangeType;
+    public TargetType[] target;
 
     public float gold;
 
@@ -31,18 +32,18 @@ public class EnemyData : ScriptableObject
     {
         switch (rangeType)
         {
-            case RangeType.close:
+            case RangeType.Close:
                 range = 5f;
                 break;
 
-            case RangeType.medium:
+            case RangeType.Medium:
                 range = 20f;
                 break;
 
-            case RangeType.distance:
+            case RangeType.Long:
                 range = 30f;
                 break;
         }
     }
-
 }
+ 

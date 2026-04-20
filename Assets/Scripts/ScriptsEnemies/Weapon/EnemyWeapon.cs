@@ -24,11 +24,13 @@ public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
 
         Vector3 dir = (target.transform.position - bulletSpawn.position).normalized;
 
-        GameObject bulletGO = Instantiate(
-            bulletType,
-            bulletSpawn.position,
-            Quaternion.LookRotation(dir)
-        );
+        //GameObject bulletGO = Instantiate(
+        //    bulletType,
+        //    bulletSpawn.position,
+        //    Quaternion.LookRotation(dir)
+        //);
+
+        GameObject bulletGO = ObjectPoolManager.SpawnObject(bulletType, bulletSpawn.position, Quaternion.LookRotation(dir));
 
         EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
         bullet.Init(dir, damage);

@@ -24,7 +24,7 @@ public class EnemyBullet : MonoBehaviour
         {
             Debug.Log("Hice daño" + damage);
             component.TakeDamage(damage);
-            Destroy(gameObject);
+            ObjectPoolManager.ReturnObjectToPool(gameObject);
         }
     }
 }
