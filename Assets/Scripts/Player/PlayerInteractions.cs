@@ -173,6 +173,7 @@ public class PlayerInteractions : MonoBehaviour
         if (playerMovementController != null)
         {
             playerMovementController.SetCanMove(false);
+            playerMovementController.SetCanRotate(false);
         }
 
         if (interactionUIManager != null)
@@ -189,6 +190,7 @@ public class PlayerInteractions : MonoBehaviour
         if (playerMovementController != null)
         {
             playerMovementController.SetCanMove(true);
+            playerMovementController.SetCanRotate(true);
         }
 
         if (interactionUIManager != null)
@@ -204,9 +206,13 @@ public class PlayerInteractions : MonoBehaviour
         if (usingTurretStation.Turret == null) return;
         if (lookObjectToMouse == null) return;
 
+        Transform aimOrigin = usingTurretStation.Turret.FirePoint != null
+            ? usingTurretStation.Turret.FirePoint
+            : usingTurretStation.Turret.transform;
+
         if (Mouse.current.leftButton.isPressed)
         {
-            Vector3 direction = lookObjectToMouse.GetMouseDirection(usingTurretStation.Turret.transform);
+            Vector3 direction = lookObjectToMouse.GetMouseDirection(aimOrigin);
             direction.y = 0f;
 
             if (direction.sqrMagnitude > 0.001f)

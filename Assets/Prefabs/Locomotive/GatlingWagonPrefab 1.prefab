@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5d9c52a5ddcf764895223c65fa6d251, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActiveTurretStation
-  turret: {fileID: 5901074936556939558}
+  turret: {fileID: 77435903165197984}
 --- !u!114 &3330091335726141192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 257459406866160118}
   - component: {fileID: 7226562531027052806}
   - component: {fileID: 5333138794343394051}
-  - component: {fileID: 7782192240405160592}
+  - component: {fileID: 77435903165197984}
   m_Layer: 0
   m_Name: GatlingWagonPrefab 1
   m_TagString: Train
@@ -266,7 +266,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 7.313535, y: 4.6908326, z: 17.354155}
   m_Center: {x: -0.0021641254, y: 0.3163507, z: 8.27662}
---- !u!114 &7782192240405160592
+--- !u!114 &77435903165197984
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -275,15 +275,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 3221274974295192296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ecd34a30d63f594ba0985f474886528, type: 3}
+  m_Script: {fileID: 11500000, guid: 82bbf4a8d1cbffa48b7ca95c0accc5cd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WagonBrain
+  m_EditorClassIdentifier: Assembly-CSharp::GatlingWagonBrain
   currentHp: 0
   destroyWagonMaterial: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
-  rendererWagon: {fileID: 1507636723249488290, guid: e31b8e0ddbdc91c4fa699c776ae6a6fe, type: 3}
+  rendererWagon: {fileID: 218442086324047483}
   canBreak: 1
   SM: 10
   RES: 1
+  turretVisual: {fileID: 8836270019998345191}
+  firePoint: {fileID: 8609027585153321505}
+  bulletPrefab: {fileID: 751579678887233810, guid: 9f332b99415d4b847afb7d34c4590ec0, type: 3}
+  bulletType: {fileID: 11400000, guid: adfbda553c051ca4bbc5043d5628da4a, type: 2}
+  fireCooldown: 0.15
+  defaultCapacity: 15
+  maxSize: 50
 --- !u!1 &4600678293243372737
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +493,6 @@ GameObject:
   - component: {fileID: 5961150697684954380}
   - component: {fileID: 2570619522877138715}
   - component: {fileID: 1831702054928773244}
-  - component: {fileID: 5901074936556939558}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -590,24 +596,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.00000005960467, y: 0, z: -0.00000008940701}
---- !u!114 &5901074936556939558
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8510865790528922678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7aab455b36136c445bb150e7e6b2b12e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WagonActiveTurret
-  firePoint: {fileID: 8609027585153321505}
-  bulletPrefab: {fileID: 751579678887233810, guid: 90d7062da2899f5429e873d87d4f048c, type: 3}
-  bulletType: {fileID: 11400000, guid: adfbda553c051ca4bbc5043d5628da4a, type: 2}
-  fireCooldown: 0.15
-  defaultCapacity: 15
-  maxSize: 50
 --- !u!1001 &6136809663126527139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -725,6 +713,11 @@ PrefabInstance:
       addedObject: {fileID: 7543737296106539159}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+--- !u!23 &218442086324047483 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6206624616346047192, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+  m_PrefabInstance: {fileID: 6136809663126527139}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1907583462196782024 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3507377416648425621, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}

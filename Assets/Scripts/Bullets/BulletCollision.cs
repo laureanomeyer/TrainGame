@@ -2,22 +2,25 @@ using UnityEngine;
 
 public class BulletCollision : MonoBehaviour
 {
-    private BulletScript bulletScript;
+    private IBullet bullet;
 
-    private void Start()
+    private void Awake()
     {
-        bulletScript = GetComponent<BulletScript>();
+        bullet = GetComponent<IBullet>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("deadWall"))
         {
-            bulletScript.Deactivate();
+            bullet?.Deactivate();
+            return;
         }
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            bulletScript.Deactivate();
+            bullet?.Deactivate();
+            return;
         }
     }
 }

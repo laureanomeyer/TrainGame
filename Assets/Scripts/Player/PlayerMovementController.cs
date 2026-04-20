@@ -1,38 +1,45 @@
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovementController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] float speed = 5f;
+    [SerializeField] private float speed = 5f;
 
     private Rigidbody rb;
     private LookObjectToMouse lookToMouseController;
     private Vector2 moveInput;
 
     private bool canMove = true;
+    private bool canRotate = true;
 
-    void Start()
+    private void Start()
     {
         lookToMouseController = GetComponent<LookObjectToMouse>();
         rb = GetComponent<Rigidbody>();
     }
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         if (!canMove)
         {
-            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+            rb.linearVelocity = Vector3.zero;
+        }
+        else
+        {
+            MovePlayer();
+        }
+
+        if (!canRotate)
+        {
+            rb.angularVelocity = Vector3.zero;
             return;
         }
 
-        MovePlayer();
         RotateToMouse();
     }
 
-
-
-    void OnMove(InputValue value)
+    private void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
     }
@@ -46,20 +53,35 @@ public class PlayerMovementController : MonoBehaviour
 
     private void RotateToMouse()
     {
-        var direction = lookToMouseController.GetMouseDirection(transform);
+        if (lookToMouseController == null) return;
+
+        Vector3 direction = lookToMouseController.GetMouseDirection(transform);
         direction.y = 0f;
-        transform.forward = direction;
+
+        if (direction.sqrMagnitude <= 0.001f) return;
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
+        rb.MoveRotation(targetRotation);
     }
 
     public void SetCanMove(bool value)
     {
         canMove = value;
 
-        if(!canMove)
+        if (!canMove)
         {
             moveInput = Vector2.zero;
-            rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+            rb.linearVelocity = Vector3.zero;
         }
     }
 
+    public void SetCanRotate(bool value)
+    {
+        canRotate = value;
+
+        if (!canRotate)
+        {
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
 }
