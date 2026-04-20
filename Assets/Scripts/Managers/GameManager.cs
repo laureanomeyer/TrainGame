@@ -6,14 +6,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField] public LocomotiveStatsSO baseStats;
-    private TrainData trainData;
-    private StatSystem statSystem;
-    public float runduration;
-    private PlayerData playerData;
+    private IState currentState;
 
-    public TrainData TrainData => trainData;
-    public PlayerData PlayerData => playerData;
-    public StatSystem StatsSystem => statSystem;
+    public IState CurrentState => currentState;
+    public TrainData TrainData => (currentState as GameplayState)?.TrainData;
+    public PlayerData PlayerData => (currentState as GameplayState)?.PlayerData;
+    public StatSystem StatsSystem => (currentState as GameplayState)?.StatsSystem;
+    public float RunDuration => (currentState as GameplayState).runduration;
 
 
     void Awake()
@@ -27,33 +26,26 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;    
         }
-        trainData = new TrainData(baseStats);
-        playerData = new PlayerData();
-        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
         DontDestroyOnLoad(gameObject);
-
+        currentState = new GameplayState();
+        currentState.Enter(baseStats);
     }
 
     public void GoToStore()
     {
-        GameEvents.ChangeGold();
-        GameEvents.ChangeTrainData();
-        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        (currentState as GameplayState)?.GoToStore();
         SceneManager.LoadScene("Shop");
     }
 
     public void GoToRun()
     {
-        GameEvents.ChangeGold();
+        (currentState as GameplayState)?.GoToRun();
         SceneManager.LoadScene("LauScene");
-        runduration += 10f;
     }
 
     public void ResetGame()
     {
-        trainData.ResetValuesToDefault();
-        playerData.ResetValuesToDefault();
-        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        (currentState as GameplayState)?.ResetGame();
         SceneManager.LoadScene("LauScene");
     }
 }

@@ -68,7 +68,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public virtual void Repair(float repairAmount)
     {
-        hpController.Repair(Time.deltaTime, -repairAmount);
+        hpController.Repair(Time.deltaTime, repairAmount);
     }
     public void SetWagonID (IWagonID wagon)
     {
