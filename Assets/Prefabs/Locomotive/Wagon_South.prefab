@@ -381,6 +381,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: deaaf2705ca77aa48bc23f72c24cf2e1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3437057148003890775}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: deaaf2705ca77aa48bc23f72c24cf2e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8669982123700736726}
   m_SourcePrefab: {fileID: 100100000, guid: deaaf2705ca77aa48bc23f72c24cf2e1, type: 3}
 --- !u!4 &2944918903075864700 stripped
 Transform:
@@ -447,6 +450,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.083206, y: 2.752903, z: 9.061424}
   m_Center: {x: -0.09207535, y: 0.87645197, z: 4.393832}
+--- !u!114 &8669982123700736726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3621167062874137271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7996dc902bd639940b02db76cf4f629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
+  rend: {fileID: 4627899043250641410}
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.1
 --- !u!4 &4110424090194835469 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: deaaf2705ca77aa48bc23f72c24cf2e1, type: 3}

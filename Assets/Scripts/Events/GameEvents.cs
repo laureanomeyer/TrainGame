@@ -10,6 +10,14 @@ public static class GameEvents
 
     public static event Action OnChangeTrainData;
 
+    public static event Action OnShoot;
+
+    public static event Action OnShieldsBroken;
+
+    public static event Action OnCoalEmpty;
+
+    public static event Action OnWagonDestroyed;
+
     public static void GoldEarned(float amount)
     {
         OnGoldEarned?.Invoke(amount);
@@ -28,6 +36,26 @@ public static class GameEvents
     public static void ChangeTrainData()
     {
         OnChangeTrainData?.Invoke();
+    }
+
+    public static void ShootPerformed()
+    {
+        OnShoot?.Invoke();
+    }
+
+    public static void CoalEmpty()
+    {
+        OnCoalEmpty?.Invoke();
+    }
+
+    public static void ShieldsBroken()
+    {
+        OnShieldsBroken?.Invoke();
+    }
+
+    public static void WagonDestroyed()
+    {
+        OnWagonDestroyed?.Invoke();
     }
 
 }

@@ -205,6 +205,7 @@ GameObject:
   - component: {fileID: 7226562531027052806}
   - component: {fileID: 5333138794343394051}
   - component: {fileID: 77435903165197984}
+  - component: {fileID: 4738617757933681993}
   m_Layer: 0
   m_Name: GatlingWagonPrefab 1
   m_TagString: Train
@@ -284,13 +285,27 @@ MonoBehaviour:
   canBreak: 1
   SM: 10
   RES: 1
-  turretVisual: {fileID: 8836270019998345191}
   firePoint: {fileID: 8609027585153321505}
   bulletPrefab: {fileID: 751579678887233810, guid: 9f332b99415d4b847afb7d34c4590ec0, type: 3}
   bulletType: {fileID: 11400000, guid: adfbda553c051ca4bbc5043d5628da4a, type: 2}
   fireCooldown: 0.15
   defaultCapacity: 15
   maxSize: 50
+--- !u!114 &4738617757933681993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3221274974295192296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7996dc902bd639940b02db76cf4f629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
+  rend: {fileID: 218442086324047483}
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.1
 --- !u!1 &4600678293243372737
 GameObject:
   m_ObjectHideFlags: 0

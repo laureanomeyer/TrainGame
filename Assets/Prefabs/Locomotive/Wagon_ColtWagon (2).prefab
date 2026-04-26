@@ -477,9 +477,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2762194869550795090, guid: d006a02aff417c346844535e5c28b82f, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2762194869550795090, guid: d006a02aff417c346844535e5c28b82f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
+    - target: {fileID: 2762194869550795090, guid: d006a02aff417c346844535e5c28b82f, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 631fccf98d0e0924099f8642f5eff300, type: 2}
     - target: {fileID: 6688365970232631406, guid: d006a02aff417c346844535e5c28b82f, type: 3}
       propertyPath: m_Name
       value: Empty
@@ -533,6 +541,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d006a02aff417c346844535e5c28b82f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3644062954500194812}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d006a02aff417c346844535e5c28b82f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8707225630396016752}
   m_SourcePrefab: {fileID: 100100000, guid: d006a02aff417c346844535e5c28b82f, type: 3}
 --- !u!23 &1507636723249488290 stripped
 MeshRenderer:
@@ -650,3 +661,18 @@ MonoBehaviour:
   shootAngle: 50
   defaultCapacity: 10
   maxSize: 30
+--- !u!114 &8707225630396016752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4501369629086111137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7996dc902bd639940b02db76cf4f629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
+  rend: {fileID: 1507636723249488290}
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.1

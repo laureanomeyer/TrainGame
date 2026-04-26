@@ -8,6 +8,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private PlayerInteractions playerInteractions;
 
     [Header("Wagon UI")]
+    [SerializeField] private TMP_Text WagonHpText;
     [SerializeField] private Image wagonHpImage;
     [SerializeField] private Image wagonHpBackground;
 
@@ -50,6 +51,7 @@ public class UIPlayerManager : MonoBehaviour
         if (wagon != null)
         {
             wagonHpImage.gameObject.SetActive(true);
+            WagonHpText.gameObject.SetActive(true);
             wagonHpBackground.gameObject.SetActive(true);
             wagonHpImage.fillAmount = wagon.HPController.CurrentHp / wagon.HPController.MaxHp;
         }
@@ -57,6 +59,7 @@ public class UIPlayerManager : MonoBehaviour
         {
             wagonHpImage.gameObject.SetActive(false);
             wagonHpBackground.gameObject.SetActive(false);
+            WagonHpText.gameObject.SetActive(false);
         }
     }
 

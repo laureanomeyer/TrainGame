@@ -1114,7 +1114,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   baseStats: {fileID: 11400000, guid: 119675ca747a4af4a9fbee5852b7949e, type: 2}
-  runduration: 30
 --- !u!4 &631446770
 Transform:
   m_ObjectHideFlags: 0
@@ -1888,6 +1887,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 168115176330373532, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 168115176330373532, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 631fccf98d0e0924099f8642f5eff300, type: 2}
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: coalImage
       value: 
@@ -2004,6 +2011,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7457804147423590320, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7457804147423590320, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 631fccf98d0e0924099f8642f5eff300, type: 2}
     - target: {fileID: 9173773505589081166, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: groundMask.m_Bits
       value: 384
@@ -2224,6 +2239,8 @@ GameObject:
   - component: {fileID: 1724918361}
   - component: {fileID: 1724918360}
   - component: {fileID: 1724918362}
+  - component: {fileID: 1724918363}
+  - component: {fileID: 1724918364}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -2308,6 +2325,43 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 2.4, y: 46, z: -17}
+--- !u!114 &1724918363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724918359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBasicMultiChannelPerlin
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0
+  FrequencyGain: 1
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &1724918364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724918359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e811f67cb9d3941ae61277acbce9cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraShakes
+  shootTimer: 0.1
+  shootIntensity: 1
+  shieldsTimer: 0.1
+  shieldsIntensity: 1
+  coalTimer: 0.1
+  coalIntensity: 1
+  wagonTimer: 0.1
+  wagonIntensity: 1
 --- !u!1 &1786806781
 GameObject:
   m_ObjectHideFlags: 0
@@ -2763,6 +2817,10 @@ PrefabInstance:
       propertyPath: startPoint
       value: 
       objectReference: {fileID: 57285620}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: WagonHpText
+      value: 
+      objectReference: {fileID: 2043740329}
     - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
       propertyPath: shieldImage
       value: 

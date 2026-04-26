@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] EnemyData data;
     [SerializeField] GameObject weapon;
     [SerializeField] float CurrentH;
+    private DamageFlash flash;
 
     private List<IWagon> targetList;
     private Transform target;
@@ -44,6 +45,7 @@ public class Enemy : MonoBehaviour
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         Brain.Begin(this);
         limitZ = Movement.SetLimitZ();
+        flash = GetComponent<DamageFlash>();
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -69,7 +71,9 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         Debug.Log("took: " + damage);
-        if (currentHealth <= 0)
+        if (currentHealth > 0)
+            flash.Flash();
+        else
             Dead();
     }
 

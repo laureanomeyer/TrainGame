@@ -10,7 +10,8 @@ public class WagonBrain : MonoBehaviour, IDamagable
     protected WagonHP hpController;
     protected TrainData dataRef;
     private IWagonID wagonID;
-
+    private DamageFlash Flash;
+    private bool broken;
 
     [SerializeField] private float currentHp;
     [SerializeField] private Material destroyWagonMaterial;
@@ -30,6 +31,8 @@ public class WagonBrain : MonoBehaviour, IDamagable
         dataRef = RunManager.Instance.TrainCopyData;
         var statSystem = RunManager.Instance.StatSystem;
         statSystem.OnStatChanged += OnStatChanged;
+        Flash = GetComponent<DamageFlash>();
+        broken = false;
     }
 
     public void Update()
@@ -51,11 +54,14 @@ public class WagonBrain : MonoBehaviour, IDamagable
     public void TakeDamage(float damageAmount)
     {
         hpController.TakeDamage(damageAmount);
+
         Debug.Log("took " + damageAmount + " damage");
-        if (hpController.CurrentHp <= 0)
-        {
-            Break();
-        }
+
+        if (hpController.CurrentHp > 0) 
+            Flash.Flash();
+
+        else  
+            Break();       
     }
 
     public void SetUpWagonHP() 
@@ -83,6 +89,11 @@ public class WagonBrain : MonoBehaviour, IDamagable
     {
         RunManager.Instance.StatSystem.RemoveModifiersFromSource(this);
         rendererWagon.material = destroyWagonMaterial;
+
+        if (!broken)
+            GameEvents.WagonDestroyed();
+        broken = true;
+
         if (wagonID != null)
             GameManager.Instance.TrainData.RemoveWagonID(wagonID);
     }

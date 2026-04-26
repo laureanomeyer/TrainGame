@@ -377,6 +377,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ec4aab0e0aa7f704cb3c6c6abf841d8b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6103826407415097898}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ec4aab0e0aa7f704cb3c6c6abf841d8b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 547304004439997403}
   m_SourcePrefab: {fileID: 100100000, guid: ec4aab0e0aa7f704cb3c6c6abf841d8b, type: 3}
 --- !u!23 &2661552456864203367 stripped
 MeshRenderer:
@@ -448,6 +451,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.083206, y: 2.752903, z: 9.069632}
   m_Center: {x: -0.09207535, y: 0.87645197, z: 4.3897285}
+--- !u!114 &547304004439997403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6152897119049583977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7996dc902bd639940b02db76cf4f629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
+  rend: {fileID: 2661552456864203367}
+  flashColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.1
 --- !u!4 &6784861920454891475 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ec4aab0e0aa7f704cb3c6c6abf841d8b, type: 3}

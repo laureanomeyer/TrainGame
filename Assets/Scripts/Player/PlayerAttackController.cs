@@ -64,6 +64,7 @@ public class PlayerAttackController : MonoBehaviour
             if (weapon.IsReloading) return;
 
             weapon.Shoot(spawnPoint);
+            GameEvents.ShootPerformed();
             waitToFire = 0;
         }
     }

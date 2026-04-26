@@ -24,6 +24,7 @@ public class GameplayState: IState
         trainData = new TrainData(baseStats);
         playerData = new PlayerData();
         statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        runduration = 10;
         
     }
     public void Tick() 

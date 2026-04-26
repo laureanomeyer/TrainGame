@@ -69,6 +69,7 @@ public class LocomotiveFuel
     private void ConsumeFuel(float amount) //gasto natural del tren
     {
         currentFuel = Mathf.Clamp(currentFuel - amount, 0f, currentMaxFuel);
+        if (currentFuel <= 0) GameEvents.CoalEmpty();
         UpdateSharedSpeed();
     }
 
@@ -110,6 +111,7 @@ public class LocomotiveFuel
             currentShield -= amount * 100 / (100 + defense);
             timer = 0;
             shieldTakenDamage = true;
+            if (currentShield <= 0) GameEvents.ShieldsBroken();
         }
     }
 
