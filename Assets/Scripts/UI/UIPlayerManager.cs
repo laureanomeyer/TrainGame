@@ -25,6 +25,8 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private RectTransform startPoint;
     [SerializeField] private RectTransform endPoint;
 
+    private Color originalColor;
+
 
     private void Start()
     {
@@ -37,6 +39,7 @@ public class UIPlayerManager : MonoBehaviour
         UpdateLocomotiveUI();
         UpdateInventoryUI();
         UpdateRunProgress();
+        originalColor = Color.darkGreen;
     }
 
  //   void UpdateWagonUI()
@@ -63,9 +66,16 @@ public class UIPlayerManager : MonoBehaviour
 
         if (locomotive != null && locomotive.fuelController != null)
         {
-            fuelFillImage.fillAmount = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelMaxCapacityImage.fillAmount = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
+            var currentFill = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
+            fuelFillImage.fillAmount = currentFill;
             shieldImage.fillAmount = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
+            var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
+            fuelMaxCapacityImage.fillAmount = currentCapacity;
+            if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 4)
+            {
+                fuelMaxCapacityImage.color = Color.red;
+            }
+            else fuelMaxCapacityImage.color = originalColor;
         }
     }
 
