@@ -18,6 +18,8 @@ public static class GameEvents
 
     public static event Action OnWagonDestroyed;
 
+    public static event Action OnEnemyDeath;
+
     public static void GoldEarned(float amount)
     {
         OnGoldEarned?.Invoke(amount);
@@ -56,6 +58,11 @@ public static class GameEvents
     public static void WagonDestroyed()
     {
         OnWagonDestroyed?.Invoke();
+    }
+
+    public static void EnemyDeath()
+    {
+        OnEnemyDeath?.Invoke();
     }
 
 }
