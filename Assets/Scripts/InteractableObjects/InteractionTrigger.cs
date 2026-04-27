@@ -2,30 +2,30 @@ using UnityEngine;
 
 public class InteractionTrigger : MonoBehaviour
 {
-    [SerializeField] private PlayerInteractionText playerInteractionText;
+    [SerializeField] private GameObject outline;
+
+    private void Awake()
+    {
+        outline.SetActive(false);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
-        if (playerInteractionText == null)
+        if (outline != null)
         {
-            playerInteractionText = other.GetComponent<PlayerInteractionText>();
+            outline.SetActive(true);
         }
-
-        if (playerInteractionText != null)
-        {
-            playerInteractionText.ShowPrompt();
-        }
-
     }
+
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
 
-        if (playerInteractionText != null)
+        if (outline != null)
         {
-            playerInteractionText.HidePrompt();
+            outline.SetActive(false);
         }
     }
 }
