@@ -12,7 +12,6 @@ public class WagonHPWorldUI : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Image wagonHpImage;
     [SerializeField] private Image wagonHpBackground;
-    [SerializeField] private TMP_Text wagonHpText;
 
     private Camera cam;
 
@@ -64,10 +63,6 @@ public class WagonHPWorldUI : MonoBehaviour
 
         wagonHpImage.fillAmount = currentHp / maxHp;
 
-        if (wagonHpText != null)
-        {
-            wagonHpText.text = $"Wagon HP {currentHp:0}/{maxHp:0}";
-        }
     }
 
     private void SetVisible(bool visible)
@@ -80,11 +75,6 @@ public class WagonHPWorldUI : MonoBehaviour
         if (wagonHpBackground != null)
         {
             wagonHpBackground.gameObject.SetActive(visible);
-        }
-
-        if (wagonHpText != null)
-        {
-            wagonHpText.gameObject.SetActive(visible);
         }
     }
 }
