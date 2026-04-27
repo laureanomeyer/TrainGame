@@ -7,11 +7,6 @@ public class UIPlayerManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerInteractions playerInteractions;
 
-    [Header("Wagon UI")]
-    [SerializeField] private TMP_Text WagonHpText;
-    [SerializeField] private Image wagonHpImage;
-    [SerializeField] private Image wagonHpBackground;
-
 
     [Header("Locomotive UI")]
     [SerializeField] private Image fuelFillImage;
@@ -38,30 +33,29 @@ public class UIPlayerManager : MonoBehaviour
 
     void Update()
     {
-        UpdateWagonUI();
+        //UpdateWagonUI();
         UpdateLocomotiveUI();
         UpdateInventoryUI();
         UpdateRunProgress();
     }
 
-    void UpdateWagonUI()
-    {
-        WagonBrain wagon = playerInteractions.CurrentWagon;
-
-        if (wagon != null)
-        {
-            wagonHpImage.gameObject.SetActive(true);
-            WagonHpText.gameObject.SetActive(true);
-            wagonHpBackground.gameObject.SetActive(true);
-            wagonHpImage.fillAmount = wagon.HPController.CurrentHp / wagon.HPController.MaxHp;
-        }
-        else
-        {
-            wagonHpImage.gameObject.SetActive(false);
-            wagonHpBackground.gameObject.SetActive(false);
-            WagonHpText.gameObject.SetActive(false);
-        }
-    }
+ //   void UpdateWagonUI()
+ //   {
+ //       WagonBrain wagon = playerInteractions.CurrentWagon;
+ //
+ //       if (wagon != null)
+ //       {
+ //           wagonHpImage.gameObject.SetActive(true);
+ //           WagonHpText.gameObject.SetActive(true);
+ //           
+ //       }
+ //       else
+ //       {
+ //           wagonHpImage.gameObject.SetActive(false);
+ //           wagonHpBackground.gameObject.SetActive(false);
+ //           WagonHpText.gameObject.SetActive(false);
+ //       }
+ //   }
 
     void UpdateLocomotiveUI()
     {
