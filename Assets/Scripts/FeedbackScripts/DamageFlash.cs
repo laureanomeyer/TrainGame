@@ -4,21 +4,28 @@ using UnityEngine.UI;
 
 public class DamageFlash : MonoBehaviour
 {
-    [SerializeField] Renderer rend;
-    [SerializeField] Color flashColor;
-    [SerializeField] float flashDuration;
+    [SerializeField] private Renderer[] rend;
+    [SerializeField] private Material flashMaterial;
+    [SerializeField] private float flashDuration;
 
-    private Color originalColor;
-    void Start()
+    private Material[] originalMaterials;
+
+    void Awake()
     {
-        originalColor = rend.material.color;
+        originalMaterials = new Material[rend.Length];
+        for (int i = 0; i < rend.Length; i++)
+            originalMaterials[i] = rend[i].material;
     }
 
     private IEnumerator DoFlash()
     {
-        rend.material.color = flashColor;
+        for (int i = 0; i < rend.Length; i++)
+            rend[i].material = flashMaterial;
+
         yield return new WaitForSeconds(flashDuration);
-        rend.material.color = originalColor;
+
+        for (int i = 0; i < rend.Length; i++)
+            rend[i].material = originalMaterials[i];
     }
 
     public void Flash()
@@ -26,6 +33,4 @@ public class DamageFlash : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(DoFlash());
     }
-
-
 }
