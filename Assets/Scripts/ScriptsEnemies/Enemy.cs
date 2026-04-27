@@ -6,16 +6,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] EnemyData data;
+    EnemyData data;
     [SerializeField] GameObject weapon;
-    [SerializeField] float CurrentH;
+    float CurrentH;
     private DamageFlash flash;
 
     private List<IWagon> targetList;
     private Transform target;
     private Transform weaponPosition;
     private float limitZ;
-
 
     public IEnemyWeapon Weapon;
     public IEnemyMovement Movement => data.movement;
@@ -25,6 +24,8 @@ public class Enemy : MonoBehaviour
     public float MaxHealth => data.health;
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
+
+
 
     public List<IWagon> TargetList => targetList;
 
@@ -36,9 +37,9 @@ public class Enemy : MonoBehaviour
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
 
-
-    void Awake()
+    public void Initialize(EnemyData data)
     {
+        this.data = data;
         currentHealth = MaxHealth;
         weaponPosition = GetComponentInChildren<Transform>();
         var WeaponGO = Instantiate(weapon, weaponPosition);
@@ -46,6 +47,7 @@ public class Enemy : MonoBehaviour
         Brain.Begin(this);
         limitZ = Movement.SetLimitZ();
         flash = GetComponent<DamageFlash>();
+        GetComponent<Renderer>().materials = data.material;
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -80,7 +82,8 @@ public class Enemy : MonoBehaviour
     private void Dead()
     {
         GameEvents.GoldEarned(data.gold);
-        Destroy(this.gameObject);
+        GameEvents.EnemyDeath();
+        Destroy(gameObject);
     }
 
     //---------------------GIZMOS-------------------------

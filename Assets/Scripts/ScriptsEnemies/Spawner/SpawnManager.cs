@@ -7,10 +7,13 @@ public class SpawnManager : MonoBehaviour
 
     [SerializeField] float spawnInterval;
     [SerializeField] int maxEnemies;
+    [SerializeField] LevelSpawnsData levelData;
 
     List<SpawnZone> activeZones = new();
 
     private List<IWagon> trainList = new();
+
+    List<EnemyData> spawnPool = new();
 
     Camera cam;
 
@@ -21,6 +24,7 @@ public class SpawnManager : MonoBehaviour
     {
         trainList = RunManager.Instance.TrainCopyData.WagonList;
         cam = Camera.main;
+        BuildPool();
     }
 
     void Update()
@@ -66,13 +70,26 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    void BuildPool()
+    {
+        spawnPool.Clear();
+
+        foreach (var entry in levelData.spawneables)
+        {
+            for (int i = 0; i < entry.quantity; i++)
+            {
+                spawnPool.Add(entry.enemyData);
+            }
+        }
+    }
+
     void Spawn(Vector3 pos)
     {
-        GameObject enemy = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)],pos,Quaternion.identity);
-        enemy.GetComponent<Enemy>().SetTargetList(trainList);
-
-        aliveEnemies++;
-        Debug.Log("enemy spawn");
+        EnemyData enemyToSpawn = spawnPool[Random.Range(0, spawnPool.Count)];
+        GameObject enemyGO = Instantiate(levelData.prefab, pos, Quaternion.identity);
+        Enemy enemy = enemyGO.GetComponent<Enemy>();
+        enemy.Initialize(enemyToSpawn);
+        enemy.SetTargetList(trainList);
     }
 
     bool IsOutsideCamera(Vector3 worldPos)

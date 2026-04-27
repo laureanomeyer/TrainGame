@@ -19,6 +19,8 @@ public class EnemyData : ScriptableObject
 
     public float gold;
 
+    public Material[] material;
+
     public EnemyAttackSO attack;     // logica ataque
     public EnemyBrainSO brain;       // logica targeteo
     public EnemyMovementSO movement; //logica movimiento
