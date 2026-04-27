@@ -166,6 +166,7 @@ GameObject:
   - component: {fileID: 72369569}
   - component: {fileID: 72369568}
   - component: {fileID: 72369567}
+  - component: {fileID: 72369571}
   m_Layer: 0
   m_Name: managers
   m_TagString: Untagged
@@ -187,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RunManager
   mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
   mapStartLocation: {fileID: 902026377}
+  spawnManager: {fileID: 72369571}
   trainM: {fileID: 0}
   locoM: {fileID: 0}
 --- !u!114 &72369568
@@ -234,6 +236,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &72369571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72369566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40a491ff675e4794e971c773f82bb17f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnManager
+  enemyPrefabs:
+  - {fileID: 8924080553250581591, guid: 7fcf31fc672615a4e8137ac821804655, type: 3}
+  - {fileID: 8924080553250581591, guid: 49e82650c5ee0a94c8239bd964d84db9, type: 3}
+  - {fileID: 8924080553250581591, guid: 366e4b6b281f8ab4491d507af4c877a1, type: 3}
+  spawnInterval: 3
+  maxEnemies: 10
 --- !u!1 &104594091
 GameObject:
   m_ObjectHideFlags: 0
