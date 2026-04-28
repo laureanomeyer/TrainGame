@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public PlayerData PlayerData => (currentState as GameplayState)?.PlayerData;
     public StatSystem StatsSystem => (currentState as GameplayState)?.StatsSystem;
     public float RunDuration => (currentState as GameplayState).runduration;
+    public int RunNumber => (currentState as GameplayState).CurrentRun;
 
 
     void Awake()
