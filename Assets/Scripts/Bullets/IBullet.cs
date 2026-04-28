@@ -10,6 +10,8 @@ public interface IBullet
 
     public int Speed { get; set; }
 
+    public bool DestroyOnEnemy { get; }
+
     //Referencia para utlizar la pool de unity 
     IObjectPool<GameObject> BulletPool { set; }
 

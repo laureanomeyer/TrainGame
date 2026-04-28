@@ -11,6 +11,9 @@ public class GatlingBullet : MonoBehaviour, IBullet
     public float Damage { get; set; }
     public int Speed { get; set; }
 
+    private bool destroyOnEnemy;
+    public bool DestroyOnEnemy { get => destroyOnEnemy; }
+
     public IObjectPool<GameObject> BulletPool
     {
         set => bulletPool = value;

@@ -12,6 +12,9 @@ public class BulletScript : MonoBehaviour, IBullet
     public int Speed { get => speed; set => speed = value; }
     private int speed;
 
+    private bool destroyOnEnemy;
+    public bool DestroyOnEnemy { get => destroyOnEnemy; }
+
     private IObjectPool<GameObject> bulletPool;
 
     public BulletTypeScriptable bulletType;
@@ -50,6 +53,7 @@ public class BulletScript : MonoBehaviour, IBullet
         currentLife = bulletType.duration;
         Damage = bulletType.damage * (GameManager.Instance.StatsSystem.GetStat(StatType.DamageMultiplier));
         Speed = speed;
+        destroyOnEnemy = bulletType.destroyOnEnemy;
         isActive = true;
     }
 

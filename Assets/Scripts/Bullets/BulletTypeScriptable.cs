@@ -10,8 +10,11 @@ public class BulletTypeScriptable : ScriptableObject
     [SerializeField] public float speed;
 
     [Header("Bullet damage")]
-    [SerializeField] public int damage;
+    [SerializeField] public float damage;
 
     [Header("Bullet duration")]
     [SerializeField] public float duration;
+
+    [Header("DestroyOnCollsion")]
+    [SerializeField] public bool destroyOnEnemy;
 }
