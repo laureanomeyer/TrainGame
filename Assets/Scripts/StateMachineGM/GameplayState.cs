@@ -11,6 +11,7 @@ public class GameplayState: IState
 {
     private TrainData trainData;
     private StatSystem statSystem;
+    private int currentRun;
     public float runduration;
     private PlayerData playerData;
     private LocomotiveStatsSO baseStats;
@@ -18,6 +19,7 @@ public class GameplayState: IState
     public TrainData TrainData => trainData;
     public PlayerData PlayerData => playerData;
     public StatSystem StatsSystem => statSystem;
+    public int CurrentRun => currentRun;
     public void Enter(LocomotiveStatsSO stats) 
     {
         this.baseStats = stats;
@@ -25,7 +27,7 @@ public class GameplayState: IState
         playerData = new PlayerData();
         statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
         runduration = 10;
-        
+        currentRun = 0;
     }
     public void Tick() 
     { 
@@ -43,6 +45,7 @@ public class GameplayState: IState
     {
         GameEvents.ChangeGold();
         runduration += 10f;
+        currentRun += 1;
     }
 
     public void ResetGame()
