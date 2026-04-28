@@ -119,11 +119,10 @@ public class SpawnManager : MonoBehaviour
     {
         int index = GameManager.Instance.RunNumber;
 
-        if (index > levelList.Count)
-        {
+        if (index > levelList.Count-1)
             currentlevelData = levelList.Last();
-        }
-        currentlevelData = levelList[index];
+        else
+            currentlevelData = levelList[index];
 
         maxEnemies = currentlevelData.maxAliveEnemies;
         spawnInterval = currentlevelData.spawnInterval;

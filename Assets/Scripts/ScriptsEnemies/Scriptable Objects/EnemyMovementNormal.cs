@@ -51,5 +51,32 @@ public class EnemyMovementNormal : EnemyMovementSO
             pos.y = 0;
         
         enemy.transform.position = pos;
+
+        if (enemy.IsKnocked)
+        {
+            Knockback(enemy);
+            return;
+        }
+    }
+    public override void Knockback(Enemy enemy)
+    {
+        Vector3 pos = enemy.transform.position;
+
+        pos += enemy.KnockbackVelocity * Time.deltaTime;
+
+        enemy.transform.position = pos;
+
+        enemy.KnockbackVelocity =
+            Vector3.Lerp(
+                enemy.KnockbackVelocity,
+                Vector3.zero,
+                10f * Time.deltaTime
+            );
+
+        if (enemy.KnockbackVelocity.magnitude < .1f)
+        {
+            enemy.KnockbackVelocity = Vector3.zero;
+            enemy.IsKnocked = false;
+        }
     }
 }

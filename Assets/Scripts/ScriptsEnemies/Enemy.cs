@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     private Transform target;
     private Transform weaponPosition;
     private float limitZ;
+    public Vector3 KnockbackVelocity = Vector3.zero; //temporal
+    public bool IsKnocked = false; //temporal
 
     public IEnemyWeapon Weapon;
     public IEnemyMovement Movement => data.movement;
@@ -25,12 +27,11 @@ public class Enemy : MonoBehaviour
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
 
-
-
     public List<IWagon> TargetList => targetList;
 
     public Transform Target => target;
     public float Range => data.range;
+    //Vector3 KnockbackVelocity => knockbackVelocity;
 
     private float currentHealth;
 
@@ -45,9 +46,10 @@ public class Enemy : MonoBehaviour
         var WeaponGO = Instantiate(weapon, weaponPosition);
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         Brain.Begin(this);
-        limitZ = Movement.SetLimitZ();
         flash = GetComponent<DamageFlash>();
+        limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
+
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -74,7 +76,14 @@ public class Enemy : MonoBehaviour
         currentHealth -= damage;
         Debug.Log("took: " + damage);
         if (currentHealth > 0)
+        {
             flash.Flash();
+
+            IsKnocked = true;
+
+            KnockbackVelocity += -transform.forward * 6f;
+        }
+
         else
             Dead();
     }
