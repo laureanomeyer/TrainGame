@@ -19,8 +19,11 @@ public class BulletCollision : MonoBehaviour
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            bullet?.Deactivate();
-            return;
+            if (bullet.DestroyOnEnemy)
+            {
+                bullet?.Deactivate();
+                return;
+            } 
         }
     }
 }

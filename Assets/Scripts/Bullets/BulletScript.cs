@@ -22,6 +22,7 @@ public class BulletScript : MonoBehaviour, IBullet
     private Rigidbody rb;
     private BoxCollider bc;
     private MeshFilter meshFilter;
+    private Renderer render;
 
     private TrainData dataRef;
 
@@ -33,6 +34,8 @@ public class BulletScript : MonoBehaviour, IBullet
         meshFilter = GetComponent<MeshFilter>();
         rb = GetComponent<Rigidbody>();
         bc = GetComponent<BoxCollider>();
+        render = GetComponent<Renderer>();
+
     }
 
     void Update()
@@ -54,6 +57,7 @@ public class BulletScript : MonoBehaviour, IBullet
         Damage = bulletType.damage * (GameManager.Instance.StatsSystem.GetStat(StatType.DamageMultiplier));
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
+        render.material = bulletType.bulletMaterial;
         isActive = true;
     }
 

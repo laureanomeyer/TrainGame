@@ -6,6 +6,9 @@ public class BulletTypeScriptable : ScriptableObject
     [Header("Bullet mesh")]
     [SerializeField] public Mesh bulletMesh;
 
+    [Header("Bullet material")]
+    [SerializeField] public Material bulletMaterial;
+
     [Header("Bullet speed")]
     [SerializeField] public float speed;
 
