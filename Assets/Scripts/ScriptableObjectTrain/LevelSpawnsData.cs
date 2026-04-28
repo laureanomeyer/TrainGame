@@ -8,6 +8,8 @@ public class LevelSpawnsData : ScriptableObject
 {
     public List<SpawnEntry> spawneables;
     public GameObject prefab;
+    public int maxAliveEnemies;
+    public float spawnInterval;
 
 }
 

@@ -49,7 +49,7 @@ public class EnemyMovementNormal : EnemyMovementSO
 
         if (pos.y < 0)
             pos.y = 0;
-
+        
         enemy.transform.position = pos;
     }
 }

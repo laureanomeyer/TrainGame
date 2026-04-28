@@ -1,13 +1,17 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    [SerializeField] List<GameObject> enemyPrefabs;
+    //se setean con el level spawn data
+    float spawnInterval; 
+    int maxEnemies;
 
-    [SerializeField] float spawnInterval;
-    [SerializeField] int maxEnemies;
-    [SerializeField] LevelSpawnsData levelData;
+    [Header("Levels")]
+
+    [SerializeField] List<LevelSpawnsData> levelList = new();
+    LevelSpawnsData currentlevelData;
 
     List<SpawnZone> activeZones = new();
 
@@ -20,11 +24,24 @@ public class SpawnManager : MonoBehaviour
     float timer;
     int aliveEnemies;
 
+    private void OnEnable()
+    {
+        GameEvents.OnEnemyDeath += EnemyDead;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnEnemyDeath -= EnemyDead;
+    }
+
+
     public void Start()
     {
         trainList = RunManager.Instance.TrainCopyData.WagonList;
         cam = Camera.main;
+        SetLevelData();
         BuildPool();
+        Debug.Log("hola si probando, nivel: " + GameManager.Instance.RunNumber + "level spawn: " + currentlevelData.name);
     }
 
     void Update()
@@ -32,7 +49,7 @@ public class SpawnManager : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        if (timer >= spawnInterval && aliveEnemies < maxEnemies)
+        if (timer >= spawnInterval && aliveEnemies < maxEnemies && spawnPool.Count > 0)
         {
             TrySpawn();
             timer = 0;
@@ -74,7 +91,7 @@ public class SpawnManager : MonoBehaviour
     {
         spawnPool.Clear();
 
-        foreach (var entry in levelData.spawneables)
+        foreach (var entry in currentlevelData.spawneables)
         {
             for (int i = 0; i < entry.quantity; i++)
             {
@@ -85,11 +102,31 @@ public class SpawnManager : MonoBehaviour
 
     void Spawn(Vector3 pos)
     {
-        EnemyData enemyToSpawn = spawnPool[Random.Range(0, spawnPool.Count)];
-        GameObject enemyGO = Instantiate(levelData.prefab, pos, Quaternion.identity);
+        if (spawnPool.Count == 0) return;
+
+        int index = Random.Range(0, spawnPool.Count);
+
+        EnemyData enemyToSpawn = spawnPool[index];
+        GameObject enemyGO = Instantiate(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
         enemy.Initialize(enemyToSpawn);
         enemy.SetTargetList(trainList);
+
+        aliveEnemies++;
+    }
+
+    void SetLevelData()
+    {
+        int index = GameManager.Instance.RunNumber;
+
+        if (index > levelList.Count)
+        {
+            currentlevelData = levelList.Last();
+        }
+        currentlevelData = levelList[index];
+
+        maxEnemies = currentlevelData.maxAliveEnemies;
+        spawnInterval = currentlevelData.spawnInterval;
     }
 
     bool IsOutsideCamera(Vector3 worldPos)
@@ -100,5 +137,10 @@ public class SpawnManager : MonoBehaviour
             vp.x < 0 || vp.x > 1 ||
             vp.y < 0 || vp.y > 1 ||
             vp.z < 0;
+    }
+
+    void EnemyDead()
+    {
+        aliveEnemies--;
     }
 }
