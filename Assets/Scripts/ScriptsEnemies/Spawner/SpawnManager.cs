@@ -42,6 +42,7 @@ public class SpawnManager : MonoBehaviour
         SetLevelData();
         BuildPool();
         Debug.Log("hola si probando, nivel: " + GameManager.Instance.RunNumber + "level spawn: " + currentlevelData.name);
+        TrySpawn();
     }
 
     void Update()
