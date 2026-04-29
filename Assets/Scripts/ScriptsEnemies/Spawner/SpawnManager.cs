@@ -41,7 +41,7 @@ public class SpawnManager : MonoBehaviour
         cam = Camera.main;
         SetLevelData();
         BuildPool();
-        Debug.Log("hola si probando, nivel: " + GameManager.Instance.RunNumber + "level spawn: " + currentlevelData.name);
+        //Debug.Log("hola si probando, nivel: " + GameManager.Instance.RunNumber + "level spawn: " + currentlevelData.name);
         TrySpawn();
     }
 

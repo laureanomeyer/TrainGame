@@ -37,7 +37,7 @@ public class ShopButton : MonoBehaviour
         {
             if (storeManager.ShowPlayerGold() < currentWagonInStock.Price)
             {
-                Debug.Log("No se posee el dinero suficiente");
+                //Debug.Log("No se posee el dinero suficiente");
             }
             else
             {
@@ -48,7 +48,7 @@ public class ShopButton : MonoBehaviour
         }
         else
         {
-            Debug.Log("No hay objetos en Stock");
+            //Debug.Log("No hay objetos en Stock");
         }
     }
 

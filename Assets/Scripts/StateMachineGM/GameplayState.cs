@@ -56,7 +56,7 @@ public class GameplayState: IState
         runduration = 30f;
         currentRun = 0;
 
-        Debug.Log(runduration);
+        //Debug.Log(runduration);
     }
 
     public void Exit() 

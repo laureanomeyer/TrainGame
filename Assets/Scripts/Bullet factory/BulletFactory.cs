@@ -26,7 +26,7 @@ public class BulletFactory : MonoBehaviour
     {
         if (!obstaclesDictionary.TryGetValue(name, out GameObject bullet))
         {
-            Debug.Log("No se encontro la bala indicada");
+            //Debug.Log("No se encontro la bala indicada");
             return null;
         }
 

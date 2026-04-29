@@ -48,7 +48,7 @@ public class ObjectPoolManager : MonoBehaviour
 
         if (pool == null)
         {
-            Debug.LogWarning("quiere liberar obj no pooleado => " + obj.name);
+            //Debug.LogWarning("quiere liberar obj no pooleado => " + obj.name);
         }
         else
         {

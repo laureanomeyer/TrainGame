@@ -77,7 +77,7 @@ public class LocomotiveFuel
     {
         fuelOptimizer = fuelOptimizer + wagonEffect;
         fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
-        Debug.Log(fuelOptimizer);
+        //Debug.Log(fuelOptimizer);
     }
 
     private void UpdateSharedSpeed()
