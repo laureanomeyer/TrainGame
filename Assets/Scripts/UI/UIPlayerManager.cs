@@ -24,6 +24,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private RectTransform trainIcon;
     [SerializeField] private RectTransform startPoint;
     [SerializeField] private RectTransform endPoint;
+    [SerializeField] private TMP_Text currentLevel;
 
     private Color originalColor;
 
@@ -133,6 +134,8 @@ public class UIPlayerManager : MonoBehaviour
         {
             runProgressFill.fillAmount = progress;
         }
+
+        currentLevel.text = new string("Current Level: " + GameManager.Instance.RunNumber);
 
     }
 }

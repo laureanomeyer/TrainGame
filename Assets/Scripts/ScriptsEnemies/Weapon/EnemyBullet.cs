@@ -22,7 +22,6 @@ public class EnemyBullet : MonoBehaviour
         IDamagable component = other.GetComponent<IDamagable>();
         if (component != null) 
         {
-            Debug.Log("Hice daño" + damage);
             component.TakeDamage(damage);
             ObjectPoolManager.ReturnObjectToPool(gameObject);
         }
