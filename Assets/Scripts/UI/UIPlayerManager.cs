@@ -27,12 +27,17 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private RectTransform endPoint;
     [SerializeField] private TMP_Text currentLevel;
 
+    [Header("Interactions")]
+    [SerializeField] private GameObject InteractImage;
+
     private Color originalColor;
 
 
     private void Start()
     {
         UpdateGoldUI(0);
+        InteractImage.SetActive(false);
+
     }
 
     void Update()
@@ -93,11 +98,15 @@ public class UIPlayerManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnGoldBoxChanged += UpdateGoldUI;
+        GameEvents.OnHideInteract += HideInteract;
+        GameEvents.OnShowInteract += ShowInteract;
     }
 
     private void OnDisable()
     {
         GameEvents.OnGoldBoxChanged -= UpdateGoldUI;
+        GameEvents.OnHideInteract -= HideInteract;
+        GameEvents.OnShowInteract -= ShowInteract;
     }
 
 
@@ -122,5 +131,14 @@ public class UIPlayerManager : MonoBehaviour
 
         currentLevel.text = new string("Current Level: " + GameManager.Instance.RunNumber);
 
+    }
+    void ShowInteract()
+    {
+        InteractImage.SetActive(true);
+    }
+
+    void HideInteract()
+    {
+        InteractImage.SetActive(false);
     }
 }

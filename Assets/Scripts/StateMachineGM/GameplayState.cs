@@ -25,7 +25,7 @@ public class GameplayState: IState
         this.baseStats = stats;
         trainData = new TrainData(baseStats);
         playerData = new PlayerData();
-        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        statSystem = new StatSystem(baseStats, trainData);
         runduration = 30;
         currentRun = 0;
     }
@@ -38,7 +38,7 @@ public class GameplayState: IState
     {
         GameEvents.ChangeGold();
         GameEvents.ChangeTrainData();
-        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        statSystem = new StatSystem(baseStats, trainData);
     }
 
     public void GoToRun()
@@ -52,7 +52,7 @@ public class GameplayState: IState
     {
         trainData.ResetValuesToDefault();
         playerData.ResetValuesToDefault();
-        statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        statSystem = new StatSystem(baseStats, trainData);
         runduration = 30f;
         currentRun = 0;
 

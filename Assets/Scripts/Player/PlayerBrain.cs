@@ -10,9 +10,4 @@ public class PlayerBrain : MonoBehaviour
     {
         inventory = new PlayerInventory();
     }
-
-    void Update()
-    {
-
-    }
 }

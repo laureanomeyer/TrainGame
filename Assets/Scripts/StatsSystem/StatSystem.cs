@@ -4,15 +4,15 @@ using System.Collections.Generic;
 public class StatSystem
 {
     private readonly LocomotiveStatsSO baseStats;
-    private readonly TrainStats locoMultipliers;
+    private readonly TrainData trainData;
     private readonly List<StatModifier> modifiers = new();
     
     public event Action<StatType, float> OnStatChanged;
 
-    public StatSystem(LocomotiveStatsSO baseStats, TrainStats locoMultipliers)
+    public StatSystem(LocomotiveStatsSO baseStats, TrainData trainData)
     {
         this.baseStats = baseStats;
-        this.locoMultipliers = locoMultipliers;
+        this.trainData = trainData;
     }
 
     public void AddModifier(StatModifier mod)
@@ -29,21 +29,26 @@ public class StatSystem
 
     public float GetStat(StatType type)
     {
-        float baseValue = GetBase(type) * GetLocoMultiplier(type);
-        float additive = 0f;
-        float multiplicative = 1f;
+        float baseValue = GetBase(type);
+        float locoMultiplier = GetLocoMultiplier(type);
+
+        float additiveSum = 0f;
+        int additiveCount = 0;
 
         foreach (var mod in modifiers)
         {
             if (mod.StatType != type) continue;
-            if (mod.ModifierType == ModifierType.Additive) additive += mod.Value;
-            else if (mod.ModifierType == ModifierType.Multipicaive) multiplicative *= mod.Value;
+            if (mod.ModifierType == ModifierType.Additive)
+            {
+                additiveSum += mod.Value;
+                additiveCount++;
+            }
         }
 
-        return (baseValue + additive) * multiplicative;
+        return baseValue * (locoMultiplier + additiveSum * additiveCount);
     }
 
-    private void RecalculateAll()
+    public void RecalculateAll()
     {
         foreach (StatType type in Enum.GetValues(typeof(StatType)))
             OnStatChanged?.Invoke(type, GetStat(type));
@@ -63,13 +68,13 @@ public class StatSystem
 
     private float GetLocoMultiplier(StatType type) => type switch
     {
-        StatType.MaxHp => locoMultipliers.trainMaxHp,
-        StatType.Defense => locoMultipliers.shields,
-        StatType.GoldMultiplier => locoMultipliers.goldBonus,
-        StatType.DamageMultiplier => locoMultipliers.damageBonus,
-        StatType.AttackSpeed => locoMultipliers.attackSpeed,
-        StatType.FuelOptimizer => locoMultipliers.fuelOptimizer,
-        StatType.Speed => locoMultipliers.baseSpeed,
+        StatType.MaxHp => trainData.LocomotiveStatsMultiplicator.trainMaxHp,
+        StatType.Defense => trainData.LocomotiveStatsMultiplicator.shields,
+        StatType.GoldMultiplier => trainData.LocomotiveStatsMultiplicator.goldBonus,
+        StatType.DamageMultiplier => trainData.LocomotiveStatsMultiplicator.damageBonus,
+        StatType.AttackSpeed => trainData.LocomotiveStatsMultiplicator.attackSpeed,
+        StatType.FuelOptimizer => trainData.LocomotiveStatsMultiplicator.fuelOptimizer,
+        StatType.Speed => trainData.LocomotiveStatsMultiplicator.baseSpeed,
         _ => 1f
     };
 }

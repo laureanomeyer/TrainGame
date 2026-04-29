@@ -20,6 +20,10 @@ public static class GameEvents
 
     public static event Action OnEnemyDeath;
 
+    public static event Action OnShowInteract;
+
+    public static event Action OnHideInteract;
+
     public static void GoldEarned(float amount)
     {
         OnGoldEarned?.Invoke(amount);
@@ -65,4 +69,13 @@ public static class GameEvents
         OnEnemyDeath?.Invoke();
     }
 
+    public static void ShowInteract()
+    {
+        OnShowInteract?.Invoke();
+    }
+
+    public static void HideInteract()
+    {
+        OnHideInteract?.Invoke();
+    }
 }

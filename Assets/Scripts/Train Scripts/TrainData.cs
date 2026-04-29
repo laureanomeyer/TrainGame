@@ -8,7 +8,7 @@ public class TrainData
     private float speed;
 
     private LocomotiveStatsSO baseStats;
-    private TrainStats locomotiveStatsMultiplicator;
+    public TrainStats locomotiveStatsMultiplicator;
 
     private Transform tailPosition;
 
