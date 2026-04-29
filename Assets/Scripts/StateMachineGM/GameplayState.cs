@@ -26,7 +26,7 @@ public class GameplayState: IState
         trainData = new TrainData(baseStats);
         playerData = new PlayerData();
         statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
-        runduration = 10;
+        runduration = 30;
         currentRun = 0;
     }
     public void Tick() 
@@ -44,7 +44,7 @@ public class GameplayState: IState
     public void GoToRun()
     {
         GameEvents.ChangeGold();
-        runduration += 10f;
+        runduration += 15f;
         currentRun += 1;
     }
 
