@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerInteractions : MonoBehaviour
 {
@@ -250,5 +251,15 @@ public class PlayerInteractions : MonoBehaviour
     public void ReloadScene()
     {
         GameManager.Instance.GoToRun();
+    }
+
+    public void OnOpenMainMenu()
+    {
+        OpenMainMenu();
+    }
+
+    public void OpenMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
