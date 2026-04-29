@@ -39,6 +39,8 @@ public class Winchester : MonoBehaviour, IWeapons
     {
         if (isReloading) return;
 
+        if (spawnPoint == null) return;
+
         bulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletScriptable);
         currentAmmunition -= 1;
 

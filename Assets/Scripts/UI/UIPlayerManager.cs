@@ -12,6 +12,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private Image fuelFillImage;
     [SerializeField] private Image fuelMaxCapacityImage;
     [SerializeField] private Image shieldImage;
+    [SerializeField] private Image backgroundImage;
 
     [Header("Inventory UI")]
     [SerializeField] private Image coalImage;
@@ -40,26 +41,8 @@ public class UIPlayerManager : MonoBehaviour
         UpdateLocomotiveUI();
         UpdateInventoryUI();
         UpdateRunProgress();
-        originalColor = Color.darkGreen;
+        originalColor = new Color(0, 0.39215f, 0, 0.7f);
     }
-
- //   void UpdateWagonUI()
- //   {
- //       WagonBrain wagon = playerInteractions.CurrentWagon;
- //
- //       if (wagon != null)
- //       {
- //           wagonHpImage.gameObject.SetActive(true);
- //           WagonHpText.gameObject.SetActive(true);
- //           
- //       }
- //       else
- //       {
- //           wagonHpImage.gameObject.SetActive(false);
- //           wagonHpBackground.gameObject.SetActive(false);
- //           WagonHpText.gameObject.SetActive(false);
- //       }
- //   }
 
     void UpdateLocomotiveUI()
     {
@@ -70,13 +53,15 @@ public class UIPlayerManager : MonoBehaviour
             var currentFill = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
             fuelFillImage.fillAmount = currentFill;
             shieldImage.fillAmount = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
+
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
             fuelMaxCapacityImage.fillAmount = currentCapacity;
+
             if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 4)
             {
-                fuelMaxCapacityImage.color = Color.red;
+                backgroundImage.color = new Color(1, 0, 0, 0.5f);
             }
-            else fuelMaxCapacityImage.color = originalColor;
+            else backgroundImage.color = originalColor;
         }
     }
 
