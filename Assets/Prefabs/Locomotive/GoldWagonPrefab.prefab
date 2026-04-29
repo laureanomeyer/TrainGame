@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 7254593633358160322}
   - component: {fileID: 4638936807773844915}
   m_Layer: 5
-  m_Name: BackgroundWagonHPImage
+  m_Name: WagonHPImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -171,7 +171,7 @@ GameObject:
   - component: {fileID: 6996549752615846649}
   - component: {fileID: 5847718196255309563}
   m_Layer: 5
-  m_Name: WagonHPImage
+  m_Name: WagonHPImageBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -576,7 +576,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7894833677585300043}
   m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 0, z: 4.6}
+  m_LocalPosition: {x: 0, y: 0, z: 4.45}
   m_LocalScale: {x: 0.23100995, y: 0.23101, z: 0.23100995}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -665,9 +665,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WagonHPWorldUI
   wagon: {fileID: 7714708652093589402}
-  wagonHpImage: {fileID: 5847718196255309563}
-  wagonHpBackground: {fileID: 4638936807773844915}
-  wagonHpText: {fileID: 0}
+  wagonHpImage: {fileID: 4638936807773844915}
+  wagonHpBackground: {fileID: 5847718196255309563}
 --- !u!1001 &7255576388497289326
 PrefabInstance:
   m_ObjectHideFlags: 0

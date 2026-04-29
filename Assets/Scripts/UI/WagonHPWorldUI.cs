@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class WagonHPWorldUI : MonoBehaviour
 {
@@ -61,8 +60,13 @@ public class WagonHPWorldUI : MonoBehaviour
         float currentHp = wagon.HPController.CurrentHp;
         float maxHp = wagon.HPController.MaxHp;
 
-        wagonHpImage.fillAmount = currentHp / maxHp;
+        if (maxHp <= 0f)
+        {
+            wagonHpImage.fillAmount = 0f;
+            return;
+        }
 
+        wagonHpImage.fillAmount = Mathf.Clamp01(currentHp / maxHp);
     }
 
     private void SetVisible(bool visible)
