@@ -47,6 +47,6 @@ public class GameManager : MonoBehaviour
     public void ResetGame()
     {
         (currentState as GameplayState)?.ResetGame();
-        SceneManager.LoadScene("LauScene");
+        SceneManager.LoadScene("Shop");
     }
 }
