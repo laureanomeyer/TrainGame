@@ -20,7 +20,6 @@ public class CollectGoldFromWagon : MonoBehaviour
         if (playerRef  != null)
         {
             playerRef.Inventory.GoldAmount += goldBrain.Collector.GiveGold();
-            Debug.Log("Oro in player inventory" + playerRef.Inventory.GoldAmount);
         }
     }
 

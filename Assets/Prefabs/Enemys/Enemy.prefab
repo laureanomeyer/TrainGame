@@ -161,9 +161,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef07c0a67c780c4dbe06b3cd47458fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  data: {fileID: 0}
   weapon: {fileID: 1649670476137331935, guid: 04f493fefd42f214e9785639b7e43a2a, type: 3}
-  CurrentH: 0
+  KnockbackVelocity: {x: 0, y: 0, z: 0}
+  IsKnocked: 0
 --- !u!54 &-3826095390640366561
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -206,7 +206,7 @@ MonoBehaviour:
   rend:
   - {fileID: 1813896501800611726}
   flashMaterial: {fileID: 2100000, guid: 90697fa2e87819b44a64f50217f75c8e, type: 2}
-  flashDuration: 0.5
+  flashDuration: 0.1
 --- !u!1001 &7912619639291199596
 PrefabInstance:
   m_ObjectHideFlags: 0

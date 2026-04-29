@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
         flash = GetComponent<DamageFlash>();
         limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
-
+        flash.SetMaterialArray(data.material);
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log("took: " + damage);
+        //Debug.Log("took: " + damage);
         if (currentHealth > 0)
         {
             flash.Flash();

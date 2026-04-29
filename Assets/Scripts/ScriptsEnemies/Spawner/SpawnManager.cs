@@ -61,7 +61,7 @@ public class SpawnManager : MonoBehaviour
     {
         if (!activeZones.Contains(zone))
         {
-            Debug.Log("zone register");
+           // Debug.Log("zone register");
             activeZones.Add(zone);
         }
             

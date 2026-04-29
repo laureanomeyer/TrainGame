@@ -55,8 +55,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
     {
         hpController.TakeDamage(damageAmount);
 
-        Debug.Log("took " + damageAmount + " damage");
-
         if (hpController.CurrentHp > 0) 
             Flash.Flash();
 
