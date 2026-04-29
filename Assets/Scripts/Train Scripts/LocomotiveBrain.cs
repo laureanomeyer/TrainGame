@@ -58,7 +58,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if(fuelController.CurrentMaxFuel >= 0)
         {
             rendererWagon.material = materialDeVagonDestruido;
-            SceneManager.LoadScene("LauScene");
+            GameManager.Instance.ResetGame();
         }
     }
     private void OnStatChanged(StatType type, float newValue)

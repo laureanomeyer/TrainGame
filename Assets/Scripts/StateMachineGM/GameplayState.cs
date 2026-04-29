@@ -53,6 +53,10 @@ public class GameplayState: IState
         trainData.ResetValuesToDefault();
         playerData.ResetValuesToDefault();
         statSystem = new StatSystem(baseStats, trainData.LocomotiveStatsMultiplicator);
+        runduration = 30f;
+        currentRun = 0;
+
+        Debug.Log(runduration);
     }
 
     public void Exit() 
