@@ -1330,7 +1330,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   level: 0
-  moneyManager: {fileID: 1670977926}
   descriptionTextUI: {fileID: 4923871}
 --- !u!4 &505731351
 Transform:
@@ -2539,7 +2538,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 012eae3dc5363a640a34a1de2df783ca, type: 2}
   thirdSlotWeapons:
   - {fileID: 11400000, guid: 8bfcc7bdf0d3c4a4bb82a74f45990c60, type: 2}
-  moneyManager: {fileID: 1670977926}
 --- !u!1 &775141437
 GameObject:
   m_ObjectHideFlags: 0
@@ -4873,7 +4871,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1670977927}
-  - component: {fileID: 1670977926}
+  - component: {fileID: 1670977928}
   m_Layer: 0
   m_Name: MoneyManager
   m_TagString: Untagged
@@ -4881,19 +4879,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1670977926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1670977925}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5303a3b6d918d443a34d5a846137f87, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  goldDisplay: {fileID: 1793641585}
 --- !u!4 &1670977927
 Transform:
   m_ObjectHideFlags: 0
@@ -4909,6 +4894,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1670977928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670977925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be611fcca8e66614cb438542f5cea33a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StoreManager
+  goldDisplay: {fileID: 1793641585}
 --- !u!1 &1697229563
 GameObject:
   m_ObjectHideFlags: 0

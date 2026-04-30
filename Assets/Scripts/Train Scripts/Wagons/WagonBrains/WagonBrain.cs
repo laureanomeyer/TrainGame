@@ -8,7 +8,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
     protected float defense;
 
     protected WagonHP hpController;
-    protected TrainData dataRef;
     private IWagonID wagonID;
     private DamageFlash Flash;
     private bool broken;
@@ -28,11 +27,12 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public virtual void Start()
     {
-        dataRef = RunManager.Instance.TrainCopyData;
         var statSystem = RunManager.Instance.StatSystem;
         statSystem.OnStatChanged += OnStatChanged;
         Flash = GetComponent<DamageFlash>();
         broken = false;
+        SetUpWagonHP();
+        RegisterModifiers();
     }
 
     public void Update()
@@ -66,6 +66,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     {
         var stats = RunManager.Instance.StatSystem;
         float maxHp = SM * stats.GetStat(StatType.MaxHp);
+        Debug.Log(maxHp);
         float def = RES * stats.GetStat(StatType.Defense);
         hpController = new WagonHP(maxHp, def, Break, canBreak);
     }
@@ -93,7 +94,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
         broken = true;
 
         if (wagonID != null)
-            GameManager.Instance.TrainData.RemoveWagonID(wagonID);
+            GameManager.Instance.Session.TrainData.RemoveWagonID(wagonID);
     }
     public void OnDestroy()
     {

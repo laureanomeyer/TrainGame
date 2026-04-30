@@ -33,22 +33,12 @@ public class ShopButton : MonoBehaviour
 
     public void Interact()
     {
-        if (wagonsInStock.Length > 0)
+        if (wagonsInStock.Length == 0) return;
+        if (storeManager.TryConsumeGold(currentWagonInStock.Price))
         {
-            if (storeManager.ShowPlayerGold() < currentWagonInStock.Price)
-            {
-                //Debug.Log("No se posee el dinero suficiente");
-            }
-            else
-            {
-                storeManager.ConsumeGold(currentWagonInStock.Price);
-                GameManager.Instance.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
-                SetWagonInStock();
-            }
-        }
-        else
-        {
-            //Debug.Log("No hay objetos en Stock");
+            GameManager.Instance.Session.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
+            GameManager.Instance.Session.RebuildStatsSystem();
+            SetWagonInStock();
         }
     }
 

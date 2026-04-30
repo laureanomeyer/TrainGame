@@ -4,49 +4,38 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    [SerializeField] public LocomotiveStatsSO baseStats;
-    private IState currentState;
+    public static GameManager Instance { get; private set; }
+    [SerializeField] private LocomotiveStatsSO baseStats;
+    public GameSession Session { get; private set; }
 
-    public IState CurrentState => currentState;
-    public TrainData TrainData => (currentState as GameplayState)?.TrainData;
-    public PlayerData PlayerData => (currentState as GameplayState)?.PlayerData;
-    public StatSystem StatsSystem => (currentState as GameplayState)?.StatsSystem;
-    public float RunDuration => (currentState as GameplayState).runduration;
-    public int RunNumber => (currentState as GameplayState).CurrentRun;
-
-
-    void Awake()
+    private void Awake()
     {
-        if (Instance != null && Instance != this) 
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            Instance = this;    
-        }
+        Instance = this;
         DontDestroyOnLoad(gameObject);
-        currentState = new GameplayState();
-        currentState.Enter(baseStats);
+        Session = new GameSession(baseStats);
     }
 
     public void GoToStore()
     {
-        (currentState as GameplayState)?.GoToStore();
+        Session.SessionConfig.AdvanceRun();
+        Session.RebuildStatsSystem();
         SceneManager.LoadScene("Shop");
     }
 
     public void GoToRun()
     {
-        (currentState as GameplayState)?.GoToRun();
+        Session.RebuildStatsSystem();
         SceneManager.LoadScene("LauScene");
     }
 
-    public void ResetGame()
+    public void EndSession()
     {
-        (currentState as GameplayState)?.ResetGame();
-        SceneManager.LoadScene("Shop");
+        Session.Reset();
+        SceneManager.LoadScene("MainMenu");
     }
 }

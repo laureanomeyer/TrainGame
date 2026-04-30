@@ -25,7 +25,6 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
 
         if (level > weaponInStock.Length)
         {
-            Debug.Log(weaponInStock[weaponInStock.Length]);
             currentWeapon = weaponInStock[weaponInStock.Length].Weapon;
             currentWeaponprice = weaponInStock[weaponInStock.Length].Price;
         }
@@ -42,14 +41,13 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
 
     private void BuyWeapon()
     {
-        if (buttonManager.ShowPlayerGold() < currentWeaponprice)
+        if (!buttonManager.TryConsumeGold(currentWeaponprice))
         {
             Debug.Log("No se posee el dinero suficiente");
         }
         else
         {
-            buttonManager.ConsumeGold(currentWeaponprice);
-            playerReference.SetWeapon(currentWeapon);
+            GameManager.Instance.Session.PlayerData.ChangeWeaponData(currentWeapon);
             buttonManager.UpdateButtons(this);
         }
        

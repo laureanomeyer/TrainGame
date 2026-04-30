@@ -18,7 +18,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        trainList = RunManager.Instance.TrainCopyData.WagonList;
+        trainList = RunManager.Instance.ActiveWagons;
     }
 
     void Update()

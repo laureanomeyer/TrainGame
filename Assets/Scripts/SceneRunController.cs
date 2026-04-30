@@ -11,7 +11,7 @@ public class SceneRunController : MonoBehaviour
 
     private void Awake()
     {
-        sceneDuration = GameManager.Instance.RunDuration;
+        sceneDuration = GameManager.Instance.Session.SessionConfig.RunDurantion;
         currentTime = sceneDuration;
     }
 

@@ -189,8 +189,6 @@ MonoBehaviour:
   mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
   mapStartLocation: {fileID: 902026377}
   spawnManager: {fileID: 72369571}
-  trainM: {fileID: 0}
-  locoM: {fileID: 0}
 --- !u!114 &72369568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,10 +201,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefbea979dd9e774b8011365f90dc4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainManager
-  tail: {fileID: 0}
-  WagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
-  GoldWagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
-  LocomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  wagonPrefab: {fileID: 0}
+  goldWagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
+  locomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
 --- !u!114 &72369569
 MonoBehaviour:
   m_ObjectHideFlags: 0

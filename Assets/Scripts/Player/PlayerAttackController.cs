@@ -32,13 +32,13 @@ public class PlayerAttackController : MonoBehaviour
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
 
         //Se establece el arma equipada
-        if (GameManager.Instance.PlayerData.CheckWeapon() == false)
+        if (GameManager.Instance.Session.PlayerData.CheckWeapon() == false)
         {
             SetWeapon(weaponItem);
         }
         else
         {
-            SetWeapon(GameManager.Instance.PlayerData.PlayerWeapon);
+            SetWeapon(GameManager.Instance.Session.PlayerData.PlayerWeapon);
         }
 
         waitToFire = weapon.RateOfFire;
@@ -94,7 +94,7 @@ public class PlayerAttackController : MonoBehaviour
     public void SetWeapon(GameObject weaponObtein)
     {
         weaponItem = weaponObtein;
-        GameManager.Instance.PlayerData.ChangeWeaponData(weaponItem);
+        GameManager.Instance.Session.PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.RestockBullets();
         weapon.SetPool(pool);

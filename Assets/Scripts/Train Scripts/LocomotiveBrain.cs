@@ -20,7 +20,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     void Start()
     {
-        dataRef = RunManager.Instance.TrainCopyData;
+        dataRef = GameManager.Instance.Session.TrainData;
         var stats = RunManager.Instance.StatSystem;
 
         fuelController = new LocomotiveFuel(
@@ -58,7 +58,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if(fuelController.CurrentMaxFuel >= 0)
         {
             rendererWagon.material = materialDeVagonDestruido;
-            GameManager.Instance.ResetGame();
+            GameManager.Instance.EndSession();
         }
     }
     private void OnStatChanged(StatType type, float newValue)

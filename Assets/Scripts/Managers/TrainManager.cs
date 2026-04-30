@@ -4,75 +4,45 @@ using UnityEngine;
 
 public class TrainManager : MonoBehaviour
 {
-    [Header("Ending point")]
-    [SerializeField] private Transform tail;
+    [SerializeField] private GameObject wagonPrefab;
+    [SerializeField] private GameObject goldWagonPrefab;
+    [SerializeField] private GameObject locomotivePrefab;
 
-    [Header("Wagons")]
-    [SerializeField] private GameObject WagonPrefab;
-    [SerializeField] private GameObject GoldWagonPrefab;
-
-    [SerializeField] private GameObject LocomotivePrefab;
-
-    private List<GameObject> wagonsCreated = new List<GameObject>();
-    private List<WagonBrain> wagonBrains;
-    private List<IWagon> wagonsList;
-    private List<IBuffer> BufferList; 
-
-    private TrainData trainData;
+    private List<IWagon> wagonsCreated = new();
+    private List<WagonBrain> wagonBrains = new();
+    private Transform tail;
     private WagonMovement lastWagon;
-
-    public TrainData TrainData => trainData;
 
     private void Awake()
     {
-        wagonsList = new List<IWagon>();
-        BufferList = new List<IBuffer>();
-        wagonBrains = new List<WagonBrain>();
-        RunManager.Instance.trainM = this;
-        CreateTrain();
+        BuildTrain();
     }
 
     private void Start()
     {
-        RunManager.Instance.OnTrainReady();
-
+        RunManager.Instance.OnTrainReady(tail, wagonsCreated);
     }
 
-    public void CreateTrain()
+    private void BuildTrain()
     {
         CreateLocomotive();
         CreateWagons();
         CreateGoldWagon();
-        foreach (var brain in wagonBrains)
-        {
-            brain.RegisterModifiers();
-        }
-        foreach (var brain in wagonBrains)
-        {
-            brain.SetUpWagonHP();
-        }
-        RunManager.Instance.TrainCopyData.SetWagonList(wagonsList);
-
     }
 
-    void CreateLocomotive()
+    private void CreateLocomotive()
     {
-        GameObject LocomotiveInstance = Instantiate(LocomotivePrefab);
-        var foo = LocomotiveInstance.GetComponent<LocomotiveBrain>();
-        RunManager.Instance.SetLocoBrain(foo);
-        wagonsList.Add(foo);
-        tail = foo.TailRef;
-        RunManager.Instance.TrainCopyData.SetTrainTail(tail);
-
+        GameObject instance = Instantiate(locomotivePrefab);
+        var brain = instance.GetComponent<LocomotiveBrain>();
+        RunManager.Instance.SetLocoBrain(brain);
+        wagonsCreated.Add(brain);
+        tail = brain.TailRef;
     }
-    public void CreateWagons()
+    private void CreateWagons()
     {
-        foreach (var wagon in GameManager.Instance.TrainData.WagonsIDList)
-        {
-            CreateWagon(wagon.Prefab, wagon);
-        }
+        foreach (var wagonID in GameManager.Instance.Session.TrainData.WagonsIDList)
+            CreateWagon(wagonID.Prefab, wagonID);
     }
-
 
     public void CreateWagon(GameObject wagonToCreate, IWagonID id)
     {
@@ -80,28 +50,26 @@ public class TrainManager : MonoBehaviour
         WagonMovement wagon = wagonInstance.GetComponent<WagonMovement>();
         WagonBrain wagonBrain = wagonInstance.GetComponent<WagonBrain>();
 
-        wagonsList.Add(wagon);
+        wagonsCreated.Add(wagon);
         wagonBrains.Add(wagonBrain);
         wagonBrain.SetWagonID(id);
 
-        AddWagon(tail, wagon);
-        wagonsCreated.Add(wagonInstance);
+        AttachWagon(tail, wagon);
     }
-    public void CreateGoldWagon()
+
+    private void CreateGoldWagon()
     {
-        GameObject WagonInstance = Instantiate(GoldWagonPrefab, tail.position, tail.rotation);
-        WagonMovement wagon = WagonInstance.GetComponent<WagonMovement>();
-        WagonBrain wagonBrain = WagonInstance.GetComponent<WagonBrain>();
-
-        wagonsList.Add(wagon);
-        AddWagon(tail, wagon);
+        GameObject instance = Instantiate(goldWagonPrefab, tail.position, tail.rotation);
+        WagonMovement wagon = instance.GetComponent<WagonMovement>();
+        wagonsCreated.Add(wagon);
+        AttachWagon(tail, wagon);
     }
 
-    void AddWagon(Transform head, WagonMovement wagon) //Inicializa el vagon
+    private void AttachWagon(Transform head, WagonMovement wagon)
     {
         wagon.Initialize(head);
         tail = wagon.Tail;
-        RunManager.Instance.TrainCopyData.SetTrainTail(tail);
+        RunManager.Instance.SetTrainTail(tail);
 
         if (lastWagon)
         {

@@ -49,12 +49,12 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public void ResetState(BulletTypeScriptable type)
     {
-        dataRef = GameManager.Instance.TrainData;
+        dataRef = GameManager.Instance.Session.TrainData;
 
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
         currentLife = bulletType.duration;
-        Damage = bulletType.damage * (GameManager.Instance.StatsSystem.GetStat(StatType.DamageMultiplier));
+        Damage = bulletType.damage * (GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier));
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;

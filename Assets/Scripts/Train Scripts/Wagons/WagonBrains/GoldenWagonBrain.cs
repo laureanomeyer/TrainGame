@@ -10,7 +10,6 @@ public class GoldenWagonBrain : WagonBrain
     public override void Start()
     {
         base.Start();
-        SetUpWagonHP();
         collector = new GoldCollector(hpController);
     }
     public override void Repair(float repairAmount)

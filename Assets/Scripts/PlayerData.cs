@@ -5,8 +5,8 @@ public class PlayerData
     private GameObject playerWeapon;
     public GameObject PlayerWeapon => playerWeapon;
 
-    private float playerGold;
-
+    private float gold = 100;
+    public float Gold => gold;
     public PlayerData() { }
 
     public void ChangeWeaponData(GameObject weapon)
@@ -28,22 +28,26 @@ public class PlayerData
 
     public void AddPlayerGold(float gold)
     {
-        playerGold += gold;
+        this.gold += gold;
     }
 
     public void ChangePlayerGold(float gold)
     {
-        playerGold = gold;
+        this.gold = gold;
     }
 
     public float GivePlayerGold()
     {
-        return playerGold;
+        return this.gold;
+    }
+    public void SpendGold(float amount)
+    {
+        gold = Mathf.Max(0, gold - amount);
     }
 
     public void ResetValuesToDefault()
     {
         playerWeapon = null;
-        playerGold = 0;
+        this.gold = 0;
     }
 }

@@ -23,7 +23,6 @@ public class GatlingWagonBrain : WagonBrain
     public override void Start()
     {
         base.Start();
-        SetUpWagonHP();
 
         bulletPool = new ObjectPool<GameObject>(
             CreateBullet,
