@@ -91,7 +91,7 @@ public class Enemy : MonoBehaviour
     private void Dead()
     {
         GameEvents.GoldEarned(data.gold);
-        GameEvents.EnemyDeath();
+        GameEvents.EnemyDeath(transform.position);
         Destroy(gameObject);
     }
 

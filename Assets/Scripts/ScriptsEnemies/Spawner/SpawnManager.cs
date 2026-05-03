@@ -15,6 +15,10 @@ public class SpawnManager : MonoBehaviour
 
     List<SpawnZone> activeZones = new();
 
+
+    [Header("Coins")]
+    [SerializeField] GameObject coin;
+
     private List<IWagon> trainList = new();
 
     List<EnemyData> spawnPool = new();
@@ -139,8 +143,14 @@ public class SpawnManager : MonoBehaviour
             vp.z < 0;
     }
 
+    void SpawCoin(Vector3 position, Vector3 goTo)
+    {
+        
+    }
+
     void EnemyDead()
     {
+
         aliveEnemies--;
     }
 }

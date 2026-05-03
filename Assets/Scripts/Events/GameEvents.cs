@@ -1,4 +1,6 @@
 using System;
+using System.Numerics;
+using UnityEngine;
 
 public static class GameEvents
 {
@@ -64,7 +66,7 @@ public static class GameEvents
         OnWagonDestroyed?.Invoke();
     }
 
-    public static void EnemyDeath()
+    public static void EnemyDeath(UnityEngine.Vector3 position)
     {
         OnEnemyDeath?.Invoke();
     }
