@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3493918421790633782}
   - component: {fileID: 2769434726012333797}
   - component: {fileID: 3330091335726141192}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: HandleTurret
   m_TagString: ActiveTurret
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7258263255524300021}
   - component: {fileID: 4347391575282356394}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon right wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 5333138794343394051}
   - component: {fileID: 77435903165197984}
   - component: {fileID: 4738617757933681993}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: GatlingWagonPrefab 1
   m_TagString: Train
   m_Icon: {fileID: 0}
@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 4203868130406425663}
   - component: {fileID: 6631120353714038836}
   - component: {fileID: 1888927658686712535}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -440,7 +440,7 @@ GameObject:
   - component: {fileID: 5649733839503865104}
   - component: {fileID: 6327551346482839716}
   - component: {fileID: 3505764703570837597}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Outline
   m_TagString: ActiveTurret
   m_Icon: {fileID: 0}
@@ -528,7 +528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8609027585153321505}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -560,7 +560,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7543737296106539159}
   - component: {fileID: 256112030009827020}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -613,7 +613,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5801940310202737341}
   - component: {fileID: 350560518496160149}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon floor Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -666,7 +666,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3848222974809308152}
   - component: {fileID: 2968443622511949849}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon left wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -721,7 +721,7 @@ GameObject:
   - component: {fileID: 5961150697684954380}
   - component: {fileID: 2570619522877138715}
   - component: {fileID: 1831702054928773244}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -835,7 +835,7 @@ GameObject:
   - component: {fileID: 3104546199094403030}
   - component: {fileID: 4394237567277423358}
   - component: {fileID: 3400165698468305836}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WagonHPImageBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -910,7 +910,7 @@ GameObject:
   - component: {fileID: 9099524132562457122}
   - component: {fileID: 779974550941066295}
   - component: {fileID: 314790721957229845}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WagonHPImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1038,6 +1038,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -4035545753247348911, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -3133498875991405556, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -2859109400176981367, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -1045,6 +1053,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
       propertyPath: m_Name
       value: GenericWagon
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1159,9 +1171,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -2851195749870887970, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
       propertyPath: m_Name
       value: Floor_Wagon
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4820542772251406005, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

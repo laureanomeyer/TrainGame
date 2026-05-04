@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7258263255524300021}
   - component: {fileID: 4347391575282356394}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon right wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,7 +65,7 @@ GameObject:
   - component: {fileID: 7226562531027052806}
   - component: {fileID: 5333138794343394051}
   - component: {fileID: -4448932347158984456}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: WagonPrefab
   m_TagString: Train
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7543737296106539159}
   - component: {fileID: 256112030009827020}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5801940310202737341}
   - component: {fileID: 350560518496160149}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon floor Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -256,7 +256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3848222974809308152}
   - component: {fileID: 2968443622511949849}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon left wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,9 +395,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -2851195749870887970, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
       propertyPath: m_Name
       value: Floor_Wagon
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3466294327263182876, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4820542772251406005, guid: ed56f649af7df204d9f316b6dee4fcca, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

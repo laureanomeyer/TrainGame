@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2382323504992169218}
   - component: {fileID: 1456144774304846669}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon left wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,7 +63,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7969817385539490437}
   - component: {fileID: 7716257316588205280}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon Right wall Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2271434506428919637}
   - component: {fileID: 1082121186097127364}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon floor Hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 3111331724723597689}
   - component: {fileID: 8350884106402261210}
   - component: {fileID: 6105158540899681487}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WagonHPImageBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4277985751475487967}
   - component: {fileID: 1680103861453613623}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wagon back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   - component: {fileID: 620345927188805237}
   - component: {fileID: 4691780657149199846}
   - component: {fileID: 2192088496301068345}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: WagonHPImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +375,7 @@ GameObject:
   - component: {fileID: 8940538580231584044}
   - component: {fileID: 1946738495880434341}
   - component: {fileID: 6961877280868839974}
-  m_Layer: 5
+  m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,6 +552,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
       propertyPath: m_Name
       value: Wagon_East
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d02db9f56b667b64d9f8f37b63062af3, type: 3}
       propertyPath: m_TagString
@@ -752,13 +756,29 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: a49df07d3a8532940bcce26b98abb851, type: 2}
+    - target: {fileID: -4035545753247348911, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -3133498875991405556, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: -2859109400176981367, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: a49df07d3a8532940bcce26b98abb851, type: 2}
+    - target: {fileID: 635547659545568360, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
       propertyPath: m_Name
       value: Vagon_Generico 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2511811754567536238, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
