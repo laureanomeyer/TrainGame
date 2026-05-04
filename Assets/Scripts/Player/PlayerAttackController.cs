@@ -42,6 +42,7 @@ public class PlayerAttackController : MonoBehaviour
         }
 
         waitToFire = weapon.RateOfFire;
+        GameEvents.AmmoChanged(weapon.CurrentAmmunition);
     }
 
     void Update()
@@ -65,6 +66,7 @@ public class PlayerAttackController : MonoBehaviour
 
             weapon.Shoot(spawnPoint);
             GameEvents.ShootPerformed();
+            GameEvents.AmmoChanged(weapon.CurrentAmmunition);
             waitToFire = 0;
         }
     }
@@ -85,6 +87,7 @@ public class PlayerAttackController : MonoBehaviour
                 currentReloadTime = 0;
                 weapon.RestockBullets();
                 weapon.IsReloading = false;
+                GameEvents.AmmoChanged(weapon.CurrentAmmunition);
             }
         }
         
@@ -98,5 +101,6 @@ public class PlayerAttackController : MonoBehaviour
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.RestockBullets();
         weapon.SetPool(pool);
+        GameEvents.AmmoChanged(weapon.CurrentAmmunition);
     }
 }

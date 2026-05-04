@@ -14,6 +14,8 @@ public static class GameEvents
 
     public static event Action OnShoot;
 
+    public static event Action<float> OnAmmoChanged;
+
     public static event Action OnShieldsBroken;
 
     public static event Action OnCoalEmpty;
@@ -49,6 +51,10 @@ public static class GameEvents
     public static void ShootPerformed()
     {
         OnShoot?.Invoke();
+    }
+    public static void AmmoChanged(float currentAmmo)
+    {
+        OnAmmoChanged?.Invoke(currentAmmo);
     }
 
     public static void CoalEmpty()
