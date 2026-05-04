@@ -50,4 +50,5 @@ public class PlayerData
         playerWeapon = null;
         this.gold = 0;
     }
+
 }
