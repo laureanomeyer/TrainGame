@@ -374,7 +374,6 @@ GameObject:
   - component: {fileID: 23805061892145083}
   - component: {fileID: 8940538580231584044}
   - component: {fileID: 1946738495880434341}
-  - component: {fileID: 6961877280868839974}
   m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
@@ -466,21 +465,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6961877280868839974
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9125048333921066773}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1f488bdf589a9340a4748925d918fba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WagonHPWorldUI
-  wagon: {fileID: 8783682575282614284}
-  wagonHpImage: {fileID: 2192088496301068345}
-  wagonHpBackground: {fileID: 6105158540899681487}
 --- !u!1001 &2869363281390905482
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -641,6 +625,8 @@ MonoBehaviour:
   canBreak: 1
   SM: 10
   RES: 1
+  hpImage: {fileID: 2192088496301068345}
+  hpBackgroundImage: {fileID: 6105158540899681487}
   hpBonus: 0.1
 --- !u!65 &8770853818642890087
 BoxCollider:

@@ -53,8 +53,17 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (other.CompareTag("Train"))
         {
-            other.TryGetComponent(out WagonBrain wagon);
-            currentWagon = wagon;
+            WagonBrain wagon = other.GetComponentInParent<WagonBrain>();
+
+            if(wagon != null)
+            {
+                if (currentWagon != null)
+                {
+                    currentWagon.HideHpBar();
+                }
+                currentWagon = wagon;
+                currentWagon.ShowHpBar();
+            }
         }
 
         if (other.CompareTag("ShopButton"))
@@ -97,8 +106,11 @@ public class PlayerInteractions : MonoBehaviour
         {
             if (other.TryGetComponent(out WagonBrain wagon) && wagon == currentWagon)
             {
+                currentWagon.HideHpBar();
                 currentWagon = null;
             }
+
+            
         }
 
         if (other.CompareTag("ShopButton"))

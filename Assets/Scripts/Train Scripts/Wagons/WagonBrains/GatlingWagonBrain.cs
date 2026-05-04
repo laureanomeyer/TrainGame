@@ -37,10 +37,8 @@ public class GatlingWagonBrain : WagonBrain
         WarmUp(defaultCapacity);
     }
 
-    public new void Update()
+    public void Update()
     {
-        base.Update();
-
         if (cooldownTimer > 0f)
         {
             cooldownTimer -= Time.deltaTime;

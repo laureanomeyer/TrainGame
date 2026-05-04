@@ -1,84 +1,42 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.UI;
 
-public class WagonHPWorldUI : MonoBehaviour
+public class WagonHPWorldUI
 {
-    [Header("References")]
-    [SerializeField] private WagonBrain wagon;
+    private Image hpImage;
+    private Image hpBackgroundImage;
 
-    private PlayerInteractions playerInteractions;
-
-    [Header("UI")]
-    [SerializeField] private Image wagonHpImage;
-    [SerializeField] private Image wagonHpBackground;
-
-    private Camera cam;
-
-    private void Awake()
+    public WagonHPWorldUI(Image hpImage, Image hpBackgroundImage)
     {
-        cam = Camera.main;
-
-        if (wagon == null)
-        {
-            wagon = GetComponentInParent<WagonBrain>();
-        }
-
-        playerInteractions = FindFirstObjectByType<PlayerInteractions>();
-
+        this.hpImage = hpImage;
+        this.hpBackgroundImage = hpBackgroundImage;
         SetVisible(false);
     }
 
-    private void Update()
+
+    public void UpdateHp(float currentHp, float maxHp)
     {
-        if (wagon == null || playerInteractions == null || wagon.HPController == null)
+        if (hpImage == null) return;
+
+        if (maxHp <= 0)
         {
-            SetVisible(false);
+            hpImage.fillAmount = 0;
             return;
         }
 
-        bool isCurrentWagon = playerInteractions.CurrentWagon == wagon;
-
-        if (!isCurrentWagon)
-        {
-            SetVisible(false);
-            return;
-        }
-
-        SetVisible(true);
-        UpdateHpBar();
+        hpImage.fillAmount = Mathf.Clamp01(currentHp / maxHp);
     }
 
-    private void LateUpdate()
+    public void SetVisible(bool isVisible)
     {
-        if (cam == null) return;
-
-        transform.forward = cam.transform.forward;
-    }
-
-    private void UpdateHpBar()
-    {
-        float currentHp = wagon.HPController.CurrentHp;
-        float maxHp = wagon.HPController.MaxHp;
-
-        if (maxHp <= 0f)
+        if (hpImage != null)
         {
-            wagonHpImage.fillAmount = 0f;
-            return;
+            hpImage.gameObject.SetActive(isVisible);
         }
-
-        wagonHpImage.fillAmount = Mathf.Clamp01(currentHp / maxHp);
-    }
-
-    private void SetVisible(bool visible)
-    {
-        if (wagonHpImage != null)
+        if (hpBackgroundImage != null)
         {
-            wagonHpImage.gameObject.SetActive(visible);
-        }
-
-        if (wagonHpBackground != null)
-        {
-            wagonHpBackground.gameObject.SetActive(visible);
+            hpBackgroundImage.gameObject.SetActive(isVisible);
         }
     }
 }

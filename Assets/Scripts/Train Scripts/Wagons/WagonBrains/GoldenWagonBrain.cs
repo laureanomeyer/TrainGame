@@ -21,5 +21,10 @@ public class GoldenWagonBrain : WagonBrain
         }
 
         hpController.ReapirGoldenWagon(Time.deltaTime, repairAmount);
+
+        if (hpWorldUI != null)
+        {
+            hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
+        }
     }
 }

@@ -35,13 +35,13 @@ public class WagonHP : IDamagable
         }
 
     }
-    public void Repair(float deltaTime, float repairAmount) 
+    public void Repair(float repairAmount) 
     {
-        if (!IsBroken)
-        {
-            currentHp += repairAmount * deltaTime;
-            currentHp = Mathf.Clamp(currentHp, 0, maxHp);
-        }
+        if(currentHp <= 0) return;
+
+        currentHp += repairAmount;
+        currentHp = Mathf.Clamp(currentHp, 0, maxHp);
+
     }
     public void ReapirGoldenWagon(float deltaTime, float repairAmount)
     {

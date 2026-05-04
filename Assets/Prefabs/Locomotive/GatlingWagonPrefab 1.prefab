@@ -288,6 +288,8 @@ MonoBehaviour:
   canBreak: 1
   SM: 10
   RES: 1
+  hpImage: {fileID: 314790721957229845}
+  hpBackgroundImage: {fileID: 3400165698468305836}
   firePoint: {fileID: 8609027585153321505}
   bulletPrefab: {fileID: 751579678887233810, guid: 9f332b99415d4b847afb7d34c4590ec0, type: 3}
   bulletType: {fileID: 11400000, guid: adfbda553c051ca4bbc5043d5628da4a, type: 2}
@@ -322,7 +324,6 @@ GameObject:
   - component: {fileID: 4604944370089395268}
   - component: {fileID: 4203868130406425663}
   - component: {fileID: 6631120353714038836}
-  - component: {fileID: 1888927658686712535}
   m_Layer: 3
   m_Name: Canvas
   m_TagString: Untagged
@@ -414,21 +415,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1888927658686712535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4091107846788577344}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1f488bdf589a9340a4748925d918fba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WagonHPWorldUI
-  wagon: {fileID: 77435903165197984}
-  wagonHpImage: {fileID: 314790721957229845}
-  wagonHpBackground: {fileID: 3400165698468305836}
 --- !u!1 &4347970043918677567
 GameObject:
   m_ObjectHideFlags: 0
