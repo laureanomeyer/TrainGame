@@ -445,6 +445,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 153.239, y: 0.52697897, z: 150}
   m_Center: {x: -12.758405, y: -0.23651156, z: -1.2037936e-13}
+--- !u!1 &229577584
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 229577585}
+  m_Layer: 0
+  m_Name: SpawnWagon_1 (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &229577585
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229577584}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -26.62, y: 1.9341, z: -35.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &231933483
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,6 +1141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
   descriptionText: .
   wagonsInStock: []
+  spawnWagonPoint: {fileID: 763366212}
   storeManager: {fileID: 505731350}
 --- !u!65 &464905827
 BoxCollider:
@@ -2446,6 +2478,37 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 012eae3dc5363a640a34a1de2df783ca, type: 2}
   thirdSlotWeapons:
   - {fileID: 11400000, guid: 8bfcc7bdf0d3c4a4bb82a74f45990c60, type: 2}
+--- !u!1 &763366211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 763366212}
+  m_Layer: 0
+  m_Name: SpawnWagon_1 (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &763366212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763366211}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -26.62, y: 1.9341, z: -23.92}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &775141437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2594,6 +2657,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eca4772a8c0c5fe47b79d30a891736b0, type: 2}
   - {fileID: 11400000, guid: 13756da67bf6f34488262dfd59734305, type: 2}
   - {fileID: 11400000, guid: 2bda8e7a182aee1458f2d3054110342f, type: 2}
+  spawnWagonPoint: {fileID: 1903150045}
   storeManager: {fileID: 505731350}
 --- !u!65 &800090912
 BoxCollider:
@@ -3339,6 +3403,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948594216}
   m_CullTransparentMesh: 1
+--- !u!1 &964455715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 964455716}
+  m_Layer: 0
+  m_Name: SpawnWagon_1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &964455716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964455715}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -26.62, y: 1.9341, z: 1.22}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1003557550
 GameObject:
   m_ObjectHideFlags: 0
@@ -4765,6 +4860,7 @@ MonoBehaviour:
   descriptionText: .
   wagonsInStock:
   - {fileID: 11400000, guid: 98eacd1c34655eb418ba7e1afb6df679, type: 2}
+  spawnWagonPoint: {fileID: 229577585}
   storeManager: {fileID: 505731350}
 --- !u!65 &1465251338
 BoxCollider:
@@ -5524,6 +5620,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1865815514}
   m_CullTransparentMesh: 1
+--- !u!1 &1903150044
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1903150045}
+  m_Layer: 0
+  m_Name: SpawnWagon_1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1903150045
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903150044}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: -26.62, y: 1.9341, z: -11.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1954991136
 GameObject:
   m_ObjectHideFlags: 0
@@ -5869,23 +5996,39 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Size.x
-      value: 2.881864
+      value: 19.3914
       objectReference: {fileID: 0}
     - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Size.y
-      value: 0.9999997
+      value: 2.3764443
       objectReference: {fileID: 0}
     - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Size.z
-      value: 0.6500355
+      value: 4.2835727
       objectReference: {fileID: 0}
     - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Center.x
-      value: 0.025595125
+      value: 0.38337326
+      objectReference: {fileID: 0}
+    - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: m_Center.y
+      value: -0.68822217
       objectReference: {fileID: 0}
     - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Center.z
-      value: -0.022204887
+      value: -1.4703734
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5932,6 +6075,10 @@ PrefabInstance:
       value: Press F to buy Wagon,  press O to Restart
       objectReference: {fileID: 0}
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: spawnWagon
+      value: 
+      objectReference: {fileID: 919132149155446097, guid: 95eb67d61ee78064cb73bc3eef69df19, type: 3}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: wagonPrefab
       value: 
       objectReference: {fileID: 3103947036141524443, guid: 108db729cb17c1b46857361b2f614244, type: 3}
@@ -5947,6 +6094,10 @@ PrefabInstance:
       propertyPath: descriptionText
       value: .
       objectReference: {fileID: 0}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: spawnWagonPoint
+      value: 
+      objectReference: {fileID: 964455716}
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: wagonsInStock.Array.size
       value: 2
@@ -6001,4 +6152,11 @@ SceneRoots:
   - {fileID: 571390109}
   - {fileID: 1003557551}
   - {fileID: 1275331039}
+<<<<<<< Updated upstream
   - {fileID: 2921894974563880597}
+=======
+  - {fileID: 964455716}
+  - {fileID: 1903150045}
+  - {fileID: 763366212}
+  - {fileID: 229577585}
+>>>>>>> Stashed changes

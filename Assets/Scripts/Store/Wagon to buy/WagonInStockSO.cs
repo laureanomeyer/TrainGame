@@ -16,4 +16,7 @@ public class WagonInStockSO : ScriptableObject
     [Header("Description")]
     [SerializeField] private string description;
     public string Description => description;
+
+    [Header("Shop Model")]
+    [SerializeField] public GameObject shopModel;
 }

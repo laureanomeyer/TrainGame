@@ -10,6 +10,10 @@ public class ShopButton : MonoBehaviour
     private WagonInStockSO currentWagonInStock;
     public WagonInStockSO CurrentWagonInStock => currentWagonInStock;
 
+    [SerializeField] private Transform spawnWagonPoint;
+
+    private GameObject modelReference;
+
     public string DescriptionText => descriptionText;
 
     [SerializeField] private WagonStoreManager storeManager;
@@ -38,6 +42,7 @@ public class ShopButton : MonoBehaviour
         {
             GameManager.Instance.Session.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
             GameManager.Instance.Session.RebuildStatsSystem();
+            Destroy(modelReference);
             SetWagonInStock();
         }
     }
@@ -47,6 +52,8 @@ public class ShopButton : MonoBehaviour
         currentWagonInStock = SelectRandomWagon();
         descriptionText = (currentWagonInStock.Name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
         textUI.text = descriptionText;
+
+        modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
 
     private WagonInStockSO SelectRandomWagon()
