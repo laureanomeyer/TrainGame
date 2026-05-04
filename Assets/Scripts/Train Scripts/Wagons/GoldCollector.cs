@@ -1,6 +1,3 @@
-
-using System.Diagnostics;
-
 public class GoldCollector
 {
     private WagonHP wagonHP;
@@ -19,7 +16,7 @@ public class GoldCollector
     {
         if (wagonHP.CurrentHp > 0)
         {
-            gold += amount * RunManager.Instance.TrainCopyData.LocomotiveStatsMultiplicator.goldBonus;
+            gold += amount * GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier);
         }
         else
         {

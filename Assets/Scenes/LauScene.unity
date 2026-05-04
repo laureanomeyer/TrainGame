@@ -189,8 +189,6 @@ MonoBehaviour:
   mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
   mapStartLocation: {fileID: 902026377}
   spawnManager: {fileID: 72369571}
-  trainM: {fileID: 0}
-  locoM: {fileID: 0}
 --- !u!114 &72369568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,10 +201,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefbea979dd9e774b8011365f90dc4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainManager
-  tail: {fileID: 0}
-  WagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
-  GoldWagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
-  LocomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  wagonPrefab: {fileID: 0}
+  goldWagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
+  locomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
 --- !u!114 &72369569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2232,13 +2229,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraShakes
   shootTimer: 0.1
-  shootIntensity: 1
-  shieldsTimer: 0.1
-  shieldsIntensity: 1
+  shootIntensity: 0.5
+  shieldsTimer: 0.3
+  shieldsIntensity: 3
   coalTimer: 0.1
   coalIntensity: 1
-  wagonTimer: 0.1
-  wagonIntensity: 1
+  wagonTimer: 0.2
+  wagonIntensity: 2
 --- !u!1 &1786806781
 GameObject:
   m_ObjectHideFlags: 0
@@ -2466,8 +2463,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -818.8999, y: 498.10004}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -788.70514, y: 498.21445}
+  m_SizeDelta: {x: 260.3895, y: 49.7712}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2083077568
 GameObject:

@@ -16,9 +16,9 @@ public class MapManager : MonoBehaviour
     {
         this.startLocation = startLocation;
 
-        endLocation = RunManager.Instance.TrainCopyData.TailPosition;
+        endLocation = RunManager.Instance.TrainTail;
 
-        for (int i = 0; i < RunManager.Instance.TrainCopyData.WagonList.Count + 5; i++)
+        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count + 5; i++)
         {
             GenerateMap();
         }
@@ -45,7 +45,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (MapTile tile in tilesMap) 
         {
-            tile.MoveHead(endLocation, RunManager.Instance.TrainCopyData.Speed);
+            tile.MoveHead(endLocation, RunManager.Instance.TrainSpeed);
             tile.Move();
         }
     }
@@ -68,15 +68,15 @@ public class MapManager : MonoBehaviour
     {
         Vector3 spawnPosition;
         if (tilesMap.Count == 0)
-            spawnPosition = new Vector3 (RunManager.Instance.TrainCopyData.TailPosition.position.x - 250, 0, 0);
+            spawnPosition = new Vector3 (RunManager.Instance.TrainTail.position.x - 250, 0, 0);
         else
         {
             MapTile last = tilesMap[tilesMap.Count - 1];
             spawnPosition = tilesMap[tilesMap.Count - 1].Tail.position;
         }
 
-        Vector3 direction = (RunManager.Instance.TrainCopyData.TailPosition.position -
-                     RunManager.Instance.TrainCopyData.TailPosition.position).normalized;
+        Vector3 direction = (RunManager.Instance.TrainTail.position -
+                     RunManager.Instance.TrainTail.position).normalized;
         Quaternion rotation = Quaternion.LookRotation(direction);
         rotation = new Quaternion(0, 1, 0, 1f);
         

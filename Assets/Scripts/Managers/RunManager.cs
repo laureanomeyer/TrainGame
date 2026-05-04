@@ -4,48 +4,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [DefaultExecutionOrder(-99)]
 public class RunManager : MonoBehaviour
 {
     public static RunManager Instance;
+
     [SerializeField] private GameObject mapManagerPrefab;
     [SerializeField] private Transform mapStartLocation;
     [SerializeField] private SpawnManager spawnManager;
-    private LocomotiveBrain locomotiveBrain;
-    private MapManager mapManager;
-    public TrainManager trainM;
-    public LocomotiveBrain locoM;
-    private StatSystem statSystem;
-    private TrainData trainCopyData;
 
-    public TrainData TrainCopyData => trainCopyData;
-    public SpawnManager SpawnManager => spawnManager;
+    private MapManager mapManager;
+    private LocomotiveBrain locomotiveBrain;
+    private StatSystem statSystem;
+
+    private List<IWagon> activeWagons = new();
+    private Transform trainTail;
+    private float speed;
+
+    public Transform TrainTail => trainTail;
+    public float TrainSpeed => speed;
+    public List<IWagon> ActiveWagons => activeWagons;
     public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
     public StatSystem StatSystem => statSystem;
-    void Awake()
+    public SpawnManager SpawnManager => spawnManager;
+
+    private void Awake()
     {
-        if (Instance != null && Instance != this)
+        #region Singleton
+        if (Instance != null && Instance != this) 
         {
             Destroy(gameObject);
             return;
         }
-        else
-        {
-            Instance = this;
-        }
-        trainCopyData = GameManager.Instance.TrainData;
-        statSystem = GameManager.Instance.StatsSystem;
+        Instance = this;
+        #endregion
+
+        statSystem = GameManager.Instance.Session.StatSystem;
+        speed = statSystem.GetStat(StatType.Speed);
     }
-    public void OnTrainReady()
+
+    public void OnTrainReady(Transform tail, List<IWagon> wagons)
     {
-        GameObject obj = Instantiate(mapManagerPrefab, TrainCopyData.TailPosition.position, TrainCopyData.TailPosition.rotation);
+        trainTail = tail;
+        activeWagons = wagons;
+
+        GameObject obj = Instantiate(mapManagerPrefab, tail.position, tail.rotation);
         mapManager = obj.GetComponent<MapManager>();
         mapManager.Initialize(mapStartLocation);
     }
-    public void SetLocoBrain(LocomotiveBrain locomotion)
+    public void SetLocoBrain(LocomotiveBrain brain)
     {
-        this.locomotiveBrain = locomotion;
+        locomotiveBrain = brain;
+    }
+
+    public void SetTrainTail(Transform tail)
+    {
+        trainTail = tail;
+    }
+
+    public void SetTrainSpeed(float speed)
+    {
+        this.speed = speed;
+    }
+
+    public void OnWagonDestroyed(IWagonID wagon)
+    {
+        GameManager.Instance.Session.TrainData.RemoveWagonID(wagon);
+        GameManager.Instance.Session.RebuildStatsSystem();
+        statSystem = GameManager.Instance.Session.StatSystem;
+    }
+    public void OnRunFinished()
+    {
+        GameManager.Instance.GoToStore();
     }
 }
 

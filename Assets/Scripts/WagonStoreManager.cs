@@ -7,23 +7,14 @@ public class WagonStoreManager : MonoBehaviour
     [SerializeField] private int level;
     public int Level => level;
 
-    [Header("MoneyManager reference")]
-    [SerializeField] private MoneyManager moneyManager;
-
     [SerializeField] public TextMeshProUGUI descriptionTextUI;
 
-    public void ConsumeGold(float amount)
+    public bool TryConsumeGold(float amount)
     {
-        moneyManager.ConsumePlayerGold(amount);
+        return StoreManager.Instance.TrySpendGold(amount);
     }
-
-    public float ShowPlayerGold()
+    public float GetPlayerGold()
     {
-        return moneyManager.ShowPlayerGold();
-    }
-
-    public float ShowGold()
-    {
-        return moneyManager.PlayerMoney;
+        return StoreManager.Instance.GetGold();
     }
 }

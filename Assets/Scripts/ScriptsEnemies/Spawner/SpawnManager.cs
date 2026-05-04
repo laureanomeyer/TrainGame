@@ -41,7 +41,7 @@ public class SpawnManager : MonoBehaviour
 
     public void Start()
     {
-        trainList = RunManager.Instance.TrainCopyData.WagonList;
+        trainList = RunManager.Instance.ActiveWagons;
         cam = Camera.main;
         SetLevelData();
         BuildPool();
@@ -122,7 +122,7 @@ public class SpawnManager : MonoBehaviour
 
     void SetLevelData()
     {
-        int index = GameManager.Instance.RunNumber;
+        int index = GameManager.Instance.Session.SessionConfig.CurrentLevel;
 
         if (index > levelList.Count-1)
             currentlevelData = levelList.Last();

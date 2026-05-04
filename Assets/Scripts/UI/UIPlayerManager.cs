@@ -113,7 +113,7 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateGoldUI(float currentGold)
     {
-            goldText.text = "Gold: " + currentGold; 
+            goldText.text = "Oro actual: " + currentGold; 
     }
 
     void UpdateRunProgress()
@@ -129,7 +129,7 @@ public class UIPlayerManager : MonoBehaviour
             runProgressFill.fillAmount = progress;
         }
 
-        currentLevel.text = new string("Current Level: " + GameManager.Instance.RunNumber);
+        currentLevel.text = new string("Nivel actual: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
 
     }
     void ShowInteract()

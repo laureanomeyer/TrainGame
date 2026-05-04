@@ -17,9 +17,6 @@ public class WeaponShopButtonManager : MonoBehaviour
     [SerializeField] public WeaponInStocSO[] secondSlotWeapons;
     [SerializeField] public WeaponInStocSO[] thirdSlotWeapons;
 
-    [Header("MoneyManager reference")]
-    [SerializeField] private MoneyManager moneyManager;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,7 +36,6 @@ public class WeaponShopButtonManager : MonoBehaviour
             button.PlayerReference = playerAtk;
             button.ButtonManager = this;
             button.Level = level;
-
             button.SetValuesInStock();
        }
     }
@@ -59,13 +55,13 @@ public class WeaponShopButtonManager : MonoBehaviour
         }
     }
 
-    public void ConsumeGold(float amount)
+    public bool TryConsumeGold(float amount)
     {
-       moneyManager.ConsumePlayerGold(amount);
+        return StoreManager.Instance.TrySpendGold(amount);
     }
 
     public float ShowPlayerGold()
     {
-        return moneyManager.ShowPlayerGold();
+        return StoreManager.Instance.GetGold();
     }
 }

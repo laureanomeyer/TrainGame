@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using UnityEngine;
-using System.Text;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
-
 
 public class GoldBox : IInteractable
 {
@@ -15,7 +9,6 @@ public class GoldBox : IInteractable
     public GoldBox()
     {
         currentGold = 0;
-        GameEvents.OnChangeGold += ChangeGoldInData;
     }
 
     public void Interact(IInventory playerRef) 
@@ -27,13 +20,15 @@ public class GoldBox : IInteractable
     {
         currentGold += amount;
         GameEvents.GoldBoxChanged(currentGold);
+        ChangeGoldInData(amount);
     }
 
-    public void ChangeGoldInData()
+    public void ChangeGoldInData(float amount)
     {
-        GameManager.Instance.PlayerData.AddPlayerGold(currentGold);
+        Debug.Log("GoldChange");
+        GameManager.Instance.Session.PlayerData.AddPlayerGold(amount);
     }
 
-    public void OnDestroyObject() => GameEvents.OnChangeGold -= ChangeGoldInData;
+    public void OnDestroyObject() { }
 }
 

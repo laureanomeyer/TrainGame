@@ -26,7 +26,7 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log(GameManager.Instance.TrainData.locomotiveStatsMultiplicator.trainMaxHp);
+        Debug.Log(GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator.trainMaxHp);
         button = GetComponent<Button>();
 
         upgrades = new TrainStats(maxHp, defense, goldMultyplier, damageMultyplier, attackSpeed, 0, 0);
@@ -42,8 +42,8 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
 
     public virtual void adquiere()
     {
-        GameManager.Instance.TrainData.locomotiveStatsMultiplicator += upgrades;
-        Debug.Log(GameManager.Instance.TrainData.locomotiveStatsMultiplicator.trainMaxHp);
+        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += upgrades;
+        Debug.Log(GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator.trainMaxHp);
     }
 
     public void DeactivateButton()
