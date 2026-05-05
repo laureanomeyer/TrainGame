@@ -7,13 +7,14 @@ public class GoldenWagonBrain : WagonBrain
     public GoldCollector Collector => collector;
 
     [SerializeField] private TextMeshProUGUI currentGoldUI;
-
+    [SerializeField] private Transform goldBox;
     [SerializeField] private Material baseWagonMaterial;
 
     public override void Start()
     {
         base.Start();
         collector = new GoldCollector(hpController, currentGoldUI);
+        GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
     }
     public override void Repair(float repairAmount)
     {
