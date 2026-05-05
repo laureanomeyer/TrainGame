@@ -1,4 +1,7 @@
+using System.Threading;
+using System.Threading.Tasks;
 using TMPro;
+using UnityEngine;
 
 public class GoldCollector
 {
@@ -9,13 +12,26 @@ public class GoldCollector
 
     private TextMeshProUGUI goldDisplayUI;
 
+    private float originalFontSize;
+    private float maxFontSize = 16f;
+
+    private float duration = 0.3f;
+
+    private CancellationTokenSource cts;
+
     public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI)
     {
         wagonHP = hpController;
         goldDisplayUI = CurrentGoldUI;
+        originalFontSize = goldDisplayUI.fontSize;
         GameEvents.OnGoldEarned += CollectGold;
     }
-    void OnDestroy() => GameEvents.OnGoldEarned -= CollectGold;
+    void OnDestroy()
+    {
+        GameEvents.OnGoldEarned -= CollectGold;
+        cts?.Cancel();
+        cts?.Dispose();
+    }
 
     public void CollectGold(float amount)
     {
@@ -23,6 +39,7 @@ public class GoldCollector
         {
             gold += amount * GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier);
             goldDisplayUI.text = "$" + gold;
+            PlayScaleEffect();
         }
         else
         {
@@ -49,5 +66,39 @@ public class GoldCollector
     {
         gold = 0;
         goldDisplayUI.text = string.Empty;
+    }
+
+    private async void PlayScaleEffect()
+    {
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
+        var token = cts.Token;
+
+        try
+        {
+            await AnimateFontSize(originalFontSize, maxFontSize, duration, token);
+            await AnimateFontSize(maxFontSize, originalFontSize, duration, token);
+        }
+        catch (TaskCanceledException) { }
+    }
+
+    private async Task AnimateFontSize(float from, float to, float dur, CancellationToken token)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < dur)
+        {
+            token.ThrowIfCancellationRequested();
+
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / dur);
+            t = t * t * (3f - 2f * t);
+
+            goldDisplayUI.fontSize = Mathf.Lerp(from, to, t);
+
+            await Task.Yield();
+        }
+
+        goldDisplayUI.fontSize = to;
     }
 }

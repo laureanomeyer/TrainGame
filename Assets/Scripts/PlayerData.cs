@@ -5,7 +5,7 @@ public class PlayerData
     private GameObject playerWeapon;
     public GameObject PlayerWeapon => playerWeapon;
 
-    private float gold = 100;
+    private float gold = 0;
     public float Gold => gold;
     public PlayerData() { }
 
