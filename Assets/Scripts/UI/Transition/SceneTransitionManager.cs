@@ -12,6 +12,7 @@ public class SceneTransitionManager : MonoBehaviour
     [Header("Transition Settings")]
     [SerializeField] private Image fadeImage;
     [SerializeField] private TMP_Text stationText;
+    [SerializeField] private Canvas canvas;
 
     [Header("Settings")]
     [SerializeField] private float fadeDuration = 1f;
@@ -32,6 +33,8 @@ public class SceneTransitionManager : MonoBehaviour
         SetFadeAlpha(0f);
         SetTextAlpha(0f);
 
+        canvas.sortingOrder = -1;
+
     }
 
     public void TransitionToScene(string sceneName, string stationName)
@@ -43,6 +46,8 @@ public class SceneTransitionManager : MonoBehaviour
 
     private IEnumerator TransitionCoroutine(string sceneName, string stationName)
     {
+        canvas.sortingOrder = 100;
+
         isTransitioning = true;
 
         stationText.text = stationName;
@@ -60,12 +65,15 @@ public class SceneTransitionManager : MonoBehaviour
 
         yield return FadeImage(1f,0f);
 
+        canvas.sortingOrder = -1;
+
         isTransitioning = false;
 
         if (GameManager.Instance != null)
         {
             GameManager.Instance.FinishSceneChange();
         }
+
 
     }
 

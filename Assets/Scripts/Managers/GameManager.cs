@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VectorGraphics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,10 +35,12 @@ public class GameManager : MonoBehaviour
 
         int currentLevel = Session.SessionConfig.CurrentLevel;
 
+        
         SceneTransitionManager.Instance.TransitionToScene(
             "Shop",
             "Llegando a Estacion " + currentLevel
             );
+        
     }
 
     public void GoToRun()
@@ -49,10 +52,12 @@ public class GameManager : MonoBehaviour
 
         int currentLevel = Session.SessionConfig.CurrentLevel;
 
+        
         SceneTransitionManager.Instance.TransitionToScene(
             "LauScene",
             "Partiendo viaje " + currentLevel
             );
+        
     }
 
     public void EndSession()

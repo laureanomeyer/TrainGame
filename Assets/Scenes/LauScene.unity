@@ -977,7 +977,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!224 &491946923
 RectTransform:
@@ -1267,10 +1267,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4512888872558207603, guid: 656f44bbd0b42344691411f6d7923694, type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 498928608}
     - target: {fileID: 5538424874332405473, guid: 656f44bbd0b42344691411f6d7923694, type: 3}
       propertyPath: m_Name
       value: AmmoCanvas
@@ -1539,6 +1535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionManager
   fadeImage: {fileID: 379350066}
   stationText: {fileID: 1960431168}
+  canvas: {fileID: 544874062}
   fadeDuration: 1
   textFadeDuration: 1.5
   isTransitioning: 0
