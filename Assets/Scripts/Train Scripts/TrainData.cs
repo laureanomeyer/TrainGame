@@ -11,6 +11,7 @@ public class TrainData
     public TrainStats locomotiveStatsMultiplicator;
 
     private Transform tailPosition;
+    private Transform goldBoxPosition;
 
     private List<IWagon> wagonsList = new();
     private List<IWagonID> wagonsIDList = new();
@@ -19,6 +20,7 @@ public class TrainData
     public List<IWagon> WagonList => wagonsList;
     public List<IWagonID> WagonsIDList => wagonsIDList; 
     public Transform TailPosition => tailPosition;
+    public Transform GoldBoxPosition => goldBoxPosition;
     public float Speed => speed;
 
     public TrainData(LocomotiveStatsSO stats)
@@ -44,18 +46,18 @@ public class TrainData
     {
         tailPosition = tail;
     }
+    public void SetGoldBox(Transform position)
+    {
+        goldBoxPosition = position;
+    }
     public void SetWagonList(List<IWagon> wagonList)
     {
         this.wagonsList = wagonList;
     }
-
-
     public void ResetValuesToDefault()
     {
         wagonsIDList = new List<IWagonID>();
     }
-
-
     public void ChangedWagonIDList(List<IWagonID> wagonIDs)
     {
         wagonsIDList = wagonIDs;

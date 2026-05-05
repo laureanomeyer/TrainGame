@@ -20,7 +20,7 @@ public class Coin : MonoBehaviour
     {
         if (target == null) return;
         transform.position = Vector3.Lerp(transform.position,target.position, speed * Time.deltaTime);
-        if(transform.position == target.position )
+        if((transform.position - target.position).magnitude < 1)
         {
             Destroy(gameObject);
         }

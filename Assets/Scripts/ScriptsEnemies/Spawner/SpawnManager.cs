@@ -19,6 +19,7 @@ public class SpawnManager : MonoBehaviour
 
     [Header("Coins")]
     [SerializeField] GameObject coin;
+    private Transform goldBox;
 
     private List<IWagon> trainList = new();
 
@@ -34,6 +35,7 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
+        
     }
 
     private void OnDisable()
@@ -50,6 +52,7 @@ public class SpawnManager : MonoBehaviour
         BuildPool();
         //Debug.Log("hola si probando, nivel: " + GameManager.Instance.RunNumber + "level spawn: " + currentlevelData.name);
         TrySpawn();
+        goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
     }
 
     void Update()
@@ -156,7 +159,7 @@ public class SpawnManager : MonoBehaviour
 
     void EnemyDead(Vector3 position)
     {
-        SpawCoin(position, trainList.Last().Transform);
+        SpawCoin(position, goldBox);
         aliveEnemies--;
 
     }
