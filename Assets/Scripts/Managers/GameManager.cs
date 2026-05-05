@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LocomotiveStatsSO baseStats;
     public GameSession Session { get; private set; }
 
+    private bool isChangingScene;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,6 +25,10 @@ public class GameManager : MonoBehaviour
 
     public void GoToStore()
     {
+        if (isChangingScene) return;
+
+        isChangingScene = true;
+
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
         
@@ -34,6 +40,10 @@ public class GameManager : MonoBehaviour
 
     public void GoToRun()
     {
+        if (isChangingScene) return;
+
+        isChangingScene = true;
+
         Session.RebuildStatsSystem();
         SceneTransitionManager.Instance.TransitionToScene(
             "LauScene",
@@ -43,10 +53,19 @@ public class GameManager : MonoBehaviour
 
     public void EndSession()
     {
+        if (isChangingScene) return;
+
+        isChangingScene = true;
+
         Session.Reset();
         SceneTransitionManager.Instance.TransitionToScene(
             "MainMenu",
             "Volviendo al menu"
             );
     }
+    public void FinishSceneChange()
+    {
+        isChangingScene = false;
+    }
+
 }

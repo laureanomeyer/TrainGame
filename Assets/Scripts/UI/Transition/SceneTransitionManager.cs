@@ -45,7 +45,7 @@ public class SceneTransitionManager : MonoBehaviour
     {
         isTransitioning = true;
 
-        stationText.text = "Llegando a " + stationName;
+        stationText.text = stationName;
 
         yield return FadeImage(0f, 1f);
         yield return FadeText(0f, 1f);
@@ -61,6 +61,11 @@ public class SceneTransitionManager : MonoBehaviour
         yield return FadeImage(1f,0f);
 
         isTransitioning = false;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.FinishSceneChange();
+        }
 
     }
 

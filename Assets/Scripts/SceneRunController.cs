@@ -6,6 +6,7 @@ public class SceneRunController : MonoBehaviour
     private float sceneDuration;
 
     private float currentTime;
+    private bool runFinished;
 
     public float Progress => 1f - Mathf.Clamp01(currentTime / sceneDuration);
 
@@ -13,14 +14,18 @@ public class SceneRunController : MonoBehaviour
     {
         sceneDuration = GameManager.Instance.Session.SessionConfig.RunDurantion;
         currentTime = sceneDuration;
+        runFinished = false;
     }
 
     void Update()
     {
+        if (runFinished) return;
+
         currentTime -= Time.deltaTime;
 
         if (currentTime < 0)
         {
+            runFinished = true;
             GameManager.Instance.GoToStore();
         }
     }
