@@ -7,8 +7,7 @@ public class InteractionTrigger : MonoBehaviour
 
     private void Awake()
     {
-        outline.SetActive(false);
-        
+        outline.SetActive(false);     
     }
 
     private void OnTriggerEnter(Collider other)
