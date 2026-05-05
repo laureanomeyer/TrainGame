@@ -22,7 +22,7 @@ public static class GameEvents
 
     public static event Action OnWagonDestroyed;
 
-    public static event Action OnEnemyDeath;
+    public static event Action<UnityEngine.Vector3> OnEnemyDeath;
 
     public static event Action OnShowInteract;
 
@@ -74,7 +74,7 @@ public static class GameEvents
 
     public static void EnemyDeath(UnityEngine.Vector3 position)
     {
-        OnEnemyDeath?.Invoke();
+        OnEnemyDeath?.Invoke(position);
     }
 
     public static void ShowInteract()

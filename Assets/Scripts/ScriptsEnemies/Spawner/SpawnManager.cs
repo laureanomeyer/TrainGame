@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -27,6 +28,8 @@ public class SpawnManager : MonoBehaviour
 
     float timer;
     int aliveEnemies;
+
+    Vector3 enemyDeathPosition;
 
     private void OnEnable()
     {
@@ -143,14 +146,18 @@ public class SpawnManager : MonoBehaviour
             vp.z < 0;
     }
 
-    void SpawCoin(Vector3 position, Vector3 goTo)
+    void SpawCoin(Vector3 position, Transform goTo)
     {
-        
+        GameObject coinGO = Instantiate(coin, position, Quaternion.identity);
+        Coin coinScript = coinGO.GetComponent<Coin>();
+        coinScript.SetTarget(goTo);
     }
 
-    void EnemyDead()
-    {
 
+    void EnemyDead(Vector3 position)
+    {
+        SpawCoin(position, trainList.Last().Transform);
         aliveEnemies--;
+
     }
 }

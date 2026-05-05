@@ -1,16 +1,30 @@
+using UnityEditor.AdaptivePerformance.Editor;
 using UnityEngine;
 
 public class Coin : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    float speed = 5f;
+    Transform target;
 
-    // Update is called once per frame
     void Update()
     {
-        
+        Move();
     }
+
+    public void SetTarget(Transform targetTRF) 
+    {
+        target = targetTRF;
+    }
+
+    private void Move()
+    {
+        if (target == null) return;
+        transform.position = Vector3.Lerp(transform.position,target.position, speed * Time.deltaTime);
+        if(transform.position == target.position )
+        {
+            Destroy(gameObject);
+        }
+    }
+
 }
+
