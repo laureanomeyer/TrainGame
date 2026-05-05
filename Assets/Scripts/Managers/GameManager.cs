@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour
 {
@@ -24,18 +25,28 @@ public class GameManager : MonoBehaviour
     {
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
-        SceneManager.LoadScene("Shop");
+        
+        SceneTransitionManager.Instance.TransitionToScene(
+            "Shop",
+            "Estacion Central"
+            );
     }
 
     public void GoToRun()
     {
         Session.RebuildStatsSystem();
-        SceneManager.LoadScene("LauScene");
+        SceneTransitionManager.Instance.TransitionToScene(
+            "LauScene",
+            "Saliendo de la estacion"
+            );
     }
 
     public void EndSession()
     {
         Session.Reset();
-        SceneManager.LoadScene("MainMenu");
+        SceneTransitionManager.Instance.TransitionToScene(
+            "MainMenu",
+            "Volviendo al menu"
+            );
     }
 }
