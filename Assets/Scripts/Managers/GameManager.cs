@@ -31,10 +31,12 @@ public class GameManager : MonoBehaviour
 
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
-        
+
+        int currentLevel = Session.SessionConfig.CurrentLevel;
+
         SceneTransitionManager.Instance.TransitionToScene(
             "Shop",
-            "Estacion Central"
+            "Llegando a Estacion " + currentLevel
             );
     }
 
@@ -43,11 +45,13 @@ public class GameManager : MonoBehaviour
         if (isChangingScene) return;
 
         isChangingScene = true;
-
         Session.RebuildStatsSystem();
+
+        int currentLevel = Session.SessionConfig.CurrentLevel;
+
         SceneTransitionManager.Instance.TransitionToScene(
             "LauScene",
-            "Saliendo de la estacion"
+            "Partiendo viaje " + currentLevel
             );
     }
 
