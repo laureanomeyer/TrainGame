@@ -1,3 +1,5 @@
+using TMPro;
+
 public class GoldCollector
 {
     private WagonHP wagonHP;
@@ -5,9 +7,12 @@ public class GoldCollector
     private float gold;
     public float Gold => gold;
 
-    public GoldCollector(WagonHP hpController)
+    private TextMeshProUGUI goldDisplayUI;
+
+    public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI)
     {
         wagonHP = hpController;
+        goldDisplayUI = CurrentGoldUI;
         GameEvents.OnGoldEarned += CollectGold;
     }
     void OnDestroy() => GameEvents.OnGoldEarned -= CollectGold;
@@ -17,6 +22,7 @@ public class GoldCollector
         if (wagonHP.CurrentHp > 0)
         {
             gold += amount * GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier);
+            goldDisplayUI.text = "$" + gold;
         }
         else
         {
@@ -42,5 +48,6 @@ public class GoldCollector
     public void EmptyGold()
     {
         gold = 0;
+        goldDisplayUI.text = string.Empty;
     }
 }

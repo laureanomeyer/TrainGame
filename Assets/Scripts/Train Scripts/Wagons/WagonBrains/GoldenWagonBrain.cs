@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class GoldenWagonBrain : WagonBrain
@@ -5,12 +6,14 @@ public class GoldenWagonBrain : WagonBrain
     private GoldCollector collector;
     public GoldCollector Collector => collector;
 
+    [SerializeField] private TextMeshProUGUI currentGoldUI;
+
     [SerializeField] private Material baseWagonMaterial;
 
     public override void Start()
     {
         base.Start();
-        collector = new GoldCollector(hpController);
+        collector = new GoldCollector(hpController, currentGoldUI);
     }
     public override void Repair(float repairAmount)
     {

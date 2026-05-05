@@ -19,6 +19,7 @@ public class PlayerAttackController : MonoBehaviour
     private TrainData dataRef;
 
     private InputAction repairAction;
+    private bool isAttacking = false;
 
     private float currentReloadTime = 0;
 
@@ -26,7 +27,8 @@ public class PlayerAttackController : MonoBehaviour
     {
         //se busca la pool de objetos
         repairAction = InputSystem.actions.FindAction("Attack");
-        repairAction.performed += Attack;
+        repairAction.performed += ActiveAttack;
+        repairAction.canceled += DeactiveAttack;
 
         lookToMouseController = GetComponent<LookObjectToMouse>();
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
@@ -49,6 +51,11 @@ public class PlayerAttackController : MonoBehaviour
     {
         AidToMouseDirection();
         ChargeTimers();
+
+        if (isAttacking)
+        {
+            Attack();
+        }
     }
 
     private void AidToMouseDirection()
@@ -58,7 +65,7 @@ public class PlayerAttackController : MonoBehaviour
     }
 
     //Funcion utiliza por el Player Inputs para atacar 
-    void Attack(InputAction.CallbackContext context)
+    void Attack()
     {
         if (waitToFire > weapon.RateOfFire)
         {
@@ -69,6 +76,16 @@ public class PlayerAttackController : MonoBehaviour
             GameEvents.AmmoChanged(weapon.CurrentAmmunition);
             waitToFire = 0;
         }
+    }
+
+    void ActiveAttack (InputAction.CallbackContext context)
+    {
+        isAttacking = true;
+    }
+
+    void DeactiveAttack(InputAction.CallbackContext context)
+    {
+        isAttacking = false;
     }
 
     private void ChargeTimers()

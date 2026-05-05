@@ -115,17 +115,5 @@ public class Enemy : MonoBehaviour
         {
             Dead();
         }
-        if (other.gameObject.CompareTag("bullet"))
-        {
-            IBullet bullet = other.GetComponent<IBullet>();
-            if (bullet != null)
-            {
-                TakeDamage(bullet.Damage);
-                bullet.Deactivate();
-            }
-        }
-
     }
-
-
 }
