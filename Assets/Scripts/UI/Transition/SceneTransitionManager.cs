@@ -22,6 +22,7 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void Awake()
     {
+        #region Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -30,25 +31,26 @@ public class SceneTransitionManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+    #endregion
 
         HideTransitionInstantly();
     }
 
-    public void TransitionToScene(string sceneName, string stationName)
+    public void TransitionToScene(string sceneName)
     {
         if (isTransitioning) return;
 
-        StartCoroutine(TransitionCoroutine(sceneName, stationName));
+        StartCoroutine(TransitionCoroutine(sceneName));
     }
 
-    private IEnumerator TransitionCoroutine(string sceneName, string stationName)
+    private IEnumerator TransitionCoroutine(string sceneName)
     {
         isTransitioning = true;
 
         canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = true;
 
-        stationText.text = stationName;
+        stationText.text = "Cargando...";
 
         yield return FadeImage(0f, 1f);
         yield return FadeText(0f, 1f);

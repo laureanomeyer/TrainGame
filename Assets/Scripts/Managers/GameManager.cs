@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Base Data")]
     [SerializeField] private LocomotiveStatsSO baseStats;
+    [SerializeField] private Texture2D gameplayCursor;
+    [SerializeField] private Texture2D menuCursor;
 
     public GameSession Session { get; private set; }
 
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        #region Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        #endregion
 
         Session = new GameSession(baseStats);
     }
@@ -34,47 +38,30 @@ public class GameManager : MonoBehaviour
     {
         if (isChangingScene) return;
 
-        /*
-         * La run terminó.
-         * Entonces avanzamos al siguiente nivel/estación.
-         */
+        
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
         int currentLevel = Session.SessionConfig.CurrentLevel;
 
-        ChangeScene(
-            ShopScene,
-            "Llegando a Estación " + currentLevel
-        );
+        ChangeScene(ShopScene);
     }
 
     public void GoToRun()
     {
         if (isChangingScene) return;
 
-        /*
-         * Salimos del shop y entramos a la run actual.
-         * No avanzamos el nivel acá, porque ya avanzó al llegar al shop.
-         */
         Session.RebuildStatsSystem();
-
         int currentLevel = Session.SessionConfig.CurrentLevel;
 
-        ChangeScene(
-            RunScene,
-            "Partiendo al Nivel " + currentLevel
-        );
+        ChangeScene(RunScene);
     }
 
     public void GoToMainMenu()
     {
         if (isChangingScene) return;
 
-        ChangeScene(
-            MainMenuScene,
-            "Volviendo al menú"
-        );
+        ChangeScene(MainMenuScene);
     }
 
     public void StartNewSession()
@@ -84,10 +71,8 @@ public class GameManager : MonoBehaviour
         Session.Reset();
         Session.RebuildStatsSystem();
 
-        ChangeScene(
-            "LauScene",
-            "Comenzando recorrido " + Session.SessionConfig.CurrentLevel
-        );
+        ChangeScene(ShopScene);
+        Cursor.SetCursor(gameplayCursor, new Vector2(128, 128), CursorMode.Auto);
     }
 
     public void EndSession()
@@ -95,21 +80,15 @@ public class GameManager : MonoBehaviour
         if (isChangingScene) return;
 
         Session.Reset();
-
-        ChangeScene(
-            MainMenuScene,
-            "Volviendo al menú"
-        );
+        Cursor.SetCursor(menuCursor, new Vector2(256, 256), CursorMode.Auto);
+        ChangeScene(MainMenuScene );
     }
 
-    private void ChangeScene(string sceneName, string transitionMessage)
+    private void ChangeScene(string sceneName)
     {
         isChangingScene = true;
 
-        SceneTransitionManager.Instance.TransitionToScene(
-            sceneName,
-            transitionMessage
-        );
+        SceneTransitionManager.Instance.TransitionToScene(sceneName);
     }
 
     public void FinishSceneChange()

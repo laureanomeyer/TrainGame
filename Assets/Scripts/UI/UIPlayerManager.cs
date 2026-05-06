@@ -47,7 +47,7 @@ public class UIPlayerManager : MonoBehaviour
         UpdateLocomotiveUI();
         UpdateInventoryUI();
         UpdateRunProgress();
-        originalColor = new Color(0, 0.39215f, 0, 0.7f);
+        originalColor = new Color(0, 0, 0, 0.7f);
     }
 
     void UpdateLocomotiveUI()

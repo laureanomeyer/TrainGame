@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -73,13 +74,12 @@ public class GoldCollector
         cts?.Cancel();
         cts = new CancellationTokenSource();
         var token = cts.Token;
-
         try
         {
             await AnimateFontSize(originalFontSize, maxFontSize, duration, token);
             await AnimateFontSize(maxFontSize, originalFontSize, duration, token);
         }
-        catch (TaskCanceledException) { }
+        catch (OperationCanceledException) { }
     }
 
     private async Task AnimateFontSize(float from, float to, float dur, CancellationToken token)
