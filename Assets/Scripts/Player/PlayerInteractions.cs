@@ -272,6 +272,6 @@ public class PlayerInteractions : MonoBehaviour
 
     public void OpenMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        GameManager.Instance.EndSession();
     }
 }

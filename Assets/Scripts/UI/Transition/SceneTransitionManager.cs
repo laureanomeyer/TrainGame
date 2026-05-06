@@ -6,19 +6,19 @@ using UnityEngine.UI;
 
 public class SceneTransitionManager : MonoBehaviour
 {
-
-    public static SceneTransitionManager Instance;
+    public static SceneTransitionManager Instance { get; private set; }
 
     [Header("Transition Settings")]
     [SerializeField] private Image fadeImage;
     [SerializeField] private TMP_Text stationText;
-    [SerializeField] private Canvas canvas;
+    [SerializeField] private CanvasGroup canvasGroup;
 
     [Header("Settings")]
     [SerializeField] private float fadeDuration = 1f;
     [SerializeField] private float textFadeDuration = 1.5f;
+    [SerializeField] private float textStayDuration = 1f;
 
-    public bool isTransitioning;
+    private bool isTransitioning;
 
     private void Awake()
     {
@@ -27,45 +27,47 @@ public class SceneTransitionManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        SetFadeAlpha(0f);
-        SetTextAlpha(0f);
-
-        canvas.sortingOrder = -1;
-
+        HideTransitionInstantly();
     }
 
     public void TransitionToScene(string sceneName, string stationName)
     {
         if (isTransitioning) return;
-        
+
         StartCoroutine(TransitionCoroutine(sceneName, stationName));
     }
 
     private IEnumerator TransitionCoroutine(string sceneName, string stationName)
     {
-        canvas.sortingOrder = 100;
-
         isTransitioning = true;
+
+        canvasGroup.blocksRaycasts = true;
+        canvasGroup.interactable = true;
 
         stationText.text = stationName;
 
         yield return FadeImage(0f, 1f);
         yield return FadeText(0f, 1f);
 
-        yield return new WaitForSeconds(textFadeDuration);
+        yield return new WaitForSecondsRealtime(textStayDuration);
 
         yield return FadeText(1f, 0f);
-        
-        SceneManager.LoadScene(sceneName);
 
-        yield return null;
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
 
-        yield return FadeImage(1f,0f);
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
 
-        canvas.sortingOrder = -1;
+        yield return FadeImage(1f, 0f);
+
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
 
         isTransitioning = false;
 
@@ -73,8 +75,6 @@ public class SceneTransitionManager : MonoBehaviour
         {
             GameManager.Instance.FinishSceneChange();
         }
-
-
     }
 
     private IEnumerator FadeImage(float from, float to)
@@ -83,9 +83,9 @@ public class SceneTransitionManager : MonoBehaviour
 
         while (timer < fadeDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
             float t = timer / fadeDuration;
-            
+
             SetFadeAlpha(Mathf.Lerp(from, to, t));
 
             yield return null;
@@ -97,14 +97,17 @@ public class SceneTransitionManager : MonoBehaviour
     private IEnumerator FadeText(float from, float to)
     {
         float timer = 0f;
+
         while (timer < textFadeDuration)
         {
-            timer += Time.deltaTime;
+            timer += Time.unscaledDeltaTime;
             float t = timer / textFadeDuration;
-            
+
             SetTextAlpha(Mathf.Lerp(from, to, t));
+
             yield return null;
         }
+
         SetTextAlpha(to);
     }
 
@@ -122,4 +125,12 @@ public class SceneTransitionManager : MonoBehaviour
         stationText.color = color;
     }
 
+    private void HideTransitionInstantly()
+    {
+        SetFadeAlpha(0f);
+        SetTextAlpha(0f);
+
+        canvasGroup.blocksRaycasts = false;
+        canvasGroup.interactable = false;
+    }
 }
