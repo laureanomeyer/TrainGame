@@ -95,6 +95,12 @@ public class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void DeadWallDead()
+    {
+        GameEvents.EnemyDeath(transform.position);
+        Destroy(gameObject);
+    }
+
     //---------------------GIZMOS-------------------------
 
     void OnDrawGizmosSelected()
@@ -113,7 +119,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("deadWall"))
         {
-            Dead();
+            DeadWallDead();
         }
     }
 }
