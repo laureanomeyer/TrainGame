@@ -1,8 +1,6 @@
 using System.Collections;
 using TMPro;
-using Unity.VectorGraphics;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class InteractionUIManager : MonoBehaviour
@@ -10,6 +8,7 @@ public class InteractionUIManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private GameObject textPanel;
     [SerializeField] private TMP_Text infoText;
+    [SerializeField] private TMP_Text spacialText;
     [SerializeField] private GameObject buttonsPanel;
     [SerializeField] private TMP_Text stationText;
     [SerializeField] private Image fadeImage;
@@ -21,6 +20,7 @@ public class InteractionUIManager : MonoBehaviour
     {
         HideAll();
         stationText.text = $"Estación: {GameManager.Instance.Session.SessionConfig.CurrentLevel}";
+        spacialText.text = $"Estación {GameManager.Instance.Session.SessionConfig.CurrentLevel}";
 
         StartCoroutine(StartUi());
     }
@@ -71,6 +71,7 @@ public class InteractionUIManager : MonoBehaviour
         }
         SetTextAlpha(to);
     }
+
     public void ShowButtons()
     {
         textPanel.SetActive(false);
