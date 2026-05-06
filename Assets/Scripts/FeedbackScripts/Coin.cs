@@ -1,4 +1,3 @@
-using UnityEditor.AdaptivePerformance.Editor;
 using UnityEngine;
 
 public class Coin : MonoBehaviour

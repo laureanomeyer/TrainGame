@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using Unity.VectorGraphics;
+
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 [DefaultExecutionOrder(-100)]
 public class GameManager : MonoBehaviour

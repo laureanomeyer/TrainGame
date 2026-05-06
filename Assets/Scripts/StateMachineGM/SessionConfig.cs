@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEditor.PackageManager.Requests;
-using UnityEngine.Rendering;
-
-
+﻿
 public class SessionConfig
 {
     public int CurrentLevel {  get; private set; }
