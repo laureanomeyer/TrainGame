@@ -6,16 +6,19 @@ public class MapTile : MonoBehaviour
     [SerializeField] private Transform head;
     [SerializeField] private Transform tail;
     private float offset;
+    private Vector3 offsetVect;
     public Transform Tail => tail;
     public Transform Head => head;
 
     public bool IsMapHead => isMapHead;   
 
     public float Offset => offset;
+    public Vector3 OffsetVect => offsetVect;
 
     private void Awake()
     {
         offset = Vector3.Distance(transform.position, tail.position);
+        offsetVect = new Vector3(offset, 0, 0);
         //Debug.Log($"offset: {offset} | tail local: {tail.localPosition} | tail world: {tail.position}");
     }
     public void SetUp(Transform followTransform)
@@ -33,17 +36,17 @@ public class MapTile : MonoBehaviour
     {
         if (!isMapHead)
         {
-            transform.position = head.position;
+            transform.position = head.position + offsetVect;
         }
     }
-    public void MoveHead(Transform target, float speed)
+    public void MoveHead(Vector3 target, float speed)
     {
         if (isMapHead)
         {
             Vector3 adjustedTarget = new Vector3(
-                target.position.x - offset * 5,
-                transform.position.y,
-                transform.position.z
+                target.x - offset * 5,
+                target.y,
+                target.z
             );
             transform.position = Vector3.MoveTowards(transform.position, adjustedTarget, speed * Time.deltaTime);
         }

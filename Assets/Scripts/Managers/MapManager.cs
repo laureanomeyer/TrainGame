@@ -45,7 +45,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (MapTile tile in tilesMap) 
         {
-            tile.MoveHead(endLocation, RunManager.Instance.TrainSpeed);
+            tile.MoveHead(endLocation.position - tilesMap[0].OffsetVect * 3, RunManager.Instance.TrainSpeed);
             tile.Move();
         }
     }
@@ -53,7 +53,7 @@ public class MapManager : MonoBehaviour
     void RecycleTile()
     {
         if (tilesMap.Count == 0) return;
-        if (head.Tail.position.x <= endLocation.position.x - tilesMap[0].Offset / 2)
+        if (head.Tail.position.x <= endLocation.position.x - tilesMap[0].Offset * 3)
         {
             tilesMap.RemoveAt(0); 
             head.SetUp(tilesMap[tilesMap.Count - 1].Tail);
