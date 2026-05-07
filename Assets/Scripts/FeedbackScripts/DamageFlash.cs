@@ -8,24 +8,31 @@ public class DamageFlash : MonoBehaviour
     [SerializeField] private Material flashMaterial;
     [SerializeField] private float flashDuration;
 
-    private Material[] originalMaterials;
+    private Material[][] originalMaterials;
 
     void Awake()
     {
-        originalMaterials = new Material[rend.Length];
+        originalMaterials = new Material[rend.Length][];
         for (int i = 0; i < rend.Length; i++)
-            originalMaterials[i] = rend[i].material;
+            originalMaterials[i] = rend[i].materials;
     }
 
     private IEnumerator DoFlash()
     {
         for (int i = 0; i < rend.Length; i++)
-            rend[i].material = flashMaterial;
+        {
+            Material[] flashArray = new Material[rend[i].materials.Length];
+            for (int j = 0; j < flashArray.Length; j++)
+                flashArray[j] = flashMaterial;
 
+            rend[i].materials = flashArray;
+        }
         yield return new WaitForSeconds(flashDuration);
 
+       
         for (int i = 0; i < rend.Length; i++)
-            rend[i].material = originalMaterials[i];
+            rend[i].materials = originalMaterials[i];
+    
     }
 
     public void Flash()
@@ -35,10 +42,11 @@ public class DamageFlash : MonoBehaviour
     }
     public void SetMaterialSingle(Material material)
     {
-        originalMaterials[0] = material;
+        originalMaterials[0][0] = material;
     }
-    public void SetMaterialArray(Material[] materials) 
-    { 
-        originalMaterials = materials;
+    public void SetMaterialArray(int rendererIndex, Material[] materials)
+    {
+        if (rendererIndex >= 0 && rendererIndex < originalMaterials.Length)
+            originalMaterials[rendererIndex] = materials;
     }
 }

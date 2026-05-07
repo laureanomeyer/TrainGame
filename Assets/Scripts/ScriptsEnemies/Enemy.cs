@@ -49,7 +49,7 @@ public class Enemy : MonoBehaviour
         flash = GetComponent<DamageFlash>();
         limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
-        flash.SetMaterialArray(data.material);
+        flash.SetMaterialArray(0,data.material);
     }
 
     public void ResetAttackCooldown(float cooldown)

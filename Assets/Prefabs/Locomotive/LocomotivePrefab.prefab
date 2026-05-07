@@ -399,6 +399,8 @@ GameObject:
   - component: {fileID: 1432992804342217495}
   - component: {fileID: 2900975310691610324}
   - component: {fileID: 1038731131388850925}
+  - component: {fileID: 7727724930647348602}
+  - component: {fileID: 4659215539045768355}
   m_Layer: 3
   m_Name: LocomotivePrefab
   m_TagString: Train
@@ -469,6 +471,44 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.362849, y: 6.743032, z: 21.970228}
   m_Center: {x: -0.24931955, y: 1.2046597, z: 8.527081}
+--- !u!114 &7727724930647348602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7996dc902bd639940b02db76cf4f629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
+  rend:
+  - {fileID: 4442366920351635523}
+  flashMaterial: {fileID: 2100000, guid: 90697fa2e87819b44a64f50217f75c8e, type: 2}
+  flashDuration: 0.1
+--- !u!95 &4659215539045768355
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90120189f6356bc46ba3c2a7ee84d3f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8426430648945959898
 GameObject:
   m_ObjectHideFlags: 0

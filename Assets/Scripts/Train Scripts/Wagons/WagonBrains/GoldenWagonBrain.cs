@@ -15,6 +15,7 @@ public class GoldenWagonBrain : WagonBrain
         base.Start();
         collector = new GoldCollector(hpController, currentGoldUI);
         GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
+        rendererWagon.material = baseWagonMaterial;
     }
 
     private void Update()
@@ -22,10 +23,6 @@ public class GoldenWagonBrain : WagonBrain
         if (hpController.CurrentHp <= 0)
         {
             collector.EmptyGold();
-        }
-        else
-        {
-            rendererWagon.material = baseWagonMaterial;
         }
     }
 
