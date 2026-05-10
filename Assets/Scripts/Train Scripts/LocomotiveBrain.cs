@@ -11,6 +11,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     [SerializeField] private float EM;
     [SerializeField] private float RES;
 
+    private bool destroyed;
+
     public LocomotiveFuel fuelController;
     private TrainData dataRef;
     private DamageFlash flash;
@@ -66,11 +68,16 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     public void Break()
     {
-        if(fuelController.CurrentMaxFuel >= 0)
+        if (destroyed) return;
+
+        destroyed = true;
+
+        if (rendererWagon != null && materialDeVagonDestruido != null)
         {
             rendererWagon.material = materialDeVagonDestruido;
-            GameManager.Instance.EndSession();
         }
+
+        GameManager.Instance.Defeat();
     }
     private void OnStatChanged(StatType type, float newValue)
     {

@@ -26,7 +26,7 @@ public class SceneRunController : MonoBehaviour
         if (currentTime < 0)
         {
             runFinished = true;
-            GameManager.Instance.GoToStore();
+            RunManager.Instance.OnRunFinished();
         }
     }
 }

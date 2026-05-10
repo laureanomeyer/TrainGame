@@ -77,7 +77,16 @@ public class RunManager : MonoBehaviour
     }
     public void OnRunFinished()
     {
-        GameManager.Instance.GoToStore();
+        Debug.Log("Nivel actual cuando terminó la run: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
+        Debug.Log("Ultima estacion: " + GameManager.Instance.LastStationDebug());
+        if (GameManager.Instance.IsFinalStation())
+        {
+            GameManager.Instance.Victory();
+        }
+        else
+        {
+            GameManager.Instance.GoToStore();
+        }
     }
 }
 
