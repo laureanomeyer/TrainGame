@@ -20,6 +20,7 @@ public class CoalBox: IInteractable
     public void Interact(IInventory playerRef)
     {      
         HandleCoal(playerRef);
+        GameEvents.TakeFuel();
     }
 
     public void HandleCoal(IInventory playerRef)

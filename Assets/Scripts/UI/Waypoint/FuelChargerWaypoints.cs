@@ -1,7 +1,7 @@
 using HUDIndicator;
 using UnityEngine;
 
-public class FuelChargerWaypoints : MonoBehaviour
+public class FuelChargerWaypoints : MonoBehaviour, IWaypointsUI
 {
     private IndicatorRenderer indicatorRenderer;
 
@@ -14,10 +14,26 @@ public class FuelChargerWaypoints : MonoBehaviour
 
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
+
+        GameEvents.OnTakeFuel += ActivateWaypointUI;
+        GameEvents.OnDropFuel += DeactivateWaypointUI;
+    }
+
+    public void ActivateWaypointUI()
+    {
+        indicatorOnScreen.visible = true;
+        indicatorOffScreen.visible = true;
+    }
+
+    public void DeactivateWaypointUI()
+    {
+        indicatorOnScreen.visible = false;
+        indicatorOffScreen.visible = false;
     }
 
     private void OnDestroy()
     {
-
+        GameEvents.OnTakeFuel -= ActivateWaypointUI;
+        GameEvents.OnDropFuel -= DeactivateWaypointUI;
     }
 }

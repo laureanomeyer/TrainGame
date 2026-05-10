@@ -28,6 +28,14 @@ public static class GameEvents
 
     public static event Action OnHideInteract;
 
+    public static event Action OnTakeFuel;
+
+    public static event Action OnTakeGold;
+
+    public static event Action OnDropFuel;
+
+    public static event Action OnDropGold;
+
     public static void GoldEarned(float amount)
     {
         OnGoldEarned?.Invoke(amount);
@@ -85,5 +93,25 @@ public static class GameEvents
     public static void HideInteract()
     {
         OnHideInteract?.Invoke();
+    }
+
+    public static void TakeFuel()
+    {
+        OnTakeFuel?.Invoke();
+    }
+
+    public static void TakeGold()
+    {
+        OnTakeGold?.Invoke();
+    }
+
+    public static void DropFuel()
+    {
+        OnDropFuel?.Invoke();
+    }
+
+    public static void DropGold()
+    {
+        OnDropGold?.Invoke();
     }
 }
