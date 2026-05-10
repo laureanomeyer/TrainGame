@@ -146,7 +146,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
             GameManager.Instance.Session.TrainData.RemoveWagonID(wagonID);
         }
     }
-    public void OnDestroy()
+    public virtual void OnDestroy()
     {
         var statSystem = RunManager.Instance.StatSystem;
         statSystem.OnStatChanged -= OnStatChanged;

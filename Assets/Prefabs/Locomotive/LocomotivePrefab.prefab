@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 439538155036447985}
   - component: {fileID: 642537610263290708}
   - component: {fileID: 2728760231018745957}
+  - component: {fileID: 6428999732380688441}
   m_Layer: 3
   m_Name: CoalBox
   m_TagString: Untagged
@@ -188,7 +189,8 @@ Transform:
   m_LocalPosition: {x: 2.39, y: 0.694, z: 15.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2785387745662270170}
   m_Father: {fileID: 1432992804342217495}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &439538155036447985
@@ -245,6 +247,20 @@ MonoBehaviour:
   whiteOutlineLayer:
     serializedVersion: 2
     m_Bits: 512
+--- !u!114 &6428999732380688441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3290545796818616260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720e1bc82a852ab4e98ac73d70bf9730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CoalBoxWaypoints
+  indicatorOnScreen: {fileID: 5392055199678170758}
+  indicatorOffScreen: {fileID: 6438675391185084156}
 --- !u!1 &3837915469814561841
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,7 +288,7 @@ Transform:
   m_GameObject: {fileID: 3837915469814561841}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.83, y: 1.32, z: 1.43}
+  m_LocalPosition: {x: 0.22, y: 2.71, z: 1.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -290,11 +306,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c660d981a1dbd44eaa0fdbbbd053c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOnScreen
-  visible: 1
+  visible: 0
   renderers:
   - {fileID: 0}
   style:
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 3474c58b009b6224cb46539576afdff8, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
     width: 32
     height: 32
@@ -310,18 +326,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c08470e2a2343b14e90107557e5208ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOffScreen
-  visible: 1
+  visible: 0
   renderers:
   - {fileID: 0}
   style:
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: 3474c58b009b6224cb46539576afdff8, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
     width: 32
     height: 32
   showArrow: 1
   arrowStyle:
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: b14d512c127ad2545b2ce2126a7690c6, type: 3}
+    color: {r: 1, g: 0.78845626, b: 0, a: 1}
+    margin: 0
+    width: 16
+    height: 16
+--- !u!1 &6176506645571132237
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2785387745662270170}
+  - component: {fileID: 5392055199678170758}
+  - component: {fileID: 6438675391185084156}
+  m_Layer: 3
+  m_Name: Waypoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2785387745662270170
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176506645571132237}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.4, y: 2.72, z: 2.54}
+  m_LocalScale: {x: 4.1271, y: 3.4231699, z: 0.24905999}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1104470219656805924}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5392055199678170758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176506645571132237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c660d981a1dbd44eaa0fdbbbd053c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOnScreen
+  visible: 1
+  renderers: []
+  style:
+    texture: {fileID: 2800000, guid: a3cdb43e1917d7246bb7fcf2c3632026, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    width: 32
+    height: 32
+--- !u!114 &6438675391185084156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6176506645571132237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c08470e2a2343b14e90107557e5208ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOffScreen
+  visible: 1
+  renderers: []
+  style:
+    texture: {fileID: 2800000, guid: a3cdb43e1917d7246bb7fcf2c3632026, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    width: 32
+    height: 32
+  showArrow: 1
+  arrowStyle:
+    texture: {fileID: 2800000, guid: b14d512c127ad2545b2ce2126a7690c6, type: 3}
+    color: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
     margin: 0
     width: 16
     height: 16
@@ -405,7 +499,7 @@ Transform:
   m_GameObject: {fileID: 7131068646574043805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 5.58}
+  m_LocalPosition: {x: 0, y: 0.727, z: 2.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -423,10 +517,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c660d981a1dbd44eaa0fdbbbd053c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOnScreen
-  visible: 1
+  visible: 0
   renderers: []
   style:
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: a3cdb43e1917d7246bb7fcf2c3632026, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
     width: 32
     height: 32
@@ -442,17 +536,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c08470e2a2343b14e90107557e5208ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOffScreen
-  visible: 1
+  visible: 0
   renderers: []
   style:
-    texture: {fileID: 0}
+    texture: {fileID: 2800000, guid: a3cdb43e1917d7246bb7fcf2c3632026, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
     width: 32
     height: 32
   showArrow: 1
   arrowStyle:
-    texture: {fileID: 0}
-    color: {r: 1, g: 1, b: 1, a: 1}
+    texture: {fileID: 2800000, guid: b14d512c127ad2545b2ce2126a7690c6, type: 3}
+    color: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
     margin: 0
     width: 16
     height: 16

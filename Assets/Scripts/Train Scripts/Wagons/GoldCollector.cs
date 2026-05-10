@@ -27,7 +27,8 @@ public class GoldCollector
         originalFontSize = goldDisplayUI.fontSize;
         GameEvents.OnGoldEarned += CollectGold;
     }
-    void OnDestroy()
+
+    public void ActivateOnDestroy()
     {
         GameEvents.OnGoldEarned -= CollectGold;
         cts?.Cancel();

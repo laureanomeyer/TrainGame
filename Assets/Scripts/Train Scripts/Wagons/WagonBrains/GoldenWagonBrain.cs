@@ -41,4 +41,10 @@ public class GoldenWagonBrain : WagonBrain
             hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         }
     }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        collector.ActivateOnDestroy();
+    }
 }
