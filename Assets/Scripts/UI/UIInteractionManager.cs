@@ -26,13 +26,16 @@ public class InteractionUIManager : MonoBehaviour
     }
     IEnumerator StartUi()
     {
-            yield return new WaitForSeconds(fadeDuration);
+        yield return new WaitForSeconds(fadeDuration);
 
-            yield return FadeText(1f, 0f);
+        yield return FadeText(1f, 0f);
 
-            yield return null;
+        yield return null;
 
-            yield return FadeImage(1f, 0f);
+        yield return FadeImage(1f, 0f);
+
+        fadeImage.gameObject.SetActive(false);
+        stationText.gameObject.SetActive(false);
         
     }
     public void ShowText(string message)
@@ -54,7 +57,6 @@ public class InteractionUIManager : MonoBehaviour
 
             yield return null;
         }
-
         SetFadeAlpha(to);
     }
 

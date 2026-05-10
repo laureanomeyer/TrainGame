@@ -262,7 +262,7 @@ public class PlayerInteractions : MonoBehaviour
 
     public void ReloadScene()
     {
-        GameManager.Instance.GoToRun();
+        //GameManager.Instance.GoToRun();
     }
 
     public void OnOpenMainMenu()
