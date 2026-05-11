@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour
 
     public void Defeat()
     {
-        if (isChangingScene) return;
         if (gameEnded) return;
 
         gameEnded = true;
@@ -93,9 +92,9 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        ChangeScene(FinalScene, SceneTransitionType.Final, instant: true);
         Cursor.SetCursor(gameplayCursor, new Vector2(256, 256), CursorMode.Auto);
 
+        SceneManager.LoadScene(FinalScene);
     }
 
     public void Victory()
@@ -107,6 +106,7 @@ public class GameManager : MonoBehaviour
         LastRunResult = RunResult.Victory;
 
         Time.timeScale = 1f;
+
         Cursor.SetCursor(gameplayCursor, new Vector2(256, 256), CursorMode.Auto);
 
         ChangeScene(FinalScene, SceneTransitionType.Final);
@@ -141,18 +141,11 @@ public class GameManager : MonoBehaviour
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
     }
 
-    private void ChangeScene(string sceneName, SceneTransitionType transitionType, bool instant = false)
+    private void ChangeScene(string sceneName, SceneTransitionType transitionType)
     {
         isChangingScene = true;
 
-        if (instant)
-        {
-            SceneTransitionManager.Instance.TransitionToSceneInstant(sceneName);
-        }
-        else
-        {
-            SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);
-        }
+        SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);
     }
 
     public void FinishSceneChange()

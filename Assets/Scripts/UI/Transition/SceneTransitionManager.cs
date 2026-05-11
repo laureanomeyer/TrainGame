@@ -134,6 +134,8 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void SetFadeAlpha(float alpha)
     {
+        if (fadeImage == null) return;
+
         Color color = fadeImage.color;
         color.a = alpha;
         fadeImage.color = color;
@@ -141,6 +143,8 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void SetTextAlpha(float alpha)
     {
+        if (stationText == null) return;
+
         Color color = stationText.color;
         color.a = alpha;
         stationText.color = color;
@@ -201,41 +205,6 @@ public class SceneTransitionManager : MonoBehaviour
         if (transitionRootCanvas != null)
         {
             transitionRootCanvas.SetActive(false);
-        }
-    }
-
-
-    //instant transition oli
-
-    public void TransitionToSceneInstant(string sceneName)
-    {
-        if (isTransitioning) return;
-
-        StartCoroutine(InstantTransitionCoroutine(sceneName));
-    }
-
-    private IEnumerator InstantTransitionCoroutine(string sceneName)
-    {
-        isTransitioning = true;
-
-        HideTransitionInstantly();
-
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
-
-        while (!operation.isDone)
-        {
-            yield return null;
-        }
-
-        yield return null;
-
-        HideTransitionInstantly();
-
-        isTransitioning = false;
-
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.FinishSceneChange();
         }
     }
 }
