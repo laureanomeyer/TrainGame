@@ -27,11 +27,14 @@ public class GoldCollector
         originalFontSize = goldDisplayUI.fontSize;
         GameEvents.OnGoldEarned += CollectGold;
     }
-    void OnDestroy()
+
+    public void ActivateOnDestroy()
     {
         GameEvents.OnGoldEarned -= CollectGold;
         cts?.Cancel();
         cts?.Dispose();
+
+        Debug.Log("Me destrui");
     }
 
     public void CollectGold(float amount)
@@ -54,6 +57,11 @@ public class GoldCollector
         {
             float goldToGive = gold;
             EmptyGold();
+            
+            if (goldToGive > 0)
+            {
+                GameEvents.TakeGold();
+            }
 
             return goldToGive;
         }

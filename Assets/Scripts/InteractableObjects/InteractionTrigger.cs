@@ -1,3 +1,4 @@
+using HUDIndicator;
 using UnityEngine;
 using UnityEngine.UI;
 

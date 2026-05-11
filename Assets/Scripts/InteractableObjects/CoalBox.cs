@@ -20,6 +20,7 @@ public class CoalBox: IInteractable
     public void Interact(IInventory playerRef)
     {      
         HandleCoal(playerRef);
+        
     }
 
     public void HandleCoal(IInventory playerRef)
@@ -30,11 +31,13 @@ public class CoalBox: IInteractable
         {
             hasCoal = true;
             playerRef.DepositCoal();
+            GameEvents.TakeFuel();
         }
         else if (hasCoal && !playerRef.HasCoal)
         {
             hasCoal = true;
             playerRef.CollectCoal();
+            GameEvents.TakeFuel();
         }
 
 

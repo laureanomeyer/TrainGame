@@ -33,6 +33,7 @@ public class FuelCharger: MonoBehaviour
         {
             locomotive.AddFuel();
             playerRef.Inventory.DepositCoal();
+            GameEvents.DropFuel();
         }else return;
        
     }

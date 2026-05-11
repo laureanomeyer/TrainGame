@@ -1,5 +1,64 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7741565866159520540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8450276076056107103}
+  - component: {fileID: 8710539770654113804}
+  m_Layer: 3
+  m_Name: Waypoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8450276076056107103
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741565866159520540}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.08, y: 0.34, z: 0.16}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4455024647667153101}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8710539770654113804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741565866159520540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c08470e2a2343b14e90107557e5208ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOffScreen
+  visible: 1
+  renderers:
+  - {fileID: 0}
+  style:
+    texture: {fileID: 2800000, guid: 3474c58b009b6224cb46539576afdff8, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    width: 32
+    height: 32
+  showArrow: 1
+  arrowStyle:
+    texture: {fileID: 2800000, guid: b14d512c127ad2545b2ce2126a7690c6, type: 3}
+    color: {r: 1, g: 0.7882353, b: 0, a: 1}
+    margin: 0
+    width: 16
+    height: 16
 --- !u!1001 &7255576388497289326
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -83,9 +142,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7913514835193122095, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 6441151427167963299, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8450276076056107103}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5500451339517949497, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5168134435809098979}
   m_SourcePrefab: {fileID: 100100000, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+--- !u!1 &2946896845627868759 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5500451339517949497, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  m_PrefabInstance: {fileID: 7255576388497289326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5168134435809098979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2946896845627868759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb67107d4cc5e8d44b369c6a05d098c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GolodenWagonBoxWaypoints
+  indicatorOffScreen: {fileID: 8710539770654113804}
+--- !u!4 &4455024647667153101 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6441151427167963299, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  m_PrefabInstance: {fileID: 7255576388497289326}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5443711640314484261 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3403330081908401739, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
