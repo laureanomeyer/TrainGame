@@ -14,12 +14,12 @@ public class FinalScreenUI : MonoBehaviour
         if(result == RunResult.Victory)
         {
             titleText.text = "Victoria";
-            descriptionText.text = "Llegaste a la ultima estacion";
+            descriptionText.text = "LLegaste a la mina";
         }
         else if (result == RunResult.Defeat)
         {
             titleText.text = "Derrota";
-            descriptionText.text = "La locomotora fue destruida";
+            descriptionText.text = "Tu viaje acabo";
         }
         else
         {

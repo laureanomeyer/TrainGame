@@ -23,10 +23,10 @@ public class GameSession
     }
     public void Reset()
     {
-        PlayerData.ResetValuesToDefault();
-        TrainData.ResetValuesToDefault();
-        SessionConfig.Reset();
-        RebuildStatsSystem();
+        this.PlayerData = new PlayerData();
+        TrainData = new TrainData(baseStats);
+        SessionConfig = new SessionConfig();
+        StatSystem = new StatSystem(baseStats, TrainData);
     }
 }
 

@@ -28,7 +28,7 @@ public class PlayerData
 
     public void AddPlayerGold(float gold)
     {
-        this.gold += gold + 100;
+        this.gold += gold;
     }
 
     public void ChangePlayerGold(float gold)

@@ -77,6 +77,12 @@ public class GameManager : MonoBehaviour
     {
         if (isChangingScene) return;
 
+        gameEnded = false;
+        LastRunResult = RunResult.None;
+
+        Session.Reset();
+        Session.RebuildStatsSystem();
+
         ChangeScene(MainMenuScene);
     }
 
@@ -108,7 +114,6 @@ public class GameManager : MonoBehaviour
     public void StartNewSession()
     {
         if (isChangingScene) return;
-
 
         gameEnded = false;
         LastRunResult = RunResult.None;
