@@ -21,6 +21,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] GameObject coin;
     private Transform goldBox;
 
+    [Header("Particle Systems")]
+    [SerializeField] ParticleSystem enemyHitPS;
+
     private List<IWagon> trainList = new();
 
     List<EnemyData> spawnPool = new();
@@ -35,12 +38,14 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
+        GameEvents.OnEnemyHit += EnemyHit;
         
     }
 
     private void OnDisable()
     {
         GameEvents.OnEnemyDeath -= EnemyDead;
+        GameEvents.OnEnemyHit -= EnemyHit;
     }
 
 
@@ -50,7 +55,6 @@ public class SpawnManager : MonoBehaviour
         cam = Camera.main;
         SetLevelData();
         BuildPool();
-        //Debug.Log("hola si probando, nivel: " + GameManager.Instance.RunNumber + "level spawn: " + currentlevelData.name);
         TrySpawn();
         goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
     }
@@ -71,7 +75,6 @@ public class SpawnManager : MonoBehaviour
     {
         if (!activeZones.Contains(zone))
         {
-           // Debug.Log("zone register");
             activeZones.Add(zone);
         }
             
@@ -118,7 +121,7 @@ public class SpawnManager : MonoBehaviour
         int index = Random.Range(0, spawnPool.Count);
 
         EnemyData enemyToSpawn = spawnPool[index];
-        GameObject enemyGO = Instantiate(currentlevelData.prefab, pos, Quaternion.identity);
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
         enemy.Initialize(enemyToSpawn);
         enemy.SetTargetList(trainList);
@@ -151,7 +154,7 @@ public class SpawnManager : MonoBehaviour
 
     void SpawCoin(Vector3 position, Transform goTo)
     {
-        GameObject coinGO = Instantiate(coin, position, Quaternion.identity);
+        GameObject coinGO = ObjectPoolManager.SpawnObject(coin, position, Quaternion.identity);
         Coin coinScript = coinGO.GetComponent<Coin>();
         coinScript.SetTarget(goTo);
     }
@@ -161,6 +164,17 @@ public class SpawnManager : MonoBehaviour
     {
         SpawCoin(position, goldBox);
         aliveEnemies--;
+    }
 
+    void SpawnParticles(Vector3 position) 
+    {
+        Debug.Log("enemy hit");
+        ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
+    }
+
+
+    void EnemyHit(Vector3 position) 
+    {
+        SpawnParticles(position);
     }
 }

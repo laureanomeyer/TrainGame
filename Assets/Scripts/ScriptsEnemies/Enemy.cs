@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        //Debug.Log("took: " + damage);
+        GameEvents.EnemyHit(transform.position);
         if (currentHealth > 0)
         {
             flash.Flash();
@@ -83,7 +83,6 @@ public class Enemy : MonoBehaviour
 
             KnockbackVelocity += -transform.forward * 6f;
         }
-
         else
             Dead();
     }
@@ -92,13 +91,13 @@ public class Enemy : MonoBehaviour
     {
         GameEvents.GoldEarned(data.gold);
         GameEvents.EnemyDeath(transform.position);
-        Destroy(gameObject);
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
     private void DeadWallDead()
     {
         GameEvents.EnemyDeath(transform.position);
-        Destroy(gameObject);
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
     //---------------------GIZMOS-------------------------

@@ -24,6 +24,8 @@ public static class GameEvents
 
     public static event Action<UnityEngine.Vector3> OnEnemyDeath;
 
+    public static event Action<UnityEngine.Vector3> OnEnemyHit;
+
     public static event Action OnShowInteract;
 
     public static event Action OnHideInteract;
@@ -85,6 +87,11 @@ public static class GameEvents
         OnEnemyDeath?.Invoke(position);
     }
 
+    public static void EnemyHit(UnityEngine.Vector3 position)
+    {
+        OnEnemyHit?.Invoke(position);
+    }
+
     public static void ShowInteract()
     {
         OnShowInteract?.Invoke();
@@ -114,4 +121,6 @@ public static class GameEvents
     {
         OnDropGold?.Invoke();
     }
+
+
 }
