@@ -9,6 +9,7 @@ public class SceneTransitionManager : MonoBehaviour
     public static SceneTransitionManager Instance { get; private set; }
 
     [Header("Transition Settings")]
+    [SerializeField] private GameObject transitionRootCanvas;
     [SerializeField] private Image fadeImage;
     [SerializeField] private TMP_Text stationText;
     [SerializeField] private CanvasGroup canvasGroup;
@@ -31,26 +32,45 @@ public class SceneTransitionManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-    #endregion
+        #endregion
 
         HideTransitionInstantly();
     }
 
-    public void TransitionToScene(string sceneName)
+    public void TransitionToScene(string sceneName, SceneTransitionType transitionType)
     {
         if (isTransitioning) return;
 
-        StartCoroutine(TransitionCoroutine(sceneName));
+        StartCoroutine(TransitionCoroutine(sceneName, transitionType));
     }
 
-    private IEnumerator TransitionCoroutine(string sceneName)
+    private IEnumerator TransitionCoroutine(string sceneName, SceneTransitionType transitionType)
     {
         isTransitioning = true;
 
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = true;
+        if (transitionRootCanvas != null)
+        {
+            transitionRootCanvas.SetActive(true);
+        }
 
-        stationText.text = "Cargando...";
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+        }
+
+        if (fadeImage != null)
+        {
+            fadeImage.raycastTarget = true;
+        }
+
+        if (stationText != null)
+        {
+            stationText.raycastTarget = true;
+        }
+
+        stationText.text = GetTransitionText(transitionType);
 
         yield return FadeImage(0f, 1f);
         yield return FadeText(0f, 1f);
@@ -68,8 +88,7 @@ public class SceneTransitionManager : MonoBehaviour
 
         yield return FadeImage(1f, 0f);
 
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = false;
+        HideTransitionInstantly();
 
         isTransitioning = false;
 
@@ -127,12 +146,96 @@ public class SceneTransitionManager : MonoBehaviour
         stationText.color = color;
     }
 
+    private string GetTransitionText(SceneTransitionType transitionType)
+    {
+        int currentLevel = 1;
+
+        if (GameManager.Instance != null &&
+            GameManager.Instance.Session != null &&
+            GameManager.Instance.Session.SessionConfig != null)
+        {
+            currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+        }
+
+        switch (transitionType)
+        {
+            case SceneTransitionType.StartingRun:
+                return $"Comenzando trayecto {currentLevel}";
+
+            case SceneTransitionType.EndingRun:
+                return $"Llegando a la estación {currentLevel}";
+
+            case SceneTransitionType.MainMenu:
+                return "Volviendo al menú principal";
+
+            case SceneTransitionType.Final:
+                return "Finalizando viaje";
+
+            default:
+                return "Cargando...";
+        }
+    }
+
     private void HideTransitionInstantly()
     {
         SetFadeAlpha(0f);
         SetTextAlpha(0f);
 
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = false;
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
+        }
+
+        if (fadeImage != null)
+        {
+            fadeImage.raycastTarget = false;
+        }
+
+        if (stationText != null)
+        {
+            stationText.raycastTarget = false;
+        }
+
+        if (transitionRootCanvas != null)
+        {
+            transitionRootCanvas.SetActive(false);
+        }
+    }
+
+
+    //instant transition oli
+
+    public void TransitionToSceneInstant(string sceneName)
+    {
+        if (isTransitioning) return;
+
+        StartCoroutine(InstantTransitionCoroutine(sceneName));
+    }
+
+    private IEnumerator InstantTransitionCoroutine(string sceneName)
+    {
+        isTransitioning = true;
+
+        HideTransitionInstantly();
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+
+        while (!operation.isDone)
+        {
+            yield return null;
+        }
+
+        yield return null;
+
+        HideTransitionInstantly();
+
+        isTransitioning = false;
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.FinishSceneChange();
+        }
     }
 }

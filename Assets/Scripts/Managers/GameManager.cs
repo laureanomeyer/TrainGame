@@ -45,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         return Session.SessionConfig.CurrentLevel >= lastStation;
     }
+
     public int LastStationDebug()
     {
         return lastStation;
@@ -54,13 +55,10 @@ public class GameManager : MonoBehaviour
     {
         if (isChangingScene) return;
 
-        
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        int currentLevel = Session.SessionConfig.CurrentLevel;
-
-        ChangeScene(ShopScene);
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun);
     }
 
     public void GoToRun()
@@ -68,9 +66,8 @@ public class GameManager : MonoBehaviour
         if (isChangingScene) return;
 
         Session.RebuildStatsSystem();
-        int currentLevel = Session.SessionConfig.CurrentLevel;
 
-        ChangeScene(RunScene);
+        ChangeScene(RunScene, SceneTransitionType.StartingRun);
     }
 
     public void GoToMainMenu()
@@ -83,18 +80,20 @@ public class GameManager : MonoBehaviour
         Session.Reset();
         Session.RebuildStatsSystem();
 
-        ChangeScene(MainMenuScene);
+        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
     }
 
     public void Defeat()
     {
         if (isChangingScene) return;
         if (gameEnded) return;
+
         gameEnded = true;
         LastRunResult = RunResult.Defeat;
 
         Time.timeScale = 1f;
-        ChangeScene(FinalScene);
+
+        ChangeScene(FinalScene, SceneTransitionType.Final, instant: true);
         Cursor.SetCursor(gameplayCursor, new Vector2(256, 256), CursorMode.Auto);
 
     }
@@ -103,12 +102,14 @@ public class GameManager : MonoBehaviour
     {
         if (isChangingScene) return;
         if (gameEnded) return;
+
         gameEnded = true;
         LastRunResult = RunResult.Victory;
 
         Time.timeScale = 1f;
-        ChangeScene(FinalScene);
         Cursor.SetCursor(gameplayCursor, new Vector2(256, 256), CursorMode.Auto);
+
+        ChangeScene(FinalScene, SceneTransitionType.Final);
     }
 
     public void StartNewSession()
@@ -121,8 +122,9 @@ public class GameManager : MonoBehaviour
         Session.Reset();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene);
         Cursor.SetCursor(gameplayCursor, new Vector2(128, 128), CursorMode.Auto);
+
+        ChangeScene(ShopScene, SceneTransitionType.Generic);
     }
 
     public void EndSession()
@@ -133,15 +135,24 @@ public class GameManager : MonoBehaviour
         LastRunResult = RunResult.None;
 
         Session.Reset();
+
         Cursor.SetCursor(menuCursor, new Vector2(256, 256), CursorMode.Auto);
-        ChangeScene(MainMenuScene );
+
+        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
     }
 
-    private void ChangeScene(string sceneName)
+    private void ChangeScene(string sceneName, SceneTransitionType transitionType, bool instant = false)
     {
         isChangingScene = true;
 
-        SceneTransitionManager.Instance.TransitionToScene(sceneName);
+        if (instant)
+        {
+            SceneTransitionManager.Instance.TransitionToSceneInstant(sceneName);
+        }
+        else
+        {
+            SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);
+        }
     }
 
     public void FinishSceneChange()
