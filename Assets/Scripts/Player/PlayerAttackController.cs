@@ -61,7 +61,10 @@ public class PlayerAttackController : MonoBehaviour
     private void AidToMouseDirection()
     {
         if (lookToMouseController == null) return;
-        spawnPoint.forward = lookToMouseController.GetMouseDirection(spawnPoint);
+
+        Vector3 dir = lookToMouseController.GetMouseDirection(spawnPoint);
+        dir.y = 0;
+        spawnPoint.forward = dir;
     }
 
     //Funcion utiliza por el Player Inputs para atacar 
