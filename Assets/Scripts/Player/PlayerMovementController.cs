@@ -1,25 +1,31 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovementController : MonoBehaviour
+public class PlayerMovementController
 {
     [Header("Movement")]
     [SerializeField] private float speed = 5f;
 
     private Rigidbody rb;
     private LookObjectToMouse lookToMouseController;
-    private Vector2 moveInput;
+    private Transform playerTransform;
 
+
+    private Vector2 moveInput;
     private bool canMove = true;
     private bool canRotate = true;
 
-    private void Start()
+    public bool CanMove => canMove;
+
+    public PlayerMovementController(Rigidbody rb, LookObjectToMouse lookToMouseController, Transform playerTransform, float speed)
     {
-        lookToMouseController = GetComponent<LookObjectToMouse>();
-        rb = GetComponent<Rigidbody>();
+        this.rb = rb;
+        this.lookToMouseController = lookToMouseController;
+        this.playerTransform = playerTransform;
+        this.speed = speed;
     }
 
-    private void FixedUpdate()
+    public void FixedUpdate()
     {
         if (!canMove)
         {
@@ -39,9 +45,9 @@ public class PlayerMovementController : MonoBehaviour
         RotateToMouse();
     }
 
-    private void OnMove(InputValue value)
+    public void SetMoveInput(Vector2 input)
     {
-        moveInput = value.Get<Vector2>();
+        moveInput = input;
     }
 
     private void MovePlayer()
@@ -55,7 +61,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (lookToMouseController == null) return;
 
-        Vector3 direction = lookToMouseController.GetMouseDirection(transform);
+        Vector3 direction = lookToMouseController.GetMouseDirection(playerTransform);
         direction.y = 0f;
 
         if (direction.sqrMagnitude <= 0.001f) return;

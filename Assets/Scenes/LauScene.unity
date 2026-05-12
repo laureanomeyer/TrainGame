@@ -1552,6 +1552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7bf1da1632f824dbd1f5bec7d1c0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionManager
+  transitionRootCanvas: {fileID: 0}
   fadeImage: {fileID: 379350066}
   stationText: {fileID: 1960431168}
   canvasGroup: {fileID: 0}
@@ -2327,17 +2328,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1558271860}
   m_SourcePrefab: {fileID: 100100000, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
---- !u!114 &1558271858 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
-  m_PrefabInstance: {fileID: 1558271857}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558271859}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce139bd50ba5774f975850326376dcf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractions
 --- !u!1 &1558271859 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
@@ -2356,6 +2346,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractionText
   interactionText: {fileID: 1481721911}
+--- !u!114 &1558271861 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+  m_PrefabInstance: {fileID: 1558271857}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558271859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f319f3222fb9e474d9f941ace11f4f28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBrain
 --- !u!1 &1583139274
 GameObject:
   m_ObjectHideFlags: 0
@@ -3174,6 +3175,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1558271861}
+    - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
       propertyPath: shopUI
       value: 
       objectReference: {fileID: 0}
@@ -3252,7 +3257,7 @@ PrefabInstance:
     - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
       propertyPath: playerInteractions
       value: 
-      objectReference: {fileID: 1558271858}
+      objectReference: {fileID: 0}
     - target: {fileID: 1060243660957242778, guid: a2b427a94d2ffd9439f0d83cdeeaecf8, type: 3}
       propertyPath: sceneRunController
       value: 

@@ -1,9 +1,9 @@
 using System;
-using System.Numerics;
-using UnityEngine;
 
 public static class GameEvents
 {
+    public static bool InteractConsumed { get; set; }
+
     public static event Action<float> OnGoldEarned;
     
     public static event Action<float> OnGoldBoxChanged;
@@ -37,6 +37,8 @@ public static class GameEvents
     public static event Action OnDropFuel;
 
     public static event Action OnDropGold;
+
+    public static event Action OnInteractPressed;
 
     public static void GoldEarned(float amount)
     {
@@ -121,6 +123,9 @@ public static class GameEvents
     {
         OnDropGold?.Invoke();
     }
-
+    public static void InteractPressed()
+    {
+        OnInteractPressed?.Invoke();
+    }
 
 }

@@ -15,7 +15,7 @@ namespace HUDIndicator {
 
 		private void Start() {
             if (renderers.Count == 0) {
-                IndicatorRenderer[] renderersInScene = GameObject.FindObjectsOfType<IndicatorRenderer>(true);
+                IndicatorRenderer[] renderersInScene = GameObject.FindObjectsByType<IndicatorRenderer>(FindObjectsSortMode.None);
 
                 if (renderersInScene.Length > 0) {
                     renderers = renderersInScene.ToList();

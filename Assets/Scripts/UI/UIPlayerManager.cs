@@ -5,7 +5,7 @@ using TMPro;
 public class UIPlayerManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private PlayerInteractions playerInteractions;
+    [SerializeField] private PlayerBrain player;
 
 
     [Header("Locomotive UI")]
@@ -80,7 +80,7 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateInventoryUI()
     {
-        PlayerInventory inventory = playerInteractions.Inventory;
+        PlayerInventory inventory = player.Inventory;
 
         if (inventory != null)
         {
@@ -126,7 +126,7 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateRunProgress()
     {
-        if (playerInteractions.Inventory == null) return;
+        if (player.Inventory == null) return;
 
             float progress = sceneRunController.Progress;
 

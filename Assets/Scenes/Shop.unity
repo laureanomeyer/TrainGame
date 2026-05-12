@@ -1571,6 +1571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
   zoneType: 0
   message: Press F to buy Wagon,  press O to Restart
+  optionalPanel: {fileID: 0}
 --- !u!1 &469501462
 GameObject:
   m_ObjectHideFlags: 0
@@ -2975,12 +2976,12 @@ GameObject:
   - component: {fileID: 718338757}
   - component: {fileID: 718338760}
   m_Layer: 5
-  m_Name: ButtonPanel
+  m_Name: WeaponsUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &718338757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3266,37 +3267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
   zoneType: 0
   message: 
---- !u!1 &805683555
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 805683556}
-  m_Layer: 0
-  m_Name: SpawnPoint 4
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &805683556
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 805683555}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.333, y: -0.07, z: -0.23}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1515640739}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  optionalPanel: {fileID: 0}
 --- !u!1 &818310169
 GameObject:
   m_ObjectHideFlags: 0
@@ -3449,7 +3420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 898533623}
   - component: {fileID: 898533622}
-  - component: {fileID: 898533624}
+  - component: {fileID: 898533625}
   m_Layer: 3
   m_Name: InteractLocomotiveUpdates
   m_TagString: Untagged
@@ -3494,7 +3465,7 @@ Transform:
   - {fileID: 775141438}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 41.447, z: 0}
---- !u!114 &898533624
+--- !u!114 &898533625
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3503,10 +3474,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 898533621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e41bf1cac4a209440b144e8a8d95c39a, type: 3}
+  m_Script: {fileID: 11500000, guid: 575e4de63cc326649ba8463d707d8057, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
-  UILocomotivesUpgrades: {fileID: 2014402468}
+  m_EditorClassIdentifier: Assembly-CSharp::StoreUiInteracts
+  uiToShow: {fileID: 2014402468}
 --- !u!1001 &917034658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3515,6 +3486,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: interactionUIManager
+      value: 
+      objectReference: {fileID: 1375272491}
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: interactionUIManager
       value: 
@@ -3578,7 +3553,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1587032997}
   m_SourcePrefab: {fileID: 100100000, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
 --- !u!1 &921080834
 GameObject:
@@ -5936,6 +5914,7 @@ RectTransform:
   - {fileID: 1793641584}
   - {fileID: 1274201612}
   - {fileID: 509448152}
+  - {fileID: 1713792623}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -6038,9 +6017,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1383411881}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab8265549cfa943409efef0c0689239a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e72d2fde1fc8a0479bfb90f4e02137a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopZone
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
+  zoneType: 1
+  message: 
+  optionalPanel: {fileID: 718338756}
 --- !u!1 &1385243851
 GameObject:
   m_ObjectHideFlags: 0
@@ -6490,6 +6472,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
   zoneType: 0
   message: Press F to buy Wagon,  press O to Restart
+  optionalPanel: {fileID: 0}
 --- !u!114 &1465251337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6670,6 +6653,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
   m_PrefabInstance: {fileID: 9053902308235256331}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1587032996 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+  m_PrefabInstance: {fileID: 917034658}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1587032997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587032996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a84afd6dde4dc14bbaedfd836f07724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteractionText
+  interactionText: {fileID: 1713792620}
 --- !u!1 &1629899573
 GameObject:
   m_ObjectHideFlags: 0
@@ -6985,6 +6986,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1697229563}
   m_CullTransparentMesh: 1
+--- !u!1 &1713792620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1713792623}
+  - component: {fileID: 1713792622}
+  - component: {fileID: 1713792621}
+  m_Layer: 5
+  m_Name: F Interact
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1713792621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713792620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 2dcc42ad5fad4b54d9f732f0cc0c705a, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1713792622
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713792620}
+  m_CullTransparentMesh: 1
+--- !u!224 &1713792623
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1713792620}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.0000113, y: 1.0000113, z: 1.0000113}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1375272490}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -75}
+  m_SizeDelta: {x: 58.405, y: 58.4045}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1788893336
 GameObject:
   m_ObjectHideFlags: 0
@@ -7985,26 +8061,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 505731351}
     m_Modifications:
-    - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: m_Size.x
-      value: 2.881864
-      objectReference: {fileID: 0}
-    - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: m_Size.y
-      value: 0.9999997
-      objectReference: {fileID: 0}
-    - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: m_Size.z
-      value: 0.6500355
-      objectReference: {fileID: 0}
-    - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: m_Center.x
-      value: 0.025595125
-      objectReference: {fileID: 0}
-    - target: {fileID: 1369101928665954601, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: m_Center.z
-      value: -0.022204887
-      objectReference: {fileID: 0}
     - target: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 32.55
@@ -8046,65 +8102,16 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: buttonText
-      value: Press F to buy Wagon,  press O to Restart
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: wagonPrefab
-      value: 
-      objectReference: {fileID: 3103947036141524443, guid: 108db729cb17c1b46857361b2f614244, type: 3}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: storeManager
       value: 
       objectReference: {fileID: 505731350}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: trainManager
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: descriptionText
-      value: .
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: spawnWagonPoint
-      value: 
-      objectReference: {fileID: 805683556}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: wagonsInStock.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: 'wagonsInStock.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 1c018fec4b9a794479c9b3debdec30d0, type: 2}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: 'wagonsInStock.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 80206949286be384fa95dd3172597d7b, type: 2}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: 'wagonsInStock.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 1c018fec4b9a794479c9b3debdec30d0, type: 2}
-    - target: {fileID: 3494164443460426275, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: ebd1b375f9866974b918725cc5d33522, type: 2}
     - target: {fileID: 3574913483160136529, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Name
       value: WagonUpgrade1
       objectReference: {fileID: 0}
-    - target: {fileID: 9200360204539160305, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: message
-      value: Press F to buy Wagon,  press O to Restart
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3494164443460426275, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-    - {fileID: 5801927550549255740, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 805683556}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
 --- !u!1660057539 &9223372036854775807

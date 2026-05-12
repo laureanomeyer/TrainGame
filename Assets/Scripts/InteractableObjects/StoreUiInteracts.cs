@@ -1,0 +1,40 @@
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class StoreUiInteracts : MonoBehaviour
+{
+    [SerializeField] private GameObject uiToShow;
+    private bool playerInZone;
+
+    private void OnEnable()
+    {
+        GameEvents.OnInteractPressed += OnPlayerInteract;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnInteractPressed -= OnPlayerInteract;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+        playerInZone = true;
+        GameEvents.ShowInteract();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.CompareTag("Player")) return;
+        playerInZone = false;
+        GameEvents.HideInteract();
+        uiToShow.SetActive(false);
+    }
+
+    private void OnPlayerInteract()
+    {
+        if (!playerInZone) return;
+        uiToShow.SetActive(true);
+        GameEvents.HideInteract();
+    }
+}

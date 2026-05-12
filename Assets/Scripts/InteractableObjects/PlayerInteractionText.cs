@@ -7,6 +7,8 @@ public class PlayerInteractionText : MonoBehaviour
     void Start()
     {
         HidePrompt();
+        GameEvents.OnShowInteract += ShowPrompt;
+        GameEvents.OnHideInteract += HidePrompt;
     }
 
     public void ShowPrompt()
@@ -23,5 +25,11 @@ public class PlayerInteractionText : MonoBehaviour
         {
             interactionText.SetActive(false);
         }
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.OnShowInteract -= ShowPrompt;
+        GameEvents.OnHideInteract -= HidePrompt;
     }
 }

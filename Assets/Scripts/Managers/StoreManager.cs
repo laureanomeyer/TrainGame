@@ -23,7 +23,6 @@ public class StoreManager : MonoBehaviour
     private void Start()
     {
         playerData = GameManager.Instance.Session.PlayerData;
-        Debug.Log("Oro " + playerData.Gold);
         goldDisplay.UpdatedGold(playerData.Gold);
     }
 

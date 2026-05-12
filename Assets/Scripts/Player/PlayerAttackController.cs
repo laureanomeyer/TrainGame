@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,7 +29,8 @@ public class PlayerAttackController : MonoBehaviour
         repairAction.performed += ActiveAttack;
         repairAction.canceled += DeactiveAttack;
 
-        lookToMouseController = GetComponent<LookObjectToMouse>();
+        PlayerBrain brain = GetComponent<PlayerBrain>();
+        lookToMouseController = brain.FaceMouse;
         pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
 
         //Se establece el arma equipada

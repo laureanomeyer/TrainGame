@@ -14,7 +14,6 @@ public class MoneyManager : MonoBehaviour
         GameEvents.OnChangeGold += ChangePlayerGoldData;
 
         goldDisplay.UpdatedGold(playerMoney);
-        //Debug.Log("player gold: " + playerMoney);
     }
 
     private void ChangePlayerGoldData()

@@ -13,6 +13,11 @@ public class GoldUIDisplay : MonoBehaviour
 
     private UnityEngine.Color colorText;
 
+    private void Start()
+    {
+        colorText = BuyDoneText.color;
+    }
+
     public void UpdatedGold(float gold)
     {
         GoldTextUI.text = "Oro total: " + gold;
@@ -26,18 +31,18 @@ public class GoldUIDisplay : MonoBehaviour
 
     public void PlayFade()
     {
-        StopAllCoroutines(); // evita superposición
+        StopAllCoroutines(); 
         StartCoroutine(FadeRoutine());
     }
 
 
     IEnumerator FadeRoutine()
     {
-        // Forzar alpha inicial a 0
-        colorText.a = minAlpha; // 👈 esto es lo que faltaba
+        
+        colorText.a = minAlpha;
         BuyDoneText.color = colorText;
 
-        // SUBE
+  
         while (colorText.a < maxAlpha)
         {
             colorText.a += speed * Time.deltaTime;

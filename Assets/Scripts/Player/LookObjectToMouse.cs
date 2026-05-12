@@ -1,17 +1,18 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class LookObjectToMouse : MonoBehaviour
+public class LookObjectToMouse
 {
-    [Header("Aim")]
-    [SerializeField] private LayerMask groundMask;
+    private LayerMask groundMask;
 
     private Camera mainCamera;
 
-    private void Start()
+    public LookObjectToMouse(LayerMask groundMask)
     {
+        this.groundMask = groundMask;
         mainCamera = Camera.main;
     }
+
 
     public Vector3 GetMouseDirection(Transform objectTransform)
     {

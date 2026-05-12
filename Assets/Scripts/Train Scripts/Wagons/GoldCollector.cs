@@ -33,8 +33,6 @@ public class GoldCollector
         GameEvents.OnGoldEarned -= CollectGold;
         cts?.Cancel();
         cts?.Dispose();
-
-        Debug.Log("Me destrui");
     }
 
     public void CollectGold(float amount)

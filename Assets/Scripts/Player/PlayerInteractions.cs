@@ -1,13 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
-public class PlayerInteractions : MonoBehaviour
+public class PlayerInteractions
 {
-    [SerializeField] private WagonBrain currentWagon;
-    [SerializeField] private float repairCapacity;
-    [SerializeField] private InteractionUIManager interactionUIManager;
+    private float repairCapacity;
+    private InteractionUIManager interactionUIManager;
 
+    private WagonBrain currentWagon;
     private ShopButton currentButton;
     private ShopZone currentShopZone;
     private ActiveTurretStation currentTurretStation;
@@ -25,17 +24,17 @@ public class PlayerInteractions : MonoBehaviour
     private bool buttonIsHold = false;
     private bool isUsingTurret = false;
 
-    void Start()
+    public PlayerInteractions(PlayerBrain playerBrain, PlayerMovementController playerMovementController, LookObjectToMouse lookObjectToMouse, InteractionUIManager interactionUIManager, float repairCapacity)
     {
-        playerBrain = GetComponent<PlayerBrain>();
-        playerMovementController = GetComponent<PlayerMovementController>();
-        lookObjectToMouse = GetComponent<LookObjectToMouse>();
-
+        this.playerBrain = playerBrain;
+        this.playerMovementController = playerMovementController;
+        this.lookObjectToMouse = lookObjectToMouse;
         playerInventory = playerBrain.Inventory;
-
         repairAction = InputSystem.actions.FindAction("Repair");
         repairAction.performed += ActiveRepairInput;
         repairAction.canceled += DeactiveRepairInput;
+        this.interactionUIManager = interactionUIManager;
+        this.repairCapacity = repairCapacity;
 
         if (interactionUIManager != null)
         {
@@ -43,13 +42,13 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 
-    private void Update()
+    public void Update()
     {
         Repair();
         HandleTurretUse();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Train"))
         {
@@ -70,22 +69,12 @@ public class PlayerInteractions : MonoBehaviour
         {
             other.TryGetComponent(out ShopButton shopButton);
             currentButton = shopButton;
-
-            if (currentButton != null && interactionUIManager != null)
-            {
-                interactionUIManager.ShowText(currentButton.DescriptionText);
-            }
         }
 
         if (other.CompareTag("ShopZone"))
         {
             other.TryGetComponent(out ShopZone shopZone);
             currentShopZone = shopZone;
-
-            if (currentShopZone != null && interactionUIManager != null)
-            {
-                interactionUIManager.ShowButtons();
-            }
         }
 
         if (other.CompareTag("ActiveTurret"))
@@ -100,7 +89,7 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Train"))
         {
@@ -108,9 +97,7 @@ public class PlayerInteractions : MonoBehaviour
             {
                 currentWagon.HideHpBar();
                 currentWagon = null;
-            }
-
-            
+            }  
         }
 
         if (other.CompareTag("ShopButton"))
@@ -238,11 +225,13 @@ public class PlayerInteractions : MonoBehaviour
     public void ActiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = true;
+        playerMovementController.SetCanMove(false);
     }
 
     public void DeactiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = false;
+        playerMovementController.SetCanMove(true);
     }
 
     void Repair()
@@ -255,16 +244,6 @@ public class PlayerInteractions : MonoBehaviour
         }
     }
 
-    public void OnReloadScene()
-    {
-        ReloadScene();
-    }
-
-    public void ReloadScene()
-    {
-        //GameManager.Instance.GoToRun();
-    }
-
     public void OnOpenMainMenu()
     {
         OpenMainMenu();
@@ -273,5 +252,14 @@ public class PlayerInteractions : MonoBehaviour
     public void OpenMainMenu()
     {
         GameManager.Instance.EndSession();
+    }
+
+    public void Cleanup()
+    {
+        if (repairAction != null)
+        {
+            repairAction.performed -= ActiveRepairInput;
+            repairAction.canceled -= DeactiveRepairInput;
+        }
     }
 }
