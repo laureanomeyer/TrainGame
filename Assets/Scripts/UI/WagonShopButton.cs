@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class ShopButton : MonoBehaviour
+public class WagonShopButton : MonoBehaviour
 {
     private string descriptionText;
 
-    private int level;
+    private int currentLevel;
 
-    [SerializeField] private WagonInStockSO[] wagonsInStock;
+    public int Level { get => currentLevel; set => currentLevel = value; }
+
+    private WagonInStockSO[] wagonsInStock;
 
     private WagonInStockSO currentWagonInStock;
     public WagonInStockSO CurrentWagonInStock => currentWagonInStock;
@@ -32,23 +34,21 @@ public class ShopButton : MonoBehaviour
     {
         textUI = storeManager.descriptionTextUI;
 
-        level = storeManager.Level;
-
         foreach (var collection in wagonsCollectionSOs)
         {
             wagonsCollections.Add(collection.level, collection.WagonCollection);
         }
 
 
-        if (level > wagonsCollections.Count)
+        if (currentLevel > wagonsCollections.Count)
         {
             wagonsInStock = wagonsCollections[wagonsCollections.Count];
         }
         else
         {
-            if (wagonsCollections.ContainsKey(level))
+            if (wagonsCollections.ContainsKey(currentLevel))
             {
-                wagonsInStock = wagonsCollections[level];
+                wagonsInStock = wagonsCollections[currentLevel];
             }
             else
             {

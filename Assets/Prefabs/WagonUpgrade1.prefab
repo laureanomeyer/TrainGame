@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1735568880357236800}
   - component: {fileID: 1369101928665954601}
-  - component: {fileID: 1831918778947639840}
   - component: {fileID: 9200360204539160305}
+  - component: {fileID: 4268736138887028017}
   m_Layer: 0
   m_Name: WagonUpgrade1
   m_TagString: ShopButton
@@ -56,24 +56,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.881864, y: 0.9999997, z: 0.6500355}
   m_Center: {x: 0.025595125, y: 0, z: -0.022204887}
---- !u!114 &1831918778947639840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3574913483160136529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  descriptionText: .
-  wagonsInStock:
-  - {fileID: 11400000, guid: 1c018fec4b9a794479c9b3debdec30d0, type: 2}
-  - {fileID: 11400000, guid: 80206949286be384fa95dd3172597d7b, type: 2}
-  spawnWagonPoint: {fileID: 2661907403367792995}
-  storeManager: {fileID: 0}
 --- !u!114 &9200360204539160305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +70,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InteractionZone
   zoneType: 0
   message: Press F to buy Wagon,  press O to Restart
+  optionalPanel: {fileID: 0}
+--- !u!114 &4268736138887028017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3574913483160136529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: 2375f0b629341824c9fa9bad89986dfb, type: 2}
+  spawnWagonPoint: {fileID: 2661907403367792995}
+  storeManager: {fileID: 0}
 --- !u!1 &8985697660809943731
 GameObject:
   m_ObjectHideFlags: 0

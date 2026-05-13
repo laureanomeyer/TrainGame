@@ -53,7 +53,7 @@ public class InteractionZone : MonoBehaviour
             GameEvents.InteractConsumed = true;
             isOpen = true;
 
-            string textToShow = TryGetComponent(out ShopButton shopButton)
+            string textToShow = TryGetComponent(out WagonShopButton shopButton)
                  ? shopButton.DescriptionText
                  : message;
 

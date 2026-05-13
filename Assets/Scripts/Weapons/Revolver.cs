@@ -37,10 +37,6 @@ public class Revolver : MonoBehaviour, IWeapons
     //Referencia a la pool de balas
     private BulletPool bulletPool;
 
-    public void Activate()
-    {
-    }
-
     public void Shoot(Transform spawnPoint)
     {
         if (isReloading) return;

@@ -3,12 +3,25 @@ using UnityEngine;
 
 public class WagonStoreManager : MonoBehaviour
 {
-    [Header("Level of progress")]
-    [SerializeField] private int level;
-    public int Level => level;
+    [Header("Wagon shop sections")]
+    [SerializeField] private WagonShopButton[] shopButtons;
+
+    private int currentLevel;
+    public int Level => currentLevel;
+
     //[SerializeField] public int maxLevel;
 
     [SerializeField] public TextMeshProUGUI descriptionTextUI;
+
+    private void Start()
+    {
+        currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+
+        foreach (var button in shopButtons)
+        {
+            button.Level = currentLevel;
+        }
+    }
 
     public bool TryConsumeGold(float amount)
     {

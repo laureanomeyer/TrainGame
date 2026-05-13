@@ -1491,8 +1491,8 @@ GameObject:
   m_Component:
   - component: {fileID: 464905830}
   - component: {fileID: 464905827}
-  - component: {fileID: 464905826}
   - component: {fileID: 464905831}
+  - component: {fileID: 464905832}
   m_Layer: 0
   m_Name: WagonUpgrade3
   m_TagString: ShopButton
@@ -1500,23 +1500,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &464905826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 464905825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  wagonsInStock: []
-  wagonsCollectionSOs:
-  - {fileID: 11400000, guid: 75438e9ddb3306c4aad1837426422a2c, type: 2}
-  spawnWagonPoint: {fileID: 118387131}
-  storeManager: {fileID: 505731350}
 --- !u!65 &464905827
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1569,6 +1552,22 @@ MonoBehaviour:
   zoneType: 0
   message: Press F to buy Wagon,  press O to Restart
   optionalPanel: {fileID: 0}
+--- !u!114 &464905832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 464905825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: 75438e9ddb3306c4aad1837426422a2c, type: 2}
+  spawnWagonPoint: {fileID: 118387131}
+  storeManager: {fileID: 505731350}
 --- !u!1 &469501462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,7 +1734,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c49dabf44c76c746b45174d95d5d760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  level: 2
+  shopButtons:
+  - {fileID: 1515640743}
+  - {fileID: 800090917}
+  - {fileID: 464905832}
+  - {fileID: 1465251339}
   descriptionTextUI: {fileID: 4923871}
 --- !u!4 &505731351
 Transform:
@@ -3181,8 +3184,8 @@ GameObject:
   m_Component:
   - component: {fileID: 800090915}
   - component: {fileID: 800090912}
-  - component: {fileID: 800090911}
   - component: {fileID: 800090916}
+  - component: {fileID: 800090917}
   m_Layer: 0
   m_Name: WagonUpgrade2
   m_TagString: ShopButton
@@ -3190,26 +3193,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &800090911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 800090910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  wagonsInStock:
-  - {fileID: 11400000, guid: eca4772a8c0c5fe47b79d30a891736b0, type: 2}
-  - {fileID: 11400000, guid: 13756da67bf6f34488262dfd59734305, type: 2}
-  - {fileID: 11400000, guid: 2bda8e7a182aee1458f2d3054110342f, type: 2}
-  wagonsCollectionSOs:
-  - {fileID: 11400000, guid: f8ddc02069f80cc4c9aba836b460f664, type: 2}
-  spawnWagonPoint: {fileID: 937126556}
-  storeManager: {fileID: 505731350}
 --- !u!65 &800090912
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3262,6 +3245,22 @@ MonoBehaviour:
   zoneType: 0
   message: 
   optionalPanel: {fileID: 0}
+--- !u!114 &800090917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800090910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: f8ddc02069f80cc4c9aba836b460f664, type: 2}
+  spawnWagonPoint: {fileID: 937126556}
+  storeManager: {fileID: 505731350}
 --- !u!1 &818310169
 GameObject:
   m_ObjectHideFlags: 0
@@ -6334,9 +6333,9 @@ MonoBehaviour:
   defenseButton: {fileID: 1865815516}
   goldMultiplierButton: {fileID: 438761834}
   self: {fileID: 1431052560}
-  upgradesLevel: []
-  description: {fileID: 0}
-  textDescription: 
+  upgradesLevel:
+  - {fileID: 11400000, guid: 8ecf5abb3171fad4c9fb87bb8cc690d8, type: 2}
+  descriptionUI: {fileID: 566622557}
 --- !u!1 &1461899853
 GameObject:
   m_ObjectHideFlags: 0
@@ -6425,8 +6424,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1465251335}
   - component: {fileID: 1465251338}
-  - component: {fileID: 1465251337}
   - component: {fileID: 1465251336}
+  - component: {fileID: 1465251339}
   m_Layer: 0
   m_Name: WagonUpgrade4
   m_TagString: ShopButton
@@ -6465,24 +6464,6 @@ MonoBehaviour:
   zoneType: 0
   message: Press F to buy Wagon,  press O to Restart
   optionalPanel: {fileID: 0}
---- !u!114 &1465251337
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465251334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  wagonsInStock:
-  - {fileID: 11400000, guid: 98eacd1c34655eb418ba7e1afb6df679, type: 2}
-  wagonsCollectionSOs:
-  - {fileID: 11400000, guid: b79d19ce7746e8b408e3bbaddd7feb3d, type: 2}
-  spawnWagonPoint: {fileID: 1921304405}
-  storeManager: {fileID: 505731350}
 --- !u!65 &1465251338
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6504,6 +6485,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.1622705, y: 0.9999997, z: 0.84776217}
   m_Center: {x: 0.010620299, y: 0, z: -0.010206431}
+--- !u!114 &1465251339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1465251334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: b79d19ce7746e8b408e3bbaddd7feb3d, type: 2}
+  spawnWagonPoint: {fileID: 1921304405}
+  storeManager: {fileID: 505731350}
 --- !u!1 &1481280272
 GameObject:
   m_ObjectHideFlags: 0
@@ -6646,6 +6643,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1735568880357236800, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
   m_PrefabInstance: {fileID: 9053902308235256331}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1515640743 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+  m_PrefabInstance: {fileID: 9053902308235256331}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
 --- !u!1 &1587032996 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
@@ -8086,22 +8094,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: storeManager
-      value: 
-      objectReference: {fileID: 505731350}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: wagonsCollectionSOs.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
-      propertyPath: 'wagonsCollectionSOs.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 2375f0b629341824c9fa9bad89986dfb, type: 2}
     - target: {fileID: 3574913483160136529, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Name
       value: WagonUpgrade1
       objectReference: {fileID: 0}
+    - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: storeManager
+      value: 
+      objectReference: {fileID: 505731350}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

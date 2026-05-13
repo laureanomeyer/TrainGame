@@ -13,6 +13,9 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private string textDescription;
 
+    private float upgrade;
+    public float Upgrade { get => upgrade; set => upgrade = value; }
+
 
     void Start()
     {
@@ -29,7 +32,7 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     {
         if (button.interactable == true)
         {
-            description.text = textDescription;
+            description.text = textDescription + "\n\n" + "Aumento de " + upgrade;
         }
     }
 

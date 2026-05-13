@@ -7,7 +7,7 @@ public class PlayerInteractions
     private InteractionUIManager interactionUIManager;
 
     private WagonBrain currentWagon;
-    private ShopButton currentButton;
+    private WagonShopButton currentButton;
     private ShopZone currentShopZone;
     private ActiveTurretStation currentTurretStation;
     private ActiveTurretStation usingTurretStation;
@@ -67,7 +67,7 @@ public class PlayerInteractions
 
         if (other.CompareTag("ShopButton"))
         {
-            other.TryGetComponent(out ShopButton shopButton);
+            other.TryGetComponent(out WagonShopButton shopButton);
             currentButton = shopButton;
         }
 
@@ -102,7 +102,7 @@ public class PlayerInteractions
 
         if (other.CompareTag("ShopButton"))
         {
-            if (other.TryGetComponent(out ShopButton shopButton) && shopButton == currentButton)
+            if (other.TryGetComponent(out WagonShopButton shopButton) && shopButton == currentButton)
             {
                 currentButton = null;
 
