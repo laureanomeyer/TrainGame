@@ -1,14 +1,22 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class ShopButton : MonoBehaviour
 {
-    [SerializeField] private string descriptionText;
+    private string descriptionText;
+
+    private int level;
+
     [SerializeField] private WagonInStockSO[] wagonsInStock;
 
     private WagonInStockSO currentWagonInStock;
     public WagonInStockSO CurrentWagonInStock => currentWagonInStock;
+
+    [SerializeField] private ShopWagonCollectionSO[] wagonsCollectionSOs;
+
+    private Dictionary<int, WagonInStockSO[]> wagonsCollections = new Dictionary<int, WagonInStockSO[]>();
 
     [SerializeField] private Transform spawnWagonPoint;
 
@@ -23,6 +31,32 @@ public class ShopButton : MonoBehaviour
     private void Start()
     {
         textUI = storeManager.descriptionTextUI;
+
+        level = storeManager.Level;
+
+        foreach (ShopWagonCollectionSO collection in wagonsCollectionSOs)
+        {
+            wagonsCollections.Add(collection.level, collection.WagonCollection);
+        }
+
+
+        if (level > wagonsCollections.Count)
+        {
+            wagonsInStock = wagonsCollections[wagonsCollections.Count];
+        }
+        else
+        {
+            if (wagonsCollections.ContainsKey(level))
+            {
+                wagonsInStock = wagonsCollections[level];
+            }
+            else
+            {
+                wagonsInStock = new WagonInStockSO[0];
+            }
+        }
+
+
 
         if (wagonsInStock.Length > 0)
         {

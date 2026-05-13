@@ -45,6 +45,9 @@ public class PlayerAttackController : MonoBehaviour
 
         waitToFire = weapon.RateOfFire;
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);
+
+        weapon.RateOfFire = weapon.RateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
+        weapon.ReloadDuration = weapon.ReloadDuration / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
     }
 
     void Update()

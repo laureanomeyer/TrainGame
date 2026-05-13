@@ -882,8 +882,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 818310170}
   - {fileID: 1012830757}
+  - {fileID: 818310170}
   - {fileID: 533262833}
   - {fileID: 1788893337}
   - {fileID: 1865815515}
@@ -1516,8 +1516,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  descriptionText: .
   wagonsInStock: []
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: 75438e9ddb3306c4aad1837426422a2c, type: 2}
   spawnWagonPoint: {fileID: 118387131}
   storeManager: {fileID: 505731350}
 --- !u!65 &464905827
@@ -1738,7 +1739,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c49dabf44c76c746b45174d95d5d760, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  level: 0
+  level: 2
   descriptionTextUI: {fileID: 4923871}
 --- !u!4 &505731351
 Transform:
@@ -3209,11 +3210,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  descriptionText: .
   wagonsInStock:
   - {fileID: 11400000, guid: eca4772a8c0c5fe47b79d30a891736b0, type: 2}
   - {fileID: 11400000, guid: 13756da67bf6f34488262dfd59734305, type: 2}
   - {fileID: 11400000, guid: 2bda8e7a182aee1458f2d3054110342f, type: 2}
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: f8ddc02069f80cc4c9aba836b460f664, type: 2}
   spawnWagonPoint: {fileID: 937126556}
   storeManager: {fileID: 505731350}
 --- !u!65 &800090912
@@ -4320,7 +4322,7 @@ GameObject:
   - component: {fileID: 1012830759}
   - component: {fileID: 1012830758}
   m_Layer: 5
-  m_Name: Upgrades max HP (1)
+  m_Name: Close button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6485,9 +6487,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff33a706ae72c1a4ea763b24609defcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopButton
-  descriptionText: .
   wagonsInStock:
   - {fileID: 11400000, guid: 98eacd1c34655eb418ba7e1afb6df679, type: 2}
+  wagonsCollectionSOs:
+  - {fileID: 11400000, guid: b79d19ce7746e8b408e3bbaddd7feb3d, type: 2}
   spawnWagonPoint: {fileID: 1921304405}
   storeManager: {fileID: 505731350}
 --- !u!65 &1465251338
@@ -8105,6 +8108,14 @@ PrefabInstance:
       propertyPath: storeManager
       value: 
       objectReference: {fileID: 505731350}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: wagonsCollectionSOs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1831918778947639840, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: 'wagonsCollectionSOs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 2375f0b629341824c9fa9bad89986dfb, type: 2}
     - target: {fileID: 3574913483160136529, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: m_Name
       value: WagonUpgrade1
@@ -8123,10 +8134,10 @@ SceneRoots:
   - {fileID: 286238103}
   - {fileID: 2010371301}
   - {fileID: 1375272490}
-  - {fileID: 1383411887}
   - {fileID: 917034658}
   - {fileID: 252329277}
   - {fileID: 1670977927}
+  - {fileID: 1383411887}
   - {fileID: 505731351}
   - {fileID: 898533623}
   - {fileID: 557648912}

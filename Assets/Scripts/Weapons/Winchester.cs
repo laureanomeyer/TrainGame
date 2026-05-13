@@ -22,11 +22,11 @@ public class Winchester : MonoBehaviour, IWeapons
 
     [Header("Reloud time")]
     [SerializeField] private float reloadDuration;
-    public float ReloadDuration { get => reloadDuration; }
+    public float ReloadDuration { get => reloadDuration; set => reloadDuration = value; }
 
     [Header("Rate of fire")]
     [SerializeField] private float rateOfFire;
-    public float RateOfFire { get => rateOfFire; }
+    public float RateOfFire { get => rateOfFire; set => rateOfFire = value; }
 
     private bool isReloading = false;
     public bool IsReloading { get => isReloading; set => isReloading = value; }

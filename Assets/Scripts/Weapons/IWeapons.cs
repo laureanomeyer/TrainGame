@@ -9,9 +9,9 @@ public interface IWeapons
 
     public WeaponType WeaponType { get; }
 
-    public float RateOfFire { get; }
+    public float RateOfFire { get; set; }
 
-    public float ReloadDuration { get; }
+    public float ReloadDuration { get; set; }
 
     public float CurrentAmmunition { get; }
 
