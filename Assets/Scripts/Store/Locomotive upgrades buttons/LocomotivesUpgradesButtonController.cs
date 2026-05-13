@@ -92,9 +92,9 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
             maxHPButton.Upgrade = currentLevelUpgrades.maxHp;
             attackSpeedButton.Upgrade = currentLevelUpgrades.attackSpeed;
-            damageMultiplierButton.Upgrade = currentLevelUpgrades.damageMultyplier;
+            damageMultiplierButton.Upgrade = currentLevelUpgrades.damageMultiplier;
             defenseButton.Upgrade = currentLevelUpgrades.defense;
-            goldMultiplierButton.Upgrade = currentLevelUpgrades.goldMultyplier;
+            goldMultiplierButton.Upgrade = currentLevelUpgrades.goldMultiplier;
         }
         else
         {
@@ -117,7 +117,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     }
     public void DamageMultiplierUpgrade()
     {
-        locomotiveUpgrade.damageBonus = currentLevelUpgrades.damageMultyplier;
+        locomotiveUpgrade.damageBonus = currentLevelUpgrades.damageMultiplier;
         GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
         DeactivateAllButtons();
     }
@@ -129,7 +129,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     }
     public void GoldMultiplierUpgrade()
     {
-        locomotiveUpgrade.goldBonus = currentLevelUpgrades.goldMultyplier;
+        locomotiveUpgrade.goldBonus = currentLevelUpgrades.goldMultiplier;
         GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
         DeactivateAllButtons();
     }

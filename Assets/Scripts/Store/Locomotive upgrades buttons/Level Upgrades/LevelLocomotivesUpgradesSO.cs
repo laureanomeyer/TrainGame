@@ -10,7 +10,7 @@ public class LevelLocomotivesUpgradesSO : ScriptableObject
     [Header("Upgrades")]
     [SerializeField] public float maxHp;
     [SerializeField] public float defense;
-    [SerializeField] public float goldMultyplier;
-    [SerializeField] public float damageMultyplier;
+    [SerializeField] public float goldMultiplier;
+    [SerializeField] public float damageMultiplier;
     [SerializeField] public float attackSpeed;
 }
