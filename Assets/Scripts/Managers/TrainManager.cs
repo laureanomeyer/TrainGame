@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class TrainManager : MonoBehaviour
 {
-    [SerializeField] private GameObject wagonPrefab;
     [SerializeField] private GameObject goldWagonPrefab;
     [SerializeField] private GameObject locomotivePrefab;
 
