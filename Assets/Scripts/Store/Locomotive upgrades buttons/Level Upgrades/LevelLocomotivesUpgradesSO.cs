@@ -4,5 +4,13 @@ using UnityEngine;
 
 public class LevelLocomotivesUpgradesSO : ScriptableObject
 {
-    
+    [Header("Level")]
+    [SerializeField] public int level;
+
+    [Header("Upgrades")]
+    [SerializeField] public float maxHp;
+    [SerializeField] public float defense;
+    [SerializeField] public float goldMultyplier;
+    [SerializeField] public float damageMultyplier;
+    [SerializeField] public float attackSpeed;
 }

@@ -6,6 +6,7 @@ public class WagonStoreManager : MonoBehaviour
     [Header("Level of progress")]
     [SerializeField] private int level;
     public int Level => level;
+    //[SerializeField] public int maxLevel;
 
     [SerializeField] public TextMeshProUGUI descriptionTextUI;
 

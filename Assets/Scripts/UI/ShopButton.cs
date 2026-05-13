@@ -34,7 +34,7 @@ public class ShopButton : MonoBehaviour
 
         level = storeManager.Level;
 
-        foreach (ShopWagonCollectionSO collection in wagonsCollectionSOs)
+        foreach (var collection in wagonsCollectionSOs)
         {
             wagonsCollections.Add(collection.level, collection.WagonCollection);
         }

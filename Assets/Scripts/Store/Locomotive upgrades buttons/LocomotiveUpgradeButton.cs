@@ -8,16 +8,7 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     private LocomotivesUpgradesButtonController buttonManager;
     public LocomotivesUpgradesButtonController ButtonManager {  get => buttonManager; set => buttonManager = value; }
 
-    private Button button;
-
-    private TrainStats upgrades;
-
-    [Header("Upgrades")]
-    [SerializeField] private float maxHp;
-    [SerializeField] private float defense;
-    [SerializeField] private float goldMultyplier;
-    [SerializeField] private float damageMultyplier;
-    [SerializeField] private float attackSpeed;
+    public Button button;
 
     [SerializeField] private TextMeshProUGUI description;
     [SerializeField] private string textDescription;
@@ -26,26 +17,12 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     void Start()
     {
         button = GetComponent<Button>();
-
-        upgrades = new TrainStats(maxHp, defense, goldMultyplier, damageMultyplier, attackSpeed, 0, 0);
-
-        button.onClick.AddListener(adquireUpgrade);
-    }
-
-    public void adquireUpgrade()
-    {
-        adquiere();
-        buttonManager.DeactivateAllButtons();
-    }
-
-    public virtual void adquiere()
-    {
-        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += upgrades;
     }
 
     public void DeactivateButton()
     {
         button.interactable = false;
+        description.text = "";
     }
 
     public void OnPointerEnter(PointerEventData eventData)

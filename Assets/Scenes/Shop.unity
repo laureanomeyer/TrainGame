@@ -1396,11 +1396,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214957e80cf90e14994dc0ea6de6d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
-  maxHp: 0
-  defense: 0
-  goldMultyplier: 1
-  damageMultyplier: 0
-  attackSpeed: 0
+  button: {fileID: 0}
   description: {fileID: 566622557}
   textDescription: Aumenta el oro que sueltan los enemigos.
 --- !u!114 &438761835
@@ -1949,11 +1945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214957e80cf90e14994dc0ea6de6d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
-  maxHp: 0
-  defense: 0
-  goldMultyplier: 0
-  damageMultyplier: 0
-  attackSpeed: 1
+  button: {fileID: 0}
   description: {fileID: 566622557}
   textDescription: Aumenta la cadencia de las armas.
 --- !u!114 &533262835
@@ -3322,11 +3314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214957e80cf90e14994dc0ea6de6d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
-  maxHp: 1
-  defense: 0
-  goldMultyplier: 0
-  damageMultyplier: 0
-  attackSpeed: 0
+  button: {fileID: 0}
   description: {fileID: 566622557}
   textDescription: "Aumenta la vida m\xE1xima de los vagones y la capacidad m\xE1xima
     de carb\xF3n."
@@ -6340,13 +6328,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13bd972889e4aa247ba5e99f8a77247e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotivesUpgradesButtonController
-  buttons:
-  - {fileID: 818310171}
-  - {fileID: 1865815516}
-  - {fileID: 438761834}
-  - {fileID: 533262834}
-  - {fileID: 1788893338}
+  maxHPButton: {fileID: 0}
+  attackSpeedButton: {fileID: 0}
+  damageMultiplierButton: {fileID: 0}
+  defenseButton: {fileID: 0}
+  goldMultiplierButton: {fileID: 0}
   self: {fileID: 1431052560}
+  upgradesLevel: []
+  description: {fileID: 0}
+  textDescription: 
 --- !u!1 &1461899853
 GameObject:
   m_ObjectHideFlags: 0
@@ -7078,7 +7068,7 @@ GameObject:
   - component: {fileID: 1788893339}
   - component: {fileID: 1788893338}
   m_Layer: 5
-  m_Name: Upgrades damage multyplier
+  m_Name: Upgrades damage multiplier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7116,11 +7106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214957e80cf90e14994dc0ea6de6d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
-  maxHp: 0
-  defense: 0
-  goldMultyplier: 0
-  damageMultyplier: 1
-  attackSpeed: 0
+  button: {fileID: 0}
   description: {fileID: 566622557}
   textDescription: "Aumenta el da\xF1o de las armas."
 --- !u!114 &1788893339
@@ -7388,11 +7374,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 214957e80cf90e14994dc0ea6de6d0f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
-  maxHp: 0
-  defense: 1
-  goldMultyplier: 0
-  damageMultyplier: 0
-  attackSpeed: 0
+  button: {fileID: 0}
   description: {fileID: 566622557}
   textDescription: Aumenta la resistencia del tren y la barra de aguante.
 --- !u!114 &1865815517
