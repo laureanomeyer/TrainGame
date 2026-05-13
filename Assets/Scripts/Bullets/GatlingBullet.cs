@@ -65,7 +65,7 @@ public class GatlingBullet : MonoBehaviour, IBullet
 
         currentType = type;
 
-        Damage = type.damage;
+        Damage = type.Damage;
         Speed = Mathf.RoundToInt(type.speed);
         currentLife = type.duration;
 

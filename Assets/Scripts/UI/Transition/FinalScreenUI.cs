@@ -14,7 +14,7 @@ public class FinalScreenUI : MonoBehaviour
         if(result == RunResult.Victory)
         {
             titleText.text = "Victoria";
-            descriptionText.text = "LLegaste a la mina";
+            descriptionText.text = "Llegaste a la mina";
         }
         else if (result == RunResult.Defeat)
         {

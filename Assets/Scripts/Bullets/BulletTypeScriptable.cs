@@ -12,8 +12,8 @@ public class BulletTypeScriptable : ScriptableObject
     [Header("Bullet speed")]
     [SerializeField] public float speed;
 
-    [Header("Bullet damage")]
-    [SerializeField] public float damage;
+    private float damage;
+    public float Damage { get { return damage; } set { damage = value; } }
 
     [Header("Bullet duration")]
     [SerializeField] public float duration;

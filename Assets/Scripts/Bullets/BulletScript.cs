@@ -54,7 +54,7 @@ public class BulletScript : MonoBehaviour, IBullet
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
         currentLife = bulletType.duration;
-        Damage = bulletType.damage * (GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier));
+        Damage = bulletType.Damage * (GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier));
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;

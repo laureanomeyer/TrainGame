@@ -32,7 +32,8 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     {
         if (button.interactable == true)
         {
-            description.text = textDescription + "\n\n" + "Aumento de " + upgrade;
+            //description.text = textDescription + "\n\n" + "Aumento de " + upgrade;
+            description.text = textDescription;
         }
     }
 

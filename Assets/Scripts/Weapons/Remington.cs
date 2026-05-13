@@ -10,6 +10,10 @@ public class Remington : MonoBehaviour, IWeapons
     [SerializeField] private WeaponType weponType;
     public WeaponType WeaponType { get => weponType; }
 
+    [Header("Damage")]
+    [SerializeField] private float damage;
+    public float Damage { get => damage; set => damage = value; }
+
     //Tipos de balas que utiliza el arma
     [Header("BulletType")]
     [SerializeField] private BulletTypeScriptable bulletScriptable;
@@ -41,6 +45,7 @@ public class Remington : MonoBehaviour, IWeapons
 
         if (spawnPoint != null)
         {
+            bulletScriptable.Damage = damage;
             bulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletScriptable);
             currentAmmunition -= 1;
         }

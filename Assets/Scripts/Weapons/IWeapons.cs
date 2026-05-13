@@ -9,6 +9,8 @@ public interface IWeapons
 
     public WeaponType WeaponType { get; }
 
+    public float Damage { get; set; }
+
     public float RateOfFire { get; set; }
 
     public float ReloadDuration { get; set; }
