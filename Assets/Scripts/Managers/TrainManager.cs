@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TrainManager : MonoBehaviour
@@ -19,7 +18,7 @@ public class TrainManager : MonoBehaviour
 
     private void Start()
     {
-        RunManager.Instance.OnTrainReady(tail, wagonsCreated);
+        
     }
 
     private void BuildTrain()
@@ -27,6 +26,10 @@ public class TrainManager : MonoBehaviour
         CreateLocomotive();
         CreateWagons();
         CreateGoldWagon();
+
+        foreach (var brain in wagonBrains) brain.RegisterModifiers();
+        foreach (var brain in wagonBrains) brain.StartWagon();
+        RunManager.Instance.OnTrainReady(tail, wagonsCreated);
     }
 
     private void CreateLocomotive()
@@ -60,7 +63,9 @@ public class TrainManager : MonoBehaviour
     {
         GameObject instance = Instantiate(goldWagonPrefab, tail.position, tail.rotation);
         WagonMovement wagon = instance.GetComponent<WagonMovement>();
+        WagonBrain brain = instance.GetComponent<WagonBrain>();
         wagonsCreated.Add(wagon);
+        wagonBrains.Add(brain);
         AttachWagon(tail, wagon);
     }
 

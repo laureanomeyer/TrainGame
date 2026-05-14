@@ -39,16 +39,15 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
         Flash = GetComponent<DamageFlash>();
         broken = false;
-
-
-        SetUpWagonHP();
-
-        hpWorldUI = new WagonHPWorldUI(hpImage, hpBackgroundImage);
-        hpWorldUI.UpdateHp(HPController.CurrentHp, HPController.MaxHp);
-
-        RegisterModifiers();
     }
 
+    public virtual void StartWagon()
+    {
+        SetUpWagonHP();
+        hpWorldUI = new WagonHPWorldUI(hpImage, hpBackgroundImage);
+        hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
+        hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
+    }
 
     public virtual IEnumerable<StatModifier> GetModifiers()
     {
@@ -61,7 +60,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
             RunManager.Instance.StatSystem.AddModifier(mod);
     }
 
-    public void TakeDamage(float damageAmount)
+    public virtual void TakeDamage(float damageAmount)
     {
         if(hpController == null) return;
         if (broken) return;
@@ -98,8 +97,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
         hpController = new WagonHP(maxHp, def, Break, canBreak);
         
         currentHp = hpController.CurrentHp;
-
-        Debug.Log(maxHp);
     }
 
     public virtual void Repair(float repairAmount)

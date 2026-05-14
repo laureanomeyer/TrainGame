@@ -168,7 +168,6 @@ public class SpawnManager : MonoBehaviour
 
     void SpawnParticles(Vector3 position) 
     {
-        Debug.Log("enemy hit");
         ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
     }
 

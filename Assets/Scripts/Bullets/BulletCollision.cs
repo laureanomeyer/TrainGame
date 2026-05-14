@@ -21,7 +21,6 @@ public class BulletCollision : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
-            Debug.Log(collisionEnemy.MaxHealth);
             collisionEnemy.TakeDamage(bullet.Damage);
 
             if (bullet.DestroyOnEnemy)

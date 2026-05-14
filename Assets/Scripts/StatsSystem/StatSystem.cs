@@ -32,20 +32,35 @@ public class StatSystem
         float baseValue = GetBase(type);
         float locoMultiplier = GetLocoMultiplier(type);
 
-        float additiveSum = 0f;
-        int additiveCount = 0;
+        float extra = 0f;
 
-        foreach (var mod in modifiers)
+        if (type != StatType.FuelOptimizer)
         {
-            if (mod.StatType != type) continue;
-            if (mod.ModifierType == ModifierType.Additive)
+            foreach (var mod in modifiers)
             {
-                additiveSum += mod.Value;
-                additiveCount++;
+                if (mod.StatType != type) continue;
+                if (mod.ModifierType == ModifierType.Additive)
+                {
+                    extra += locoMultiplier * mod.Value;
+                }
             }
         }
 
-        return baseValue * (locoMultiplier + additiveSum * additiveCount);
+        else
+        {
+            extra = locoMultiplier;
+            foreach (var mod in modifiers)
+            {
+                if (mod.StatType != type) continue;
+                if (mod.ModifierType == ModifierType.Additive)
+                {
+                    extra += extra * mod.Value;
+                }
+            }
+            return extra;
+        }
+
+        return baseValue * (locoMultiplier + extra);
     }
 
     public void RecalculateAll()
@@ -78,4 +93,3 @@ public class StatSystem
         _ => 1f
     };
 }
-
