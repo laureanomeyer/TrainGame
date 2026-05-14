@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UpgradesFlowController : MonoBehaviour
 {
@@ -7,9 +8,17 @@ public class UpgradesFlowController : MonoBehaviour
     [SerializeField] private LocomotivesUpgradesButtonController upgrades;
     [SerializeField] private GameObject sureMessage;
 
+    [SerializeField] private Button upgradesPanelButton;
+    private int currentLevel;
+
     private void Start()
     {
         HideAll();
+        currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+        if (currentLevel == 0)
+        {
+            upgradesPanelButton.interactable = false;
+        }
     }
     public void ShowContinueAndUpgrade()
     {
