@@ -27,20 +27,21 @@ public class LocomotiveFuel
     public float FuelCapacity => fuelCapacity;
     public float FuelMaxCapaciy => fuelMaxCapacity;
 
-    public LocomotiveFuel(float shield, float maxFuel, float baseSpeed, float defense, float fuelOptimizer)
+    public LocomotiveFuel(float shield, float maxFuel, float defense, float fuelOptimizer)
     {
         this.maxShield = shield;
         this.currentShield = shield;
         this.currentMaxFuel = maxFuel;
         currentFuel = maxFuel;
-        this.actualSpeed = baseSpeed;
+        this.actualSpeed = 100f;
         this.fuelOptimizer = fuelOptimizer;
-        fuelUseXSecond = (actualSpeed * 0.01f) / (2 * fuelOptimizer);
+        fuelUseXSecond = 1 / (2 * fuelOptimizer);
         this.defense = defense;
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
 
         GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
+        Debug.Log("FuelUse: " + fuelUseXSecond);
     }
 
     public void Move(float deltaTime)
@@ -76,7 +77,7 @@ public class LocomotiveFuel
     public void ModifyOptimizer(float wagonEffect)
     {
         fuelOptimizer = fuelOptimizer + wagonEffect;
-        fuelUseXSecond = actualSpeed / (2 * fuelOptimizer);
+        fuelUseXSecond = 1 / (2 * fuelOptimizer);
         //Debug.Log(fuelOptimizer);
     }
 

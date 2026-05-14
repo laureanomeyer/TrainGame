@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
+
 
 [DefaultExecutionOrder(-99)]
 public class RunManager : MonoBehaviour
@@ -77,8 +73,6 @@ public class RunManager : MonoBehaviour
     }
     public void OnRunFinished()
     {
-        Debug.Log("Nivel actual cuando terminó la run: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
-        Debug.Log("Ultima estacion: " + GameManager.Instance.LastStationDebug());
         if (GameManager.Instance.IsFinalStation())
         {
             GameManager.Instance.Victory();

@@ -32,11 +32,11 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         fuelController = new LocomotiveFuel(
             EM * stats.GetStat(StatType.Defense),
             CM * stats.GetStat(StatType.MaxHp),
-            dataRef.LocomotiveStatsMultiplicator.baseSpeed,
             RES * stats.GetStat(StatType.Defense),
-            dataRef.LocomotiveStatsMultiplicator.fuelOptimizer
+            stats.GetStat(StatType.FuelOptimizer)
             );
         stats.OnStatChanged += OnStatChanged;
+        Debug.Log("Fuel optimizer: " + stats.GetStat(StatType.FuelOptimizer));
     }
 
     void Update()

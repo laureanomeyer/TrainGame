@@ -26,7 +26,6 @@ public class GoldBox : IInteractable
 
     public void ChangeGoldInData(float amount)
     {
-        Debug.Log("GoldChange");
         GameManager.Instance.Session.PlayerData.AddPlayerGold(amount);
     }
 

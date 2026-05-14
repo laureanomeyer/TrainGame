@@ -18,14 +18,6 @@ public class GoldenWagonBrain : WagonBrain
         rendererWagon.material = baseWagonMaterial;
     }
 
-    private void Update()
-    {
-        if (hpController.CurrentHp <= 0)
-        {
-            collector.EmptyGold();
-        }
-    }
-
     public override void Repair(float repairAmount)
     {
         if (hpController.IsBroken == true & hpController.CurrentHp > 0)
@@ -40,6 +32,15 @@ public class GoldenWagonBrain : WagonBrain
         {
             hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         }
+    }
+    public override void TakeDamage(float damageAmount)
+    {
+        base.TakeDamage(damageAmount);
+        if (hpController.CurrentHp <= 0 && hpController != null)
+        {
+            collector.EmptyGold();
+        }
+
     }
 
     public override void OnDestroy()
