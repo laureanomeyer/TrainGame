@@ -17,8 +17,12 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
 
         GameEvents.OnTakeFuel += DeactivateWaypointUI;
         GameEvents.OnDropFuel += ActivateWaypointUI;
+        TutorialEvents.OnSetCanConsume += SetWaypointVisible;
     }
-
+    public void SetWaypointVisible(bool set)
+    {
+        indicatorOnScreen.visible = set;
+    }
     public void ActivateWaypointUI()
     {
         indicatorOnScreen.visible = true;
@@ -35,5 +39,6 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
     {
         GameEvents.OnTakeFuel -= DeactivateWaypointUI;
         GameEvents.OnDropFuel -= ActivateWaypointUI;
+        TutorialEvents.OnSetCanConsume -= SetWaypointVisible;
     }
 }

@@ -87,5 +87,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     {
         if (RunManager.Instance != null)
             RunManager.Instance.StatSystem.OnStatChanged -= OnStatChanged;
+        fuelController.Destroy();
     }
 }

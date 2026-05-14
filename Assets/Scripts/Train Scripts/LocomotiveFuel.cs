@@ -13,6 +13,7 @@ public class LocomotiveFuel
     private float fuelUseXSecond;
     private float defense;
     private float timer = 0;
+    private bool canConsume = true;
 
     private float fuelCapacity;
     private float fuelMaxCapacity;
@@ -39,6 +40,7 @@ public class LocomotiveFuel
         this.defense = defense;
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
+        TutorialEvents.OnSetCanConsume += SetCanConsume;
 
         GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
         Debug.Log("FuelUse: " + fuelUseXSecond);
@@ -51,7 +53,7 @@ public class LocomotiveFuel
             GameManager.Instance.Session.TrainData.SetSpeed(0);
             return;
         }
-        ConsumeFuel(fuelUseXSecond * deltaTime);
+        if (canConsume) ConsumeFuel(fuelUseXSecond * deltaTime);
 
 
     }
@@ -140,5 +142,16 @@ public class LocomotiveFuel
             }
         }
 
+    }
+
+    public void SetCanConsume(bool canConsume)
+    {
+        this.canConsume = canConsume;
+        Debug.Log(canConsume);
+    }
+
+    public void Destroy()
+    {
+        TutorialEvents.OnSetCanConsume -= SetCanConsume;
     }
 }

@@ -4,16 +4,22 @@ using System.Collections;
 
 public class TutorialController : MonoBehaviour
 {
-    [SerializeField] GameObject Ui;
+    [SerializeField] GameObject CoalUi;
+    [SerializeField] GameObject RunUi;
     float timer = 5;
-    int source = 1;
 
     private void Awake()
     {
-        Ui.SetActive(false);
-        GameManager.Instance.Session.StatSystem.AddModifier(new StatModifier(StatType.FuelOptimizer, 1000, ModifierType.Multipicaive, source));
-        GameManager.Instance.Session.StatSystem.RecalculateAll();
+        TutorialEvents.SetRunStarted(false);
+    }
+    private void Start()
+    {
+        CoalUi.SetActive(false);
+        RunUi.SetActive(false);
+        TutorialEvents.SetCanConsume(false);
+        TutorialEvents.SetTimerStarted(false);
         TutorialEvents.OnStartFuelUse += StartFuelConsumption;
+        TutorialEvents.OnSetRunStarted += StartRun;
     }
     private void Update()
     {
@@ -28,13 +34,18 @@ public class TutorialController : MonoBehaviour
 
     void StartFuelConsumption()
     {
-        GameManager.Instance.Session.StatSystem.RemoveModifiersFromSource(source);
-        GameManager.Instance.Session.StatSystem.RecalculateAll();
-        Ui.SetActive(true);
+        TutorialEvents.SetCanConsume(true);
+        CoalUi.SetActive(true);
+    }
+
+    void StartRun(bool c)
+    {
+        RunUi.SetActive(c);
     }
 
     private void OnDestroy()
     {
         TutorialEvents.OnStartFuelUse -= StartFuelConsumption;
+        TutorialEvents.OnSetRunStarted -= StartRun;
     }
 }

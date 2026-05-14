@@ -7,7 +7,7 @@ public class SpawnManager : MonoBehaviour
     //se setean con el level spawn data
     float spawnInterval; 
     int maxEnemies;
-    bool canSpawn = false;
+    bool canSpawn = true;
 
     [Header("Levels")]
 
@@ -38,13 +38,17 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
-        GameEvents.OnEnemyHit += EnemyHit;       
+        GameEvents.OnEnemyHit += EnemyHit;
+        TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
+        TutorialEvents.OnSetRunStarted += SetCanSpawn;
     }
 
     private void OnDisable()
     {
         GameEvents.OnEnemyDeath -= EnemyDead;
         GameEvents.OnEnemyHit -= EnemyHit;
+        TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
+        TutorialEvents.OnSetRunStarted -= SetCanSpawn;
     }
 
 
@@ -56,7 +60,7 @@ public class SpawnManager : MonoBehaviour
         BuildPool();
         TrySpawn();
         goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
-        TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
+
     }
 
     void Update()
@@ -202,8 +206,8 @@ public class SpawnManager : MonoBehaviour
         SpawnParticles(position);
     }
 
-    private void OnDestroy()
+    void SetCanSpawn(bool canSpawn)
     {
-        TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
+        this.canSpawn = canSpawn;
     }
 }
