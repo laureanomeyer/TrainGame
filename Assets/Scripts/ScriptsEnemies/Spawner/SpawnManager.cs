@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -8,6 +7,7 @@ public class SpawnManager : MonoBehaviour
     //se setean con el level spawn data
     float spawnInterval; 
     int maxEnemies;
+    bool canSpawn = false;
 
     [Header("Levels")]
 
@@ -38,8 +38,7 @@ public class SpawnManager : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
-        GameEvents.OnEnemyHit += EnemyHit;
-        
+        GameEvents.OnEnemyHit += EnemyHit;       
     }
 
     private void OnDisable()
@@ -57,6 +56,7 @@ public class SpawnManager : MonoBehaviour
         BuildPool();
         TrySpawn();
         goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
+        TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
     }
 
     void Update()
@@ -85,6 +85,31 @@ public class SpawnManager : MonoBehaviour
         if (activeZones.Count == 0) 
         {
             Debug.Log("lista vacia");
+            return;
+        }
+
+        if (!canSpawn) return;
+
+        for (int i = 0; i < 10; i++)
+        {
+            SpawnZone zone = activeZones[Random.Range(0, activeZones.Count)];
+
+            Vector3 point = zone.GetRandomPoint();
+
+            if (IsOutsideCamera(point))
+            {
+                Spawn(point);
+                return;
+            }
+        }
+    }
+
+    void SpawnSingleEnemy()
+    {
+        if (activeZones.Count == 0)
+        {
+            Debug.Log("lista vacia");
+            return;
         }
 
         for (int i = 0; i < 10; i++)
@@ -175,5 +200,10 @@ public class SpawnManager : MonoBehaviour
     void EnemyHit(Vector3 position) 
     {
         SpawnParticles(position);
+    }
+
+    private void OnDestroy()
+    {
+        TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
     }
 }

@@ -32,6 +32,17 @@ public struct TrainStats
         fuelOptimizer = trainData.fuelOptimizer;
         baseSpeed = trainData.baseSpeed;
     }
+    public enum TutorialStep
+    {
+        FreeMove,
+        SpawnEnemy,
+        WaitEnemyKilled,
+        WaitGoldDeposited,
+        EnableCoal,
+        WaitCoalTaken,
+        WaitCoalDeposited,
+        StartRun
+    }
 
 
     //Funcion encargada de sumar las varibles de dos TrainsStats

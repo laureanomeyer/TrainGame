@@ -15,6 +15,7 @@ public class GoldBox : IInteractable
     {
         AddGold(playerRef.DepositGold());
         GameEvents.DropGold();
+        TutorialEvents.StartFuelUse();
     }
 
     public void AddGold(float amount) 
