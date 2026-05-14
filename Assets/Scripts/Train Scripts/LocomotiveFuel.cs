@@ -27,13 +27,13 @@ public class LocomotiveFuel
     public float FuelCapacity => fuelCapacity;
     public float FuelMaxCapaciy => fuelMaxCapacity;
 
-    public LocomotiveFuel(float shield, float maxFuel, float baseSpeed, float defense, float fuelOptimizer)
+    public LocomotiveFuel(float shield, float maxFuel, float defense, float fuelOptimizer)
     {
         this.maxShield = shield;
         this.currentShield = shield;
         this.currentMaxFuel = maxFuel;
         currentFuel = maxFuel;
-        this.actualSpeed = baseSpeed;
+        this.actualSpeed = 100f;
         this.fuelOptimizer = fuelOptimizer;
         fuelUseXSecond = (actualSpeed * 0.01f) / (2 * fuelOptimizer);
         this.defense = defense;
