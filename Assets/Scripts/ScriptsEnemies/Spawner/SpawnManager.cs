@@ -108,7 +108,7 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    void SpawnSingleEnemy()
+    void SpawnSingleEnemy(Vector3 pos, List<IWagon> targetList)
     {
         if (activeZones.Count == 0)
         {
@@ -116,18 +116,7 @@ public class SpawnManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < 10; i++)
-        {
-            SpawnZone zone = activeZones[Random.Range(0, activeZones.Count)];
-
-            Vector3 point = zone.GetRandomPoint();
-
-            if (IsOutsideCamera(point))
-            {
-                Spawn(point);
-                return;
-            }
-        }
+        SpawnSingle(pos, targetList);
     }
 
     void BuildPool()
@@ -154,6 +143,20 @@ public class SpawnManager : MonoBehaviour
         Enemy enemy = enemyGO.GetComponent<Enemy>();
         enemy.Initialize(enemyToSpawn);
         enemy.SetTargetList(trainList);
+
+        aliveEnemies++;
+    }
+    void SpawnSingle(Vector3 pos, List <IWagon> target)
+    {
+        if (spawnPool.Count == 0) return;
+
+        int index = Random.Range(0, spawnPool.Count);
+
+        EnemyData enemyToSpawn = spawnPool[index];
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
+        Enemy enemy = enemyGO.GetComponent<Enemy>();
+        enemy.Initialize(enemyToSpawn);
+        enemy.SetTargetList(target);
 
         aliveEnemies++;
     }

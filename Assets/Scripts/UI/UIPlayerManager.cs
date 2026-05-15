@@ -137,7 +137,7 @@ public class UIPlayerManager : MonoBehaviour
             runProgressFill.fillAmount = progress;
         }
 
-        currentLevel.text = new string("Nivel actual: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
+        if(currentLevel != null) currentLevel.text = new string("Nivel actual: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
 
     }
     void ShowInteract()

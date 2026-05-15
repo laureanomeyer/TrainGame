@@ -14,26 +14,42 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private float repairCapacity;
     [SerializeField] private InteractionUIManager interactionUIManager;
 
+    [Header("Bullets")]
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private GameObject weaponItem;
+
     private PlayerInventory inventory;
     private LookObjectToMouse faceMouse;
     private PlayerMovementController playerMovementController;
     private PlayerInteractions playerInteractionsController;
-    public bool playerCanMove => playerMovementController.CanMove;
+    private PlayerAttackController playerAttackController;
+    private InputAction repairAction;
 
+    private bool canAttack;
+
+    public bool playerCanMove => playerMovementController.CanMove;
     public PlayerInventory Inventory => inventory;
     public LookObjectToMouse FaceMouse => faceMouse;
     public InteractionUIManager InteractionUIManager => interactionUIManager;
     void Awake() 
     {
         rb = GetComponent<Rigidbody>();
+
         inventory = new PlayerInventory();
         faceMouse = new LookObjectToMouse(groundMask);
         playerMovementController = new PlayerMovementController(rb, faceMouse, transform, speed);
         playerInteractionsController = new PlayerInteractions(this, playerMovementController, faceMouse, interactionUIManager, repairCapacity);
+        playerAttackController = new PlayerAttackController(spawnPoint, weaponItem, GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>(), this, faceMouse);
+
+        repairAction = InputSystem.actions.FindAction("Attack");
+        repairAction.performed += ActiveAttack;
+        repairAction.canceled += DeactiveAttack;
+        TutorialEvents.OnSetAttackEnabled += SetCanAttack;
     }
     private void Update()
     {
         playerInteractionsController.Update();
+        if (canAttack) playerAttackController.Update();
     }
     private void FixedUpdate()
     {
@@ -65,9 +81,23 @@ public class PlayerBrain : MonoBehaviour
     {
         playerInteractionsController.OnTriggerExit(other);
     }
+    public void ActiveAttack(InputAction.CallbackContext context)
+    {
+        playerAttackController.ActiveAttack();
+    }
+    public void DeactiveAttack(InputAction.CallbackContext context)
+    {
+        playerAttackController.DeactiveAttack();
+    }
 
+    private void SetCanAttack(bool canAttack)
+    {
+        this.canAttack = canAttack;
+    }
     private void OnDestroy()
     {
         playerInteractionsController.Cleanup();
+        repairAction.performed -= ActiveAttack;
+        repairAction.canceled -= DeactiveAttack;
     }
 }

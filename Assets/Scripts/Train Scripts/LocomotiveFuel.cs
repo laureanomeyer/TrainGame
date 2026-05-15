@@ -43,7 +43,6 @@ public class LocomotiveFuel
         TutorialEvents.OnSetCanConsume += SetCanConsume;
 
         GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
-        Debug.Log("FuelUse: " + fuelUseXSecond);
     }
 
     public void Move(float deltaTime)
@@ -54,9 +53,8 @@ public class LocomotiveFuel
             return;
         }
         if (canConsume) ConsumeFuel(fuelUseXSecond * deltaTime);
-
-
     }
+
     public void AddFuel()
     {
         currentFuel = currentMaxFuel;
@@ -80,7 +78,6 @@ public class LocomotiveFuel
     {
         fuelOptimizer = fuelOptimizer + wagonEffect;
         fuelUseXSecond = 1 / (2 * fuelOptimizer);
-        //Debug.Log(fuelOptimizer);
     }
 
     private void UpdateSharedSpeed()
@@ -147,7 +144,6 @@ public class LocomotiveFuel
     public void SetCanConsume(bool canConsume)
     {
         this.canConsume = canConsume;
-        Debug.Log(canConsume);
     }
 
     public void Destroy()

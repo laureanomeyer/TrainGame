@@ -1,37 +1,31 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerAttackController : MonoBehaviour
+public class PlayerAttackController 
 {
     [Header("Bullet Spawn")]
-    [SerializeField] private Transform spawnPoint;
+    private Transform spawnPoint;
 
     [Header("Weapon")]
-    [SerializeField] private GameObject weaponItem;
+    private GameObject weaponItem;
     private IWeapons weapon;
 
     private BulletPool pool;
     private LookObjectToMouse lookToMouseController;
+    private PlayerBrain brain;
 
     private float waitToFire;
 
-    private TrainData dataRef;
-
-    private InputAction repairAction;
     private bool isAttacking = false;
 
     private float currentReloadTime = 0;
 
-    void Start()
+    public PlayerAttackController(Transform spawnPoint, GameObject weaponItem, BulletPool pool, PlayerBrain brain, LookObjectToMouse look)
     {
-        //se busca la pool de objetos
-        repairAction = InputSystem.actions.FindAction("Attack");
-        repairAction.performed += ActiveAttack;
-        repairAction.canceled += DeactiveAttack;
-
-        PlayerBrain brain = GetComponent<PlayerBrain>();
-        lookToMouseController = brain.FaceMouse;
-        pool = GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>();
+        this.brain = brain;
+        lookToMouseController = look;
+        this.pool = pool;
+        this.spawnPoint = spawnPoint;
 
         //Se establece el arma equipada
         if (GameManager.Instance.Session.PlayerData.CheckWeapon() == false)
@@ -43,14 +37,14 @@ public class PlayerAttackController : MonoBehaviour
             SetWeapon(GameManager.Instance.Session.PlayerData.PlayerWeapon);
         }
 
-        waitToFire = weapon.RateOfFire;
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);
 
+        waitToFire = weapon.RateOfFire;
         weapon.RateOfFire = weapon.RateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
         weapon.ReloadDuration = weapon.ReloadDuration / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
     }
 
-    void Update()
+    public void Update()
     {
         AidToMouseDirection();
         ChargeTimers();
@@ -64,13 +58,12 @@ public class PlayerAttackController : MonoBehaviour
     private void AidToMouseDirection()
     {
         if (lookToMouseController == null) return;
-
+        if (spawnPoint == null) return;
         Vector3 dir = lookToMouseController.GetMouseDirection(spawnPoint);
         dir.y = 0;
         spawnPoint.forward = dir;
     }
 
-    //Funcion utiliza por el Player Inputs para atacar 
     void Attack()
     {
         if (waitToFire > weapon.RateOfFire)
@@ -84,12 +77,12 @@ public class PlayerAttackController : MonoBehaviour
         }
     }
 
-    void ActiveAttack (InputAction.CallbackContext context)
+    public void ActiveAttack ()
     {
         isAttacking = true;
     }
 
-    void DeactiveAttack(InputAction.CallbackContext context)
+    public void DeactiveAttack()
     {
         isAttacking = false;
     }

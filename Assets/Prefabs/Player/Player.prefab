@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 3891595303444984587}
   - component: {fileID: 5405415855480793203}
   - component: {fileID: 7116384346465008739}
-  - component: {fileID: 1084008011257188204}
   - component: {fileID: 1735930275029825393}
   m_Layer: 3
   m_Name: Player
@@ -210,20 +209,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 0
---- !u!114 &1084008011257188204
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6058667659620982090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126e489d6d01b0d46adb4ead567e69f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackController
-  spawnPoint: {fileID: 4376919442636921631}
-  weaponItem: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
 --- !u!114 &1735930275029825393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +227,8 @@ MonoBehaviour:
   speed: 25
   repairCapacity: 10
   interactionUIManager: {fileID: 0}
+  spawnPoint: {fileID: 0}
+  weaponItem: {fileID: 0}
 --- !u!1 &6947113026186938357
 GameObject:
   m_ObjectHideFlags: 0

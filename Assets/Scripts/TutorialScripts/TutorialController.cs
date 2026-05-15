@@ -1,11 +1,14 @@
 using UnityEngine;
 using static TrainStats;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TutorialController : MonoBehaviour
 {
     [SerializeField] GameObject CoalUi;
     [SerializeField] GameObject RunUi;
+    [SerializeField] Transform EnemySpawn;
+    private List<IWagon> wagons = new();
     float timer = 5;
 
     private void Awake()
@@ -27,8 +30,9 @@ public class TutorialController : MonoBehaviour
 
         if (timer <= 0)
         {
-            TutorialEvents.SpawnEnemy();
-            timer = 100000;
+            wagons.Add(RunManager.Instance.ActiveWagons[1]);
+            TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
+            timer = 10000000000000;
         }
     }
 

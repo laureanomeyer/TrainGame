@@ -48,6 +48,7 @@ public class Revolver : MonoBehaviour, IWeapons
         {
             bulletScriptable.Damage = damage;
             bulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletScriptable);
+            
             currentAmmunition -= 1;
         }
        
