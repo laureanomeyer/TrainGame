@@ -9,6 +9,7 @@ public class TutorialController : MonoBehaviour
     [SerializeField] GameObject RunUi;
     [SerializeField] GameObject attackCursor;
     [SerializeField] Transform EnemySpawn;
+    private bool started = false;
     private List<IWagon> wagons = new();
     float timer = 5;
 
@@ -24,7 +25,7 @@ public class TutorialController : MonoBehaviour
         TutorialEvents.SetTimerStarted(false);
         TutorialEvents.OnSetAttackEnabled += SetAttackUi;
         TutorialEvents.SetAttackEnabled(false);
-        TutorialEvents.OnStartFuelUse += StartFuelConsumption;
+        TutorialEvents.OnSetCanConsume += StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies += StartRun;
 
         TutorialEvents.SetTutorialTextVisible(true);
@@ -46,13 +47,17 @@ public class TutorialController : MonoBehaviour
         }
     }
 
-    void StartFuelConsumption()
+    void StartFuelConsumption(bool can)
     {
-        TutorialEvents.SetCanConsume(true);
-        CoalUi.SetActive(true);
+        CoalUi.SetActive(can);
+        if (!started)
+        {
+            started = true;
+            TutorialEvents.StartFuelUse();
+            TutorialEvents.SetTutorialTextVisible(true);
+            TutorialEvents.SetTutorialText("Tu locomotora nunca debe dejar de moverse. Estate atento, que no se agote su combustible");
+        }
 
-        TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Tu locomotora nunca debe dejar de moverse. Estate atento, que no se agote su combustible");
     }
 
     void StartRun(bool can)
@@ -74,7 +79,7 @@ public class TutorialController : MonoBehaviour
 
     private void OnDestroy()
     {
-        TutorialEvents.OnStartFuelUse -= StartFuelConsumption;
+        TutorialEvents.OnSetCanConsume -= StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies -= StartRun;
         TutorialEvents.OnSetAttackEnabled -= SetAttackUi;
     }

@@ -61,7 +61,9 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     }
     void RemoveFuel()
     {
+
         fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.5f);
+
     }
     public void AddFuel()
     {
