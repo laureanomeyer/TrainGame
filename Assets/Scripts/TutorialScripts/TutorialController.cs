@@ -7,6 +7,7 @@ public class TutorialController : MonoBehaviour
 {
     [SerializeField] GameObject CoalUi;
     [SerializeField] GameObject RunUi;
+    [SerializeField] GameObject attackCursor;
     [SerializeField] Transform EnemySpawn;
     private List<IWagon> wagons = new();
     float timer = 5;
@@ -21,8 +22,10 @@ public class TutorialController : MonoBehaviour
         RunUi.SetActive(false);
         TutorialEvents.SetCanConsume(false);
         TutorialEvents.SetTimerStarted(false);
+        TutorialEvents.OnSetAttackEnabled += SetAttackUi;
+        TutorialEvents.SetAttackEnabled(false);
         TutorialEvents.OnStartFuelUse += StartFuelConsumption;
-        TutorialEvents.OnSetRunStarted += StartRun;
+        TutorialEvents.OnStartSpawningEnemies += StartRun;
     }
     private void Update()
     {
@@ -42,14 +45,21 @@ public class TutorialController : MonoBehaviour
         CoalUi.SetActive(true);
     }
 
-    void StartRun(bool c)
+    void StartRun(bool can)
     {
-        RunUi.SetActive(c);
+        RunUi.SetActive(can);
+    }
+
+    void SetAttackUi(bool show)
+    {
+        Cursor.visible = show;
+        attackCursor.SetActive(show);
     }
 
     private void OnDestroy()
     {
         TutorialEvents.OnStartFuelUse -= StartFuelConsumption;
-        TutorialEvents.OnSetRunStarted -= StartRun;
+        TutorialEvents.OnStartSpawningEnemies -= StartRun;
+        TutorialEvents.OnSetAttackEnabled -= SetAttackUi;
     }
 }

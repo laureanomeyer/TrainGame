@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,6 +18,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     private TrainData dataRef;
     private DamageFlash flash;
     private Animator animator;
+    private StatSystem stats;
 
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
@@ -25,7 +27,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     void Start()
     {
         dataRef = GameManager.Instance.Session.TrainData;
-        var stats = RunManager.Instance.StatSystem;
+        stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
         animator = GetComponent<Animator>();
 
@@ -36,6 +38,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             stats.GetStat(StatType.FuelOptimizer)
             );
         stats.OnStatChanged += OnStatChanged;
+
+        TutorialEvents.OnStartFuelUse += RemoveFuel;
     }
 
     void Update()
@@ -55,7 +59,10 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (animator != null) animator.SetTrigger("Damage");
         
     }
-
+    void RemoveFuel()
+    {
+        fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.5f);
+    }
     public void AddFuel()
     {
         fuelController.AddFuel();
@@ -87,5 +94,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (RunManager.Instance != null)
             RunManager.Instance.StatSystem.OnStatChanged -= OnStatChanged;
         fuelController.Destroy();
+        TutorialEvents.OnStartFuelUse -= RemoveFuel;
     }
 }

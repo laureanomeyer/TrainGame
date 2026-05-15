@@ -25,12 +25,13 @@ public class PlayerBrain : MonoBehaviour
     private PlayerAttackController playerAttackController;
     private InputAction repairAction;
 
-    private bool canAttack;
+    private bool canAttack = true;
 
     public bool playerCanMove => playerMovementController.CanMove;
     public PlayerInventory Inventory => inventory;
     public LookObjectToMouse FaceMouse => faceMouse;
     public InteractionUIManager InteractionUIManager => interactionUIManager;
+    public PlayerAttackController PlayerAttackController => playerAttackController;
     void Awake() 
     {
         rb = GetComponent<Rigidbody>();

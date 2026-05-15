@@ -27,6 +27,7 @@ public class GoldenWagonBrain : WagonBrain
         }
 
         hpController.ReapirGoldenWagon(Time.deltaTime, repairAmount);
+        TutorialEvents.SetAttackEnabled(true);
 
         if (hpWorldUI != null)
         {
