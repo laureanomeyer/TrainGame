@@ -3,7 +3,7 @@ using UnityEngine;
 
 public interface IShopButton
 {
-    public PlayerAttackController PlayerReference { get; set; }
+    public PlayerBrain PlayerReference { get; set; }
     public WeaponShopButtonManager ButtonManager { get; set; }
 
     public int Level { get; set; }

@@ -20,7 +20,7 @@ public class WeaponShopButtonManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-       PlayerAttackController playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerAttackController>();
+       PlayerBrain playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBrain>();
 
        for (int i = 0; i < shopButtons.Length; i++)
        {

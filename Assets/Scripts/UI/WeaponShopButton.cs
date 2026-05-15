@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class WeaponShopButton : MonoBehaviour, IShopButton
 {
-    public PlayerAttackController PlayerReference { get => playerReference; set => playerReference = value; }
-    private PlayerAttackController playerReference;
+    public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
+    private PlayerBrain playerReference;
     public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
     private WeaponShopButtonManager buttonManager;
     public int Level { get => level; set => level = value; }
@@ -48,7 +48,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         else
         {
             GameManager.Instance.Session.PlayerData.ChangeWeaponData(currentWeapon);
-            playerReference.SetWeapon(currentWeapon);
+            playerReference.PlayerAttackController.SetWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
         }
        

@@ -3476,6 +3476,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 1816999796}
+    - target: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: weaponItem
+      value: 
+      objectReference: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
+    - target: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: interactionUIManager
       value: 
       objectReference: {fileID: 1375272491}
@@ -6816,7 +6824,7 @@ GameObject:
   - component: {fileID: 1670977927}
   - component: {fileID: 1670977928}
   m_Layer: 0
-  m_Name: MoneyManager
+  m_Name: StoreManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7253,6 +7261,11 @@ MonoBehaviour:
   speed: 2.5
   minAlpha: 0
   maxAlpha: 1
+--- !u!4 &1816999796 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4376919442636921631, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+  m_PrefabInstance: {fileID: 917034658}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1852318031
 GameObject:
   m_ObjectHideFlags: 0
