@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     private const string ShopScene = "Shop";
     private const string RunScene = "LauScene";
     private const string FinalScene = "FinalScene";
+    private const string TutorialScene = "TutorialScene";
 
     private void Awake()
     {
@@ -139,6 +140,21 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(menuCursor, new Vector2(256, 256), CursorMode.Auto);
 
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
+    }
+
+    public void GoToTutorial()
+    {
+        if (isChangingScene) return;
+
+        gameEnded = false;
+        LastRunResult = RunResult.None;
+
+        Session.Reset();
+        Session.RebuildStatsSystem();
+
+        Cursor.SetCursor(gameplayCursor, new Vector2(128, 128), CursorMode.Auto);
+
+        ChangeScene(TutorialScene, SceneTransitionType.Generic);
     }
 
     private void ChangeScene(string sceneName, SceneTransitionType transitionType)
