@@ -25,7 +25,7 @@ public class PlayerBrain : MonoBehaviour
     private PlayerAttackController playerAttackController;
     private InputAction repairAction;
 
-    private bool canAttack;
+    private bool canAttack = true;
 
     public bool playerCanMove => playerMovementController.CanMove;
     public PlayerInventory Inventory => inventory;
@@ -93,6 +93,10 @@ public class PlayerBrain : MonoBehaviour
     private void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
+    }
+    public void ChangeWeapon(GameObject weapon)
+    {
+        playerAttackController.SetWeapon(weapon);
     }
     private void OnDestroy()
     {

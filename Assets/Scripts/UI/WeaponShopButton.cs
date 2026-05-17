@@ -48,7 +48,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         else
         {
             GameManager.Instance.Session.PlayerData.ChangeWeaponData(currentWeapon);
-            playerReference.PlayerAttackController.SetWeapon(currentWeapon);
+            playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
         }
        
