@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 public class StoreUiInteracts : MonoBehaviour
 {
     [SerializeField] private GameObject uiToShow;
+    [SerializeField] private GameObject uiContinueConfirmation;
+    [SerializeField] private GameObject uiUpgrades;
     private bool playerInZone;
 
     private void OnEnable()
@@ -29,6 +31,8 @@ public class StoreUiInteracts : MonoBehaviour
         playerInZone = false;
         GameEvents.HideInteract();
         uiToShow.SetActive(false);
+        uiContinueConfirmation.SetActive(false);
+        uiUpgrades.SetActive(false);
     }
 
     private void OnPlayerInteract()

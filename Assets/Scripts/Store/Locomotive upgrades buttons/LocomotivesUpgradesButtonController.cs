@@ -154,4 +154,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     {
         self.SetActive(true);
     }
+
+    public void ChangeUsedUpgrades()
+    {
+        usedUpgrades = true;
+        Debug.Log(usedUpgrades);
+    }
 }

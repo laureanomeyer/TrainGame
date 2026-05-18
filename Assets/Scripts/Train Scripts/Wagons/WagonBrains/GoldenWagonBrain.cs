@@ -27,7 +27,7 @@ public class GoldenWagonBrain : WagonBrain
             hpController.IsBroken = false;
         }
 
-        hpController.Repair(repairAmount);
+        hpController.Repair(repairAmount * Time.deltaTime);
 
         if (hpWorldUI != null)
         {

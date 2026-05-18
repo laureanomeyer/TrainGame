@@ -15,9 +15,10 @@ public class UpgradesFlowController : MonoBehaviour
     {
         HideAll();
         currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
-        if (currentLevel == 0)
+        if (currentLevel <= 0)
         {
             upgradesPanelButton.interactable = false;
+            upgrades.ChangeUsedUpgrades();
         }
     }
     public void ShowContinueAndUpgrade()
