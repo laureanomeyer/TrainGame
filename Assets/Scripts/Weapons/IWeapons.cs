@@ -7,15 +7,9 @@ public interface IWeapons
     //Nombre de identificacion de armas
     public string Id { get; }
 
-    public WeaponType WeaponType { get; }
+    public WeaponDataSO WeaponData { get; set; }
 
-    public float Damage { get; set; }
-
-    public float RateOfFire { get; set; }
-
-    public float ReloadDuration { get; set; }
-
-    public float CurrentAmmunition { get; }
+    public int CurrentAmmunition { get; set; }
 
     public bool IsReloading { get; set; }
 

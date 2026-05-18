@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1978755731953740450}
-  - component: {fileID: -5280212864599192003}
+  - component: {fileID: 4480849525136305976}
   m_Layer: 0
   m_Name: Winchester
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-5280212864599192003
+--- !u!114 &4480849525136305976
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,13 +41,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 3090599529195725496}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0632038060b41e742a80883eed9d4b36, type: 3}
+  m_Script: {fileID: 11500000, guid: 220295f461ffcd54fab5b7ccf1cfdf9d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Winchester
+  m_EditorClassIdentifier: Assembly-CSharp::Revolver
   weaponName: Winchester
-  weponType: 1
-  damage: 10
-  bulletScriptable: {fileID: 11400000, guid: 108a30c88e05fd84d9d5d7c9ae7cd188, type: 2}
-  bulletAmmunition: 1
-  reloadDuration: 5
-  rateOfFire: 0
+  weaponData: {fileID: 11400000, guid: 20ee9955561204c448580321fe39b6bd, type: 2}

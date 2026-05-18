@@ -3,10 +3,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttackController 
 {
-    [Header("Bullet Spawn")]
     private Transform spawnPoint;
 
-    [Header("Weapon")]
     private GameObject weaponItem;
     private IWeapons weapon;
 
@@ -14,7 +12,7 @@ public class PlayerAttackController
     private LookObjectToMouse lookToMouseController;
     private PlayerBrain brain;
 
-    private float waitToFire;
+    private float waitToFire = 0;
 
     private bool isAttacking = false;
 
@@ -38,10 +36,6 @@ public class PlayerAttackController
         }
 
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);
-
-        waitToFire = weapon.RateOfFire;
-        weapon.RateOfFire = weapon.RateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
-        weapon.ReloadDuration = weapon.ReloadDuration / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
     }
 
     public void Update()
@@ -66,7 +60,7 @@ public class PlayerAttackController
 
     void Attack()
     {
-        if (waitToFire > weapon.RateOfFire)
+        if (waitToFire > weapon.WeaponData.rateOfFire)
         {
             if (weapon.IsReloading) return;
 
@@ -89,7 +83,7 @@ public class PlayerAttackController
 
     private void ChargeTimers()
     {
-        if (waitToFire <= weapon.RateOfFire)
+        if (waitToFire <= weapon.WeaponData.rateOfFire)
         {
             waitToFire += Time.deltaTime;
         }
@@ -98,7 +92,7 @@ public class PlayerAttackController
         {
             currentReloadTime += Time.deltaTime;
 
-            if(currentReloadTime > weapon.ReloadDuration)
+            if(currentReloadTime > weapon.WeaponData.reloadTime)
             {
                 currentReloadTime = 0;
                 weapon.RestockBullets();
