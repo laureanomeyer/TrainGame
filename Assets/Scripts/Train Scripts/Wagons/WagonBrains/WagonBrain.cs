@@ -12,7 +12,9 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private WagonRenderController renderController;
     private IWagonID wagonID;
     private DamageFlash Flash;
+
     private bool broken;
+    public bool Broken => broken;
 
     [Header("Wagons data")]
     [SerializeField] private float currentHp;
@@ -155,7 +157,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
         renderController.CheckWagonToChangeRender(canBreak);
 
         GameEvents.WagonDestroyed();
-
 
         broken = true;
 

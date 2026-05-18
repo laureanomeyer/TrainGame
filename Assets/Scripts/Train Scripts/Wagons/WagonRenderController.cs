@@ -70,7 +70,7 @@ public class WagonRenderController
 
     public void ActivateWagonTop()
     {
-        if (wagonBrain.topMeshFilterWagon != null)
+        if (wagonBrain.topMeshFilterWagon != null && wagonBrain.Broken == false)
         {
             wagonBrain.topMeshFilterWagon.mesh = wagonTopMesh;
         }
