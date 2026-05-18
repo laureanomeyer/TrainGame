@@ -81,7 +81,7 @@ public class StatSystem
         _ => 1f
     };
 
-    private float GetLocoMultiplier(StatType type) => type switch
+    public float GetLocoMultiplier(StatType type) => type switch
     {
         StatType.MaxHp => trainData.LocomotiveStatsMultiplicator.trainMaxHp,
         StatType.Defense => trainData.LocomotiveStatsMultiplicator.shields,
