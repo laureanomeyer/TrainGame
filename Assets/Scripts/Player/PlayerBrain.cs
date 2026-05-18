@@ -92,7 +92,7 @@ public class PlayerBrain : MonoBehaviour
         playerAttackController.DeactiveAttack();
     }
 
-    private void SetCanAttack(bool canAttack)
+    public void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
     }

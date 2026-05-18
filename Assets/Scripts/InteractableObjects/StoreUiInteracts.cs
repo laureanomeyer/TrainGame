@@ -6,6 +6,8 @@ public class StoreUiInteracts : MonoBehaviour
     [SerializeField] private GameObject uiToShow;
     [SerializeField] private GameObject uiContinueConfirmation;
     [SerializeField] private GameObject uiUpgrades;
+    private PlayerBrain playerBrain;
+
     private bool playerInZone;
 
     private void OnEnable()
@@ -21,6 +23,12 @@ public class StoreUiInteracts : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        
+        if (playerBrain == null)
+        {
+            playerBrain = other.gameObject.GetComponent<PlayerBrain>();
+        }
+
         playerInZone = true;
         GameEvents.ShowInteract();
     }
@@ -30,6 +38,7 @@ public class StoreUiInteracts : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         playerInZone = false;
         GameEvents.HideInteract();
+        playerBrain.SetCanAttack(true);
         uiToShow.SetActive(false);
         uiContinueConfirmation.SetActive(false);
         uiUpgrades.SetActive(false);
@@ -39,6 +48,7 @@ public class StoreUiInteracts : MonoBehaviour
     {
         if (!playerInZone) return;
         uiToShow.SetActive(true);
+        playerBrain.SetCanAttack(false);
         GameEvents.HideInteract();
     }
 }
