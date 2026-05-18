@@ -128,9 +128,37 @@ PrefabInstance:
       value: GoldWagonPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: topRenderWagon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: floorRenderWagon
+      value: 
+      objectReference: {fileID: 5582306665877763259}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
       propertyPath: baseWagonMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: topMeshFilterWagon
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: bodyMeshDestroyWagon
+      value: 
+      objectReference: {fileID: 2959467708922500008, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: destroyWagonMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: floorMeshFilterWagon
+      value: 
+      objectReference: {fileID: 5643177180271281794}
+    - target: {fileID: 4694416078694308870, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: floorMeshDestroyWagon
+      value: 
+      objectReference: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
     - target: {fileID: 6304759064977540960, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -177,5 +205,15 @@ Transform:
 --- !u!1 &5443711640314484261 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3403330081908401739, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  m_PrefabInstance: {fileID: 7255576388497289326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5582306665877763259 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3010843399070139605, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  m_PrefabInstance: {fileID: 7255576388497289326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &5643177180271281794 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 3089588056194201324, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
   m_PrefabInstance: {fileID: 7255576388497289326}
   m_PrefabAsset: {fileID: 0}

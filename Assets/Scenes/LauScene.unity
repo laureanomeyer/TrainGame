@@ -201,7 +201,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefbea979dd9e774b8011365f90dc4ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainManager
-  wagonPrefab: {fileID: 0}
   goldWagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
   locomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
 --- !u!114 &72369569
@@ -2188,6 +2187,14 @@ PrefabInstance:
       propertyPath: weaponItem
       value: 
       objectReference: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
+    - target: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: spawnPoint
+      value: 
+      objectReference: {fileID: 1558271858}
+    - target: {fileID: 1735930275029825393, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+      propertyPath: weaponItem
+      value: 
+      objectReference: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
     - target: {fileID: 2902621759693246355, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
       propertyPath: coalImage
       value: 
@@ -2328,6 +2335,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1558271860}
   m_SourcePrefab: {fileID: 100100000, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+--- !u!4 &1558271858 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4376919442636921631, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
+  m_PrefabInstance: {fileID: 1558271857}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1558271859 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}

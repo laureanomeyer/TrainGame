@@ -444,13 +444,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LowHeatWagonBrain
   currentHp: 0
-  destroyWagonMaterial: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
-  rendererWagon: {fileID: 6651783633320938150}
   canBreak: 1
   SM: 10
   RES: 1
   hpImage: {fileID: 3085350751097130660}
   hpBackgroundImage: {fileID: 3952724538580769880}
+  destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+  floorMeshDestroyWagon: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  bodyMeshDestroyWagon: {fileID: 2959467708922500008, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  floorRenderWagon: {fileID: 4048968310361741416}
+  bodyRenderWagon: {fileID: 6651783633320938150}
+  topRenderWagon: {fileID: 0}
+  floorMeshFilterWagon: {fileID: 4258174136028080721}
+  bodyMeshFilterWagon: {fileID: 835599120351592889}
+  topMeshFilterWagon: {fileID: 0}
   optimizer: 0.1
 --- !u!114 &5345624225964533301
 MonoBehaviour:
@@ -657,6 +664,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1588066396962892842, guid: 8a28f4e252a8e644dae4ec73ec72de0c, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1588066396962892842, guid: 8a28f4e252a8e644dae4ec73ec72de0c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
@@ -677,9 +688,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a28f4e252a8e644dae4ec73ec72de0c, type: 3}
+--- !u!33 &835599120351592889 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 4746430037010458421, guid: 8a28f4e252a8e644dae4ec73ec72de0c, type: 3}
+  m_PrefabInstance: {fileID: 5351982806147737228}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &4048968310361741416 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8247994413960396516, guid: 8a28f4e252a8e644dae4ec73ec72de0c, type: 3}
+  m_PrefabInstance: {fileID: 5351982806147737228}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &4258174136028080721 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 8168969872745336029, guid: 8a28f4e252a8e644dae4ec73ec72de0c, type: 3}
   m_PrefabInstance: {fileID: 5351982806147737228}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &4936416833452339605 stripped

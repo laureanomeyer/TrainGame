@@ -228,13 +228,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EastWagonBrain
   currentHp: 0
-  destroyWagonMaterial: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
-  rendererWagon: {fileID: 5364978093578655071}
   canBreak: 1
   SM: 10
   RES: 1
   hpImage: {fileID: 2192088496301068345}
   hpBackgroundImage: {fileID: 6105158540899681487}
+  destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+  floorMeshDestroyWagon: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  bodyMeshDestroyWagon: {fileID: 2959467708922500008, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  floorRenderWagon: {fileID: 1994599280705674397}
+  bodyRenderWagon: {fileID: 5364978093578655071}
+  topRenderWagon: {fileID: 0}
+  floorMeshFilterWagon: {fileID: 1767377613957852836}
+  bodyMeshFilterWagon: {fileID: 4117462342626381211}
+  topMeshFilterWagon: {fileID: 0}
   hpBonus: 0.1
 --- !u!65 &8770853818642890087
 BoxCollider:
@@ -677,9 +684,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0ec31039f242c1439b614735f73cf7b, type: 3}
+--- !u!33 &1767377613957852836 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 8168969872745336029, guid: f0ec31039f242c1439b614735f73cf7b, type: 3}
+  m_PrefabInstance: {fileID: 7627125528812970617}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &1994599280705674397 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8247994413960396516, guid: f0ec31039f242c1439b614735f73cf7b, type: 3}
+  m_PrefabInstance: {fileID: 7627125528812970617}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &4117462342626381211 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -3387599253219119134, guid: f0ec31039f242c1439b614735f73cf7b, type: 3}
   m_PrefabInstance: {fileID: 7627125528812970617}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &5364978093578655071 stripped

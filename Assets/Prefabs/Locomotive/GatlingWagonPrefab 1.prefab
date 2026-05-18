@@ -289,13 +289,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GatlingWagonBrain
   currentHp: 0
-  destroyWagonMaterial: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
-  rendererWagon: {fileID: 3687054546212446401}
   canBreak: 1
   SM: 10
   RES: 1
   hpImage: {fileID: 314790721957229845}
   hpBackgroundImage: {fileID: 3400165698468305836}
+  destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+  floorMeshDestroyWagon: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  bodyMeshDestroyWagon: {fileID: 2959467708922500008, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  floorRenderWagon: {fileID: 3687054546212446401}
+  bodyRenderWagon: {fileID: 0}
+  topRenderWagon: {fileID: 0}
+  floorMeshFilterWagon: {fileID: 3459834863058817784}
+  bodyMeshFilterWagon: {fileID: 0}
+  topMeshFilterWagon: {fileID: 0}
   firePoint: {fileID: 8609027585153321505}
   bulletPrefab: {fileID: 751579678887233810, guid: 9f332b99415d4b847afb7d34c4590ec0, type: 3}
   bulletType: {fileID: 11400000, guid: adfbda553c051ca4bbc5043d5628da4a, type: 2}
@@ -1040,6 +1047,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+--- !u!33 &3459834863058817784 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 8168969872745336029, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+  m_PrefabInstance: {fileID: 4710149120524328485}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &3687054546212446401 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8247994413960396516, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}

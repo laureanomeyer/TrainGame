@@ -9,13 +9,13 @@ public class WagonBrain : MonoBehaviour, IDamagable
     protected float defense;
 
     protected WagonHP hpController;
+    private WagonRenderController renderController;
     private IWagonID wagonID;
     private DamageFlash Flash;
     private bool broken;
 
+    [Header("Wagons data")]
     [SerializeField] private float currentHp;
-    [SerializeField] private Material destroyWagonMaterial;
-    [SerializeField] protected Renderer rendererWagon;
     [SerializeField] protected bool canBreak;
     [SerializeField] protected float SM;
     [SerializeField] protected float RES;
@@ -23,6 +23,27 @@ public class WagonBrain : MonoBehaviour, IDamagable
     [Header("UI")]
     [SerializeField] private Image hpImage;
     [SerializeField] private Image hpBackgroundImage;
+
+    #region Wagon Render/Mesh/Material
+    [Header("Wagon renders and materials")]
+
+    [Header("Wagon destroy material")]
+    [SerializeField] public Material destroyWagonMaterial;
+
+    [Header("Wagon destroy mesh")]
+    [SerializeField] public Mesh floorMeshDestroyWagon;
+    [SerializeField] public Mesh bodyMeshDestroyWagon;
+
+    [Header("Wagon renderers")]
+    [SerializeField] public Renderer floorRenderWagon;
+    [SerializeField] public Renderer bodyRenderWagon;
+    [SerializeField] public Renderer topRenderWagon;
+
+    [Header("Wagon mesh filter")]
+    [SerializeField] public MeshFilter floorMeshFilterWagon;
+    [SerializeField] public MeshFilter bodyMeshFilterWagon;
+    [SerializeField] public MeshFilter topMeshFilterWagon;
+    #endregion
 
     protected WagonHPWorldUI hpWorldUI;
 
@@ -47,6 +68,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
         hpWorldUI = new WagonHPWorldUI(hpImage, hpBackgroundImage);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
+        renderController = new WagonRenderController(this);
     }
 
     public virtual IEnumerable<StatModifier> GetModifiers()
@@ -130,14 +152,13 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
         RunManager.Instance.StatSystem.RemoveModifiersFromSource(this);
 
-        if (rendererWagon != null && destroyWagonMaterial != null)
-        {
-            rendererWagon.material = destroyWagonMaterial;
-        }
+        renderController.CheckWagonToChangeRender(canBreak);
 
         GameEvents.WagonDestroyed();
 
+
         broken = true;
+
         if ( wagonID != null)
         {
             GameManager.Instance.Session.TrainData.RemoveWagonID(wagonID);
@@ -162,6 +183,22 @@ public class WagonBrain : MonoBehaviour, IDamagable
         if (hpWorldUI != null)
         {
             hpWorldUI.SetVisible(false);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            renderController.DeactivateWagonTop();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            renderController.ActivateWagonTop();
         }
     }
 }

@@ -37,7 +37,7 @@ public class GoldCollector
 
     public void CollectGold(float amount)
     {
-        if (wagonHP.CurrentHp > 0)
+        if (wagonHP.IsBroken == false)
         {
             gold += amount * GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier);
             goldDisplayUI.text = "$" + gold;
@@ -51,7 +51,7 @@ public class GoldCollector
 
     public float GiveGold()
     {
-        if (wagonHP.CurrentHp > 0)
+        if (wagonHP.IsBroken == false)
         {
             float goldToGive = gold;
             EmptyGold();

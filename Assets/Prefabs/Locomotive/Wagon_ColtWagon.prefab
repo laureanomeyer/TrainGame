@@ -601,7 +601,7 @@ GameObject:
   - component: {fileID: 3644062954500194812}
   - component: {fileID: 8707225630396016752}
   m_Layer: 3
-  m_Name: Wagon_ColtWagon (2)
+  m_Name: Wagon_ColtWagon
   m_TagString: Train
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -642,13 +642,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WagonBrain
   currentHp: 0
-  destroyWagonMaterial: {fileID: 2100000, guid: 21754f3cbba5ef949a875bc6540ce554, type: 2}
-  rendererWagon: {fileID: 4829326639397980201}
   canBreak: 1
   SM: 10
   RES: 1
   hpImage: {fileID: 6592025168693875878}
   hpBackgroundImage: {fileID: 772328443343461271}
+  destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+  floorMeshDestroyWagon: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  bodyMeshDestroyWagon: {fileID: 2959467708922500008, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  floorRenderWagon: {fileID: 1121116090472555783}
+  bodyRenderWagon: {fileID: 4829326639397980201}
+  topRenderWagon: {fileID: 0}
+  floorMeshFilterWagon: {fileID: 911909439501375294}
+  bodyMeshFilterWagon: {fileID: 8032932108447257580}
+  topMeshFilterWagon: {fileID: 0}
 --- !u!114 &5193505474067675462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1174,6 +1181,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+--- !u!33 &911909439501375294 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 8168969872745336029, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+  m_PrefabInstance: {fileID: 9077499952494844899}
+  m_PrefabAsset: {fileID: 0}
 --- !u!23 &1121116090472555783 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 8247994413960396516, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
@@ -1182,6 +1194,11 @@ MeshRenderer:
 --- !u!23 &4829326639397980201 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -4684600263410887734, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+  m_PrefabInstance: {fileID: 9077499952494844899}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &8032932108447257580 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 1334040952100128783, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
   m_PrefabInstance: {fileID: 9077499952494844899}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8304214304464620794 stripped

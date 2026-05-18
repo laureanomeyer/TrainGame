@@ -45,6 +45,8 @@ public class PlayerBrain : MonoBehaviour
         repairAction.performed += ActiveAttack;
         repairAction.canceled += DeactiveAttack;
         TutorialEvents.OnSetAttackEnabled += SetCanAttack;
+
+        canAttack = true;
     }
     private void Update()
     {
@@ -104,4 +106,6 @@ public class PlayerBrain : MonoBehaviour
         repairAction.performed -= ActiveAttack;
         repairAction.canceled -= DeactiveAttack;
     }
+
+
 }

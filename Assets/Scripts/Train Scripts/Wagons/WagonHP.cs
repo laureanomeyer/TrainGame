@@ -37,17 +37,13 @@ public class WagonHP : IDamagable
     }
     public void Repair(float repairAmount) 
     {
-        if(currentHp <= 0) return;
+        if(currentHp <= 0 && canBreak) return;
 
         currentHp += repairAmount;
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);
 
     }
-    public void ReapirGoldenWagon(float deltaTime, float repairAmount)
-    {
-        currentHp += repairAmount * deltaTime;
-        currentHp = Mathf.Clamp(currentHp, currentHp, maxHp);
-    }
+
     public void Break() 
     {
         isBroken = true;
