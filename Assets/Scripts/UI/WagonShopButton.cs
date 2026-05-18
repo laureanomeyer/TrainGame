@@ -22,6 +22,8 @@ public class WagonShopButton : MonoBehaviour
 
     [SerializeField] private Transform spawnWagonPoint;
 
+    [SerializeField] private ParticleSystem wagonShopParticleSystem;
+
     private GameObject modelReference;
 
     public string DescriptionText => descriptionText;
@@ -78,6 +80,10 @@ public class WagonShopButton : MonoBehaviour
             GameManager.Instance.Session.RebuildStatsSystem();
             Destroy(modelReference);
             SetWagonInStock();
+            if (wagonShopParticleSystem)
+            {
+                wagonShopParticleSystem.Play();
+            }
         }
     }
 
