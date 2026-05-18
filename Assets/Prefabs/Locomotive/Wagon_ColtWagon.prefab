@@ -600,6 +600,7 @@ GameObject:
   - component: {fileID: 5211743071578810440}
   - component: {fileID: 3644062954500194812}
   - component: {fileID: 8707225630396016752}
+  - component: {fileID: 1714325756519525256}
   m_Layer: 3
   m_Name: Wagon_ColtWagon
   m_TagString: Train
@@ -751,6 +752,28 @@ MonoBehaviour:
   - {fileID: 1121116090472555783}
   flashMaterial: {fileID: 2100000, guid: 90697fa2e87819b44a64f50217f75c8e, type: 2}
   flashDuration: 0.1
+--- !u!95 &1714325756519525256
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4501369629086111137}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90120189f6356bc46ba3c2a7ee84d3f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5757316920973198254
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,6 +1170,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8158344438544836839, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.506
       objectReference: {fileID: 0}
     - target: {fileID: -4684600263410887734, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

@@ -212,6 +212,7 @@ GameObject:
   - component: {fileID: 5333138794343394051}
   - component: {fileID: 77435903165197984}
   - component: {fileID: 4738617757933681993}
+  - component: {fileID: 4518533352594136671}
   m_Layer: 3
   m_Name: GatlingWagonPrefab 1
   m_TagString: Train
@@ -325,6 +326,28 @@ MonoBehaviour:
   - {fileID: 3687054546212446401}
   flashMaterial: {fileID: 2100000, guid: 90697fa2e87819b44a64f50217f75c8e, type: 2}
   flashDuration: 0.1
+--- !u!95 &4518533352594136671
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3221274974295192296}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90120189f6356bc46ba3c2a7ee84d3f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4091107846788577344
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,9 +1056,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8158344438544836839, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8158344438544836839, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.512
+      objectReference: {fileID: 0}
+    - target: {fileID: -4035545753247348911, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
       propertyPath: m_Name
       value: ColtWagon_Torreta_Pistola
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2550463727306718371, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8247994413960396516, guid: d75b2666317a3be47ae1c1574887fe59, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

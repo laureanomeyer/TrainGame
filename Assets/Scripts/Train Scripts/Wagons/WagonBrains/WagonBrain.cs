@@ -12,6 +12,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private WagonRenderController renderController;
     private IWagonID wagonID;
     private DamageFlash Flash;
+    private Animator animator;
     private bool broken;
 
     [Header("Wagons data")]
@@ -57,6 +58,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     {
         var statSystem = RunManager.Instance.StatSystem;
         statSystem.OnStatChanged += OnStatChanged;
+        animator = GetComponent<Animator>();
 
         Flash = GetComponent<DamageFlash>();
         broken = false;
@@ -86,6 +88,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     {
         if(hpController == null) return;
         if (broken) return;
+        if (animator != null) animator.SetTrigger("Damage");
 
         hpController.TakeDamage(damageAmount);
 

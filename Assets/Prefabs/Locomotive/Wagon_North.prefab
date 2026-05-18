@@ -403,6 +403,7 @@ GameObject:
   - component: {fileID: 1131017086804129404}
   - component: {fileID: 6103826407415097898}
   - component: {fileID: 547304004439997403}
+  - component: {fileID: 667533702049977148}
   m_Layer: 3
   m_Name: Wagon_North
   m_TagString: Train
@@ -513,6 +514,28 @@ MonoBehaviour:
   - {fileID: 2022614565406209957}
   flashMaterial: {fileID: 2100000, guid: 90697fa2e87819b44a64f50217f75c8e, type: 2}
   flashDuration: 0.1
+--- !u!95 &667533702049977148
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6152897119049583977}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90120189f6356bc46ba3c2a7ee84d3f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7122973460894241407
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +662,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 55c11cf8d925b6d4fb2c7f4043f24f82, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8158344438544836839, guid: 55c11cf8d925b6d4fb2c7f4043f24f82, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.505
       objectReference: {fileID: 0}
     - target: {fileID: -4035545753247348911, guid: 55c11cf8d925b6d4fb2c7f4043f24f82, type: 3}
       propertyPath: m_Layer

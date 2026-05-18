@@ -159,6 +159,14 @@ PrefabInstance:
       propertyPath: floorMeshDestroyWagon
       value: 
       objectReference: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+    - target: {fileID: 6159189071699930408, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6159189071699930408, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9.501
+      objectReference: {fileID: 0}
     - target: {fileID: 6304759064977540960, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -175,6 +183,9 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 8450276076056107103}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2798357014514839596}
     - targetCorrespondingSourceObject: {fileID: 5500451339517949497, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5168134435809098979}
@@ -202,6 +213,33 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6441151427167963299, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
   m_PrefabInstance: {fileID: 7255576388497289326}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5189475862246834822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3221274974295192296, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
+  m_PrefabInstance: {fileID: 7255576388497289326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &2798357014514839596
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189475862246834822}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90120189f6356bc46ba3c2a7ee84d3f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5443711640314484261 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3403330081908401739, guid: ef0258e670b5faf4fb5569cd4219583e, type: 3}
