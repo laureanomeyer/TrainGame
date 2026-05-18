@@ -31,7 +31,7 @@ public class WagonMovement : MonoBehaviour, IWagon
     {
         if (targetTail == null) return;   
         transform.position = targetTail.position; //Se pega a la cola del vagon de adelante
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetTail.rotation, 0.03f); //Copia la rotacion de la cola del vagon de adelante en menor escala
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetTail.rotation, 0.3f); //Copia la rotacion de la cola del vagon de adelante en menor escala
         tail.rotation = transform.rotation; //Fija la rotación de su cola
     }
 
