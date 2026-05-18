@@ -40,7 +40,7 @@ public class SpawnManager : MonoBehaviour
         GameEvents.OnEnemyDeath += EnemyDead;
         GameEvents.OnEnemyHit += EnemyHit;
         TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
-        TutorialEvents.OnSetRunStarted += SetCanSpawn;
+        TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
     }
 
     private void OnDisable()
@@ -48,7 +48,7 @@ public class SpawnManager : MonoBehaviour
         GameEvents.OnEnemyDeath -= EnemyDead;
         GameEvents.OnEnemyHit -= EnemyHit;
         TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
-        TutorialEvents.OnSetRunStarted -= SetCanSpawn;
+        TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
     }
 
 

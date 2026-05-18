@@ -9,11 +9,9 @@ public class UIPlayerManager : MonoBehaviour
 
 
     [Header("Locomotive UI")]
-    [SerializeField] private Image fuelFillImage;
-    [SerializeField] private Image fuelMaxCapacityImage;
+    [SerializeField] private GameObject fuelIndicator;
+    [SerializeField] private GameObject fuelMaxCapacityIndicator;
     [SerializeField] private Image shieldImage;
-    [SerializeField] private Image backgroundImage;
-    [SerializeField] private Image consumedImage;
 
     [Header("Inventory UI")]
     [SerializeField] private Image coalImage;
@@ -32,13 +30,14 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private GameObject InteractImage;
 
     private Color originalColor;
+    private LocomotiveBrain locomotive;
 
 
     private void Start()
     {
         UpdateGoldUI(0);
         InteractImage.SetActive(false);
-        consumedImage.gameObject.SetActive(false);
+        locomotive = RunManager.Instance.LocomotiveBrain;
     }
 
     void Update()
@@ -52,29 +51,15 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateLocomotiveUI()
     {
-        LocomotiveBrain locomotive = RunManager.Instance.LocomotiveBrain;
-
         if (locomotive != null && locomotive.fuelController != null)
         {
-            var currentFill = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelFillImage.fillAmount = currentFill;
-            shieldImage.fillAmount = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
+            var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
+            fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, currentFuel));
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelMaxCapacityImage.fillAmount = currentCapacity;
-            consumedImage.fillAmount = currentCapacity;
+            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -80, currentCapacity));
 
-            if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 4)
-            {
-                backgroundImage.color = new Color(1, 0, 0, 0.5f);
-                consumedImage.gameObject.SetActive(true);
-            }
-            else 
-            { 
-                backgroundImage.color = originalColor;
-                consumedImage.gameObject.SetActive(false);
-            }
-
+            shieldImage.fillAmount = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
         }
     }
 

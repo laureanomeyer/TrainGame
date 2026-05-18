@@ -6,7 +6,6 @@ public class GoldenWagonBrain : WagonBrain
     private GoldCollector collector;
     public GoldCollector Collector => collector;
 
-    [Header("Golden wagon data")]
     [SerializeField] private TextMeshProUGUI currentGoldUI;
     [SerializeField] private Transform goldBox;
     [SerializeField] private Material baseWagonMaterial;
@@ -14,20 +13,21 @@ public class GoldenWagonBrain : WagonBrain
     public override void Start()
     {
         base.Start();
-        collector = new (hpController, currentGoldUI);
+        collector = new GoldCollector(hpController, currentGoldUI);
         GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
-        floorRenderWagon.material = baseWagonMaterial;
+        rendererWagon.material = baseWagonMaterial;
     }
 
     public override void Repair(float repairAmount)
     {
         if (hpController.IsBroken == true & hpController.CurrentHp > 0)
         {
-            floorRenderWagon.material = baseWagonMaterial;
+            rendererWagon.material = baseWagonMaterial;
             hpController.IsBroken = false;
         }
 
-        hpController.Repair(repairAmount * Time.deltaTime);
+        hpController.ReapirGoldenWagon(Time.deltaTime, repairAmount);
+        TutorialEvents.SetAttackEnabled(true);
 
         if (hpWorldUI != null)
         {

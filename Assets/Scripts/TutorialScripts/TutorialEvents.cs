@@ -1,15 +1,20 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEditor;
 
 public class TutorialEvents 
 {
-    public static Action<Vector3, List<IWagon>>OnSpawnEnemy;
-    public static Action OnStartFuelUse;
-    public static Action<bool> OnSetCanConsume;
-    public static Action<bool> OnSetRunStarted;
-    public static Action<bool> OnSetTimerStarted;
-    public static Action<bool> OnSetAttackEnabled;
+    public static Action<bool> OnSetMovementEnabled;
+    public static Action<Vector3, List<IWagon>>OnSpawnEnemy; //Spawnea al enemigo
+    public static Action<bool> OnSetAttackEnabled; //Permite al jugador disparar
+    public static Action OnStartFuelUse; //Comienza a perder carbon
+    public static Action<bool> OnSetCanConsume; //Activa y desactiva el carbon
+    public static Action<bool> OnStartSpawningEnemies; //Comienza el spawn de enemigos reales
+    public static Action<bool> OnSetTimerStarted; //Comienza el timer real
+
+    public static Action<string> OnSetTutorialText;
+    public static Action<bool> OnSetTutorialVisible;
 
     public static void SpawnEnemy(Vector3 pos, List<IWagon> list)
     {
@@ -23,9 +28,13 @@ public class TutorialEvents
     {
         OnSetCanConsume?.Invoke(can);
     }
+    public static void SetMovementEnabled(bool can)
+    {
+        OnSetMovementEnabled?.Invoke(can);
+    }
     public static void SetRunStarted(bool can)
     {
-        OnSetRunStarted?.Invoke(can);
+        OnStartSpawningEnemies?.Invoke(can);
     }
     public static void SetTimerStarted(bool can)
     {
@@ -34,5 +43,14 @@ public class TutorialEvents
     public static void SetAttackEnabled(bool can) 
     { 
         OnSetAttackEnabled?.Invoke(can);
+    }
+    public static void SetTutorialText(string text)
+    {
+        OnSetTutorialText?.Invoke(text);
+    }
+    public static void SetTutorialTextVisible(bool show)
+    {
+        OnSetTutorialVisible?.Invoke(show);
+        OnSetTutorialVisible?.Invoke(show);
     }
 }

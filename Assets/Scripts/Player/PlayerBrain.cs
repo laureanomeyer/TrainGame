@@ -31,6 +31,7 @@ public class PlayerBrain : MonoBehaviour
     public PlayerInventory Inventory => inventory;
     public LookObjectToMouse FaceMouse => faceMouse;
     public InteractionUIManager InteractionUIManager => interactionUIManager;
+    public PlayerAttackController PlayerAttackController => playerAttackController;
     void Awake() 
     {
         rb = GetComponent<Rigidbody>();
