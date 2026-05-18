@@ -15,18 +15,18 @@ public class GoldenWagonBrain : WagonBrain
         base.Start();
         collector = new GoldCollector(hpController, currentGoldUI);
         GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
-        rendererWagon.material = baseWagonMaterial;
+        floorRenderWagon.material = baseWagonMaterial;
     }
 
     public override void Repair(float repairAmount)
     {
         if (hpController.IsBroken == true & hpController.CurrentHp > 0)
         {
-            rendererWagon.material = baseWagonMaterial;
+            floorRenderWagon.material = baseWagonMaterial;
             hpController.IsBroken = false;
         }
 
-        hpController.ReapirGoldenWagon(Time.deltaTime, repairAmount);
+        hpController.Repair(repairAmount, Time.deltaTime);
         TutorialEvents.SetAttackEnabled(true);
 
         if (hpWorldUI != null)

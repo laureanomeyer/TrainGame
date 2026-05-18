@@ -131,7 +131,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
         if (hpController == null) return;
         if (broken) return;
 
-        hpController.Repair(repairAmount * Time.deltaTime);
+        hpController.Repair(repairAmount, Time.deltaTime);
 
         currentHp = hpController.CurrentHp;
 

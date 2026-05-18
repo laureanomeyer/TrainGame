@@ -16,11 +16,6 @@ public class TrainManager : MonoBehaviour
         BuildTrain();
     }
 
-    private void Start()
-    {
-        
-    }
-
     private void BuildTrain()
     {
         CreateLocomotive();
@@ -45,7 +40,6 @@ public class TrainManager : MonoBehaviour
         foreach (var wagonID in GameManager.Instance.Session.TrainData.WagonsIDList)
             CreateWagon(wagonID.Prefab, wagonID);
     }
-
     public void CreateWagon(GameObject wagonToCreate, IWagonID id)
     {
         GameObject wagonInstance = Instantiate(wagonToCreate, tail.position, tail.rotation);
