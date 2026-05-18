@@ -8,8 +8,12 @@ public class WagonRenderController
     public WagonRenderController (WagonBrain brain)
     {
         wagonBrain = brain;
-        wagonTopMesh = wagonBrain.topMeshFilterWagon.mesh;
 
+        if (wagonBrain.topMeshFilterWagon != null)
+        {
+            wagonTopMesh = wagonBrain.topMeshFilterWagon.mesh;
+        }
+        
         if (wagonTopMesh != null)
         {
             Debug.Log(wagonTopMesh.name);
