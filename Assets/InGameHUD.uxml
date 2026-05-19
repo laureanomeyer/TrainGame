@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Assets/Asets2D/UI/UiSvg/InGameHud.uss?fileID=7433441132597879392&amp;guid=025d17794d7beb142b91bc7c9bb162b2&amp;type=3#InGameHud"/>
+    <ui:VisualElement name="InGameUi" style="flex-grow: 1; position: relative;">
+        <ui:VisualElement name="Hp" style="flex-grow: 1; position: absolute; width: 316px; height: 500px; top: auto; left: auto; right: -40px; bottom: 314px; transform-origin: right;">
+            <ui:Image name="Fondo" source="project://database/Assets/Assets/Asets2D/UI/UiSvg/FondoHp.svg?fileID=7388822144124034973&amp;guid=b9f8f721546be2645aa5929680b43d13&amp;type=3#FondoHp" scale-mode="ScaleToFit" style="height: 100%; position: absolute; top: 0; left: 0; bottom: 0; right: 0; width: 100%; -unity-background-scale-mode: scale-and-crop;">
+                <ui:Image name="Vidrio" source="project://database/Assets/Assets/Asets2D/UI/UiSvg/VidrioHp.svg?fileID=7388822144124034973&amp;guid=5795b24d87f951b469b0a837af323693&amp;type=3#VidrioHp" scale-mode="ScaleToFit" style="-unity-background-scale-mode: scale-and-crop; position: absolute; left: 0; bottom: 0; right: 0; top: 0;">
+                    <ui:Image name="Borde" source="project://database/Assets/Assets/Asets2D/UI/UiSvg/BordeHp.svg?fileID=7388822144124034973&amp;guid=133fc8f5d96acc746be2f8f8565ceeca&amp;type=3#BordeHp" scale-mode="ScaleToFit" style="-unity-background-scale-mode: scale-and-crop; position: absolute; left: 0; bottom: 0; right: 0; top: 0;">
+                        <ui:Image name="Hebilla" source="project://database/Assets/Assets/Asets2D/UI/UiSvg/HebillaHp.svg?fileID=7388822144124034973&amp;guid=920cb1e9453d0cb4cb37a560ebd9610d&amp;type=3#HebillaHp" scale-mode="ScaleToFit" style="-unity-background-scale-mode: scale-and-crop; transform-origin: left; position: absolute; left: 16px; bottom: 212px; right: auto; top: 212px; width: 66px; height: auto; background-image: none; background-size: cover; -unity-background-image-tint-color: rgba(255, 255, 255, 0); aspect-ratio: auto; align-items: flex-start; align-self: flex-start; justify-content: center;"/>
+                        <ui:Image name="Manecilla" source="project://database/Assets/Assets/Asets2D/UI/UiSvg/ManecillaHP.svg?fileID=7388822144124034973&amp;guid=da2c7445367ac4e4887a68edb3f41b6c&amp;type=3#ManecillaHP" scale-mode="ScaleToFit" enabled="true" style="-unity-background-scale-mode: scale-and-crop; transform-origin: right; position: absolute; left: 17px; bottom: 203px; right: 31px; top: 203px; width: auto; height: auto;"/>
+                    </ui:Image>
+                </ui:Image>
+            </ui:Image>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
