@@ -13,9 +13,11 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private IWagonID wagonID;
     private DamageFlash Flash;
     private Animator animator;
-
+    private bool canBeRepaired = false;
     private bool broken;
+
     public bool Broken => broken;
+    public bool CanBeRepaired => canBeRepaired;
 
     [Header("Wagons data")]
     [SerializeField] private float currentHp;
@@ -95,6 +97,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
         hpController.TakeDamage(damageAmount);
 
         currentHp = hpController.CurrentHp;
+        canBeRepaired = (hpController.CurrentHp != hpController.MaxHp);
 
         if ( hpWorldUI != null)
         {

@@ -27,9 +27,7 @@ public class CameraShakes : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        virtualCamera = GetComponent<CinemachineCamera>();
-
-        
+        virtualCamera = GetComponent<CinemachineCamera>();    
     }
 
     private void Start()

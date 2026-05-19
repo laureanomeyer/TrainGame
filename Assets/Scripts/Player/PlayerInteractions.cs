@@ -225,12 +225,12 @@ public class PlayerInteractions
     public void ActiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = true;
-        playerMovementController.SetCanMove(false);
     }
 
     public void DeactiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = false;
+        playerBrain.SetIsRepairing(false);
         playerMovementController.SetCanMove(true);
     }
 
@@ -238,9 +238,11 @@ public class PlayerInteractions
     {
         if (isUsingTurret) return;
 
-        if (buttonIsHold && currentWagon != null)
+        if (buttonIsHold && currentWagon != null && currentWagon.CanBeRepaired)
         {
             currentWagon.Repair(repairCapacity);
+            playerBrain.SetIsRepairing(true);
+            playerMovementController.SetCanMove(false);
         }
     }
 

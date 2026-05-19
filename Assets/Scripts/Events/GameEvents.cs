@@ -26,6 +26,8 @@ public static class GameEvents
 
     public static event Action<UnityEngine.Vector3> OnEnemyHit;
 
+    public static event Action<bool> OnActivateUi;
+
     public static event Action OnShowInteract;
 
     public static event Action OnHideInteract;
@@ -92,6 +94,10 @@ public static class GameEvents
     public static void EnemyHit(UnityEngine.Vector3 position)
     {
         OnEnemyHit?.Invoke(position);
+    }
+    public static void UiActivated(bool activated)
+    {
+        OnActivateUi?.Invoke(!activated);
     }
 
     public static void ShowInteract()

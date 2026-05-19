@@ -13,11 +13,6 @@ public class WagonRenderController
         {
             wagonTopMesh = wagonBrain.topMeshFilterWagon.mesh;
         }
-        
-        if (wagonTopMesh != null)
-        {
-            Debug.Log(wagonTopMesh.name);
-        }
     }
 
     public void CheckWagonToChangeRender(bool canBreak)

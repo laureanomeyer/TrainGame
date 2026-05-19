@@ -25,6 +25,7 @@ public class PlayerBrain : MonoBehaviour
     private PlayerAttackController playerAttackController;
     private InputAction repairAction;
 
+    private bool IsRepairing = false;
     private bool canAttack = true;
 
     public bool playerCanMove => playerMovementController.CanMove;
@@ -45,18 +46,20 @@ public class PlayerBrain : MonoBehaviour
         repairAction = InputSystem.actions.FindAction("Attack");
         repairAction.performed += ActiveAttack;
         repairAction.canceled += DeactiveAttack;
-        TutorialEvents.OnSetAttackEnabled += SetCanAttack;
 
-        canAttack = true;
+        TutorialEvents.OnSetAttackEnabled += SetCanAttack;
+        GameEvents.OnActivateUi += SetCanAttack;
+
+        IsRepairing = false;
     }
     private void Update()
     {
         playerInteractionsController.Update();
-        if (canAttack) playerAttackController.Update();
+        if (!IsRepairing) playerAttackController.Update();
     }
     private void FixedUpdate()
     {
-        playerMovementController.FixedUpdate();
+        if (!IsRepairing) playerMovementController.FixedUpdate();
     }
 
     private void OnMove(InputValue value)
@@ -92,10 +95,13 @@ public class PlayerBrain : MonoBehaviour
     {
         playerAttackController.DeactiveAttack();
     }
-
     public void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
+    }
+    public void SetIsRepairing(bool canAttack)
+    {
+        this.IsRepairing = canAttack;
     }
     public void ChangeWeapon(GameObject weapon)
     {
@@ -106,6 +112,8 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController.Cleanup();
         repairAction.performed -= ActiveAttack;
         repairAction.canceled -= DeactiveAttack;
+        GameEvents.OnActivateUi -= SetCanAttack;
+        TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
     }
 
 
