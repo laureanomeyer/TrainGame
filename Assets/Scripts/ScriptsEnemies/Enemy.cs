@@ -6,15 +6,17 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    EnemyData data;
     [SerializeField] GameObject weapon;
-    float CurrentH;
-    private DamageFlash flash;
 
+    private EnemyData data;
     private List<IWagon> targetList;
     private Transform target;
     private Transform weaponPosition;
+    private Rigidbody rb;
     private float limitZ;
+    private float currentHealth;
+    private DamageFlash flash;
+
     public Vector3 KnockbackVelocity = Vector3.zero; //temporal
     public bool IsKnocked = false; //temporal
 
@@ -28,12 +30,10 @@ public class Enemy : MonoBehaviour
     public float Cooldown => data.attackCooldown;
 
     public List<IWagon> TargetList => targetList;
-
     public Transform Target => target;
     public float Range => data.range;
     //Vector3 KnockbackVelocity => knockbackVelocity;
 
-    private float currentHealth;
 
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
         weaponPosition = GetComponentInChildren<Transform>();
         var WeaponGO = Instantiate(weapon, weaponPosition);
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
+        rb = GetComponent<Rigidbody>();
         Brain.Begin(this);
         flash = GetComponent<DamageFlash>();
         limitZ = Movement.SetLimitZ();
@@ -60,7 +61,6 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         attackCooldownTimer -= Time.deltaTime;
-        CurrentH = currentHealth;
         Movement?.Move(this, limitZ);
         Attack?.Attack(this);
     }

@@ -1,16 +1,14 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class TrainRanges : MonoBehaviour
+public class TrainRanges
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Vector3 headPosition;
+    public Vector3 tailPosition;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    float positiveLimit;
+    float negativeLimit;
+
+     
+
 }
