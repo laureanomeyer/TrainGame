@@ -1,10 +1,15 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WagonStoreManager : MonoBehaviour
 {
     [Header("Wagon shop sections")]
     [SerializeField] private WagonShopButton[] shopButtons;
+
+    [SerializeField] public Button buyButton;
+    [SerializeField] public Button rerollButton;
+    [SerializeField] private GameObject wagonStoreUI;
 
     private int currentLevel;
     public int Level => currentLevel;
@@ -30,5 +35,20 @@ public class WagonStoreManager : MonoBehaviour
     public float GetPlayerGold()
     {
         return StoreManager.Instance.GetGold();
+    }
+
+    public void DeactivateReroll()
+    {
+        rerollButton.interactable = false;
+    }
+
+    public void DeactivateUI()
+    {
+        wagonStoreUI.SetActive(false);
+    }
+
+    public void ActivateUI()
+    {
+        wagonStoreUI.SetActive(true);
     }
 }
