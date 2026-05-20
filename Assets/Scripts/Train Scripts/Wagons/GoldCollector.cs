@@ -49,7 +49,7 @@ public class GoldCollector
             gold += amount * GameManager.Instance.Session.StatSystem.GetLocoMultiplier(StatType.GoldMultiplier);
 
             setCoinsModels(gold, storageCapacity);
-            goldDisplayUI.text = "$" + gold.ToString("F2");
+            goldDisplayUI.text = "$" + gold;
             PlayScaleEffect();
         }
         else
