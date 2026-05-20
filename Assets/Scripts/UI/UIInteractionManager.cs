@@ -14,7 +14,7 @@ public class InteractionUIManager : MonoBehaviour
     private void Start()
     {
         HideAll();
-        spacialText.text = $"Estación {GameManager.Instance.Session.SessionConfig.CurrentLevel}";
+        spacialText.text = $"Estacion {GameManager.Instance.Session.SessionConfig.CurrentLevel}";
     }
 
     public void ShowText(string message)
