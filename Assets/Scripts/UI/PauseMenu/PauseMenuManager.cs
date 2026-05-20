@@ -13,6 +13,7 @@ public class PauseMenuManager : MonoBehaviour
 
     [Header("Scenes")]
     [SerializeField] private string[] pausableScenes = { "LauScene", "Shop" };
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     private InputAction pauseAction;
     private bool isPaused;
@@ -113,6 +114,23 @@ public class PauseMenuManager : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void QuitToMainMenu()
+    {
+        isPaused = false;
+
+        Time.timeScale = 1f;
+
+        if (pausePanel != null)
+        {
+            pausePanel.SetActive(false);
+        }
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
