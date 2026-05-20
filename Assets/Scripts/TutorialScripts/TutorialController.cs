@@ -15,7 +15,7 @@ public class TutorialController : MonoBehaviour
     private bool firstRepair = false;
     private bool firstkilled = false;
     private List<IWagon> wagons = new();
-    float timer = 5;
+    private float timer = 5;
 
     private void Awake()
     {
@@ -37,6 +37,7 @@ public class TutorialController : MonoBehaviour
         TutorialEvents.SetAttackEnabled(false);
         TutorialEvents.EnableCoalBox(false);
         TutorialEvents.EnableGoldBox(false);
+        
 
         TutorialEvents.SetTutorialTextVisible(true);
         TutorialEvents.SetTutorialText("Presiona WASD para moverte");
@@ -48,8 +49,11 @@ public class TutorialController : MonoBehaviour
         if (timer <= 0)
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
-            if (GameManager.Instance.CurrentState == GameState.Tutorial)
+
+            if (GameManager.Instance.CurrentState == GameState.Tutorial) 
+            {
                 TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
+            }
 
             if (!firstRepair)
             {
@@ -57,7 +61,7 @@ public class TutorialController : MonoBehaviour
                 TutorialEvents.SetTutorialTextVisible(true);
                 TutorialEvents.SetTutorialText("Esto es un enemigo. Los enemigos atacan el tren. Debes reparar el vagon de oro presionando R");
             }
-            timer = 10000000000000;
+            timer = float.MaxValue;
         }
     }
 

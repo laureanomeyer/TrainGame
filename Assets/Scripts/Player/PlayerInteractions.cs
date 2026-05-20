@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteractions
 {
-    private float repairCapacity;
+    private readonly float repairCapacity;
     private InteractionUIManager interactionUIManager;
 
     private WagonBrain currentWagon;
@@ -50,11 +50,10 @@ public class PlayerInteractions
 
     public void OnTriggerEnter(Collider other)
     {
+        WagonBrain wagon = other.GetComponentInParent<WagonBrain>();
         if (other.CompareTag("Train"))
         {
-            WagonBrain wagon = other.GetComponentInParent<WagonBrain>();
-
-            if(wagon != null)
+            if (wagon != null)
             {
                 if (currentWagon != null)
                 {
@@ -97,7 +96,7 @@ public class PlayerInteractions
             {
                 currentWagon.HideHpBar();
                 currentWagon = null;
-            }  
+            }
         }
 
         if (other.CompareTag("ShopButton"))
