@@ -10,6 +10,7 @@ public class TutorialController : MonoBehaviour
     [SerializeField] GameObject attackCursor;
     [SerializeField] Transform EnemySpawn;
     private bool started = false;
+    private bool firstCash = true;
     private List<IWagon> wagons = new();
     float timer = 5;
 
@@ -21,12 +22,15 @@ public class TutorialController : MonoBehaviour
     {
         CoalUi.SetActive(false);
         RunUi.SetActive(false);
+
         TutorialEvents.SetCanConsume(false);
         TutorialEvents.SetTimerStarted(false);
-        TutorialEvents.OnSetAttackEnabled += SetAttackUi;
         TutorialEvents.SetAttackEnabled(false);
+
+        TutorialEvents.OnSetAttackEnabled += SetAttackUi;
         TutorialEvents.OnStartFuelUse += StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies += StartRun;
+        TutorialEvents.OnEnemyKilled += CashGoldWagon;
 
         TutorialEvents.SetTutorialTextVisible(true);
         TutorialEvents.SetTutorialText("Presiona WASD para moverte");
@@ -59,6 +63,15 @@ public class TutorialController : MonoBehaviour
         }
     }
 
+    void CashGoldWagon()
+    {
+        if (firstCash)
+        {
+            TutorialEvents.SetTutorialTextVisible(true);
+            TutorialEvents.SetTutorialText("El oro solo está asegurado en la caja de oro que tiene la locomotora. Recordá recolectarlo y guardarlo tras matar enemigos.");
+        }
+    }
+
     void StartRun(bool can)
     {
         RunUi.SetActive(can);
@@ -81,5 +94,6 @@ public class TutorialController : MonoBehaviour
         TutorialEvents.OnStartFuelUse -= StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies -= StartRun;
         TutorialEvents.OnSetAttackEnabled -= SetAttackUi;
+        TutorialEvents.OnEnemyKilled -= CashGoldWagon;
     }
 }

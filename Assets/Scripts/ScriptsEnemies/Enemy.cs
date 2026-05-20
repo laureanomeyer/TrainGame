@@ -107,6 +107,9 @@ public class Enemy : MonoBehaviour
         GameEvents.GoldEarned(data.gold);
         GameEvents.EnemyDeath(transform.position);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
+
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+            TutorialEvents.EnemyKilled();
     }
 
     private void DeadWallDead()

@@ -14,6 +14,7 @@ public class TutorialEvents
     public static Action<bool> OnSetTimerStarted; //Comienza el timer real
     public static Action<string> OnSetTutorialText;
     public static Action<bool> OnSetTutorialVisible;
+    public static Action OnEnemyKilled;
 
     public static void SpawnEnemy(Vector3 pos, List<IWagon> list)
     {
@@ -51,5 +52,9 @@ public class TutorialEvents
     {
         OnSetTutorialVisible?.Invoke(show);
         OnSetTutorialVisible?.Invoke(show);
+    }
+    public static void EnemyKilled()
+    {
+        OnEnemyKilled?.Invoke();
     }
 }
