@@ -25,7 +25,7 @@ public class TutorialController : MonoBehaviour
         TutorialEvents.SetTimerStarted(false);
         TutorialEvents.OnSetAttackEnabled += SetAttackUi;
         TutorialEvents.SetAttackEnabled(false);
-        TutorialEvents.OnSetCanConsume += StartFuelConsumption;
+        TutorialEvents.OnStartFuelUse += StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies += StartRun;
 
         TutorialEvents.SetTutorialTextVisible(true);
@@ -38,7 +38,8 @@ public class TutorialController : MonoBehaviour
         if (timer <= 0)
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
-            TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
+            if (GameManager.Instance.CurrentState == GameState.Tutorial)
+                TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
 
             TutorialEvents.SetTutorialTextVisible(true);
             TutorialEvents.SetTutorialText("Esto es un enemigo. Los enemigos dañan el tren. Debes reparar el vagon de oro presionando R");
@@ -47,23 +48,21 @@ public class TutorialController : MonoBehaviour
         }
     }
 
-    void StartFuelConsumption(bool can)
+    void StartFuelConsumption()
     {
-        CoalUi.SetActive(can);
         if (!started)
         {
+            CoalUi.SetActive(true);
             started = true;
-            TutorialEvents.StartFuelUse();
             TutorialEvents.SetTutorialTextVisible(true);
             TutorialEvents.SetTutorialText("Tu locomotora nunca debe dejar de moverse. Estate atento, que no se agote su combustible");
         }
-
     }
 
     void StartRun(bool can)
     {
         RunUi.SetActive(can);
-
+        TutorialEvents.SetCanConsume(true);
         TutorialEvents.SetTutorialTextVisible(true);
         TutorialEvents.SetTutorialText("Bien, este es el trayecto restante hasta la estación. ¡Tenés que llegar!");
     }
@@ -79,7 +78,7 @@ public class TutorialController : MonoBehaviour
 
     private void OnDestroy()
     {
-        TutorialEvents.OnSetCanConsume -= StartFuelConsumption;
+        TutorialEvents.OnStartFuelUse -= StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies -= StartRun;
         TutorialEvents.OnSetAttackEnabled -= SetAttackUi;
     }

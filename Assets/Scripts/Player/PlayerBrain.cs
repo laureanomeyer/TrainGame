@@ -56,7 +56,7 @@ public class PlayerBrain : MonoBehaviour
     private void Update()
     {
         playerInteractionsController.Update();
-        if (!IsRepairing) playerAttackController.Update();
+        if (!IsRepairing && canAttack) playerAttackController.Update();
     }
     private void FixedUpdate()
     {

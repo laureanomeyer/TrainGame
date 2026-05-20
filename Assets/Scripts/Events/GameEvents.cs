@@ -14,6 +14,8 @@ public static class GameEvents
 
     public static event Action OnShoot;
 
+    public static event Action<float> OnReloadStarted;
+
     public static event Action<float> OnAmmoChanged;
 
     public static event Action OnShieldsBroken;
@@ -65,6 +67,10 @@ public static class GameEvents
     public static void ShootPerformed()
     {
         OnShoot?.Invoke();
+    }
+    public static void ReloadStarted(float reloadTimer)
+    {
+        OnReloadStarted?.Invoke(reloadTimer);
     }
     public static void AmmoChanged(float currentAmmo)
     {

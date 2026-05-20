@@ -29,8 +29,12 @@ public class FuelCharger: MonoBehaviour
             locomotive.AddFuel();
             playerRef.Inventory.DepositCoal();
             GameEvents.DropFuel();
-            TutorialEvents.SetRunStarted(true);
-            TutorialEvents.SetTimerStarted(true);
+
+            if (GameManager.Instance.CurrentState == GameState.Tutorial) 
+            {
+                TutorialEvents.SetRunStarted(true);
+                TutorialEvents.SetTimerStarted(true);
+            }
         }
         else return;
        

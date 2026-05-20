@@ -17,6 +17,7 @@ public class RevolverTypeShootSO : TypeOfShoot
         if (weapon.CurrentAmmunition <= 0)
         {
             weapon.IsReloading = true;
+            GameEvents.ReloadStarted(weaponData.reloadTime);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿
-using UnityEngine;
-
-public class GoldBox : IInteractable
+﻿public class GoldBox : IInteractable
 {
     private float currentGold;
     public float CurrentGold => currentGold;
@@ -15,7 +12,8 @@ public class GoldBox : IInteractable
     {
         AddGold(playerRef.DepositGold());
         GameEvents.DropGold();
-        TutorialEvents.OnSetCanConsume(true);
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+            TutorialEvents.StartFuelUse();
     }
 
     public void AddGold(float amount) 

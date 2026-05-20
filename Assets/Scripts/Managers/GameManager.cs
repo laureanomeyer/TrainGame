@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int lastStation = 6;
 
     public RunResult LastRunResult { get; private set; } = RunResult.None;
+    public GameState CurrentState { get; private set; }
 
     public GameSession Session { get; private set; }
 
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(ShopScene, SceneTransitionType.EndingRun);
+        if (CurrentState != GameState.Gameplay) CurrentState = GameState.Gameplay;
     }
 
     public void GoToRun()
@@ -69,6 +71,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(RunScene, SceneTransitionType.StartingRun);
+        if (CurrentState != GameState.Gameplay) CurrentState = GameState.Gameplay;
     }
 
     public void GoToMainMenu()
@@ -82,6 +85,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
+        if (CurrentState != GameState.Menu) CurrentState = GameState.Menu;
     }
 
     public void Defeat()
@@ -155,6 +159,8 @@ public class GameManager : MonoBehaviour
         Cursor.SetCursor(gameplayCursor, new Vector2(128, 128), CursorMode.Auto);
 
         ChangeScene(TutorialScene, SceneTransitionType.Generic);
+
+        if (CurrentState != GameState.Tutorial) CurrentState = GameState.Tutorial;
     }
 
     private void ChangeScene(string sceneName, SceneTransitionType transitionType)

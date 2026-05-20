@@ -19,6 +19,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     private DamageFlash flash;
     private Animator animator;
     private StatSystem stats;
+    private bool started = false;
 
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
@@ -39,7 +40,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             );
         stats.OnStatChanged += OnStatChanged;
 
-        TutorialEvents.OnStartFuelUse += RemoveFuel;
+        TutorialEvents.OnStartFuelUse += RemoveFuelTutorial;
     }
 
     void Update()
@@ -61,9 +62,15 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     }
     void RemoveFuel()
     {
-
         fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.5f);
-
+    }
+    void RemoveFuelTutorial()
+    {
+        if (!started)
+        {
+            started = true;
+            fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.5f);
+        }
     }
     public void AddFuel()
     {
@@ -96,6 +103,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (RunManager.Instance != null)
             RunManager.Instance.StatSystem.OnStatChanged -= OnStatChanged;
         fuelController.Destroy();
-        TutorialEvents.OnStartFuelUse -= RemoveFuel;
+        TutorialEvents.OnStartFuelUse -= RemoveFuelTutorial;
     }
 }
