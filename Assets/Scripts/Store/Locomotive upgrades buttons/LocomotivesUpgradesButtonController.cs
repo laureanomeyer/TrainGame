@@ -66,6 +66,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
             if (upgradesLevelDictionary.ContainsKey(currentLevel))
             {
                 currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
+                Debug.Log(currentLevelUpgrades);
             }
             else
             {
