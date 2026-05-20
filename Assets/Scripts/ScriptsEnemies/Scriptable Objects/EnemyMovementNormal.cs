@@ -17,46 +17,21 @@ public class EnemyMovementNormal : EnemyMovementSO
     {
         train = enemy.Target;
 
+        Vector3 pos = enemy.rb.transform.position;
+
         if (train == null)
             return;
 
-        Vector3 pos = enemy.transform.position;
+        enemy.rb.MovePosition(enemy.transform.position + (train.position - enemy.transform.position).normalized * enemy.Speed * Time.deltaTime);
 
-        float stopZ = limitZ + enemy.Range;
+        if (enemy.transform.position.z > TrainRanges.negativeLimit || enemy.transform.position.z < TrainRanges.positiveLimit)
+        {
 
-        Vector3 dirToTarget = (train.position - pos).normalized;
-
-        Vector3 targetOnLine = train.position;
-        targetOnLine.z = stopZ;
-
-        Vector3 dirOnLine = targetOnLine - pos;
-        dirOnLine.z = 0;
-
-        if (dirOnLine.sqrMagnitude > 0.01f)
-            dirOnLine.Normalize();
-
-        float distance = Vector3.Distance(pos, train.position);
-
-        float t = Mathf.InverseLerp(desiredDistance + tolerance + 1f, desiredDistance, distance);
-
-        Vector3 finalDir = Vector3.Lerp(dirToTarget, dirOnLine, t).normalized;
-
-        pos += finalDir * enemy.Speed * Time.deltaTime;
-
-        // clamp línea
-        if (pos.z < stopZ)
-            pos.z = stopZ;
+        }
 
         if (pos.y < 0)
             pos.y = 0;
-        
-        enemy.transform.position = pos;
 
-        if (enemy.IsKnocked)
-        {
-            Knockback(enemy);
-            return;
-        }
     }
     public override void Knockback(Enemy enemy)
     {

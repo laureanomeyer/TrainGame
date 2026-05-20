@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
     private List<IWagon> targetList;
     private Transform target;
     private Transform weaponPosition;
-    private Rigidbody rb;
     private float limitZ;
     private float currentHealth;
     private DamageFlash flash;
@@ -24,6 +23,7 @@ public class Enemy : MonoBehaviour
     public IEnemyMovement Movement => data.movement;
     public IEnemyAttack Attack => data.attack;
     public IEnemyBrain Brain => data.brain;
+    public Rigidbody rb;
     public float Speed => data.speed;
     public float MaxHealth => data.health;
     public float Damage => data.damage;
@@ -51,6 +51,7 @@ public class Enemy : MonoBehaviour
         limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
         flash.SetMaterialArray(data.material);
+        TrainRanges.SetRanges(Range, transform.position);
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -61,8 +62,12 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         attackCooldownTimer -= Time.deltaTime;
-        Movement?.Move(this, limitZ);
         Attack?.Attack(this);
+    }
+
+    void FixedUpdate()
+    {
+        Movement?.Move(this, limitZ);
     }
 
     public void SetTargetList(List<IWagon> targetList)

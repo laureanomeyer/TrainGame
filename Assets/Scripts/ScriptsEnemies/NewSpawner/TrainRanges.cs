@@ -1,14 +1,18 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class TrainRanges
+//estatico y ya fue?
+
+public static class TrainRanges
 {
-    public Vector3 headPosition;
-    public Vector3 tailPosition;
 
-    float positiveLimit;
-    float negativeLimit;
+    static public float positiveLimit;
+    static public float negativeLimit;
 
-     
+    public static void SetRanges(float range, Vector3 headPosition)
+    {
+        positiveLimit = headPosition.z + (float)range;
+        negativeLimit = headPosition.z - (float)range;
+    }
 
 }
