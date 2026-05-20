@@ -12,7 +12,7 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private Button resumeButton;
 
     [Header("Scenes")]
-    [SerializeField] private string[] pausableScenes = { "LauScene", "Shop" };
+    [SerializeField] private string[] pausableScenes = { "LauScene", "Shop", "TutorialScene" };
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     private InputAction pauseAction;
@@ -99,6 +99,7 @@ public class PauseMenuManager : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        GameEvents.HideInteract();
     }
 
     public void ResumeGame()
