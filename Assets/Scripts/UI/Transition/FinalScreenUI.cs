@@ -18,8 +18,8 @@ public class FinalScreenUI : MonoBehaviour
         }
         else if (result == RunResult.Defeat)
         {
-            titleText.text = "Derrota";
-            descriptionText.text = "Tu viaje acabo";
+            titleText.text = "Es el fin de este viaje";
+            descriptionText.text = "Mejor suerte la proxima, Bronco Buckle";
         }
         else
         {

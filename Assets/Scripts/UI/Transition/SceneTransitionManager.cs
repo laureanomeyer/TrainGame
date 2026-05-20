@@ -164,13 +164,13 @@ public class SceneTransitionManager : MonoBehaviour
         switch (transitionType)
         {
             case SceneTransitionType.StartingRun:
-                return $"Comenzando trayecto {currentLevel}";
+                return $"Emprendiendo viaje {currentLevel}...";
 
             case SceneTransitionType.EndingRun:
-                return $"Llegando a la estación {currentLevel}";
+                return $"¡Tramo superado! Llegando a la estacion {currentLevel}";
 
             case SceneTransitionType.MainMenu:
-                return "Volviendo al menú principal";
+                return "Volviendo al menu principal";
 
             case SceneTransitionType.Final:
                 return "Finalizando viaje";
