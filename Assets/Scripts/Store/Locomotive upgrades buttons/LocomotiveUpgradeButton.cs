@@ -16,12 +16,6 @@ public class LocomotiveUpgradeButton : MonoBehaviour, IPointerEnterHandler, IPoi
     private float upgrade;
     public float Upgrade { get => upgrade; set => upgrade = value; }
 
-
-    void Start()
-    {
-        button = GetComponent<Button>();
-    }
-
     public void DeactivateButton()
     {
         button.interactable = false;
