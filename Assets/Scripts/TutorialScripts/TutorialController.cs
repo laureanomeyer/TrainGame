@@ -9,8 +9,11 @@ public class TutorialController : MonoBehaviour
     [SerializeField] GameObject RunUi;
     [SerializeField] GameObject attackCursor;
     [SerializeField] Transform EnemySpawn;
+
     private bool started = false;
     private bool firstCash = true;
+    private bool firstRepair = false;
+    private bool firstkilled = false;
     private List<IWagon> wagons = new();
     float timer = 5;
 
@@ -18,19 +21,22 @@ public class TutorialController : MonoBehaviour
     {
         TutorialEvents.SetRunStarted(false);
     }
+
     private void Start()
     {
         CoalUi.SetActive(false);
         RunUi.SetActive(false);
 
-        TutorialEvents.SetCanConsume(false);
-        TutorialEvents.SetTimerStarted(false);
-        TutorialEvents.SetAttackEnabled(false);
-
         TutorialEvents.OnSetAttackEnabled += SetAttackUi;
         TutorialEvents.OnStartFuelUse += StartFuelConsumption;
         TutorialEvents.OnStartSpawningEnemies += StartRun;
         TutorialEvents.OnEnemyKilled += CashGoldWagon;
+
+        TutorialEvents.SetCanConsume(false);
+        TutorialEvents.SetTimerStarted(false);
+        TutorialEvents.SetAttackEnabled(false);
+        TutorialEvents.EnableCoalBox(false);
+        TutorialEvents.EnableGoldBox(false);
 
         TutorialEvents.SetTutorialTextVisible(true);
         TutorialEvents.SetTutorialText("Presiona WASD para moverte");
@@ -45,9 +51,12 @@ public class TutorialController : MonoBehaviour
             if (GameManager.Instance.CurrentState == GameState.Tutorial)
                 TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
 
-            TutorialEvents.SetTutorialTextVisible(true);
-            TutorialEvents.SetTutorialText("Esto es un enemigo. Los enemigos dañan el tren. Debes reparar el vagon de oro presionando R");
-
+            if (!firstRepair)
+            {
+                firstRepair = true;
+                TutorialEvents.SetTutorialTextVisible(true);
+                TutorialEvents.SetTutorialText("Esto es un enemigo. Los enemigos atacan el tren. Debes reparar el vagon de oro presionando R");
+            }
             timer = 10000000000000;
         }
     }
@@ -59,6 +68,7 @@ public class TutorialController : MonoBehaviour
             CoalUi.SetActive(true);
             started = true;
             TutorialEvents.SetTutorialTextVisible(true);
+            TutorialEvents.EnableCoalBox(true);
             TutorialEvents.SetTutorialText("Tu locomotora nunca debe dejar de moverse. Estate atento, que no se agote su combustible");
         }
     }
@@ -67,8 +77,10 @@ public class TutorialController : MonoBehaviour
     {
         if (firstCash)
         {
+            firstCash = false;
             TutorialEvents.SetTutorialTextVisible(true);
-            TutorialEvents.SetTutorialText("El oro solo está asegurado en la caja de oro que tiene la locomotora. Recordá recolectarlo y guardarlo tras matar enemigos.");
+            TutorialEvents.EnableGoldBox(true);
+            TutorialEvents.SetTutorialText("El oro solo esta asegurado en la caja de oro que tiene la locomotora. Recorda recolectarlo y guardarlo tras matar enemigos.");
         }
     }
 
@@ -77,16 +89,19 @@ public class TutorialController : MonoBehaviour
         RunUi.SetActive(can);
         TutorialEvents.SetCanConsume(true);
         TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Bien, este es el trayecto restante hasta la estación. ¡Tenés que llegar!");
+        TutorialEvents.SetTutorialText("Bien, este es el trayecto restante hasta la estacion. ¡Tenes que llegar!");
     }
 
     void SetAttackUi(bool show)
     {
         Cursor.visible = show;
-        attackCursor.SetActive(show);
 
-        TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Excelente, ahora presiona el click izq. para disparar una bala y eliminar al enemigo.");
+        if (!firstkilled && show)
+        {
+            firstkilled = true;
+            TutorialEvents.SetTutorialTextVisible(true);
+            TutorialEvents.SetTutorialText("Excelente, ahora presiona el click izquierdo para disparar una bala y eliminar al enemigo.");
+        }
     }
 
     private void OnDestroy()

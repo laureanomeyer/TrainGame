@@ -96,9 +96,6 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(true);
         }
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
         GameEvents.HideInteract();
     }
 
@@ -112,9 +109,6 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(false);
         }
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
     }
 
     public void QuitToMainMenu()
@@ -127,10 +121,6 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(false);
         }
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
-
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
@@ -142,12 +132,6 @@ public class PauseMenuManager : MonoBehaviour
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
-        }
-
-        if (!IsInPausableScene())
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
         }
     }
 

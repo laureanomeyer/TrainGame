@@ -108,7 +108,6 @@ public class Enemy : MonoBehaviour
         GameEvents.EnemyDeath(transform.position);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
 
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
             TutorialEvents.EnemyKilled();
     }
 

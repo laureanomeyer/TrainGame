@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-
-
+﻿
 public class CoalBox: IInteractable
 {
+    private bool canInteract = true;
+
     private float charges;
     private bool hasCoal;
     public bool HasCoal => hasCoal;
@@ -17,11 +12,14 @@ public class CoalBox: IInteractable
     {
         charges = 1f;
         hasCoal = true;
+
+        TutorialEvents.OnEnableCoalBox += SetCanInteract;
     }
     
     public void Interact(IInventory playerRef)
-    {      
-        HandleCoal(playerRef);  
+    {
+        if (canInteract)
+            HandleCoal(playerRef);  
     }
 
     public void HandleCoal(IInventory playerRef)
@@ -64,9 +62,13 @@ public class CoalBox: IInteractable
     {
         charges = amount;
     }
+    public void SetCanInteract(bool canInteract)
+    {
+        this.canInteract = canInteract;
+    }
 
     public void OnDestroyObject()
     {
-
+        TutorialEvents.OnEnableCoalBox += SetCanInteract;
     }
 }

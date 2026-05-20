@@ -17,6 +17,7 @@ public class CursorAmmo : MonoBehaviour
     {
         GameEvents.OnAmmoChanged += UpdateText;
         GameEvents.OnReloadStarted += StartReloadFill;
+        TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
 
         cursorImage.fillAmount = 1;
     }
@@ -53,9 +54,15 @@ public class CursorAmmo : MonoBehaviour
         cursorImage.fillAmount = 1f;
     }
 
+    void SetCursorVisibility(bool visible)
+    {
+        cursorImage.gameObject.SetActive(visible);
+        ammoText.gameObject.SetActive(visible);
+    }
     private void OnDestroy()
     {
         GameEvents.OnAmmoChanged -= UpdateText;
         GameEvents.OnReloadStarted -= StartReloadFill;
+        TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }
 }

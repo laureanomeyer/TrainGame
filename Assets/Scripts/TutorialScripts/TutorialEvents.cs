@@ -8,6 +8,8 @@ public class TutorialEvents
     public static Action<bool> OnSetMovementEnabled;
     public static Action<Vector3, List<IWagon>>OnSpawnEnemy; //Spawnea al enemigo
     public static Action<bool> OnSetAttackEnabled; //Permite al jugador disparar
+    public static Action<bool> OnEnableCoalBox;
+    public static Action<bool> OnEnableGoldBox;
     public static Action OnStartFuelUse; //Comienza a perder carbon
     public static Action<bool> OnSetCanConsume; //Activa y desactiva el carbon
     public static Action<bool> OnStartSpawningEnemies; //Comienza el spawn de enemigos reales
@@ -56,5 +58,13 @@ public class TutorialEvents
     public static void EnemyKilled()
     {
         OnEnemyKilled?.Invoke();
+    }
+    public static void EnableGoldBox(bool enabled)
+    {
+        OnEnableGoldBox?.Invoke(enabled);
+    }
+    public static void EnableCoalBox(bool enabled)
+    {
+        OnEnableCoalBox?.Invoke(enabled);
     }
 }
