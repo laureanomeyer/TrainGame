@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
 {
     EnemyData data;
     [SerializeField] GameObject weapon;
+    [SerializeField] private EnemyUIHpBar healthBar;
+
     float CurrentH;
     private DamageFlash flash;
 
@@ -50,6 +52,11 @@ public class Enemy : MonoBehaviour
         limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
         flash.SetMaterialArray(0,data.material);
+
+        if(healthBar != null)
+        {
+            healthBar.SetHealth(currentHealth, MaxHealth);
+        }
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -75,6 +82,12 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         GameEvents.EnemyHit(transform.position);
+
+        if (healthBar != null)
+        {
+            healthBar.SetHealth(currentHealth, MaxHealth);
+        }
+
         if (currentHealth > 0)
         {
             flash.Flash();
@@ -89,6 +102,8 @@ public class Enemy : MonoBehaviour
 
     private void Dead()
     {
+        if( healthBar != null)
+        { healthBar.Hide(); }
         GameEvents.GoldEarned(data.gold);
         GameEvents.EnemyDeath(transform.position);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
@@ -96,6 +111,8 @@ public class Enemy : MonoBehaviour
 
     private void DeadWallDead()
     {
+        if (healthBar != null)
+        { healthBar.Hide(); }
         GameEvents.EnemyDeath(transform.position);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }

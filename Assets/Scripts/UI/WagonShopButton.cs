@@ -84,6 +84,11 @@ public class WagonShopButton : MonoBehaviour
             GameManager.Instance.Session.RebuildStatsSystem();
             //Destroy(modelReference);
             SetWagonInStock();
+
+            if (wagonShopParticleSystem)
+            {
+                wagonShopParticleSystem.Play();
+            }
         }
     }
 
@@ -97,11 +102,6 @@ public class WagonShopButton : MonoBehaviour
         currentWagonInStock = SelectRandomWagon();
         descriptionText = (currentWagonInStock.Name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
         textUI.text = descriptionText;
-
-        if (wagonShopParticleSystem)
-        {
-            wagonShopParticleSystem.Play();
-        }
 
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
@@ -117,6 +117,12 @@ public class WagonShopButton : MonoBehaviour
     private void UsedReroll()
     {
         SetWagonInStock();
+
+        if (wagonShopParticleSystem)
+        {
+            wagonShopParticleSystem.Play();
+        }
+
         storeManager.rerollButton.interactable = false;
     }
 
