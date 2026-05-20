@@ -63,11 +63,15 @@ public class WagonShopButton : MonoBehaviour
         if (wagonsInStock.Length > 0)
         {
             SetWagonInStock();
+
+            storeManager.ActivateButtons();
         }
         else
         {
             string closeText = "No hay vagones actualmente. \n\n¡Vuelva Pronto!";
             descriptionText = closeText;
+
+            storeManager.DeactivateButtons();
         }
     }
 
@@ -78,20 +82,26 @@ public class WagonShopButton : MonoBehaviour
         {
             GameManager.Instance.Session.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
             GameManager.Instance.Session.RebuildStatsSystem();
-            Destroy(modelReference);
+            //Destroy(modelReference);
             SetWagonInStock();
-            if (wagonShopParticleSystem)
-            {
-                wagonShopParticleSystem.Play();
-            }
         }
     }
 
     private void SetWagonInStock()
     {
+        if(modelReference != null)
+        {
+            Destroy(modelReference);
+        }
+
         currentWagonInStock = SelectRandomWagon();
         descriptionText = (currentWagonInStock.Name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
         textUI.text = descriptionText;
+
+        if (wagonShopParticleSystem)
+        {
+            wagonShopParticleSystem.Play();
+        }
 
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
@@ -104,11 +114,20 @@ public class WagonShopButton : MonoBehaviour
         return wagonSelected;
     }
 
+    private void UsedReroll()
+    {
+        SetWagonInStock();
+        storeManager.rerollButton.interactable = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            storeManager.rerollButton.onClick.AddListener(UsedReroll);
+            storeManager.buyButton.onClick.AddListener(Interact);
 
+            //Debug.Log(this.gameObject);
         }
     }
 
@@ -116,7 +135,10 @@ public class WagonShopButton : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            storeManager.rerollButton.onClick.RemoveListener(UsedReroll);
+            storeManager.buyButton.onClick.RemoveListener(Interact);
 
+            //Debug.Log(this.gameObject);
         }
     }
 }
