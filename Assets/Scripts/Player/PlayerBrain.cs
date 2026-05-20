@@ -17,6 +17,7 @@ public class PlayerBrain : MonoBehaviour
     [Header("Bullets")]
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject weaponItem;
+    public GameObject WeaponItem => weaponItem;
 
     private PlayerInventory inventory;
     private LookObjectToMouse faceMouse;

@@ -9,7 +9,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     protected float defense;
 
     protected WagonHP hpController;
-    private WagonRenderController renderController;
+    protected WagonRenderController renderController;
     private IWagonID wagonID;
     private DamageFlash Flash;
     private Animator animator;

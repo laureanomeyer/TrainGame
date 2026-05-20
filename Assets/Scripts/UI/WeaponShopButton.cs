@@ -37,6 +37,11 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         buttonText.text = currentWeapon.name + "   $" + currentWeaponprice;
 
         button.onClick.AddListener(BuyWeapon);
+
+        if (playerReference.WeaponItem == currentWeapon)
+        {
+            DeactivateButton();
+        }
     }
 
     private void BuyWeapon()

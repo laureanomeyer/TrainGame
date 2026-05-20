@@ -63,6 +63,15 @@ public class WagonRenderController
         }
     }
 
+    public void SetWagonMeshAndMaterial(Mesh floor, Mesh body)
+    {
+        wagonBrain.floorMeshFilterWagon.mesh = floor;
+        wagonBrain.bodyMeshFilterWagon.mesh = body;
+
+        wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
+        wagonBrain.bodyRenderWagon.material = wagonBrain.destroyWagonMaterial;
+    }
+
     public void ActivateWagonTop()
     {
         if (wagonBrain.topMeshFilterWagon != null && wagonBrain.Broken == false)

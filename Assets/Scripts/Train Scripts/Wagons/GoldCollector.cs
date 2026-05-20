@@ -11,6 +11,8 @@ public class GoldCollector
     private float gold;
     public float Gold => gold;
 
+    private float storageCapacity;
+
     private TextMeshProUGUI goldDisplayUI;
 
     private float originalFontSize;
@@ -20,12 +22,17 @@ public class GoldCollector
 
     private CancellationTokenSource cts;
 
-    public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI)
+    private Action<float, float> setCoinsModels;
+
+    public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI, float collectorStorageCapacity, Action<float, float> action)
     {
         wagonHP = hpController;
         goldDisplayUI = CurrentGoldUI;
         originalFontSize = goldDisplayUI.fontSize;
+        storageCapacity = collectorStorageCapacity;
         GameEvents.OnGoldEarned += CollectGold;
+        this.setCoinsModels = action;
+
     }
 
     public void ActivateOnDestroy()
@@ -40,7 +47,9 @@ public class GoldCollector
         if (wagonHP.IsBroken == false)
         {
             gold += amount * GameManager.Instance.Session.StatSystem.GetLocoMultiplier(StatType.GoldMultiplier);
-            goldDisplayUI.text = "$" + gold;
+
+            setCoinsModels(gold, storageCapacity);
+            goldDisplayUI.text = "$" + gold.ToString("F2");
             PlayScaleEffect();
         }
         else
@@ -72,6 +81,7 @@ public class GoldCollector
     public void EmptyGold()
     {
         gold = 0;
+        setCoinsModels(gold, storageCapacity);
         goldDisplayUI.text = string.Empty;
     }
 
