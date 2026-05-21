@@ -18,7 +18,7 @@ public class MapManager : MonoBehaviour
 
         endLocation = RunManager.Instance.TrainTail;
 
-        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count + 5; i++)
+        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count +2; i++)
         {
             GenerateMap();
         }
@@ -68,7 +68,7 @@ public class MapManager : MonoBehaviour
     {
         Vector3 spawnPosition;
         if (tilesMap.Count == 0)
-            spawnPosition = new Vector3 (RunManager.Instance.TrainTail.position.x - 250, 0, 0);
+            spawnPosition = new Vector3 (0, 0, 0);
         else
         {
             MapTile last = tilesMap[tilesMap.Count - 1];
