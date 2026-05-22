@@ -32,6 +32,9 @@ public class WagonBrain : MonoBehaviour, IDamagable
     #region Wagon Render/Mesh/Material
     [Header("Wagon renders and materials")]
 
+    [Header("Wagon particles")]
+    [SerializeField] public ParticleSystem particles;
+
     [Header("Wagon destroy material")]
     [SerializeField] public Material destroyWagonMaterial;
 

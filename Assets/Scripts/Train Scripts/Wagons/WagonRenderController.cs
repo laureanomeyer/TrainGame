@@ -50,6 +50,11 @@ public class WagonRenderController
             wagonBrain.topRenderWagon.material = null;
         }
 
+        if (wagonBrain.particles != null)
+        {
+            wagonBrain.particles.Play();
+        }
+
         //Change extra elements in wagon
     }
 
