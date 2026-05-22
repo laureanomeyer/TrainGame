@@ -47,6 +47,7 @@ public class LocomotiveFuel
 
     public void Move(float deltaTime)
     {
+        if(!GameManager.Instance.IsGameplayState) return;
         if (!hasFuel)
         {
             GameManager.Instance.Session.TrainData.SetSpeed(0);
@@ -95,6 +96,7 @@ public class LocomotiveFuel
 
     public void TakeDamage(float amount)
     {
+        if(!GameManager.Instance.IsGameplayState) return;
         if (currentShield <= 0)
         {
             currentMaxFuel -= amount / defense;
@@ -117,6 +119,7 @@ public class LocomotiveFuel
 
     public void UpdateShield(float deltaTime)
     {
+        if(!GameManager.Instance.IsGameplayState) return;
         if (!shieldTakenDamage) 
         {
             currentShield += 5 * deltaTime;

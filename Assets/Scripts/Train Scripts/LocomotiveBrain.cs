@@ -51,6 +51,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     public void TakeDamage(float damageAmount)
     {
+        if(!GameManager.Instance.IsGameplayState) return;
+
         fuelController.TakeDamage(damageAmount);
         
         if (flash != null)

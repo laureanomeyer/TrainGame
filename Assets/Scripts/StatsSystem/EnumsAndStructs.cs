@@ -4,7 +4,7 @@ public enum InteractableType { CoalBox, GoldBox }
 public enum ModifierType { Additive, Multipicaive}
 public enum StatType { MaxHp, Defense, GoldMultiplier, DamageMultiplier, AttackSpeed, FuelOptimizer, Speed }
 
-public enum GameState { Tutorial, Gameplay, Menu}
+public enum GameState { Tutorial, Gameplay, Menu, Transition}
 public struct TrainStats
 {
     public float fuelOptimizer;

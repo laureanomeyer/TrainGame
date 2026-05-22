@@ -90,7 +90,9 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public virtual void TakeDamage(float damageAmount)
     {
-        if(hpController == null) return;
+        if(!GameManager.Instance.IsGameplayState) return;
+
+        if (hpController == null) return;
         if (broken) return;
         if (animator != null) animator.SetTrigger("Damage");
 

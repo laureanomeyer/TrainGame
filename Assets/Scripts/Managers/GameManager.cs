@@ -21,6 +21,10 @@ public class GameManager : MonoBehaviour
     private bool gameEnded;
     private bool isChangingScene;
 
+    private GameState stateAfterTransition;
+    public bool IsGameplayState => CurrentState == GameState.Gameplay;
+    public bool IsTransitioning => CurrentState == GameState.Transition;
+
     private const string MainMenuScene = "MainMenu";
     private const string ShopScene = "Shop";
     private const string RunScene = "LauScene";
@@ -41,6 +45,9 @@ public class GameManager : MonoBehaviour
         #endregion
 
         Session = new GameSession(baseStats);
+
+        CurrentState = GameState.Menu;
+        stateAfterTransition = GameState.Menu;
     }
 
     public bool IsFinalStation()
@@ -60,8 +67,8 @@ public class GameManager : MonoBehaviour
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun);
-        if (CurrentState != GameState.Gameplay) CurrentState = GameState.Gameplay;
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+
     }
 
     public void GoToRun()
@@ -70,8 +77,8 @@ public class GameManager : MonoBehaviour
 
         Session.RebuildStatsSystem();
 
-        ChangeScene(RunScene, SceneTransitionType.StartingRun);
-        if (CurrentState != GameState.Gameplay) CurrentState = GameState.Gameplay;
+        ChangeScene(RunScene, SceneTransitionType.StartingRun, GameState.Gameplay);
+
     }
 
     public void GoToMainMenu()
@@ -84,8 +91,7 @@ public class GameManager : MonoBehaviour
         Session.Reset();
         Session.RebuildStatsSystem();
 
-        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
-        if (CurrentState != GameState.Menu) CurrentState = GameState.Menu;
+        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
     }
 
     public void Defeat()
@@ -114,7 +120,7 @@ public class GameManager : MonoBehaviour
 
         Cursor.SetCursor(gameplayCursor, new Vector2(256, 256), CursorMode.Auto);
 
-        ChangeScene(FinalScene, SceneTransitionType.Final);
+        ChangeScene(FinalScene, SceneTransitionType.Final, GameState.Menu);
     }
 
     public void StartNewSession()
@@ -129,7 +135,7 @@ public class GameManager : MonoBehaviour
 
         Cursor.SetCursor(gameplayCursor, new Vector2(128, 128), CursorMode.Auto);
 
-        ChangeScene(ShopScene, SceneTransitionType.Generic);
+        ChangeScene(ShopScene, SceneTransitionType.Generic, GameState.Gameplay);
     }
 
     public void EndSession()
@@ -143,7 +149,7 @@ public class GameManager : MonoBehaviour
 
         Cursor.SetCursor(menuCursor, new Vector2(256, 256), CursorMode.Auto);
 
-        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu);
+        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
     }
 
     public void GoToTutorial()
@@ -158,14 +164,16 @@ public class GameManager : MonoBehaviour
 
         Cursor.SetCursor(gameplayCursor, new Vector2(128, 128), CursorMode.Auto);
 
-        ChangeScene(TutorialScene, SceneTransitionType.Generic);
+        ChangeScene(TutorialScene, SceneTransitionType.Generic, GameState.Tutorial);
 
-        if (CurrentState != GameState.Tutorial) CurrentState = GameState.Tutorial;
     }
 
-    private void ChangeScene(string sceneName, SceneTransitionType transitionType)
+    private void ChangeScene(string sceneName, SceneTransitionType transitionType, GameState nextState)
     {
         isChangingScene = true;
+
+        stateAfterTransition = nextState;
+        CurrentState = GameState.Transition;
 
         SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);
     }
@@ -173,5 +181,6 @@ public class GameManager : MonoBehaviour
     public void FinishSceneChange()
     {
         isChangingScene = false;
+        CurrentState = stateAfterTransition;
     }
 }

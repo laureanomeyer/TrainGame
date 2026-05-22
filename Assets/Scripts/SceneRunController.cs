@@ -23,6 +23,7 @@ public class SceneRunController : MonoBehaviour
     void Update()
     {
         if (runFinished) return;
+        if (!GameManager.Instance.IsGameplayState) return;
 
         if (runStarted) currentTime -= Time.deltaTime;
 
