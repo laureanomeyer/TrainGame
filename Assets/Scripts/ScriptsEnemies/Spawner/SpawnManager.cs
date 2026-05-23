@@ -115,7 +115,7 @@ public class SpawnManager : MonoBehaviour
             Debug.Log("lista vacia");
             return;
         }
-
+        Debug.Log(targetList.Count);
         SpawnSingle(pos, targetList);
     }
 

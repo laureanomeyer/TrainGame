@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     private bool isChangingScene;
 
     private GameState stateAfterTransition;
-    public bool IsGameplayState => CurrentState == GameState.Gameplay;
+    public bool IsGameplayState => CurrentState == GameState.Gameplay || CurrentState == GameState.Tutorial;
     public bool IsTransitioning => CurrentState == GameState.Transition;
 
     private const string MainMenuScene = "MainMenu";

@@ -59,7 +59,7 @@ public class UIPlayerManager : MonoBehaviour
             var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
             fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, currentFuel));
 
-            if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 4)
+            if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 3)
             {
                 if (LowFuelImage != null)
                     LowFuelImage.SetActive(true);
