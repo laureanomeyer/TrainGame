@@ -49,10 +49,12 @@ public class TutorialController : MonoBehaviour
         if (timer <= 0)
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
+            Debug.Log(GameManager.Instance.CurrentState);
 
             if (GameManager.Instance.CurrentState == GameState.Tutorial) 
             {
                 TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
+                Debug.Log("hola");
             }
 
             if (!firstRepair)
