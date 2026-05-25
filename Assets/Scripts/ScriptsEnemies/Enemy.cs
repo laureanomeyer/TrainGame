@@ -12,12 +12,11 @@ public class Enemy : MonoBehaviour
     private List<IWagon> targetList;
     private Transform target;
     private Transform weaponPosition;
-    private float limitZ;
     private float currentHealth;
     private DamageFlash flash;
 
-    public Vector3 KnockbackVelocity = Vector3.zero; //temporal
-    public bool IsKnocked = false; //temporal
+    private TrainRanges trainRanges;
+    private (float, float) limits;
 
     public IEnemyWeapon Weapon;
     public IEnemyMovement Movement => data.movement;
@@ -32,14 +31,17 @@ public class Enemy : MonoBehaviour
     public List<IWagon> TargetList => targetList;
     public Transform Target => target;
     public float Range => data.range;
-    //Vector3 KnockbackVelocity => knockbackVelocity;
 
+    public (float, float) Limits => limits;
+    public bool moveRight;
 
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
 
     public void Initialize(EnemyData data)
     {
+        moveRight = false;
+
         this.data = data;
         currentHealth = MaxHealth;
         weaponPosition = GetComponentInChildren<Transform>();
@@ -48,10 +50,12 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Brain.Begin(this);
         flash = GetComponent<DamageFlash>();
-        limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
         flash.SetMaterialArray(data.material);
-        TrainRanges.SetRanges(Range, transform.position);
+
+        trainRanges = new();
+        limits = trainRanges.SetRanges(Range, Vector3.zero);
+
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -67,7 +71,7 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        Movement?.Move(this, limitZ);
+        Movement?.Move(this);
     }
 
     public void SetTargetList(List<IWagon> targetList)
@@ -79,16 +83,10 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        //Debug.Log("took: " + damage);
         if (currentHealth > 0)
         {
             flash.Flash();
-
-            IsKnocked = true;
-
-            KnockbackVelocity += -transform.forward * 6f;
         }
-
         else
             Dead();
     }

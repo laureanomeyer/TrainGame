@@ -164,4 +164,9 @@ public class SpawnController : MonoBehaviour
         aliveEnemies--;
 
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one * 100f);
+    }
 }

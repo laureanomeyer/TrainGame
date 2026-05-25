@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum TargetType { Random, Passives, Locomotive, Gold, Actives }
-public enum RangeType { Close = 5,
-                        Medium = 20,
-                        Long = 30 }
+public enum RangeType { Close = 15,
+                        Medium = 30,
+                        Long = 45 }
 public enum AttackType { Shoot, Explosion, None}
 
 [CreateAssetMenu(menuName = "Enemy/Data")]

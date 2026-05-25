@@ -1,57 +1,59 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Movement/Normal")]
 public class EnemyMovementNormal : EnemyMovementSO
 {
-    private float desiredDistance = 5f;
-    private float tolerance = 0.5f;
 
-    private Transform train;
-
-    public override float SetLimitZ()
+    public override void Move(Enemy enemy)
     {
-        return Random.Range(-3, -1.5f);
-    }
-
-    public override void Move(Enemy enemy, float limitZ)
-    {
-        train = enemy.Target;
-
-        Vector3 pos = enemy.rb.transform.position;
+        Transform train = enemy.Target;
 
         if (train == null)
             return;
 
-        enemy.rb.MovePosition(enemy.transform.position + (train.position - enemy.transform.position).normalized * enemy.Speed * Time.deltaTime);
+        Vector3 pos = enemy.rb.position;
 
-        if (enemy.transform.position.z > TrainRanges.negativeLimit || enemy.transform.position.z < TrainRanges.positiveLimit)
+        float minZ = enemy.Limits.Item1;
+        float maxZ = enemy.Limits.Item2;
+
+        bool insideLane = pos.z <= minZ && pos.z >= maxZ;
+
+        // =========================
+        // FUERA DEL CARRIL
+        // =========================
+        if (!insideLane)
         {
+            Vector3 dir = (train.position - pos).normalized;
 
+            enemy.rb.MovePosition(pos + dir * enemy.Speed * Time.deltaTime);
         }
+        // =========================
+        // DENTRO DEL CARRIL
+        // =========================
+        else
+        {
+            float targetX = train.position.x;
 
-        if (pos.y < 0)
-            pos.y = 0;
+            float distanceToX = Mathf.Abs(pos.x - targetX);
 
+            float stopDistance = 0.25f;
+
+            if (distanceToX <= stopDistance)
+                return;
+
+            Vector3 lateralDir = pos.x < targetX
+                ? Vector3.right
+                : Vector3.left;
+
+            Vector3 nextPos = pos + lateralDir * enemy.Speed * Time.deltaTime;
+
+            enemy.rb.MovePosition(nextPos);
+        }
     }
     public override void Knockback(Enemy enemy)
     {
-        Vector3 pos = enemy.transform.position;
-
-        pos += enemy.KnockbackVelocity * Time.deltaTime;
-
-        enemy.transform.position = pos;
-
-        enemy.KnockbackVelocity =
-            Vector3.Lerp(
-                enemy.KnockbackVelocity,
-                Vector3.zero,
-                10f * Time.deltaTime
-            );
-
-        if (enemy.KnockbackVelocity.magnitude < .1f)
-        {
-            enemy.KnockbackVelocity = Vector3.zero;
-            enemy.IsKnocked = false;
-        }
+        enemy.rb.AddForce(enemy.rb.transform.forward * 10, ForceMode.Impulse);
     }
+
 }
