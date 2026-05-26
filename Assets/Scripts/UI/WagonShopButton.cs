@@ -80,7 +80,7 @@ public class WagonShopButton : MonoBehaviour
         if (wagonsInStock.Length == 0) return;
         if (storeManager.TryConsumeGold(currentWagonInStock.Price))
         {
-            GameManager.Instance.Session.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon));
+            GameManager.Instance.Session.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon, currentWagonInStock.wagonName));
             GameManager.Instance.Session.RebuildStatsSystem();
             //Destroy(modelReference);
             SetWagonInStock();
@@ -100,7 +100,7 @@ public class WagonShopButton : MonoBehaviour
         }
 
         currentWagonInStock = SelectRandomWagon();
-        descriptionText = (currentWagonInStock.Name + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
+        descriptionText = (currentWagonInStock.wagonName + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
         textUI.text = descriptionText;
 
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);

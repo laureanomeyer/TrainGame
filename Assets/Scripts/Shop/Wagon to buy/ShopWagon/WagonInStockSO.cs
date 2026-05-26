@@ -7,7 +7,7 @@ public class WagonInStockSO : ScriptableObject
     [SerializeField] private GameObject wagon;
     public GameObject Wagon => wagon;
 
-    [SerializeField] public string Name;
+    [SerializeField] public string wagonName;
 
     [Header("Price")]
     [SerializeField] private float price;
@@ -19,4 +19,5 @@ public class WagonInStockSO : ScriptableObject
 
     [Header("Shop Model")]
     [SerializeField] public GameObject shopModel;
+
 }

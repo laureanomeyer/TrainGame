@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7307468167461198240}
+  - component: {fileID: 902583754693851420}
   m_Layer: 3
   m_Name: South_ShopModel
   m_TagString: Untagged
@@ -32,6 +33,19 @@ Transform:
   - {fileID: 1754329182517765915}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &902583754693851420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4710809799844137450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1722daaac90207f45823adcfdd1cb99b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopWagonData
+  tail: {fileID: 1231071015714396137}
 --- !u!1001 &2292921985605288176
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80,6 +94,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8158344438544836839, guid: 72eb4b15641eca243aa7546bb81ac786, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8158344438544836839, guid: 72eb4b15641eca243aa7546bb81ac786, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4035545753247348911, guid: 72eb4b15641eca243aa7546bb81ac786, type: 3}
       propertyPath: m_Layer
       value: 3
@@ -121,6 +143,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72eb4b15641eca243aa7546bb81ac786, type: 3}
+--- !u!4 &1231071015714396137 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8158344438544836839, guid: 72eb4b15641eca243aa7546bb81ac786, type: 3}
+  m_PrefabInstance: {fileID: 2292921985605288176}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1754329182517765915 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 72eb4b15641eca243aa7546bb81ac786, type: 3}

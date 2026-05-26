@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StoreManager : MonoBehaviour
@@ -7,6 +8,8 @@ public class StoreManager : MonoBehaviour
     [SerializeField] private GoldUIDisplay goldDisplay;
 
     private PlayerData playerData;
+
+    public List<IWagonID> wagonsInTrain;
 
     void Awake()
     {
@@ -18,6 +21,8 @@ public class StoreManager : MonoBehaviour
         }
         Instance = this;
         #endregion
+
+        wagonsInTrain = GameManager.Instance.Session.TrainData.WagonsIDList;
     }
 
     private void Start()

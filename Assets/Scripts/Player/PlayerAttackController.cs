@@ -109,6 +109,8 @@ public class PlayerAttackController
         weaponItem = weaponObtein;
         GameManager.Instance.Session.PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
+        weapon.WeaponData.reloadTime = weapon.WeaponData.reloadTime / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
+        weapon.WeaponData.rateOfFire = weapon.WeaponData.rateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
         weapon.RestockBullets();
         weapon.SetPool(pool);
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);
