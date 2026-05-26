@@ -311,8 +311,8 @@ GameObject:
   - component: {fileID: 1900430578884928194}
   - component: {fileID: 1813896501800611726}
   - component: {fileID: 7990215731845575219}
-  - component: {fileID: 4339743586411859866}
   - component: {fileID: -3826095390640366561}
+  - component: {fileID: 4339743586411859866}
   - component: {fileID: -4315775013427048892}
   m_Layer: 7
   m_Name: Enemy
@@ -462,6 +462,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &4339743586411859866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8924080553250581591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ef07c0a67c780c4dbe06b3cd47458fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  weapon: {fileID: 1649670476137331935, guid: 04f493fefd42f214e9785639b7e43a2a, type: 3}
+  KnockbackVelocity: {x: 0, y: 0, z: 0}
+  IsKnocked: 0
+  rb: {fileID: 0}
 --- !u!114 &-4315775013427048892
 MonoBehaviour:
   m_ObjectHideFlags: 0
