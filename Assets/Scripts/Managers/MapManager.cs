@@ -8,6 +8,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
     [SerializeField] private MapTile head;
+    [SerializeField] private GameObject deathWall;
 
     private bool initialized = false;
    
@@ -31,7 +32,9 @@ public class MapManager : MonoBehaviour
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
         }
+        GameObject.Instantiate(deathWall, new Vector3(endLocation.position.x - tilesMap[0].Offset * 3, endLocation.position.y, endLocation.position.z), Quaternion.Euler(0, 0, 0));
         initialized = true;
+
     }
     void Update()
     {
@@ -45,7 +48,7 @@ public class MapManager : MonoBehaviour
     {
         foreach (MapTile tile in tilesMap) 
         {
-            tile.MoveHead(endLocation.position - tilesMap[0].OffsetVect * 3, RunManager.Instance.TrainSpeed);
+            tile.MoveHead(endLocation.position - tilesMap[0].OffsetVect * 4, RunManager.Instance.TrainSpeed);
             tile.Move();
         }
     }

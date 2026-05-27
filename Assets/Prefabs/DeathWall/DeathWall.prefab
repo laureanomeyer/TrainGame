@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &302356739947746835
+--- !u!1 &5184442863907993115
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3175136908442350366}
-  - component: {fileID: 83741717018209245}
+  - component: {fileID: 1343897145019581578}
+  - component: {fileID: 1627157897870394395}
   m_Layer: 0
-  m_Name: TilesMap
-  m_TagString: Untagged
+  m_Name: DeathWall
+  m_TagString: deadWall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3175136908442350366
+--- !u!4 &1343897145019581578
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302356739947746835}
+  m_GameObject: {fileID: 5184442863907993115}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -500, y: 1.31233, z: 4.6877}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &83741717018209245
-MonoBehaviour:
+--- !u!65 &1627157897870394395
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302356739947746835}
+  m_GameObject: {fileID: 5184442863907993115}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 28ebf53b9cd01b64fa1de7a1bbc9381b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MapManager
-  tilePrefab: {fileID: 8924721799173008583, guid: 4630ac6aa74a84c42bf9a8a79ebf72a3, type: 3}
-  endLocation: {fileID: 0}
-  startLocation: {fileID: 0}
-  tilesMap: []
-  head: {fileID: 0}
-  deathWall: {fileID: 5184442863907993115, guid: 8b31ba5654b4faf4ab3736c04d170e88, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 1, y: 200.49197, z: 458.27875}
+  m_Center: {x: 0, y: 78.81444, z: -27.924164}

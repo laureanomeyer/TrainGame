@@ -13,6 +13,7 @@ public class PlayerBrain : MonoBehaviour
     [Header("Interactions")]
     [SerializeField] private float repairCapacity;
     [SerializeField] private InteractionUIManager interactionUIManager;
+    [SerializeField] private GameObject Interactimage;
 
     [Header("Bullets")]
     [SerializeField] private Transform spawnPoint;
@@ -50,14 +51,18 @@ public class PlayerBrain : MonoBehaviour
 
         TutorialEvents.OnSetAttackEnabled += SetCanAttack;
         GameEvents.OnActivateUi += SetCanAttack;
+        GameEvents.OnShowInteract += ShowInteract;
+        GameEvents.OnHideInteract += HideInteract;
 
         IsRepairing = false;
+        HideInteract();
     }
     private void Update()
     {
         playerInteractionsController.Update();
         if (!IsRepairing && canAttack) playerAttackController.Update();
     }
+
     private void FixedUpdate()
     {
         if (!IsRepairing) playerMovementController.FixedUpdate();
@@ -70,24 +75,26 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnInteract()
     {
-        GameEvents.InteractConsumed = false;
         GameEvents.InteractPressed();
 
-        if (!GameEvents.InteractConsumed)
-            playerInteractionsController.OnInteract();
+        playerInteractionsController.OnInteract();
     }
+
     private void OnOpenMainMenu()
     {
         playerInteractionsController.OnOpenMainMenu();
     }
+
     private void OnTriggerEnter(Collider other)
     {
         playerInteractionsController.OnTriggerEnter(other);
     }
+
     private void OnTriggerExit(Collider other)
     {
         playerInteractionsController.OnTriggerExit(other);
     }
+
     public void ActiveAttack(InputAction.CallbackContext context)
     {
         playerAttackController.ActiveAttack();
@@ -100,14 +107,27 @@ public class PlayerBrain : MonoBehaviour
     {
         this.canAttack = canAttack;
     }
+
     public void SetIsRepairing(bool canAttack)
     {
         this.IsRepairing = canAttack;
     }
+
     public void ChangeWeapon(GameObject weapon)
     {
         playerAttackController.SetWeapon(weapon);
     }
+
+    private void ShowInteract()
+    {
+        Interactimage.SetActive(true);
+    }
+
+    private void HideInteract()
+    {
+        Interactimage.SetActive(false);
+    }
+
     private void OnDestroy()
     {
         playerInteractionsController.Cleanup();
@@ -115,6 +135,8 @@ public class PlayerBrain : MonoBehaviour
         repairAction.canceled -= DeactiveAttack;
         GameEvents.OnActivateUi -= SetCanAttack;
         TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
+        GameEvents.OnShowInteract -= ShowInteract;
+        GameEvents.OnHideInteract -= HideInteract;
     }
 
 

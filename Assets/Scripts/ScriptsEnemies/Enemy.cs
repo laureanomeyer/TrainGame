@@ -111,11 +111,10 @@ public class Enemy : MonoBehaviour
             TutorialEvents.EnemyKilled();
     }
 
-    private void DeadWallDead()
+    private void DeadWallDeath()
     {
         if (healthBar != null)
         { healthBar.Hide(); }
-        GameEvents.EnemyDeath(transform.position);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
@@ -137,7 +136,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("deadWall"))
         {
-            DeadWallDead();
+            DeadWallDeath();
         }
     }
 }

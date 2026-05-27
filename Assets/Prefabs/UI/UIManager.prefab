@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7833815937731509768
 Transform:
@@ -44,9 +44,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 267f14dd57c89a040b89bc62031e41e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIPlayerManager
-  playerInteractions: {fileID: 0}
-  wagonHpImage: {fileID: 0}
-  fuelFillImage: {fileID: 0}
-  fuelMaxCapacityImage: {fileID: 0}
+  player: {fileID: 0}
+  fuelIndicator: {fileID: 0}
+  fuelMaxCapacityIndicator: {fileID: 0}
   shieldImage: {fileID: 0}
-  CoalImage: {fileID: 0}
+  animator: {fileID: 0}
+  coalImage: {fileID: 0}
+  goldImage: {fileID: 0}
+  goldText: {fileID: 0}
+  sceneRunController: {fileID: 0}
+  runProgressFill: {fileID: 0}
+  trainIcon: {fileID: 0}
+  startPoint: {fileID: 0}
+  endPoint: {fileID: 0}
+  currentLevel: {fileID: 0}
