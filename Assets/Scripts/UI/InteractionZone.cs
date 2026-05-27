@@ -42,6 +42,7 @@ public class InteractionZone : MonoBehaviour
             optionalPanel.SetActive(false);
         ui = null;
         GameEvents.HideInteract();
+        GameEvents.ShowCursor(true);
     }
 
     private void OnPlayerInteract()
@@ -65,6 +66,7 @@ public class InteractionZone : MonoBehaviour
                 optionalPanel.SetActive(true);
 
             GameEvents.HideInteract();
+            GameEvents.ShowCursor(false);
         }
     }
 }

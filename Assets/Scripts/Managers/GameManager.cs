@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public bool IsGameplayState => CurrentState == GameState.Gameplay || CurrentState == GameState.Tutorial;
     public bool IsTransitioning => CurrentState == GameState.Transition;
     public bool IsTutorial => SceneManager.GetActiveScene().name == "TutorialScene";
+    public bool IsGameplayScene => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene" || SceneManager.GetActiveScene().name == "Shop";
 
     private const string MainMenuScene = "MainMenu";
     private const string ShopScene = "Shop";
@@ -48,6 +49,12 @@ public class GameManager : MonoBehaviour
 
         CurrentState = GameState.Menu;
         stateAfterTransition = GameState.Menu;
+
+        GameEvents.OnShowCursor += ShowRealCursor;
+    }
+    private void OnDestroy()
+    {
+        GameEvents.OnShowCursor -= ShowRealCursor;
     }
 
     public bool IsFinalStation()
@@ -63,7 +70,6 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
-
     }
 
     public void GoToRun()
@@ -73,7 +79,6 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(RunScene, SceneTransitionType.StartingRun, GameState.Gameplay);
-
     }
 
     public void GoToMainMenu()
@@ -87,6 +92,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
+        Cursor.visible = true;
     }
     public void GoToTutorial()
     {
@@ -112,6 +118,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         SceneManager.LoadScene(FinalScene);
+        Cursor.visible = true;
     }
 
     public void Victory()
@@ -125,6 +132,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         ChangeScene(FinalScene, SceneTransitionType.Final, GameState.Menu);
+        Cursor.visible = true;
     }
 
     public void StartNewSession()
@@ -149,8 +157,6 @@ public class GameManager : MonoBehaviour
 
         Session.Reset();
 
-        Cursor.SetCursor(menuCursor, new Vector2(256, 256), CursorMode.Auto);
-
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
     }
 
@@ -162,11 +168,20 @@ public class GameManager : MonoBehaviour
         CurrentState = GameState.Transition;
 
         SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);
+
+        
     }
 
     public void FinishSceneChange()
     {
         isChangingScene = false;
         CurrentState = stateAfterTransition;
+        if (IsGameplayScene) Cursor.visible = false;
+        else Cursor.visible = true;
+    }
+
+    private void ShowRealCursor(bool show)
+    {
+        Cursor.visible = !show;
     }
 }

@@ -37,11 +37,13 @@ public class StoreUiInteracts : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         playerInZone = false;
-        GameEvents.HideInteract();
         playerBrain.SetCanAttack(true);
         uiToShow.SetActive(false);
         uiContinueConfirmation.SetActive(false);
         uiUpgrades.SetActive(false);
+
+        GameEvents.HideInteract();
+        GameEvents.ShowCursor(true);
     }
 
     private void OnPlayerInteract()
@@ -49,5 +51,7 @@ public class StoreUiInteracts : MonoBehaviour
         if (!playerInZone) return;
         uiToShow.SetActive(true);
         playerBrain.SetCanAttack(false);
+
+        GameEvents.ShowCursor(false);
     }
 }

@@ -7,7 +7,13 @@ public class CursorAmmo : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI ammoText;
     [SerializeField] private Image cursorImage;
+    [SerializeField] private Image cursorImageCenter;
     [SerializeField] private Vector3 offset;
+
+    private RectTransform cursorRect;
+    private RectTransform cursorCenterRect;
+    private RectTransform ammoRect;
+    private Canvas canvas;
 
     private float reloadDuration;
     private float reloadTimer;
@@ -15,8 +21,14 @@ public class CursorAmmo : MonoBehaviour
 
     private void Awake()
     {
+        cursorRect = cursorImage.rectTransform;
+        cursorCenterRect = cursorImageCenter.rectTransform;
+        ammoRect = ammoText.rectTransform;
+        canvas = GetComponent<Canvas>();
+
         GameEvents.OnAmmoChanged += UpdateText;
         GameEvents.OnReloadStarted += StartReloadFill;
+        GameEvents.OnShowCursor += SetCursorVisibility;
         TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
     }
     private void Start()
@@ -26,8 +38,17 @@ public class CursorAmmo : MonoBehaviour
     private void LateUpdate()
     {
         Vector2 mousePos = Mouse.current.position.ReadValue();
-        ammoText.transform.position = mousePos + (Vector2)offset;
-        cursorImage.transform.position = mousePos;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+        (RectTransform)canvas.transform,
+        mousePos,
+        null,
+        out Vector2 localPoint
+        );
+
+        cursorRect.localPosition = localPoint;
+        cursorCenterRect.localPosition = localPoint;
+        ammoRect.localPosition = localPoint + (Vector2)offset;
 
         if (!isReloading) return;
 
@@ -59,13 +80,14 @@ public class CursorAmmo : MonoBehaviour
     void SetCursorVisibility(bool visible)
     {
         cursorImage.gameObject.SetActive(visible);
+        cursorImageCenter.gameObject.SetActive(visible);
         ammoText.gameObject.SetActive(visible);
-        Cursor.visible = visible;
     }
     private void OnDestroy()
     {
         GameEvents.OnAmmoChanged -= UpdateText;
         GameEvents.OnReloadStarted -= StartReloadFill;
+        GameEvents.OnShowCursor -= SetCursorVisibility;
         TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }
 }
