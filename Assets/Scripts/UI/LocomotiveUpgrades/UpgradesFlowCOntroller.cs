@@ -40,7 +40,8 @@ public class UpgradesFlowController : MonoBehaviour
     {
         if (upgrades.UsedUpgrade)
         {
-            GameManager.Instance.GoToRun();
+            //GameManager.Instance.GoToRun();
+            StoreManager.Instance.ExitStore();
         } else
         {
             ShowSureMessage();
@@ -49,7 +50,8 @@ public class UpgradesFlowController : MonoBehaviour
 
     public void ContirnueAnyways()
     {
-        GameManager.Instance.GoToRun();
+        //GameManager.Instance.GoToRun();
+        StoreManager.Instance.ExitStore();
     }
     void HideAll()
     {
