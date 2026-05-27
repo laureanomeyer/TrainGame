@@ -24,7 +24,7 @@ public class PlayerInteractions
     private bool buttonIsHold = false;
     private bool isUsingTurret = false;
 
-    public PlayerInteractions(PlayerBrain playerBrain, PlayerMovementController playerMovementController, LookObjectToMouse lookObjectToMouse, InteractionUIManager interactionUIManager, float repairCapacity)
+    public PlayerInteractions (PlayerBrain playerBrain, PlayerMovementController playerMovementController, LookObjectToMouse lookObjectToMouse, InteractionUIManager interactionUIManager, float repairCapacity)
     {
         this.playerBrain = playerBrain;
         this.playerMovementController = playerMovementController;
@@ -156,11 +156,6 @@ public class PlayerInteractions
         {
             StartUsingTurret(currentTurretStation);
             return;
-        }
-
-        if (currentButton != null)
-        {
-            currentButton.Interact();
         }
     }
 

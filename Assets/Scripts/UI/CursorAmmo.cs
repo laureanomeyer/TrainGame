@@ -13,12 +13,14 @@ public class CursorAmmo : MonoBehaviour
     private float reloadTimer;
     private bool isReloading;
 
-    private void Start()
+    private void Awake()
     {
         GameEvents.OnAmmoChanged += UpdateText;
         GameEvents.OnReloadStarted += StartReloadFill;
         TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
-
+    }
+    private void Start()
+    {
         cursorImage.fillAmount = 1;
     }
     private void LateUpdate()

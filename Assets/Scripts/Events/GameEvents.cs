@@ -2,8 +2,6 @@ using System;
 
 public static class GameEvents
 {
-    public static bool InteractConsumed { get; set; }
-
     public static event Action<float> OnGoldEarned;
     
     public static event Action<float> OnGoldBoxChanged;

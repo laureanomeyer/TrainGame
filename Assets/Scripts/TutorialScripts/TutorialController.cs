@@ -17,11 +17,6 @@ public class TutorialController : MonoBehaviour
     private List<IWagon> wagons = new();
     private float timer = 5;
 
-    private void Awake()
-    {
-        TutorialEvents.SetRunStarted(false);
-    }
-
     private void Start()
     {
         CoalUi.SetActive(false);
@@ -32,12 +27,12 @@ public class TutorialController : MonoBehaviour
         TutorialEvents.OnStartSpawningEnemies += StartRun;
         TutorialEvents.OnEnemyKilled += CashGoldWagon;
 
+        TutorialEvents.SetRunStarted(false);
         TutorialEvents.SetCanConsume(false);
         TutorialEvents.SetTimerStarted(false);
-        TutorialEvents.SetAttackEnabled(false);
         TutorialEvents.EnableCoalBox(false);
         TutorialEvents.EnableGoldBox(false);
-        
+        TutorialEvents.SetAttackEnabled(false);
 
         TutorialEvents.SetTutorialTextVisible(true);
         TutorialEvents.SetTutorialText("Presiona WASD para moverte");
@@ -49,13 +44,9 @@ public class TutorialController : MonoBehaviour
         if (timer <= 0)
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
-            Debug.Log(GameManager.Instance.CurrentState);
 
-            if (GameManager.Instance.CurrentState == GameState.Tutorial) 
-            {
-                TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
-                Debug.Log("hola");
-            }
+            TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
+
 
             if (!firstRepair)
             {
@@ -100,7 +91,6 @@ public class TutorialController : MonoBehaviour
 
     void SetAttackUi(bool show)
     {
-        Cursor.visible = show;
 
         if (!firstkilled && show)
         {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class SpawnManager : MonoBehaviour
 
     Vector3 enemyDeathPosition;
 
-    private void OnEnable()
+    private void Awake()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
         GameEvents.OnEnemyHit += EnemyHit;
@@ -51,7 +52,6 @@ public class SpawnManager : MonoBehaviour
         TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
     }
 
-
     public void Start()
     {
         trainList = RunManager.Instance.ActiveWagons;
@@ -60,7 +60,6 @@ public class SpawnManager : MonoBehaviour
         BuildPool();
         TrySpawn();
         goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
-
     }
 
     void Update()

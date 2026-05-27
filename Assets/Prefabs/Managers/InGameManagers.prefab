@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4882713198279730219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8100013105334534282}
+  - component: {fileID: 4603013674644400423}
+  - component: {fileID: 2709104901828691367}
+  - component: {fileID: 3609618486797340503}
+  - component: {fileID: 4621039574094325596}
+  m_Layer: 0
+  m_Name: InGameManagers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8100013105334534282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882713198279730219}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 9.36493, y: 5.81036, z: 25.16575}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4603013674644400423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882713198279730219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6b03e1311cecd54d85e0ce6678569c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectBrain
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  behaviorType: 0
+--- !u!114 &2709104901828691367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882713198279730219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefbea979dd9e774b8011365f90dc4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrainManager
+  goldWagonPrefab: {fileID: 5189475862246834822, guid: 5392aeb15970e594e95f2ae9a9068d2d, type: 3}
+  locomotivePrefab: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+--- !u!114 &3609618486797340503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882713198279730219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a8acd9f4e290304ea00ad1333764717, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RunManager
+  mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
+  mapStartLocation: {fileID: 0}
+  spawnManager: {fileID: 4621039574094325596}
+--- !u!114 &4621039574094325596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4882713198279730219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40a491ff675e4794e971c773f82bb17f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnManager
+  levelList:
+  - {fileID: 11400000, guid: cd1e435a69e24514bb761d83445027c8, type: 2}
+  - {fileID: 11400000, guid: 41167366407f3e24280708e735bf78ca, type: 2}
+  - {fileID: 11400000, guid: 680af038dc2a7334d85063759ea8491e, type: 2}
+  - {fileID: 11400000, guid: 4cacae0fd91bd8546af6e24cc6ee2672, type: 2}
+  - {fileID: 11400000, guid: 1d9ca8babc3700240805786f180d9932, type: 2}
+  - {fileID: 11400000, guid: bb9f75eb511c5a2488d2572ca999cac6, type: 2}
+  - {fileID: 11400000, guid: c2c3d9291d27fc446892f47cb012136c, type: 2}
+  coin: {fileID: 8563536407840234828, guid: 691a4540bfc541f4ea1afe22fc6bbe09, type: 3}
+  enemyHitPS: {fileID: 1651239023368015989, guid: f73ff1e72bafc0b45ae8ed33f0a3f03d, type: 3}

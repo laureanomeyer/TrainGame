@@ -49,6 +49,5 @@ public class StoreUiInteracts : MonoBehaviour
         if (!playerInZone) return;
         uiToShow.SetActive(true);
         playerBrain.SetCanAttack(false);
-        GameEvents.HideInteract();
     }
 }

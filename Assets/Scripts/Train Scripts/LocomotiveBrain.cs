@@ -15,7 +15,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     private bool destroyed;
 
     public LocomotiveFuel fuelController;
-    private TrainData dataRef;
     private DamageFlash flash;
     private Animator animator;
     private StatSystem stats;
@@ -24,10 +23,9 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
     public Transform Transform => transform;
-
+    
     void Start()
     {
-        dataRef = GameManager.Instance.Session.TrainData;
         stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
         animator = GetComponent<Animator>();
@@ -37,7 +35,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             CM * stats.GetStat(StatType.MaxHp),
             RES * stats.GetStat(StatType.Defense),
             stats.GetStat(StatType.FuelOptimizer)
-            );
+        );
+
         stats.OnStatChanged += OnStatChanged;
 
         TutorialEvents.OnStartFuelUse += RemoveFuelTutorial;

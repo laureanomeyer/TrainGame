@@ -50,7 +50,6 @@ public class InteractionZone : MonoBehaviour
 
         if (!isOpen)
         {
-            GameEvents.InteractConsumed = true;
             isOpen = true;
 
             string textToShow = TryGetComponent(out WagonShopButton shopButton)
