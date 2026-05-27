@@ -60,6 +60,7 @@ public class CursorAmmo : MonoBehaviour
     {
         cursorImage.gameObject.SetActive(visible);
         ammoText.gameObject.SetActive(visible);
+        Cursor.visible = visible;
     }
     private void OnDestroy()
     {

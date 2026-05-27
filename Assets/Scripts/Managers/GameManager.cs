@@ -62,8 +62,6 @@ public class GameManager : MonoBehaviour
         Session.SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        Cursor.visible = false;
-
         ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
 
     }
@@ -73,8 +71,6 @@ public class GameManager : MonoBehaviour
         if (isChangingScene) return;
 
         Session.RebuildStatsSystem();
-
-        Cursor.visible = false;
 
         ChangeScene(RunScene, SceneTransitionType.StartingRun, GameState.Gameplay);
 
@@ -101,8 +97,6 @@ public class GameManager : MonoBehaviour
 
         Session.Reset();
         Session.RebuildStatsSystem();
-
-        Cursor.visible = false;
 
         ChangeScene(TutorialScene, SceneTransitionType.Generic, GameState.Tutorial);
 
