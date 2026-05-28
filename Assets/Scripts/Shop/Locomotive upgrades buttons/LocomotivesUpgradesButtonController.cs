@@ -32,8 +32,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     private LevelLocomotivesUpgradesSO currentLevelUpgrades;
 
-    private int currentLevel;
-    //[SerializeField] private int maxLevel;
+    private int currentLevel = 1;
 
     public TrainStats locomotiveUpgrade;
 
@@ -46,8 +45,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     void Start()
     {
         self = this.gameObject;
-
-        currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
 
         if (upgradesLevel.Length > 0)
         {
@@ -66,7 +63,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
             if (upgradesLevelDictionary.ContainsKey(currentLevel))
             {
                 currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
-                Debug.Log(currentLevelUpgrades);
             }
             else
             {
@@ -106,35 +102,41 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     public void MaxHPUpgrade()
     {
-        locomotiveUpgrade.trainMaxHp = currentLevelUpgrades.maxHp;
-        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
-        DeactivateAllButtons();
+        locomotiveUpgrade.trainMaxHp = GetCurrentUpgrade(StatType.MaxHp).maxHp;
+        GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
+        DeactivateAllButtons();   
     }
     public void AttackSpeedUpgrade()
     {
-        locomotiveUpgrade.attackSpeed = currentLevelUpgrades.attackSpeed;
-        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
+        locomotiveUpgrade.attackSpeed = GetCurrentUpgrade(StatType.AttackSpeed).attackSpeed;
+        GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
     }
     public void DamageMultiplierUpgrade()
     {
-        locomotiveUpgrade.damageBonus = currentLevelUpgrades.damageMultiplier;
-        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
+        locomotiveUpgrade.damageBonus = GetCurrentUpgrade(StatType.DamageMultiplier).damageMultiplier;
+        GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
     }
     public void DefenseUpgrade()
     {
-        locomotiveUpgrade.shields = currentLevelUpgrades.defense;
-        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
+        locomotiveUpgrade.shields = GetCurrentUpgrade(StatType.Defense).defense;
+        GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
     }
     public void GoldMultiplierUpgrade()
     {
-        locomotiveUpgrade.goldBonus = currentLevelUpgrades.goldMultiplier;
-        GameManager.Instance.Session.TrainData.locomotiveStatsMultiplicator += locomotiveUpgrade;
+        locomotiveUpgrade.goldBonus = GetCurrentUpgrade(StatType.GoldMultiplier).goldMultiplier;
+        GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
     }
 
+    private LevelLocomotivesUpgradesSO GetCurrentUpgrade(StatType type)
+    {
+        int levelT = GameManager.Instance.Session.TrainData.GetStatLevel(type);
+        var level = upgradesLevelDictionary[levelT];
+        return level;
+    }
     public void DeactivateAllButtons()
     {
         maxHPButton.DeactivateButton();
