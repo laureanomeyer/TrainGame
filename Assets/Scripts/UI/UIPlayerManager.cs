@@ -13,6 +13,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private GameObject fuelMaxCapacityIndicator;
     [SerializeField] private Image shieldImage;
     [SerializeField] private Animator animator;
+    [SerializeField] private GameObject lowFuel;
 
     [Header("Inventory UI")]
     [SerializeField] private Image coalImage;
@@ -35,6 +36,8 @@ public class UIPlayerManager : MonoBehaviour
     {
         UpdateGoldUI(0);
         locomotive = RunManager.Instance.LocomotiveBrain;
+        if (lowFuel != null)
+            lowFuel.SetActive(false);
     }
     private void OnEnable()
     {
@@ -65,10 +68,14 @@ public class UIPlayerManager : MonoBehaviour
             if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 3)
             {
                 if (animator != null) animator.SetBool("FuelLow", true);
+                if (lowFuel != null)
+                    lowFuel.SetActive(true);
             }
             else 
             {
                 if (animator != null) animator.SetBool("FuelLow", false);
+                if (lowFuel != null)
+                    lowFuel.SetActive(false);
             } 
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
