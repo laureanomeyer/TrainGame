@@ -18,16 +18,17 @@
         AddGold(playerRef.DepositGold());
 
         GameEvents.DropGold();
-
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
-            TutorialEvents.StartFuelUse();
     }
 
     public void AddGold(float amount) 
     {
+        if (amount <= 0) return;
         currentGold += amount;
         GameEvents.GoldBoxChanged(currentGold);
         ChangeGoldInData(amount);
+
+        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+            TutorialEvents.StartFuelUse();
     }
 
     public void ChangeGoldInData(float amount)
