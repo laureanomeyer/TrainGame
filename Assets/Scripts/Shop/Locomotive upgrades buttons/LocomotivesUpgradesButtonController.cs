@@ -54,13 +54,8 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
                 upgradesLevelDictionary.Add(upgrade.level, upgrade);
             }
         }
-       
-       
+        
         currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
-        
-       
-        
-        //Line 67
 
         locomotiveUpgrade = new TrainStats();
         usedUpgrades = false;
@@ -69,6 +64,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         attackSpeedButton.ButtonManager = this;
         damageMultiplierButton.ButtonManager = this;
         defenseButton.ButtonManager = this;
+        //Line 67
         goldMultiplierButton.ButtonManager = this;
 
         if (currentLevelUpgrades)
