@@ -83,7 +83,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnAddWag()
     {
-        GameManager.Instance.GoToStore();
+        GameManager.Instance.StartNewSession();
     }
 
     private void OnOpenMainMenu()
