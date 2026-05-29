@@ -7,7 +7,7 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] private Button tutorialButton;
     private void Start()
     {
-        startButton.onClick.AddListener(GameManager.Instance.StartNewSession);
+        startButton.onClick.AddListener(GameManager.Instance.GoToTutorial);
         tutorialButton.onClick.AddListener(GameManager.Instance.GoToTutorial);
     }
 
