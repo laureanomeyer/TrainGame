@@ -117,7 +117,7 @@ public class LocomotiveFuel
         }
         else
         {
-            currentShield -= amount * 100 / (100 + defense);
+            currentShield -= amount / defense;
             timer = 0;
             shieldTakenDamage = true;
             if (currentShield <= 0) GameEvents.ShieldsBroken();

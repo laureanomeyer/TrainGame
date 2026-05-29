@@ -22,7 +22,6 @@ public class DisplayTrain : MonoBehaviour
             foreach (var asset in wagonAssets)
             {
                 wagonAssetsReference.Add(asset.wagonName, asset.shopModel);
-                Debug.Log("Se agrego el asset" +  asset.wagonName);
             }
         }
 

@@ -4,6 +4,17 @@ public enum InteractableType { CoalBox, GoldBox }
 public enum ModifierType { Additive, Multipicaive}
 public enum StatType { MaxHp, Defense, GoldMultiplier, DamageMultiplier, AttackSpeed, FuelOptimizer, Speed }
 public enum GameState { Tutorial, Gameplay, Menu, Transition}
+public enum TutorialStep
+{
+    FreeMove,
+    SpawnEnemy,
+    WaitEnemyKilled,
+    WaitGoldDeposited,
+    EnableCoal,
+    WaitCoalTaken,
+    WaitCoalDeposited,
+    StartRun
+}
 public struct TrainStats
 {
     public float fuelOptimizer;
@@ -33,18 +44,16 @@ public struct TrainStats
         fuelOptimizer = trainData.fuelOptimizer;
         baseSpeed = trainData.baseSpeed;
     }
-    public enum TutorialStep
+    public TrainStats(LevelLocomotivesUpgradesSO trainData)
     {
-        FreeMove,
-        SpawnEnemy,
-        WaitEnemyKilled,
-        WaitGoldDeposited,
-        EnableCoal,
-        WaitCoalTaken,
-        WaitCoalDeposited,
-        StartRun
+        trainMaxHp = trainData.maxHp;
+        shields = trainData.defense;
+        goldBonus = trainData.goldMultiplier;
+        damageBonus = trainData.damageMultiplier;
+        attackSpeed = trainData.attackSpeed;
+        fuelOptimizer = 0;
+        baseSpeed = 0;
     }
-
 
     //Funcion encargada de sumar las varibles de dos TrainsStats
     public static TrainStats operator +(TrainStats x, TrainStats y)

@@ -48,7 +48,7 @@ public class UpgradesFlowController : MonoBehaviour
         }
     }
 
-    public void ContirnueAnyways()
+    public void ContinueAnywaysn()
     {
         //GameManager.Instance.GoToRun();
         StoreManager.Instance.ExitStore();
