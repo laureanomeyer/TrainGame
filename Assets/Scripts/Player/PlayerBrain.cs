@@ -81,6 +81,11 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController.OnInteract();
     }
 
+    private void OnAddWag()
+    {
+        GameManager.Instance.GoToStore();
+    }
+
     private void OnOpenMainMenu()
     {
         playerInteractionsController.OnOpenMainMenu();
