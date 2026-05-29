@@ -8,6 +8,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Base Data")]
     [SerializeField] private LocomotiveStatsSO baseStats;
+    [SerializeField] private LocomotiveStatsSO baseMultStats;
+
+    [Header("Cursor Data")]
     [SerializeField] private Texture2D menuCursor;
 
     [SerializeField] private int lastStation = 6;
@@ -45,7 +48,7 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         #endregion
 
-        Session = new GameSession(baseStats);
+        Session = new GameSession(baseStats, baseMultStats);
 
         CurrentState = GameState.Menu;
         stateAfterTransition = GameState.Menu;

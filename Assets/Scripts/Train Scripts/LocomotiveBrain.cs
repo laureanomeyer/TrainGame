@@ -38,7 +38,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         );
 
         stats.OnStatChanged += OnStatChanged;
-        Debug.Log("Max Shield: " + fuelController.MaxShield);
         TutorialEvents.OnStartFuelUse += RemoveFuelTutorial;
     }
 

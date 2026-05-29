@@ -47,7 +47,6 @@ public class LocomotiveFuel
         GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
 
         canConsume = !GameManager.Instance.IsTutorial;
-        Debug.Log(canConsume);
     }
 
     public void Move(float deltaTime)

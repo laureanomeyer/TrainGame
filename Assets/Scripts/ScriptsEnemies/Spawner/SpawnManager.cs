@@ -42,6 +42,8 @@ public class SpawnManager : MonoBehaviour
         GameEvents.OnEnemyHit += EnemyHit;
         TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
         TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
+
+        canSpawn = !GameManager.Instance.IsTutorial;
     }
 
     private void OnDisable()

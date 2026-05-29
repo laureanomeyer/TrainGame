@@ -21,10 +21,10 @@ public class TrainData
     public Transform GoldBoxPosition => goldBoxPosition;
     public float Speed => speed;
 
-    public TrainData(LocomotiveStatsSO stats)
+    public TrainData(LocomotiveStatsSO baseStats, LocomotiveStatsSO baseMultStats)
     {
-        baseStats = stats;
-        locomotiveStatsMultiplicator = new TrainStats(baseStats);
+        this.baseStats = baseStats;
+        locomotiveStatsMultiplicator = new TrainStats(baseMultStats);
         multiplicatorLevel = new Dictionary<StatType, int>();
     }
 
