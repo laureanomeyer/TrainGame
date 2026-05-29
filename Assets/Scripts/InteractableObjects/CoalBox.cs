@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class CoalBox: IInteractable
 {
     private bool canInteract = true;
@@ -69,6 +71,6 @@ public class CoalBox: IInteractable
 
     public void OnDestroyObject()
     {
-        TutorialEvents.OnEnableCoalBox += SetCanInteract;
+        TutorialEvents.OnEnableCoalBox -= SetCanInteract;
     }
 }

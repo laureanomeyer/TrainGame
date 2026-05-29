@@ -9,7 +9,7 @@ public class InteractableObjectBrain : MonoBehaviour
     InteractInputHandler inputHandler;
     PlayerBrain playerRef;
 
-    void Start()
+    void Awake()
     {
         objectBehavior = BehaviorFactory.Create(behaviorType);
 
