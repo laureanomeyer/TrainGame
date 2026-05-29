@@ -4,8 +4,8 @@ public class SessionConfig
     public int CurrentLevel {  get; private set; }
     public float RunDurantion { get; private set; }
 
-    private const float baseDuration = 30f;
-    private const float durationIncrement = 15f;
+    private const float baseDuration = 1;
+    private const float durationIncrement = 1;
 
     public SessionConfig()
     {

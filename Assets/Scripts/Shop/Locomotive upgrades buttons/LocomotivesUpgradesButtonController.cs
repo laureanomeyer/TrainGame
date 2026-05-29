@@ -28,7 +28,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     [Header("Level Upgrades")]
     [SerializeField] private LevelLocomotivesUpgradesSO[] upgradesLevel;
-    private Dictionary <int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary = new Dictionary <int, LevelLocomotivesUpgradesSO>();
+    private Dictionary <int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary;
 
     private LevelLocomotivesUpgradesSO currentLevelUpgrades;
 
@@ -44,6 +44,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     void Start()
     {
+        upgradesLevelDictionary = new Dictionary<int, LevelLocomotivesUpgradesSO>();
         self = this.gameObject;
 
         if (upgradesLevel.Length > 0)
@@ -53,22 +54,13 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
                 upgradesLevelDictionary.Add(upgrade.level, upgrade);
             }
         }
-
-        if (currentLevel > upgradesLevelDictionary.Count)
-        {
-            currentLevelUpgrades = upgradesLevelDictionary[upgradesLevelDictionary.Count];
-        }
-        else
-        {
-            if (upgradesLevelDictionary.ContainsKey(currentLevel))
-            {
-                currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
-            }
-            else
-            {
-                currentLevelUpgrades = null;
-            }
-        }
+       
+       
+        currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
+        
+       
+        
+        //Line 67
 
         locomotiveUpgrade = new TrainStats();
         usedUpgrades = false;
@@ -86,12 +78,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
             damageMultiplierButton.button.onClick.AddListener(DamageMultiplierUpgrade);
             defenseButton.button.onClick.AddListener(DefenseUpgrade);
             goldMultiplierButton.button.onClick.AddListener(GoldMultiplierUpgrade);
-
-            maxHPButton.Upgrade = currentLevelUpgrades.maxHp;
-            attackSpeedButton.Upgrade = currentLevelUpgrades.attackSpeed;
-            damageMultiplierButton.Upgrade = currentLevelUpgrades.damageMultiplier;
-            defenseButton.Upgrade = currentLevelUpgrades.defense;
-            goldMultiplierButton.Upgrade = currentLevelUpgrades.goldMultiplier;
         }
         else
         {
