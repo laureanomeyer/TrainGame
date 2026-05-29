@@ -19,7 +19,10 @@ public class PlayerAttackController
     private float currentReloadTime = 0;
 
     private float rateOfFire;
+    public float RateOfFire { get => rateOfFire; }
+
     private float reloadTime;
+    public float ReloadTime { get => reloadTime; }
 
     public PlayerAttackController(Transform spawnPoint, GameObject weaponItem, BulletPool pool, PlayerBrain brain, LookObjectToMouse look)
     {

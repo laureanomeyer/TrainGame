@@ -8,6 +8,7 @@ public interface IWeapons
     public string Id { get; }
 
     public WeaponDataSO WeaponData { get; set; }
+    BulletPool BulletPool { get; }
 
     public int CurrentAmmunition { get; set; }
 
@@ -18,6 +19,8 @@ public interface IWeapons
 
     //Establece la pool
     public void SetPool(BulletPool pool);
+
+    public void SetPlayerAtkReference(PlayerAttackController playerAtk);
 
     public void RestockBullets();
 
