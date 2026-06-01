@@ -98,7 +98,7 @@ public class SpawnManager : MonoBehaviour
         {
             SpawnZone zone = activeZones[Random.Range(0, activeZones.Count)];
 
-            Vector3 point = zone.GetRandomPoint();
+            Vector3 point = Vector3.zero; //zone.GetRandomPoint();
 
             if (IsOutsideCamera(point))
             {
@@ -202,7 +202,6 @@ public class SpawnManager : MonoBehaviour
     {
         ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
     }
-
 
     void EnemyHit(Vector3 position) 
     {

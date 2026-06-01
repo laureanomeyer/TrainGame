@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
 
@@ -7,19 +8,23 @@ public class SpawnController : MonoBehaviour
     //se setean con el level spawn data
     float spawnInterval;
     int maxEnemies;
+    bool canSpawn = true;
 
     [Header("Levels")]
 
     [SerializeField] List<LevelSpawnsData> levelList = new();
     LevelSpawnsData currentlevelData;
 
-    
-    List<SpawnZone> activeZones = new(); //deprecar
+    TrainRanges trainRanges = new TrainRanges();
 
+    [SerializeField] SpawnZone spawnZone;
 
     [Header("Coins")]
     [SerializeField] GameObject coin;
     private Transform goldBox;
+
+    [Header("Particle Systems")]
+    [SerializeField] ParticleSystem enemyHitPS;
 
     private List<IWagon> trainList = new();
 
@@ -30,17 +35,21 @@ public class SpawnController : MonoBehaviour
     float timer;
     int aliveEnemies;
 
-    Vector3 enemyDeathPosition;
 
     private void OnEnable()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
-
+        GameEvents.OnEnemyHit += EnemyHit;
+        TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
+        TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
     }
 
     private void OnDisable()
     {
         GameEvents.OnEnemyDeath -= EnemyDead;
+        GameEvents.OnEnemyHit -= EnemyHit;
+        TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
+        TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
     }
 
 
@@ -52,7 +61,7 @@ public class SpawnController : MonoBehaviour
         BuildPool();
         TrySpawn();
         goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
-        
+
     }
 
     void Update()
@@ -67,36 +76,29 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    //deprecar
-    public void RegisterZone(SpawnZone zone)
-    {
-        if (!activeZones.Contains(zone))
-        {
-            // Debug.Log("zone register");
-            activeZones.Add(zone);
-        }
-
-    }
 
     void TrySpawn()
     {
-        if (activeZones.Count == 0)
-        {
-            Debug.Log("lista vacia");
-        }
 
-        for (int i = 0; i < 10; i++)
+        if (!canSpawn) return;
+
+        int horde = Random.Range(1, currentlevelData.MaxHordeSpawn);
+        (float positive, float negative) = trainRanges.SetRanges(50, Vector3.zero);
+
+        Vector3 spawnPos = spawnZone.GetRandomPoint(positive, negative);
+
+        for (int i = 0; i < horde; i++)
         {
-            SpawnZone zone = activeZones[Random.Range(0, activeZones.Count)];//
-                                                                             //
-            Vector3 point = zone.GetRandomPoint();                           //
-                                                                             //
-            if (IsOutsideCamera(point))                                      // deprecar
-            {                                                                //
-                Spawn(point);                                                //
-                return;                                                      //
-            }                                                                //
-        }                                                                    //
+            if (IsOutsideCamera(spawnPos))
+            {
+                Spawn(spawnPos);
+            }
+        }
+    }
+
+    void SpawnSingleEnemy(Vector3 pos, List<IWagon> targetList)
+    {
+        SpawnSingle(pos, targetList);
     }
 
     void BuildPool()
@@ -119,10 +121,24 @@ public class SpawnController : MonoBehaviour
         int index = Random.Range(0, spawnPool.Count);
 
         EnemyData enemyToSpawn = spawnPool[index];
-        GameObject enemyGO = Instantiate(currentlevelData.prefab, pos, Quaternion.identity);
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
         enemy.Initialize(enemyToSpawn);
         enemy.SetTargetList(trainList);
+
+        aliveEnemies++;
+    }
+    void SpawnSingle(Vector3 pos, List<IWagon> target)
+    {
+        if (spawnPool.Count == 0) return;
+
+        int index = Random.Range(0, spawnPool.Count);
+
+        EnemyData enemyToSpawn = spawnPool[index];
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
+        Enemy enemy = enemyGO.GetComponent<Enemy>();
+        enemy.Initialize(enemyToSpawn);
+        enemy.SetTargetList(target);
 
         aliveEnemies++;
     }
@@ -152,21 +168,29 @@ public class SpawnController : MonoBehaviour
 
     void SpawCoin(Vector3 position, Transform goTo)
     {
-        GameObject coinGO = Instantiate(coin, position, Quaternion.identity);
+        GameObject coinGO = ObjectPoolManager.SpawnObject(coin, position, Quaternion.identity);
         Coin coinScript = coinGO.GetComponent<Coin>();
         coinScript.SetTarget(goTo);
     }
-
 
     void EnemyDead(Vector3 position)
     {
         SpawCoin(position, goldBox);
         aliveEnemies--;
-
     }
 
-    private void OnDrawGizmos()
+    void SpawnParticles(Vector3 position)
     {
-        Gizmos.DrawWireCube(Vector3.zero, Vector3.one * 100f);
+        ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
+    }
+
+    void EnemyHit(Vector3 position)
+    {
+        SpawnParticles(position);
+    }
+
+    void SetCanSpawn(bool canSpawn)
+    {
+        this.canSpawn = canSpawn;
     }
 }

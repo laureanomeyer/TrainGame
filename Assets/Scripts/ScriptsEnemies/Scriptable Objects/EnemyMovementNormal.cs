@@ -4,13 +4,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Movement/Normal")]
 public class EnemyMovementNormal : EnemyMovementSO
 {
-
     public override void Move(Enemy enemy)
     {
         Transform train = enemy.Target;
 
-        if (train == null)
-            return;
+        if (train == null) return;
 
         Vector3 pos = enemy.rb.position;
 
@@ -37,10 +35,9 @@ public class EnemyMovementNormal : EnemyMovementSO
 
             float distanceToX = Mathf.Abs(pos.x - targetX);
 
-            float stopDistance = 0.25f;
+            float stopDistance = 5f;
 
-            if (distanceToX <= stopDistance)
-                return;
+            if (distanceToX <= stopDistance) return;
 
             Vector3 lateralDir = pos.x < targetX
                 ? Vector3.right

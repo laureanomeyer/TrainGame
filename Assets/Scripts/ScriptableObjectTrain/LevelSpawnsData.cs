@@ -9,8 +9,9 @@ public class LevelSpawnsData : ScriptableObject
     public List<SpawnEntry> spawneables;
     public GameObject prefab;
     public int maxAliveEnemies;
+    public int MaxHordeSpawn;
     public float spawnInterval;
-
+    
 }
 
 [System.Serializable]

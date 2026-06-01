@@ -10,7 +10,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EnemyUIHpBar healthBar;
 
     float CurrentH;
-    private DamageFlash flash;
 
     private EnemyData data;
     private List<IWagon> targetList;
@@ -93,17 +92,13 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         GameEvents.EnemyHit(transform.position);
+        flash.Flash();
 
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
         }
-
-        if (currentHealth > 0)
-        {
-            flash.Flash();
-        }
-        else
+        if (currentHealth <= 0)
             Dead();
     }
 
@@ -113,9 +108,8 @@ public class Enemy : MonoBehaviour
         { healthBar.Hide(); }
         GameEvents.GoldEarned(data.gold);
         GameEvents.EnemyDeath(transform.position);
+        TutorialEvents.EnemyKilled();
         ObjectPoolManager.ReturnObjectToPool(gameObject);
-
-            TutorialEvents.EnemyKilled();
     }
 
     private void DeadWallDead()
