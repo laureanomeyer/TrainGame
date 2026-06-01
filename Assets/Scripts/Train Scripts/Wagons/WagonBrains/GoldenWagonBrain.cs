@@ -17,11 +17,14 @@ public class GoldenWagonBrain : WagonBrain
     [SerializeField] private Mesh baseBodyWagonMesh;
     [SerializeField] private GameObject[] goldCoins;
 
+    private void Awake()
+    {
+        GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
+    }
     public override void Start()
     {
         base.Start();
         collector = new GoldCollector(hpController, currentGoldUI, storageCapacity, setGoldCoins);
-        GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
     }
 
     public override void Repair(float repairAmount)

@@ -9,6 +9,8 @@ public class WagonStoreManager : MonoBehaviour
     [Header("Wagon shop sections")]
     [SerializeField] private WagonShopButton[] shopButtons;
 
+    [SerializeField] private DisplayTrain displayTrain;
+
     [SerializeField] public Button buyButton;
     [SerializeField] public Button rerollButton;
 
@@ -26,6 +28,7 @@ public class WagonStoreManager : MonoBehaviour
         foreach (var button in shopButtons)
         {
             button.Level = currentLevel;
+            button.displayTrain = displayTrain;
         }
     }
 

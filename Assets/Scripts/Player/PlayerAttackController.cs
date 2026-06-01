@@ -18,6 +18,12 @@ public class PlayerAttackController
 
     private float currentReloadTime = 0;
 
+    private float rateOfFire;
+    public float RateOfFire { get => rateOfFire; }
+
+    private float reloadTime;
+    public float ReloadTime { get => reloadTime; }
+
     public PlayerAttackController(Transform spawnPoint, GameObject weaponItem, BulletPool pool, PlayerBrain brain, LookObjectToMouse look)
     {
         this.brain = brain;
@@ -60,7 +66,7 @@ public class PlayerAttackController
 
     void Attack()
     {
-        if (waitToFire > weapon.WeaponData.rateOfFire)
+        if (waitToFire > rateOfFire)
         {
             if (weapon.IsReloading) return;
 
@@ -83,7 +89,7 @@ public class PlayerAttackController
 
     private void ChargeTimers()
     {
-        if (waitToFire <= weapon.WeaponData.rateOfFire)
+        if (waitToFire <= rateOfFire)
         {
             waitToFire += Time.deltaTime;
         }
@@ -92,7 +98,7 @@ public class PlayerAttackController
         {
             currentReloadTime += Time.deltaTime;
 
-            if(currentReloadTime > weapon.WeaponData.reloadTime)
+            if(currentReloadTime > reloadTime)
             {
                 currentReloadTime = 0;
                 weapon.RestockBullets();
@@ -103,14 +109,19 @@ public class PlayerAttackController
         
     }
 
+    public void ReseatCadenceStats()
+    {
+        rateOfFire = weapon.WeaponData.rateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
+        reloadTime = weapon.WeaponData.reloadTime / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed); ;
+    }
+
     //Funcion para setear el arma equipada
     public void SetWeapon(GameObject weaponObtein)
     {
         weaponItem = weaponObtein;
         GameManager.Instance.Session.PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
-        weapon.WeaponData.reloadTime = weapon.WeaponData.reloadTime / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
-        weapon.WeaponData.rateOfFire = weapon.WeaponData.rateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
+        ReseatCadenceStats();
         weapon.RestockBullets();
         weapon.SetPool(pool);
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);

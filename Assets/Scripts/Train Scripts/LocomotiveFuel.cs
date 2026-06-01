@@ -33,26 +33,32 @@ public class LocomotiveFuel
         this.maxShield = shield;
         this.currentShield = shield;
         this.currentMaxFuel = maxFuel;
-        currentFuel = maxFuel;
         this.actualSpeed = 100f;
         this.fuelOptimizer = fuelOptimizer;
-        fuelUseXSecond = 1 / (2 * fuelOptimizer);
         this.defense = defense;
+
+        currentFuel = maxFuel;
+        fuelUseXSecond = 1 / (2 * fuelOptimizer);
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
+
         TutorialEvents.OnSetCanConsume += SetCanConsume;
 
         GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
+
+        canConsume = !GameManager.Instance.IsTutorial;
     }
 
     public void Move(float deltaTime)
     {
-        if(!GameManager.Instance.IsGameplayState) return;
+        if (!GameManager.Instance.IsGameplayState) return;
+
         if (!hasFuel)
         {
             GameManager.Instance.Session.TrainData.SetSpeed(0);
             return;
         }
+
         if (canConsume) ConsumeFuel(fuelUseXSecond * deltaTime);
     }
 
@@ -110,7 +116,7 @@ public class LocomotiveFuel
         }
         else
         {
-            currentShield -= amount * 100 / (100 + defense);
+            currentShield -= amount / defense;
             timer = 0;
             shieldTakenDamage = true;
             if (currentShield <= 0) GameEvents.ShieldsBroken();
@@ -120,6 +126,7 @@ public class LocomotiveFuel
     public void UpdateShield(float deltaTime)
     {
         if(!GameManager.Instance.IsGameplayState) return;
+
         if (!shieldTakenDamage) 
         {
             currentShield += 5 * deltaTime;
@@ -141,7 +148,6 @@ public class LocomotiveFuel
                 timer = 0;
             }
         }
-
     }
 
     public void SetCanConsume(bool canConsume)

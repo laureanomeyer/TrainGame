@@ -7,6 +7,8 @@ public class StoreManager : MonoBehaviour
 
     [SerializeField] private GoldUIDisplay goldDisplay;
 
+    [SerializeField] private DisplayTrain displayTrain;
+
     private PlayerData playerData;
 
     public List<IWagonID> wagonsInTrain;
@@ -41,4 +43,15 @@ public class StoreManager : MonoBehaviour
     }
 
     public float GetGold() => playerData.Gold;
+
+    public void ChangeWagonList()
+    {
+         GameManager.Instance.Session.TrainData.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+    }
+
+    public void ExitStore()
+    {
+        ChangeWagonList();
+        GameManager.Instance.GoToRun();
+    }
 }

@@ -12,7 +12,8 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private GameObject fuelIndicator;
     [SerializeField] private GameObject fuelMaxCapacityIndicator;
     [SerializeField] private Image shieldImage;
-    [SerializeField] private GameObject LowFuelImage;
+    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject lowFuel;
 
     [Header("Inventory UI")]
     [SerializeField] private Image coalImage;
@@ -27,9 +28,6 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private RectTransform endPoint;
     [SerializeField] private TMP_Text currentLevel;
 
-    [Header("Interactions")]
-    [SerializeField] private GameObject InteractImage;
-
     private Color originalColor;
     private LocomotiveBrain locomotive;
 
@@ -37,10 +35,18 @@ public class UIPlayerManager : MonoBehaviour
     private void Start()
     {
         UpdateGoldUI(0);
-        InteractImage.SetActive(false);
         locomotive = RunManager.Instance.LocomotiveBrain;
-        if (LowFuelImage != null)
-            LowFuelImage.SetActive(false);
+        if (lowFuel != null)
+            lowFuel.SetActive(false);
+    }
+    private void OnEnable()
+    {
+        GameEvents.OnGoldBoxChanged += UpdateGoldUI;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnGoldBoxChanged -= UpdateGoldUI;
     }
 
     void Update()
@@ -61,13 +67,15 @@ public class UIPlayerManager : MonoBehaviour
 
             if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 3)
             {
-                if (LowFuelImage != null)
-                    LowFuelImage.SetActive(true);
+                if (animator != null) animator.SetBool("FuelLow", true);
+                if (lowFuel != null)
+                    lowFuel.SetActive(true);
             }
             else 
             {
-                if (LowFuelImage != null)
-                    LowFuelImage.SetActive(false);
+                if (animator != null) animator.SetBool("FuelLow", false);
+                if (lowFuel != null)
+                    lowFuel.SetActive(false);
             } 
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
@@ -102,22 +110,6 @@ public class UIPlayerManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        GameEvents.OnGoldBoxChanged += UpdateGoldUI;
-        GameEvents.OnHideInteract += HideInteract;
-        GameEvents.OnShowInteract += ShowInteract;
-    }
-
-    private void OnDisable()
-    {
-        GameEvents.OnGoldBoxChanged -= UpdateGoldUI;
-        GameEvents.OnHideInteract -= HideInteract;
-        GameEvents.OnShowInteract -= ShowInteract;
-    }
-
-
-
     void UpdateGoldUI(float currentGold)
     {
             goldText.text = "Oro actual: " + currentGold; 
@@ -138,14 +130,5 @@ public class UIPlayerManager : MonoBehaviour
 
         if(currentLevel != null) currentLevel.text = new string("Nivel actual: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
 
-    }
-    void ShowInteract()
-    {
-        InteractImage.SetActive(true);
-    }
-
-    void HideInteract()
-    {
-        InteractImage.SetActive(false);
     }
 }

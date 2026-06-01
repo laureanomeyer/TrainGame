@@ -14,10 +14,9 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private DamageFlash Flash;
     private Animator animator;
     private bool canBeRepaired = false;
-    private bool broken;
 
-    public bool Broken => broken;
     public bool CanBeRepaired => canBeRepaired;
+    public WagonHP HPController => hpController;
 
     [Header("Wagons data")]
     [SerializeField] private float currentHp;
@@ -58,7 +57,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
     public float CurrentHp => currentHp;
     public float MaxHp => hp;
 
-    public WagonHP HPController => hpController;
     public IWagonID WagonID => wagonID;
 
     public virtual void Start()
@@ -68,7 +66,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
         animator = GetComponent<Animator>();
 
         Flash = GetComponent<DamageFlash>();
-        broken = false;
     }
 
     public virtual void StartWagon()
@@ -96,7 +93,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
         if(!GameManager.Instance.IsGameplayState) return;
 
         if (hpController == null) return;
-        if (broken) return;
+        if (hpController.IsBroken) return;
         if (animator != null) animator.SetTrigger("Damage");
 
         hpController.TakeDamage(damageAmount);
@@ -137,7 +134,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     public virtual void Repair(float repairAmount)
     {
         if (hpController == null) return;
-        if (broken) return;
+        if (hpController.IsBroken) return;
 
         hpController.Repair(repairAmount, Time.deltaTime);
 
@@ -161,15 +158,13 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public void Break()
     {
-        if (broken) return;
+        if (hpController.IsBroken) return;
 
         RunManager.Instance.StatSystem.RemoveModifiersFromSource(this);
 
         renderController.CheckWagonToChangeRender(canBreak);
 
         GameEvents.WagonDestroyed();
-
-        broken = true;
 
         if ( wagonID != null)
         {

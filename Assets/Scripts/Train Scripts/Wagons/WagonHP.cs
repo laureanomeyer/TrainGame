@@ -31,28 +31,23 @@ public class WagonHP : IDamagable
 
         if (currentHp < 0) 
         {
-            Break();
+            BreakDown();
         }
 
     }
     public void Repair(float repairAmount, float delta) 
     {
-        if(currentHp <= 0 && canBreak) return;
+        if(IsBroken && canBreak) return;
 
         currentHp += repairAmount * delta;
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);
 
     }
-
-    public void Break() 
-    {
-        isBroken = true;
-
-        BreakDown();
-    }
     public void BreakDown() 
     {
         die();
+
+        IsBroken = true;
     }
     public void OnMaxHpChanged(float newMaxHp)
     {

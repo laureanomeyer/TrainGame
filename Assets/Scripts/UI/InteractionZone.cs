@@ -42,6 +42,7 @@ public class InteractionZone : MonoBehaviour
             optionalPanel.SetActive(false);
         ui = null;
         GameEvents.HideInteract();
+        GameEvents.ShowCursor(true);
     }
 
     private void OnPlayerInteract()
@@ -50,7 +51,6 @@ public class InteractionZone : MonoBehaviour
 
         if (!isOpen)
         {
-            GameEvents.InteractConsumed = true;
             isOpen = true;
 
             string textToShow = TryGetComponent(out WagonShopButton shopButton)
@@ -66,6 +66,7 @@ public class InteractionZone : MonoBehaviour
                 optionalPanel.SetActive(true);
 
             GameEvents.HideInteract();
+            GameEvents.ShowCursor(false);
         }
     }
 }

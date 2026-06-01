@@ -8,26 +8,24 @@ public class TrainData
     private float speed;
 
     private LocomotiveStatsSO baseStats;
-    public TrainStats locomotiveStatsMultiplicator;
+    private TrainStats locomotiveStatsMultiplicator;
+    private Dictionary<StatType, int> multiplicatorLevel;
 
     private Transform tailPosition;
     private Transform goldBoxPosition;
-
-    //private List<IWagon> wagonsList = new();
-
     private List<IWagonID> wagonsIDList = new();
 
     public TrainStats LocomotiveStatsMultiplicator => locomotiveStatsMultiplicator;
-    //public List<IWagon> WagonList => wagonsList;
     public List<IWagonID> WagonsIDList => wagonsIDList; 
     public Transform TailPosition => tailPosition;
     public Transform GoldBoxPosition => goldBoxPosition;
     public float Speed => speed;
 
-    public TrainData(LocomotiveStatsSO stats)
+    public TrainData(LocomotiveStatsSO baseStats, LocomotiveStatsSO baseMultStats)
     {
-        baseStats = stats;
-        locomotiveStatsMultiplicator = new TrainStats(baseStats);
+        this.baseStats = baseStats;
+        locomotiveStatsMultiplicator = new TrainStats(baseMultStats);
+        multiplicatorLevel = new Dictionary<StatType, int>();
     }
 
     public void AddWagonID(IWagonID wagon)
@@ -55,10 +53,6 @@ public class TrainData
     {
         goldBoxPosition = position;
     }
-    public void SetWagonList(List<IWagon> wagonList)
-    {
-        //this.wagonsList = wagonList;
-    }
     public void ResetValuesToDefault()
     {
         wagonsIDList = new List<IWagonID>();
@@ -66,6 +60,23 @@ public class TrainData
     public void ChangedWagonIDList(List<IWagonID> wagonIDs)
     {
         wagonsIDList = wagonIDs;
+    }
+    public int GetStatLevel(StatType type)
+    {
+        if (!multiplicatorLevel.ContainsKey(type))
+        {
+            multiplicatorLevel.Add(type, 1);
+            return multiplicatorLevel[type];
+        }
+        else
+        {
+            multiplicatorLevel[type] += 1;
+            return multiplicatorLevel[type];
+        }
+    }
+    public void AddStats(TrainStats stats)
+    {       
+        locomotiveStatsMultiplicator += stats;
     }
 }
 

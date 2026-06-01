@@ -2,8 +2,6 @@ using System;
 
 public static class GameEvents
 {
-    public static bool InteractConsumed { get; set; }
-
     public static event Action<float> OnGoldEarned;
     
     public static event Action<float> OnGoldBoxChanged;
@@ -29,6 +27,8 @@ public static class GameEvents
     public static event Action<UnityEngine.Vector3> OnEnemyHit;
 
     public static event Action<bool> OnActivateUi;
+
+    public static event Action<bool> OnShowCursor;
 
     public static event Action OnShowInteract;
 
@@ -76,7 +76,10 @@ public static class GameEvents
     {
         OnAmmoChanged?.Invoke(currentAmmo);
     }
-
+    public static void ShowCursor(bool showCursor)
+    {
+        OnShowCursor?.Invoke(showCursor);
+    }
     public static void CoalEmpty()
     {
         OnCoalEmpty?.Invoke();

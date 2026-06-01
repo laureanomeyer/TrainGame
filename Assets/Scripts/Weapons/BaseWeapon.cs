@@ -8,6 +8,8 @@ public class BaseWeapon : MonoBehaviour, IWeapons
     [SerializeField] private string weaponName;
     public string Id => weaponName;
 
+    private PlayerAttackController playerAtkReference;
+
     [Header("Weapon data")]
     [SerializeField] private WeaponDataSO weaponData;
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
@@ -18,18 +20,23 @@ public class BaseWeapon : MonoBehaviour, IWeapons
     private bool isReloading =false;
     public bool IsReloading { get => isReloading; set => isReloading = value; }
 
-
     //Referencia a la pool de balas
     private BulletPool bulletPool;
+    public BulletPool BulletPool => bulletPool;
 
     public void Shoot(Transform spawnPoint)
     {
-        weaponData.typeOfShootSO.Shoot(this, spawnPoint, bulletPool, weaponData);
+        weaponData.typeOfShootSO.Shoot(this, spawnPoint, playerAtkReference);
     }
 
     public void SetPool(BulletPool pool)
     {
         bulletPool = pool;
+    }
+
+    public void SetPlayerAtkReference(PlayerAttackController playerAtk)
+    {
+        playerAtkReference = playerAtk;
     }
 
     public void RestockBullets()

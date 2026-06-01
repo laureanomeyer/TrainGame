@@ -11,6 +11,8 @@ public class WagonShopButton : MonoBehaviour
 
     public int Level { get => currentLevel; set => currentLevel = value; }
 
+    public DisplayTrain displayTrain;
+
     private WagonInStockSO[] wagonsInStock;
 
     private WagonInStockSO currentWagonInStock;
@@ -80,9 +82,9 @@ public class WagonShopButton : MonoBehaviour
         if (wagonsInStock.Length == 0) return;
         if (storeManager.TryConsumeGold(currentWagonInStock.Price))
         {
-            GameManager.Instance.Session.TrainData.AddWagonID(new WagonStore(currentWagonInStock.Wagon, currentWagonInStock.wagonName));
+            displayTrain.AddWagon(currentWagonInStock);
             GameManager.Instance.Session.RebuildStatsSystem();
-            //Destroy(modelReference);
+
             SetWagonInStock();
 
             if (wagonShopParticleSystem)

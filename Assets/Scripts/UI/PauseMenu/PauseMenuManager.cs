@@ -97,6 +97,7 @@ public class PauseMenuManager : MonoBehaviour
             pausePanel.SetActive(true);
         }
         GameEvents.HideInteract();
+        GameEvents.ShowCursor(false);
     }
 
     public void ResumeGame()
@@ -109,6 +110,8 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(false);
         }
+        GameEvents.ShowCursor(true);
+
     }
 
     public void QuitToMainMenu()
@@ -122,6 +125,7 @@ public class PauseMenuManager : MonoBehaviour
             pausePanel.SetActive(false);
         }
         SceneManager.LoadScene(mainMenuSceneName);
+        Cursor.visible = true;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

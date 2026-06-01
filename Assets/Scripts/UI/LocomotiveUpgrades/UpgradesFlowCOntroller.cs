@@ -40,16 +40,18 @@ public class UpgradesFlowController : MonoBehaviour
     {
         if (upgrades.UsedUpgrade)
         {
-            GameManager.Instance.GoToRun();
+            //GameManager.Instance.GoToRun();
+            StoreManager.Instance.ExitStore();
         } else
         {
             ShowSureMessage();
         }
     }
 
-    public void ContirnueAnyways()
+    public void ContinueAnywaysn()
     {
-        GameManager.Instance.GoToRun();
+        //GameManager.Instance.GoToRun();
+        StoreManager.Instance.ExitStore();
     }
     void HideAll()
     {

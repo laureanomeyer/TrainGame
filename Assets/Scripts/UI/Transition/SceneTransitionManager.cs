@@ -85,17 +85,17 @@ public class SceneTransitionManager : MonoBehaviour
         {
             yield return null;
         }
+        
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.FinishSceneChange();
+        }
 
         yield return FadeImage(1f, 0f);
 
         HideTransitionInstantly();
 
         isTransitioning = false;
-
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.FinishSceneChange();
-        }
     }
 
     private IEnumerator FadeImage(float from, float to)

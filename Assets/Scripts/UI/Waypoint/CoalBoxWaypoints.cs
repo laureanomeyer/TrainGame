@@ -8,16 +8,19 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
     [SerializeField] private IndicatorOnScreen indicatorOnScreen;
     [SerializeField] private IndicatorOffScreen indicatorOffScreen;
 
+
+    void Awake()
+    {
+        GameEvents.OnTakeFuel += DeactivateWaypointUI;
+        GameEvents.OnDropFuel += ActivateWaypointUI;
+        TutorialEvents.OnEnableCoalBox += SetWaypointVisible;
+    }
     void Start()
     {
         indicatorRenderer = CanvasElementsReferences.CanvasIndicatorRenderer;
 
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
-
-        GameEvents.OnTakeFuel += DeactivateWaypointUI;
-        GameEvents.OnDropFuel += ActivateWaypointUI;
-        TutorialEvents.OnSetCanConsume += SetWaypointVisible;
     }
     public void SetWaypointVisible(bool set)
     {
@@ -39,6 +42,6 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
     {
         GameEvents.OnTakeFuel -= DeactivateWaypointUI;
         GameEvents.OnDropFuel -= ActivateWaypointUI;
-        TutorialEvents.OnSetCanConsume -= SetWaypointVisible;
+        TutorialEvents.OnEnableCoalBox -= SetWaypointVisible;
     }
 }
