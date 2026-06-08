@@ -19,7 +19,6 @@ public class MapTile : MonoBehaviour
     {
         offset = Vector3.Distance(transform.position, tail.position);
         offsetVect = new Vector3(offset, 0, 0);
-        //Debug.Log($"offset: {offset} | tail local: {tail.localPosition} | tail world: {tail.position}");
     }
     public void SetUp(Transform followTransform)
     {

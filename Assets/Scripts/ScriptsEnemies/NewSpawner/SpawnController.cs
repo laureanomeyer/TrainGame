@@ -17,7 +17,7 @@ public class SpawnController : MonoBehaviour
 
     TrainRanges trainRanges = new TrainRanges();
 
-    [SerializeField] SpawnZone spawnZone;
+    SpawnZone spawnZone;
 
     [Header("Coins")]
     [SerializeField] GameObject coin;
@@ -56,12 +56,13 @@ public class SpawnController : MonoBehaviour
     public void Start()
     {
         trainList = RunManager.Instance.ActiveWagons;
+        spawnZone = GameManager.Instance.Session.GetSpawnZone();
         cam = Camera.main;
+        goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
+
         SetLevelData();
         BuildPool();
         TrySpawn();
-        goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
-
     }
 
     void Update()
@@ -79,7 +80,7 @@ public class SpawnController : MonoBehaviour
 
     void TrySpawn()
     {
-
+        Debug.Log("Can spawn: " + canSpawn);
         if (!canSpawn) return;
 
         int horde = Random.Range(1, currentlevelData.MaxHordeSpawn);

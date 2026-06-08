@@ -8,6 +8,11 @@ public class SpawnZone : MonoBehaviour
 
     [SerializeField] private float followSpeed = 5f;
 
+
+    private void Awake()
+    {
+        GameManager.Instance.Session.SetSpawnZone(this);
+    }
     public Vector3 GetRandomPoint(float positiveLimit, float negativeLimit)
     {
         Vector3 center = transform.position;

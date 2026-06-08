@@ -119,9 +119,9 @@ public class UIPlayerManager : MonoBehaviour
     {
         if (player.Inventory == null) return;
 
-            float progress = sceneRunController.Progress;
+        float progress = sceneRunController.Progress;
 
-            trainIcon.position = Vector3.Lerp(startPoint.position, endPoint.position, progress);
+        trainIcon.position = Vector3.Lerp(startPoint.position, endPoint.position, progress);
 
         if (runProgressFill != null)
         {

@@ -1,8 +1,11 @@
 ﻿
+using UnityEngine;
+
 public class GameSession
 {
     private readonly LocomotiveStatsSO baseStats;
     private readonly LocomotiveStatsSO baseMultStats;
+    private SpawnZone spawnZone;
 
     public PlayerData PlayerData { get; private set; }
     public TrainData TrainData { get; private set; }
@@ -18,6 +21,16 @@ public class GameSession
         TrainData = new TrainData(baseStats, baseMultStats);
         SessionConfig = new SessionConfig();
         StatSystem = new StatSystem(baseStats, TrainData);
+    }
+    public void SetSpawnZone(SpawnZone spawnZone)
+    {
+        this.spawnZone = spawnZone;
+        Debug.Log("Spawnzone Set!");
+    }
+    public SpawnZone GetSpawnZone()
+    {
+        Debug.Log("Spawnzone Get!");
+        return this.spawnZone;
     }
 
     public void RebuildStatsSystem()

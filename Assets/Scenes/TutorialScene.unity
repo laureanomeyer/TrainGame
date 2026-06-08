@@ -300,6 +300,86 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1001 &140549560
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 759930977801820038, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2447324895165336341, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: size.x
+      value: 1118.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2447324895165336341, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: size.y
+      value: 761.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 2447324895165336341, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: cameraTarget
+      value: 
+      objectReference: {fileID: 885095141}
+    - target: {fileID: 3006779042004875296, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+      propertyPath: m_Name
+      value: SpawnZone
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+--- !u!114 &140549561 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2447324895165336341, guid: 5c3382f24c36bf04b817dad936cb2eaf, type: 3}
+  m_PrefabInstance: {fileID: 140549560}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bc7f4e995366eb47b07afa39dc1baa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnZone
 --- !u!1 &225752540 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7237061545664046600, guid: a756fadca5d13db47840ff95f32be0f5, type: 3}
@@ -1687,6 +1767,10 @@ PrefabInstance:
       propertyPath: mapStartLocation
       value: 
       objectReference: {fileID: 1389857247}
+    - target: {fileID: 5898288466105198104, guid: 41959a3cda9846b48bd3baef70b0142e, type: 3}
+      propertyPath: spawnZone
+      value: 
+      objectReference: {fileID: 140549561}
     - target: {fileID: 7196434298501702969, guid: 41959a3cda9846b48bd3baef70b0142e, type: 3}
       propertyPath: RunUi
       value: 
@@ -1783,3 +1867,4 @@ SceneRoots:
   - {fileID: 810857708}
   - {fileID: 714236955}
   - {fileID: 727919038}
+  - {fileID: 140549560}

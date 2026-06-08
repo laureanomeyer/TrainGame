@@ -89,7 +89,6 @@ public class SpawnManager : MonoBehaviour
     {
         if (activeZones.Count == 0) 
         {
-            Debug.Log("lista vacia");
             return;
         }
 
