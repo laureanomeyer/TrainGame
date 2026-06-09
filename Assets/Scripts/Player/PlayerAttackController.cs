@@ -68,6 +68,7 @@ public class PlayerAttackController
     {
         if (waitToFire > rateOfFire)
         {
+
             if (weapon.IsReloading) return;
 
             weapon.Shoot(spawnPoint);
@@ -121,6 +122,7 @@ public class PlayerAttackController
         weaponItem = weaponObtein;
         GameManager.Instance.Session.PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
+        weapon.SetPlayerAtkReference(this);
         ReseatCadenceStats();
         weapon.RestockBullets();
         weapon.SetPool(pool);

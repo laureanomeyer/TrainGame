@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     private Transform weaponPosition;
     private float currentHealth;
     private DamageFlash flash;
+    private MeshFilter filter;
 
     private TrainRanges trainRanges;
     private (float, float) limits;
@@ -52,6 +53,8 @@ public class Enemy : MonoBehaviour
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         rb = GetComponent<Rigidbody>();
         Brain.Begin(this);
+        filter = GetComponent<MeshFilter>();
+        filter.mesh = data.mesh;
         flash = GetComponent<DamageFlash>();
         GetComponent<Renderer>().materials = data.material;
         flash.SetMaterialArray(0, data.material);

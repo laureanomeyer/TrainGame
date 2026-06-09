@@ -24,6 +24,8 @@ public class EnemyData : ScriptableObject
 
     public float gold;
 
+    public Mesh mesh;
+
     public Material[] material;
 
     public EnemyAttackSO attack;     // logica ataque
