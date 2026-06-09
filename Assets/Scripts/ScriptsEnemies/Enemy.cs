@@ -6,57 +6,64 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    EnemyData data;
     [SerializeField] GameObject weapon;
     [SerializeField] private EnemyUIHpBar healthBar;
 
     float CurrentH;
-    private DamageFlash flash;
 
+    private EnemyData data;
     private List<IWagon> targetList;
     private Transform target;
     private Transform weaponPosition;
-    private float limitZ;
-    public Vector3 KnockbackVelocity = Vector3.zero; //temporal
-    public bool IsKnocked = false; //temporal
+    private float currentHealth;
+    private DamageFlash flash;
+
+    private TrainRanges trainRanges;
+    private (float, float) limits;
 
     public IEnemyWeapon Weapon;
     public IEnemyMovement Movement => data.movement;
     public IEnemyAttack Attack => data.attack;
     public IEnemyBrain Brain => data.brain;
+    public Rigidbody rb;
     public float Speed => data.speed;
     public float MaxHealth => data.health;
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
 
     public List<IWagon> TargetList => targetList;
-
     public Transform Target => target;
     public float Range => data.range;
-    //Vector3 KnockbackVelocity => knockbackVelocity;
 
-    private float currentHealth;
+    public (float, float) Limits => limits;
+    public bool moveRight;
 
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
 
     public void Initialize(EnemyData data)
     {
+        moveRight = false;
+
         this.data = data;
         currentHealth = MaxHealth;
         weaponPosition = GetComponentInChildren<Transform>();
         var WeaponGO = Instantiate(weapon, weaponPosition);
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
+        rb = GetComponent<Rigidbody>();
         Brain.Begin(this);
         flash = GetComponent<DamageFlash>();
-        limitZ = Movement.SetLimitZ();
         GetComponent<Renderer>().materials = data.material;
-        flash.SetMaterialArray(0,data.material);
+        flash.SetMaterialArray(0, data.material);
 
-        if(healthBar != null)
+        if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
         }
+
+        trainRanges = new();
+        limits = trainRanges.SetRanges(Range, Vector3.zero);
+
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -67,9 +74,12 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         attackCooldownTimer -= Time.deltaTime;
-        CurrentH = currentHealth;
-        Movement?.Move(this, limitZ);
         Attack?.Attack(this);
+    }
+
+    void FixedUpdate()
+    {
+        Movement?.Move(this);
     }
 
     public void SetTargetList(List<IWagon> targetList)
@@ -82,33 +92,24 @@ public class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         GameEvents.EnemyHit(transform.position);
+        flash.Flash();
 
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
         }
-
-        if (currentHealth > 0)
-        {
-            flash.Flash();
-
-            IsKnocked = true;
-
-            KnockbackVelocity += -transform.forward * 6f;
-        }
-        else
+        if (currentHealth <= 0)
             Dead();
     }
 
     private void Dead()
     {
-        if( healthBar != null)
+        if (healthBar != null)
         { healthBar.Hide(); }
         GameEvents.GoldEarned(data.gold);
         GameEvents.EnemyDeath(transform.position);
+        TutorialEvents.EnemyKilled();
         ObjectPoolManager.ReturnObjectToPool(gameObject);
-
-            TutorialEvents.EnemyKilled();
     }
 
     private void DeadWallDeath()

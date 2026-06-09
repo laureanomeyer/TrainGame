@@ -2,28 +2,48 @@ using UnityEngine;
 
 public class SpawnZone : MonoBehaviour
 {
-    public Vector3 size;
-    bool registered;
+    [SerializeField] private Vector2 size;
 
-    public void Register()
+    [SerializeField] private Transform cameraTarget;
+
+    [SerializeField] private float followSpeed = 5f;
+
+    public Vector3 GetRandomPoint(float positiveLimit, float negativeLimit)
     {
-        if (registered) return;
+        Vector3 center = transform.position;
 
-        RunManager.Instance.SpawnManager.RegisterZone(this);
+        for (int i = 0; i < 20; i++)
+        {
+            Vector3 randomPos = new Vector3(Random.Range(center.x - size.x / 2, center.x + size.x / 2), 0, Random.Range(center.z - size.y / 2, center.z + size.y / 2));
 
-        registered = true;
+            // SOLO fuera del rango del tren
+            bool outsideTrainRange = randomPos.z > positiveLimit || randomPos.z < negativeLimit;
+
+            if (outsideTrainRange)
+            {
+                return randomPos;
+            }
+        }
+
+        return center;
     }
 
-    public Vector3 GetRandomPoint()
+    private void LateUpdate()
     {
-        Vector3 c = transform.position;
+        if (cameraTarget == null)
+            return;
 
-        return new Vector3(Random.Range(c.x - size.x / 2, c.x + size.x / 2), c.y, Random.Range(c.z - size.z / 2, c.z + size.z / 2));
+        Vector3 targetPos = cameraTarget.position;
+
+        targetPos.y = transform.position.y;
+
+        transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.position, size);
+
+        Gizmos.DrawWireCube(transform.position, new Vector3(size.x, 0, size.y));
     }
 }

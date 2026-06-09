@@ -2,9 +2,7 @@ using UnityEngine;
 
 public interface IEnemyMovement
 {
-
-    float SetLimitZ();
-    void Move(Enemy enemy, float limitZ);
+    void Move(Enemy enemy);
 
     void Knockback(Enemy enemy);
 }

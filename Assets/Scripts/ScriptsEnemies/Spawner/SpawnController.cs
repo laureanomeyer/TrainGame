@@ -1,12 +1,12 @@
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class SpawnManager : MonoBehaviour
+public class SpawnController : MonoBehaviour
 {
     //se setean con el level spawn data
-    float spawnInterval; 
+    float spawnInterval;
     int maxEnemies;
     bool canSpawn = true;
 
@@ -15,8 +15,9 @@ public class SpawnManager : MonoBehaviour
     [SerializeField] List<LevelSpawnsData> levelList = new();
     LevelSpawnsData currentlevelData;
 
-    List<SpawnZone> activeZones = new();
+    TrainRanges trainRanges = new TrainRanges();
 
+    [SerializeField] SpawnZone spawnZone;
 
     [Header("Coins")]
     [SerializeField] GameObject coin;
@@ -34,9 +35,8 @@ public class SpawnManager : MonoBehaviour
     float timer;
     int aliveEnemies;
 
-    Vector3 enemyDeathPosition;
 
-    private void Awake()
+    private void OnEnable()
     {
         GameEvents.OnEnemyDeath += EnemyDead;
         GameEvents.OnEnemyHit += EnemyHit;
@@ -54,6 +54,7 @@ public class SpawnManager : MonoBehaviour
         TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
     }
 
+
     public void Start()
     {
         trainList = RunManager.Instance.ActiveWagons;
@@ -62,6 +63,7 @@ public class SpawnManager : MonoBehaviour
         BuildPool();
         TrySpawn();
         goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
+
     }
 
     void Update()
@@ -76,39 +78,28 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void RegisterZone(SpawnZone zone)
-    {
-        if (!activeZones.Contains(zone))
-        {
-            activeZones.Add(zone);
-        }
-            
-    }
 
     void TrySpawn()
     {
-        if (activeZones.Count == 0) 
-        {
-            Debug.Log("lista vacia");
-            return;
-        }
 
         if (!canSpawn) return;
 
-        for (int i = 0; i < 10; i++)
+        int horde = Random.Range(1, currentlevelData.MaxHordeSpawn);
+        (float positive, float negative) = trainRanges.SetRanges(50, Vector3.zero);
+
+        Vector3 spawnPos = spawnZone.GetRandomPoint(positive, negative);
+
+        for (int i = 0; i < horde; i++)
         {
-            SpawnZone zone = activeZones[Random.Range(0, activeZones.Count)];         
+            if (IsOutsideCamera(spawnPos))
+            {
+                Spawn(spawnPos);
+            }
         }
     }
 
     void SpawnSingleEnemy(Vector3 pos, List<IWagon> targetList)
     {
-        if (activeZones.Count == 0)
-        {
-            Debug.Log("lista vacia");
-            return;
-        }
-        Debug.Log(targetList.Count);
         SpawnSingle(pos, targetList);
     }
 
@@ -139,7 +130,7 @@ public class SpawnManager : MonoBehaviour
 
         aliveEnemies++;
     }
-    void SpawnSingle(Vector3 pos, List <IWagon> target)
+    void SpawnSingle(Vector3 pos, List<IWagon> target)
     {
         if (spawnPool.Count == 0) return;
 
@@ -158,7 +149,7 @@ public class SpawnManager : MonoBehaviour
     {
         int index = GameManager.Instance.Session.SessionConfig.CurrentLevel;
 
-        if (index > levelList.Count-1)
+        if (index > levelList.Count - 1)
             currentlevelData = levelList.Last();
         else
             currentlevelData = levelList[index];
@@ -184,20 +175,18 @@ public class SpawnManager : MonoBehaviour
         coinScript.SetTarget(goTo);
     }
 
-
     void EnemyDead(Vector3 position)
     {
         SpawCoin(position, goldBox);
         aliveEnemies--;
     }
 
-    void SpawnParticles(Vector3 position) 
+    void SpawnParticles(Vector3 position)
     {
         ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
     }
 
-
-    void EnemyHit(Vector3 position) 
+    void EnemyHit(Vector3 position)
     {
         SpawnParticles(position);
     }

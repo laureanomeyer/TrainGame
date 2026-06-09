@@ -86,7 +86,6 @@ public class MapManager : MonoBehaviour
 
         GameObject tile = Instantiate(tilePrefab, spawnPosition, rotation);
         MapTile mapTile = tile.GetComponent<MapTile>();
-        mapTile.GetComponentInChildren<SpawnZone>()?.Register();
 
         if (tilesMap.Count == 0)
         {

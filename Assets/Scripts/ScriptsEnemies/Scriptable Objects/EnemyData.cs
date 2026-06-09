@@ -2,8 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum TargetType { Random, Passives, Locomotive, Gold, Actives }
-public enum RangeType { Close, Medium, Long }
-public enum AttackType { Shoot, Explosion, None}
+public enum RangeType
+{
+    Close = 15,
+    Medium = 30,
+    Long = 45
+}
+public enum AttackType { Shoot, Explosion, None }
 
 [CreateAssetMenu(menuName = "Enemy/Data")]
 public class EnemyData : ScriptableObject
@@ -35,17 +40,16 @@ public class EnemyData : ScriptableObject
         switch (rangeType)
         {
             case RangeType.Close:
-                range = 5f;
+                range = (float)RangeType.Close;
                 break;
 
             case RangeType.Medium:
-                range = 20f;
+                range = (float)RangeType.Medium;
                 break;
 
             case RangeType.Long:
-                range = 30f;
+                range = (float)RangeType.Long;
                 break;
         }
     }
 }
- 
