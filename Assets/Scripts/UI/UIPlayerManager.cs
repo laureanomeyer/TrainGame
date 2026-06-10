@@ -12,6 +12,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private GameObject fuelIndicator;
     [SerializeField] private GameObject fuelMaxCapacityIndicator;
     [SerializeField] private Image shieldImage;
+    [SerializeField] private Image fuelImage;
     [SerializeField] private GameObject shieldIndicator;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject lowFuel;
@@ -66,7 +67,8 @@ public class UIPlayerManager : MonoBehaviour
             fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, currentFuel));
 
             var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
-            shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -80, currentShield));
+            shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentShield));
+            shieldImage.fillAmount = currentShield;
 
             if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 3)
             {
@@ -82,7 +84,8 @@ public class UIPlayerManager : MonoBehaviour
             } 
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -80, currentCapacity));
+            fuelImage.fillAmount = currentCapacity;
+            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentCapacity));
         }
     }
 
