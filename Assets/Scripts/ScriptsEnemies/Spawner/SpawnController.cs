@@ -91,6 +91,8 @@ public class SpawnController : MonoBehaviour
             if (IsOutsideCamera(spawnPos))
             {
                 Spawn(spawnPos);
+                spawnPos = spawnZone.GetRandomPoint(positive, negative);
+
             }
         }
     }
