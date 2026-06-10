@@ -83,13 +83,10 @@ public class SpawnController : MonoBehaviour
     {
 
         if (!canSpawn) return;
-
-        int horde = Random.Range(1, currentlevelData.MaxHordeSpawn);
         (float positive, float negative) = trainRanges.SetRanges(50, Vector3.zero);
-
         Vector3 spawnPos = spawnZone.GetRandomPoint(positive, negative);
 
-        for (int i = 0; i < horde; i++)
+        for (int i = 0; i < currentlevelData.MaxHordeSpawn; i++)
         {
             if (IsOutsideCamera(spawnPos))
             {
