@@ -23,6 +23,7 @@ public class BulletScript : MonoBehaviour, IBullet
     private BoxCollider bc;
     private MeshFilter meshFilter;
     private Renderer render;
+    private TrailRenderer tr;
 
     private TrainData dataRef;
 
@@ -35,7 +36,7 @@ public class BulletScript : MonoBehaviour, IBullet
         rb = GetComponent<Rigidbody>();
         bc = GetComponent<BoxCollider>();
         render = GetComponent<Renderer>();
-
+        tr = GetComponent<TrailRenderer>();
     }
 
     void Update()
@@ -58,6 +59,7 @@ public class BulletScript : MonoBehaviour, IBullet
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;
+        tr.emitting = true;
         isActive = true;
     }
 
@@ -80,6 +82,8 @@ public class BulletScript : MonoBehaviour, IBullet
     {
         if (!isActive) return;
 
+        tr.emitting = true;
+        tr.Clear();
         isActive = false;
         bulletPool.Release(gameObject);
     }
