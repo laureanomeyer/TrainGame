@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class CoalBox: IInteractable
+public class CoalBox: IInteractableWithInventory
 {
     private bool canInteract = true;
 

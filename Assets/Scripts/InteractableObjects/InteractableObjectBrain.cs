@@ -5,7 +5,7 @@ public class InteractableObjectBrain : MonoBehaviour
 {
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private InteractableType behaviorType;
-    private IInteractable objectBehavior;
+    private IInteractableWithInventory objectBehavior;
     InteractInputHandler inputHandler;
     PlayerBrain playerRef;
 

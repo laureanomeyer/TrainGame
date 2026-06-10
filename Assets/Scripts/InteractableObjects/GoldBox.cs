@@ -1,4 +1,4 @@
-﻿public class GoldBox : IInteractable
+﻿public class GoldBox : IInteractableWithInventory
 {
     private bool canInteract = true;
 

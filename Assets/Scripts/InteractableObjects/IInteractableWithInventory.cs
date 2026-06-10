@@ -1,5 +1,5 @@
 ﻿
-public interface IInteractable
+public interface IInteractableWithInventory
 {
     void Interact(IInventory player);
 

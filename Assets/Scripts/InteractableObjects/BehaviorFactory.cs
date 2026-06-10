@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 public static class BehaviorFactory
 {
-    public static IInteractable Create (InteractableType type)
+    public static IInteractableWithInventory Create (InteractableType type)
     {
         return type switch
         {
