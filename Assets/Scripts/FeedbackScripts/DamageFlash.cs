@@ -30,8 +30,7 @@ public class DamageFlash : MonoBehaviour
         yield return new WaitForSeconds(flashDuration);
 
        
-        for (int i = 0; i < rend.Length; i++)
-            rend[i].materials = originalMaterials[i];
+        ResetMaterials();
     
     }
 
@@ -48,5 +47,10 @@ public class DamageFlash : MonoBehaviour
     {
         if (rendererIndex >= 0 && rendererIndex < originalMaterials.Length)
             originalMaterials[rendererIndex] = materials;
+    }
+    public void ResetMaterials()
+    {
+        for (int i = 0; i < rend.Length; i++)
+            rend[i].materials = originalMaterials[i];
     }
 }

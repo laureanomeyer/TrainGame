@@ -109,6 +109,7 @@ public class Enemy : MonoBehaviour
     {
         if (healthBar != null)
         { healthBar.Hide(); }
+        flash.ResetMaterials();
         GameEvents.GoldEarned(data.gold);
         GameEvents.EnemyDeath(transform.position);
         TutorialEvents.EnemyKilled();
@@ -120,6 +121,7 @@ public class Enemy : MonoBehaviour
         if (healthBar != null)
         { healthBar.Hide(); }
         ObjectPoolManager.ReturnObjectToPool(gameObject);
+        flash.ResetMaterials();
     }
 
     //---------------------GIZMOS-------------------------
