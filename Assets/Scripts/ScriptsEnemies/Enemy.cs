@@ -1,12 +1,14 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject weapon;
+    [SerializeField] GameObject cowboyRender;
     [SerializeField] private EnemyUIHpBar healthBar;
 
     float CurrentH;
@@ -53,10 +55,8 @@ public class Enemy : MonoBehaviour
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         rb = GetComponent<Rigidbody>();
         Brain.Begin(this);
-        filter = GetComponent<MeshFilter>();
-        filter.mesh = data.mesh;
+        cowboyRender = data.SMR;
         flash = GetComponent<DamageFlash>();
-        GetComponent<Renderer>().materials = data.material;
         flash.SetMaterialArray(0, data.material);
 
         if (healthBar != null)
@@ -126,9 +126,6 @@ public class Enemy : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, Range);
-
         if (target != null)
         {
             Gizmos.color = Color.yellow;

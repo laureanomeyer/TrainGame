@@ -24,7 +24,7 @@ public class EnemyData : ScriptableObject
 
     public float gold;
 
-    public Mesh mesh;
+    public GameObject SMR;
 
     public Material[] material;
 
