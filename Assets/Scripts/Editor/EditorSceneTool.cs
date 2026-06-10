@@ -1,4 +1,4 @@
-
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor.Toolbars;
 using UnityEditor;
@@ -32,3 +32,4 @@ public class EditorSceneTool
         EditorSceneManager.OpenScene(path);
     }
 }
+#endif
