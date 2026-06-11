@@ -8,10 +8,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject weapon;
-    [SerializeField] GameObject cowboyRender;
+    [SerializeField] SkinnedMeshRenderer enemyRend;
+    [SerializeField] SkinnedMeshRenderer horseRend;
     [SerializeField] private EnemyUIHpBar healthBar;
-
-    float CurrentH;
 
     private EnemyData data;
     private List<IWagon> targetList;
@@ -19,7 +18,6 @@ public class Enemy : MonoBehaviour
     private Transform weaponPosition;
     private float currentHealth;
     private DamageFlash flash;
-    private MeshFilter filter;
 
     private TrainRanges trainRanges;
     private (float, float) limits;
@@ -54,19 +52,18 @@ public class Enemy : MonoBehaviour
         var WeaponGO = Instantiate(weapon, weaponPosition);
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         rb = GetComponent<Rigidbody>();
+
         Brain.Begin(this);
-        cowboyRender = data.SMR;
+
+        if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
+        if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
+        if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
+
         flash = GetComponent<DamageFlash>();
         flash.SetMaterialArray(0, data.material);
 
-        if (healthBar != null)
-        {
-            healthBar.SetHealth(currentHealth, MaxHealth);
-        }
-
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
-
     }
 
     public void ResetAttackCooldown(float cooldown)

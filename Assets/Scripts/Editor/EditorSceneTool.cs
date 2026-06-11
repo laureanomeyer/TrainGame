@@ -29,6 +29,7 @@ public class EditorSceneTool
 
     private static void OpenScene(string path)
     {
+        EditorSceneManager.SaveOpenScenes();
         EditorSceneManager.OpenScene(path);
     }
 }
