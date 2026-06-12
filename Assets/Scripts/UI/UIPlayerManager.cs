@@ -13,6 +13,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private GameObject fuelMaxCapacityIndicator;
     [SerializeField] private Image shieldImage;
     [SerializeField] private Image fuelImage;
+    [SerializeField] private GameObject bellImage;
     [SerializeField] private GameObject shieldIndicator;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject lowFuel;
@@ -40,6 +41,7 @@ public class UIPlayerManager : MonoBehaviour
         locomotive = RunManager.Instance.LocomotiveBrain;
         if (lowFuel != null)
             lowFuel.SetActive(false);
+        if (bellImage) bellImage.SetActive(false);
     }
     private void OnEnable()
     {
@@ -131,6 +133,8 @@ public class UIPlayerManager : MonoBehaviour
         {
             runProgressFill.fillAmount = progress;
         }
+
+        bellImage.SetActive(progress >= 0.75f);
 
         if(currentLevel != null) currentLevel.text = new string("Nivel actual: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
 
