@@ -4,8 +4,6 @@ using UnityEngine.SceneManagement;
 
 public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 {
-    [SerializeField] private Material materialDeVagonDestruido;
-    [SerializeField] private Renderer rendererWagon;
     [SerializeField] public Transform TailRef;
 
     [SerializeField] private float CM;
@@ -86,11 +84,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (destroyed) return;
 
         destroyed = true;
-
-        if (rendererWagon != null && materialDeVagonDestruido != null)
-        {
-            rendererWagon.material = materialDeVagonDestruido;
-        }
 
         GameManager.Instance.Defeat();
     }
