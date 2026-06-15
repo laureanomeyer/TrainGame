@@ -1,13 +1,17 @@
-﻿public class GoldBox : IInteractableWithInventory
+﻿using UnityEngine;
+
+public class GoldBox : IInteractableWithInventory
 {
     private bool canInteract = true;
+    BoxCollider collider;
 
     private float currentGold;
     public float CurrentGold => currentGold;
 
-    public GoldBox()
+    public GoldBox(BoxCollider collider)
     {
         currentGold = 0;
+        this.collider = collider;
         TutorialEvents.OnEnableGoldBox += SetCanInteract;
     }
 
@@ -38,6 +42,7 @@
     public void SetCanInteract(bool canInteract)
     {
         this.canInteract = canInteract;
+        collider.enabled = canInteract;
     }
 
     public void OnDestroyObject() 

@@ -5,9 +5,16 @@ public class FuelCharger: MonoBehaviour
 {
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private LocomotiveBrain locomotive;
+    [SerializeField] private BoxCollider coll;
     InteractInputHandler inputHandler;
     PlayerBrain playerRef;
 
+    private bool canInteract = true;
+
+    private void Awake()
+    {
+        TutorialEvents.OnEnableCoalBox += SetActive;
+    }
     void Start()
     {
         inputActions.Enable();
@@ -17,13 +24,14 @@ public class FuelCharger: MonoBehaviour
 
     void OnInteract()
     {
+        if (!canInteract) return;
         if (playerRef != null)
             AddFuel();
-        
     }
    
     private void AddFuel()
     {
+        if (!canInteract) return;
         if (playerRef.Inventory.HasCoal) 
         {
             locomotive.AddFuel();
@@ -54,10 +62,19 @@ public class FuelCharger: MonoBehaviour
             playerRef = null;
         }
     }
+
+    void SetActive(bool active)
+    {
+        canInteract = active;
+        coll.enabled = active;
+    }
     private void OnDestroy()
     {
         inputHandler.Dispose();
+        TutorialEvents.OnEnableCoalBox -= SetActive;
     }
+
+
 
 }
 

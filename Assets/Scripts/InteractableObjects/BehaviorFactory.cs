@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
+﻿using UnityEngine;
 
 public static class BehaviorFactory
 {
-    public static IInteractableWithInventory Create (InteractableType type)
+    public static IInteractableWithInventory Create (InteractableType type, BoxCollider collider)
     {
         return type switch
         {
-            InteractableType.GoldBox => new GoldBox(),
-            InteractableType.CoalBox => new CoalBox(),
+            InteractableType.GoldBox => new GoldBox(collider),
+            InteractableType.CoalBox => new CoalBox(collider),
 
             _ => null
         };

@@ -1,6 +1,4 @@
-using HUDIndicator;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InteractionTrigger : MonoBehaviour
 {
