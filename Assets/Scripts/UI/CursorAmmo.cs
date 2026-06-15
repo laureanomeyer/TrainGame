@@ -19,6 +19,16 @@ public class CursorAmmo : MonoBehaviour
     private float reloadTimer;
     private bool isReloading;
 
+    [Header("Crosshair Dinamic Size")]
+    [SerializeField] private float normalScale = 1f;
+    [SerializeField] private float expandedScale = 1.5f;
+    [SerializeField] private float shotCooldownDuration = 0.25f;
+    [SerializeField] private float scaleSmoothSpeed = 12f;
+
+    private float shotCooldownTimer;
+    private bool isShotCooldown;
+    private float targetScale;
+
     private void Awake()
     {
         cursorRect = cursorImage.rectTransform;
@@ -28,12 +38,20 @@ public class CursorAmmo : MonoBehaviour
 
         GameEvents.OnAmmoChanged += UpdateText;
         GameEvents.OnReloadStarted += StartReloadFill;
+        GameEvents.OnShoot += StartShootCrosshairAnimation;
         GameEvents.OnShowCursor += SetCursorVisibility;
         TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
     }
+
     private void Start()
     {
         cursorImage.fillAmount = 1;
+
+        targetScale = normalScale;
+
+        cursorRect.localScale = Vector3.one * normalScale;
+        cursorCenterRect.localScale = Vector3.one * normalScale;
+
     }
     private void LateUpdate()
     {
@@ -49,13 +67,55 @@ public class CursorAmmo : MonoBehaviour
         cursorRect.localPosition = localPoint;
         cursorCenterRect.localPosition = localPoint;
         ammoRect.localPosition = localPoint + (Vector2)offset;
+        
+        UpdateCrosshairScale();
+        UpdateShootCrosshairCooldown();
 
         if (!isReloading) return;
 
         reloadTimer += Time.deltaTime;
-        cursorImage.fillAmount = reloadTimer / reloadDuration;
+
+        float cooldownProgress = reloadTimer / reloadDuration;
+
+        cursorImage.fillAmount = cooldownProgress;
 
         if (reloadTimer >= reloadDuration) CancelReloadFill();
+    }
+
+    private void StartShootCrosshairAnimation(float rateOfFire)
+    {
+        shotCooldownDuration = rateOfFire;
+
+        shotCooldownTimer = 0;
+        isShotCooldown = true;
+
+        targetScale = expandedScale;
+    }
+
+    private void UpdateShootCrosshairCooldown()
+    {
+        if (!isShotCooldown) return;
+
+        shotCooldownTimer += Time.deltaTime;
+
+        float progress = shotCooldownTimer / shotCooldownDuration;
+        progress = Mathf.Clamp01(progress);
+
+        targetScale = Mathf.Lerp(expandedScale, normalScale, progress);
+
+        if (progress >= 1f)
+        {
+            isShotCooldown = false;
+            targetScale = normalScale;
+        }
+    }
+
+    private void UpdateCrosshairScale()
+    {
+        Vector3 desiredScale = Vector3.one * targetScale;
+
+        cursorRect.localScale = Vector3.Lerp(cursorRect.localScale, desiredScale, Time.deltaTime * scaleSmoothSpeed);
+        cursorCenterRect.localScale = Vector3.Lerp(cursorCenterRect.localScale, desiredScale, Time.deltaTime * scaleSmoothSpeed);
     }
 
     void UpdateText(float currentAmmo)
@@ -87,6 +147,7 @@ public class CursorAmmo : MonoBehaviour
     {
         GameEvents.OnAmmoChanged -= UpdateText;
         GameEvents.OnReloadStarted -= StartReloadFill;
+        GameEvents.OnShoot -= StartShootCrosshairAnimation;
         GameEvents.OnShowCursor -= SetCursorVisibility;
         TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }

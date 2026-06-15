@@ -48,7 +48,7 @@ public class CameraShakes : MonoBehaviour
         noise.AmplitudeGain = 0;
     }
 
-    public void ShootCameraShake()
+    public void ShootCameraShake(float rateOfFire)
     {
         StopAllCoroutines();
         StartCoroutine(DoCameraShake(shootTimer, shootIntensity));

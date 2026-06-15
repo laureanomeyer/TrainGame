@@ -10,7 +10,7 @@ public static class GameEvents
 
     public static event Action OnChangeTrainData;
 
-    public static event Action OnShoot;
+    public static event Action<float> OnShoot;
 
     public static event Action<float> OnReloadStarted;
 
@@ -64,9 +64,9 @@ public static class GameEvents
         OnChangeTrainData?.Invoke();
     }
 
-    public static void ShootPerformed()
+    public static void ShootPerformed(float rateOfFire)
     {
-        OnShoot?.Invoke();
+        OnShoot?.Invoke(rateOfFire);
     }
     public static void ReloadStarted(float reloadTimer)
     {
