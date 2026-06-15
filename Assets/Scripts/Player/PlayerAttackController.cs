@@ -72,7 +72,7 @@ public class PlayerAttackController
             if (weapon.IsReloading) return;
 
             weapon.Shoot(spawnPoint);
-            GameEvents.ShootPerformed();
+            GameEvents.ShootPerformed(rateOfFire);
             GameEvents.AmmoChanged(weapon.CurrentAmmunition);
             waitToFire = 0;
         }
