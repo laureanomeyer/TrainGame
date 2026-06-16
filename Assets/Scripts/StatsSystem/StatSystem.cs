@@ -20,6 +20,7 @@ public class StatSystem
     {
         modifiers.Add(mod);
         OnStatChanged?.Invoke(mod.StatType, GetStat(mod.StatType));
+        GameEvents.StatChanged();
     }
 
     public void RemoveModifiersFromSource(object source)
@@ -66,7 +67,10 @@ public class StatSystem
     public void RecalculateAll()
     {
         foreach (StatType type in Enum.GetValues(typeof(StatType)))
+        {
             OnStatChanged?.Invoke(type, GetStat(type));
+            GameEvents.StatChanged();
+        }
     }
 
     private float GetBase(StatType type) => type switch

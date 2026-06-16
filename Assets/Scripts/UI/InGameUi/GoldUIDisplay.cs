@@ -20,12 +20,12 @@ public class GoldUIDisplay : MonoBehaviour
 
     public void UpdatedGold(float gold)
     {
-        GoldTextUI.text = "Oro total: " + gold;
+        GoldTextUI.text = gold.ToString();
     }
 
     public void UpdatedGoldMesseg(float gold)
     {
-        GoldTextUI.text = "Oro total: " + gold;
+        GoldTextUI.text = gold.ToString();
         PlayFade();
     }
 

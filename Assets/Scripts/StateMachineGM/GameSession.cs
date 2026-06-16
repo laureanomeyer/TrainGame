@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 public class GameSession
 {
     private readonly LocomotiveStatsSO baseStats;
@@ -23,7 +25,9 @@ public class GameSession
     public void RebuildStatsSystem()
     {
         StatSystem = new StatSystem(baseStats, TrainData);
+        GameEvents.StatChanged();
     }
+
     public void Reset()
     {
         this.PlayerData = new PlayerData();

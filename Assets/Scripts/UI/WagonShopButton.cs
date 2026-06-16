@@ -84,7 +84,6 @@ public class WagonShopButton : MonoBehaviour
         {
             displayTrain.AddWagon(currentWagonInStock);
             GameManager.Instance.Session.RebuildStatsSystem();
-
             SetWagonInStock();
 
             if (wagonShopParticleSystem)

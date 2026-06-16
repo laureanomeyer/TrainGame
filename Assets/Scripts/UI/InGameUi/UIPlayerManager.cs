@@ -7,16 +7,16 @@ public class UIPlayerManager : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerBrain player;
 
-
-    [Header("Locomotive UI")]
+    [Header("Fuel UI")]
     [SerializeField] private GameObject fuelIndicator;
     [SerializeField] private GameObject fuelMaxCapacityIndicator;
-    [SerializeField] private Image shieldImage;
     [SerializeField] private Image fuelImage;
-    [SerializeField] private GameObject bellImage;
-    [SerializeField] private GameObject shieldIndicator;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject lowFuel;
+
+    [Header("Shields UI")]
+    [SerializeField] private Image shieldImage;
+    [SerializeField] private GameObject shieldIndicator;
 
     [Header("Inventory UI")]
     [SerializeField] private Image coalImage;
@@ -24,6 +24,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private TMP_Text goldText;
 
     [Header("Run Progress")]
+    [SerializeField] private GameObject bellImage;
     [SerializeField] private SceneRunController sceneRunController;
     [SerializeField] private Image runProgressFill;
     [SerializeField] private RectTransform trainIcon;
@@ -118,7 +119,7 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateGoldUI(float currentGold)
     {
-            goldText.text = "Oro actual: " + currentGold; 
+            goldText.text = currentGold.ToString(); 
     }
 
     void UpdateRunProgress()

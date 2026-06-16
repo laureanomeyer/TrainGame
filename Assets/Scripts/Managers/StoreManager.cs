@@ -46,7 +46,8 @@ public class StoreManager : MonoBehaviour
 
     public void ChangeWagonList()
     {
-         GameManager.Instance.Session.TrainData.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+        GameManager.Instance.Session.TrainData.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+        GameManager.Instance.Session.RebuildStatsSystem();
     }
 
     public void ExitStore()

@@ -44,6 +44,8 @@ public static class GameEvents
 
     public static event Action OnInteractPressed;
 
+    public static event Action OnStatChanged;
+
     public static void GoldEarned(float amount)
     {
         OnGoldEarned?.Invoke(amount);
@@ -143,4 +145,8 @@ public static class GameEvents
         OnInteractPressed?.Invoke();
     }
 
+    public static void StatChanged()
+    {
+        OnStatChanged?.Invoke();
+    }
 }
