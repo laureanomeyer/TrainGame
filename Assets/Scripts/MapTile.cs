@@ -5,6 +5,7 @@ public class MapTile : MonoBehaviour
     [SerializeField] private bool isMapHead;
     [SerializeField] private Transform head;
     [SerializeField] private Transform tail;
+    [SerializeField] private MeshRenderer mesh;
     private float offset;
     private Vector3 offsetVect;
     public Transform Tail => tail;
@@ -20,6 +21,14 @@ public class MapTile : MonoBehaviour
         offset = Vector3.Distance(transform.position, tail.position);
         offsetVect = new Vector3(offset, 0, 0);
         //Debug.Log($"offset: {offset} | tail local: {tail.localPosition} | tail world: {tail.position}");
+    }
+    public void SetUpWithMesh(Transform followTransform, MeshRenderer mesh)
+    {
+        head = followTransform;
+        isMapHead = false;
+
+        if(mesh != null)
+            this.mesh = mesh;
     }
     public void SetUp(Transform followTransform)
     {
