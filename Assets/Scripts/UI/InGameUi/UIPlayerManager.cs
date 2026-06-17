@@ -43,6 +43,7 @@ public class UIPlayerManager : MonoBehaviour
         if (lowFuel != null)
             lowFuel.SetActive(false);
         if (bellImage) bellImage.SetActive(false);
+        SetLevelText();
     }
     private void OnEnable()
     {
@@ -136,8 +137,10 @@ public class UIPlayerManager : MonoBehaviour
         }
 
         bellImage.SetActive(progress >= 0.75f);
+    }
 
-        if(currentLevel != null) currentLevel.text = new string("Nivel actual: " + GameManager.Instance.Session.SessionConfig.CurrentLevel);
-
+    void SetLevelText()
+    {
+        if (currentLevel != null) currentLevel.text = "Nivel: " + GameManager.Instance.Session.SessionConfig.CurrentLevel;
     }
 }

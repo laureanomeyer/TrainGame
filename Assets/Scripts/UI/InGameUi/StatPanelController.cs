@@ -43,16 +43,20 @@ public class StatPanelController : MonoBehaviour
 
     private void SetupTexts()
     {
-       /* hpText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp) * 100 + "%";
-        shieldsText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense) * 100 + "%";
-        damageText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier) * 100 + "%";
-        attackSpeedText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed) * 100 + "%";
-        bonusGoldText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier) * 100 + "%";*/
+        /* hpText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp) * 100 + "%";
+         shieldsText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense) * 100 + "%";
+         damageText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier) * 100 + "%";
+         attackSpeedText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed) * 100 + "%";
+         bonusGoldText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier) * 100 + "%";*/
 
-        hpText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp).ToString();
-        shieldsText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense).ToString();
-        damageText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier).ToString();
-        attackSpeedText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed).ToString();
-        bonusGoldText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier).ToString();
+        hpText.text = FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp));
+        shieldsText.text = FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense));
+        damageText.text = FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier));
+        attackSpeedText.text = FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed));
+        bonusGoldText.text = FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier));
+    }
+    private string FormatStat(float value)
+    {
+        return (value % 1 == 0) ? value.ToString("F0") : value.ToString("F1");
     }
 }
