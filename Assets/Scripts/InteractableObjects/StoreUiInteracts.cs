@@ -1,11 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class StoreUiInteracts : MonoBehaviour
 {
     [SerializeField] private GameObject uiToShow;
     [SerializeField] private GameObject uiContinueConfirmation;
     [SerializeField] private GameObject uiUpgrades;
+
+    [SerializeField] private Button closeButton;
+
     private PlayerBrain playerBrain;
 
     private bool playerInZone;
@@ -13,11 +17,13 @@ public class StoreUiInteracts : MonoBehaviour
     private void OnEnable()
     {
         GameEvents.OnInteractPressed += OnPlayerInteract;
+        closeButton.onClick.AddListener(DeactivateUI);
     }
 
     private void OnDisable()
     {
         GameEvents.OnInteractPressed -= OnPlayerInteract;
+        closeButton.onClick.RemoveListener(DeactivateUI);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,6 +36,7 @@ public class StoreUiInteracts : MonoBehaviour
         }
 
         playerInZone = true;
+
         GameEvents.ShowInteract();
     }
 
@@ -46,11 +53,26 @@ public class StoreUiInteracts : MonoBehaviour
         GameEvents.ShowCursor(true);
     }
 
+    private void DeactivateUI()
+    {
+        playerBrain.SetCanAttack(true);
+        playerBrain.SetCanMove(true);
+
+        uiToShow.SetActive(false);
+        uiContinueConfirmation.SetActive(false);
+        uiUpgrades.SetActive(false);
+
+        GameEvents.ShowInteract();
+        GameEvents.ShowCursor(true);
+    }
+
     private void OnPlayerInteract()
     {
         if (!playerInZone) return;
         uiToShow.SetActive(true);
+
         playerBrain.SetCanAttack(false);
+        playerBrain.SetCanMove(false);
 
         GameEvents.ShowCursor(false);
     }

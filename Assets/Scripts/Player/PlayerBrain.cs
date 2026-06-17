@@ -25,12 +25,11 @@ public class PlayerBrain : MonoBehaviour
     private PlayerMovementController playerMovementController;
     private PlayerInteractions playerInteractionsController;
     private PlayerAttackController playerAttackController;
-    private InputAction repairAction;
+    private InputAction attackAction;
 
     private bool IsRepairing = false;
     private bool canAttack = true;
 
-    public bool playerCanMove => playerMovementController.CanMove;
     public PlayerInventory Inventory => inventory;
     public LookObjectToMouse FaceMouse => faceMouse;
     public InteractionUIManager InteractionUIManager => interactionUIManager;
@@ -45,9 +44,9 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController = new PlayerInteractions(this, playerMovementController, faceMouse, interactionUIManager, repairCapacity);
         playerAttackController = new PlayerAttackController(spawnPoint, weaponItem, GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>(), this, faceMouse);
 
-        repairAction = InputSystem.actions.FindAction("Attack");
-        repairAction.performed += ActiveAttack;
-        repairAction.canceled += DeactiveAttack;
+        attackAction = InputSystem.actions.FindAction("Attack");
+        attackAction.performed += ActiveAttack;
+        attackAction.canceled += DeactiveAttack;
 
         TutorialEvents.OnSetAttackEnabled += SetCanAttack;
         GameEvents.OnActivateUi += SetCanAttack;
@@ -109,9 +108,15 @@ public class PlayerBrain : MonoBehaviour
     {
         playerAttackController.DeactiveAttack();
     }
+
     public void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        playerMovementController.SetCanMove(canMove);
     }
 
     public void SetIsRepairing(bool canAttack)
@@ -137,8 +142,8 @@ public class PlayerBrain : MonoBehaviour
     private void OnDestroy()
     {
         playerInteractionsController.Cleanup();
-        repairAction.performed -= ActiveAttack;
-        repairAction.canceled -= DeactiveAttack;
+        attackAction.performed -= ActiveAttack;
+        attackAction.canceled -= DeactiveAttack;
         GameEvents.OnActivateUi -= SetCanAttack;
         TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
         GameEvents.OnShowInteract -= ShowInteract;

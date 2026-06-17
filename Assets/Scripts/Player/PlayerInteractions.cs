@@ -226,6 +226,7 @@ public class PlayerInteractions
         buttonIsHold = false;
         playerBrain.SetIsRepairing(false);
         playerMovementController.SetCanMove(true);
+        playerMovementController.SetCanRotate(true);
     }
 
     void Repair()
@@ -237,6 +238,7 @@ public class PlayerInteractions
             currentWagon.Repair(repairCapacity);
             playerBrain.SetIsRepairing(true);
             playerMovementController.SetCanMove(false);
+            playerMovementController.SetCanRotate(false);
         }
     }
 

@@ -26,6 +26,8 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     [Header("Self")]
     [SerializeField] private GameObject self;
 
+    [SerializeField] private GameObject uiRunSelector;
+
     [Header("Level Upgrades")]
     [SerializeField] private LevelLocomotivesUpgradesSO[] upgradesLevel;
     private Dictionary <int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary;
@@ -134,10 +136,8 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     public void DeactivateUpgradesUi()
     {
         self.SetActive(false);
-    }
-    public void ActivateUpgradesUi()
-    {
-        self.SetActive(true);
+        uiRunSelector.SetActive(true);
+
     }
 
     public void ChangeUsedUpgrades()

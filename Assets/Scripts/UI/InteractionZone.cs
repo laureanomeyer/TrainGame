@@ -10,6 +10,7 @@ public class InteractionZone : MonoBehaviour
 
     private bool playerInZone;
     private InteractionUIManager ui;
+    private PlayerBrain playerBrain;
     private bool isOpen = false;
 
     private void OnEnable()
@@ -27,6 +28,7 @@ public class InteractionZone : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         if (!other.TryGetComponent(out PlayerBrain playerBrain)) return;
 
+        this.playerBrain = playerBrain;
         ui = playerBrain.InteractionUIManager;
         playerInZone = true;
         GameEvents.ShowInteract();
@@ -40,6 +42,8 @@ public class InteractionZone : MonoBehaviour
         ui?.HideAll();
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
+
+        playerBrain = null;
         ui = null;
         GameEvents.HideInteract();
         GameEvents.ShowCursor(true);
@@ -51,6 +55,9 @@ public class InteractionZone : MonoBehaviour
         ui?.HideAll();
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
+
+        playerBrain.SetCanMove(true);
+
         GameEvents.ShowInteract();
         GameEvents.ShowCursor(true);
     }
@@ -74,6 +81,8 @@ public class InteractionZone : MonoBehaviour
 
             if (optionalPanel != null)
                 optionalPanel.SetActive(true);
+
+            playerBrain.SetCanMove(false);
 
             GameEvents.HideInteract();
             GameEvents.ShowCursor(false);
