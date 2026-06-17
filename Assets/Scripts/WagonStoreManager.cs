@@ -13,6 +13,7 @@ public class WagonStoreManager : MonoBehaviour
 
     [SerializeField] public Button buyButton;
     [SerializeField] public Button rerollButton;
+    [SerializeField] public Button closeButton;
 
     private int currentLevel;
     public int Level => currentLevel;

@@ -45,6 +45,16 @@ public class InteractionZone : MonoBehaviour
         GameEvents.ShowCursor(true);
     }
 
+    public void DeactivateUI()
+    {
+        isOpen = false;
+        ui?.HideAll();
+        if (optionalPanel != null)
+            optionalPanel.SetActive(false);
+        GameEvents.ShowInteract();
+        GameEvents.ShowCursor(true);
+    }
+
     private void OnPlayerInteract()
     {
         if (!playerInZone || ui == null) return;

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WeaponShopButtonManager : MonoBehaviour
 {
@@ -17,10 +18,14 @@ public class WeaponShopButtonManager : MonoBehaviour
     [SerializeField] public WeaponInStocSO[] secondSlotWeapons;
     [SerializeField] public WeaponInStocSO[] thirdSlotWeapons;
 
+    [SerializeField] private Button closeButton;
+    [SerializeField] private InteractionZone interacZone;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
        PlayerBrain playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBrain>();
+        closeButton.onClick.AddListener(CloseButton);
 
        for (int i = 0; i < shopButtons.Length; i++)
        {
@@ -38,6 +43,16 @@ public class WeaponShopButtonManager : MonoBehaviour
             button.Level = level;
             button.SetValuesInStock();
        }
+    }
+
+    private void OnDestroy()
+    {
+        closeButton.onClick.RemoveListener(CloseButton);
+    }
+
+    private void CloseButton()
+    {
+        interacZone.DeactivateUI();
     }
 
     public void UpdateButtons(IShopButton button)

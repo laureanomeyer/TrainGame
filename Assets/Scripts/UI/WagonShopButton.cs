@@ -34,9 +34,13 @@ public class WagonShopButton : MonoBehaviour
 
     private TextMeshProUGUI textUI;
 
+    private InteractionZone interacZone;
+
     private void Start()
     {
         textUI = storeManager.descriptionTextUI;
+
+        interacZone = GetComponent<InteractionZone>();
 
         foreach (var collection in wagonsCollectionSOs)
         {
@@ -127,12 +131,19 @@ public class WagonShopButton : MonoBehaviour
         storeManager.rerollButton.interactable = false;
     }
 
+    public void CloseFuction()
+    {
+        interacZone.DeactivateUI();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             storeManager.rerollButton.onClick.AddListener(UsedReroll);
             storeManager.buyButton.onClick.AddListener(Interact);
+
+            storeManager.closeButton.onClick.AddListener(CloseFuction);
 
             //Debug.Log(this.gameObject);
         }
@@ -144,6 +155,8 @@ public class WagonShopButton : MonoBehaviour
         {
             storeManager.rerollButton.onClick.RemoveListener(UsedReroll);
             storeManager.buyButton.onClick.RemoveListener(Interact);
+
+            storeManager.closeButton.onClick.RemoveListener(CloseFuction);
 
             //Debug.Log(this.gameObject);
         }
