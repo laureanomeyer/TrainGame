@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
         return Session.SessionConfig.CurrentLevel >= lastStation;
     }
 
+    public void EnterTransitionState()
+    {
+        CurrentState = GameState.Transition;
+    }
+
     public void GoToStore()
     {
         if (isChangingScene) return;

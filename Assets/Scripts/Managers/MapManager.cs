@@ -9,6 +9,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private List<MapTile> tilesMap;
     [SerializeField] private MapTile head;
     [SerializeField] private GameObject deathWall;
+    [SerializeField] private Mesh[] variatons;
 
     private bool initialized = false;
    
@@ -19,7 +20,7 @@ public class MapManager : MonoBehaviour
 
         endLocation = RunManager.Instance.TrainTail;
 
-        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count +2; i++)
+        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count + 3; i++)
         {
             GenerateMap();
         }
@@ -28,7 +29,7 @@ public class MapManager : MonoBehaviour
         {
             if (!tilesMap[i].IsMapHead)
             {
-                tilesMap[i].SetUp(tilesMap[i - 1].Tail);
+                tilesMap[i].SetUpWithMesh(tilesMap[i - 1].Tail, variatons[Random.Range(0, variatons.Length)]);
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
         }
