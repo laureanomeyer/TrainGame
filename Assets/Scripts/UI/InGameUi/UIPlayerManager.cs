@@ -32,8 +32,8 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private RectTransform endPoint;
     [SerializeField] private TMP_Text currentLevel;
 
-    private Color originalColor;
     private LocomotiveBrain locomotive;
+    private float threshold = 0.8f;
 
 
     private void Start()
@@ -60,7 +60,6 @@ public class UIPlayerManager : MonoBehaviour
         UpdateLocomotiveUI();
         UpdateInventoryUI();
         UpdateRunProgress();
-        originalColor = new Color(0, 0, 0, 0.7f);
     }
 
     void UpdateLocomotiveUI()
@@ -72,7 +71,8 @@ public class UIPlayerManager : MonoBehaviour
 
             var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
             shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentShield));
-            shieldImage.fillAmount = currentShield;
+            if (currentShield <= threshold)
+                shieldImage.fillAmount = currentShield;
 
             if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 3)
             {
@@ -88,7 +88,8 @@ public class UIPlayerManager : MonoBehaviour
             } 
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelImage.fillAmount = currentCapacity;
+            if (currentCapacity < threshold)
+                fuelImage.fillAmount = currentCapacity;
             fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentCapacity));
         }
     }
