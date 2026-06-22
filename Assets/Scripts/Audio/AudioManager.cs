@@ -9,11 +9,6 @@ public class AudioManager : MonoBehaviour
     [SerializeField] Sound[] sounds;
     public static AudioManager instance;
 
-    private void Start()
-    {
-
-    }
-
     private void Awake()
     {
         //Singelton Pattern
