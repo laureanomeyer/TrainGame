@@ -3,12 +3,14 @@ using UnityEngine.Pool;
 
 public class GatlingWagonBrain : WagonBrain
 {
-    [Header("Referencias Gatling")]
+    [Header("Turret")]
+    [SerializeField] private Transform turretPivot;
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Transform playerUsePoint;
+
+    [Header("Attack")]
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private BulletTypeScriptable bulletType;
-
-    [Header("Ataque")]
     [SerializeField] private float fireCooldown = 0.03f;
 
     [Header("Pool")]
@@ -18,6 +20,11 @@ public class GatlingWagonBrain : WagonBrain
     private float cooldownTimer;
     private IObjectPool<GameObject> bulletPool;
 
+    private bool isOccupied;
+    private Transform currentPlayer;
+
+    public bool IsOccupied => isOccupied;
+    public Transform PlayerUsePoint => playerUsePoint;
     public Transform FirePoint => firePoint;
 
     public override void Start()
@@ -37,27 +44,49 @@ public class GatlingWagonBrain : WagonBrain
         WarmUp(defaultCapacity);
     }
 
-    public void Update()
+    private void Update()
     {
         if (cooldownTimer > 0f)
-        {
             cooldownTimer -= Time.deltaTime;
+    }
+
+    public void Interact(Transform player)
+    {
+        if (isOccupied)
+        {
+            ExitTurret();
+            return;
         }
+
+        isOccupied = true;
+        currentPlayer = player;
+
+        // Acá después ponés al player en playerUsePoint
+        // y bloqueás su movimiento desde PlayerInteractions.
+    }
+
+    public void ExitTurret()
+    {
+        isOccupied = false;
+        currentPlayer = null;
     }
 
     public void TryShoot(Vector3 direction)
     {
+        if (!isOccupied) return;
         if (firePoint == null) return;
-        if (bulletPrefab == null) return;
-        if (bulletType == null) return;
         if (bulletPool == null) return;
         if (cooldownTimer > 0f) return;
 
         direction.y = 0f;
 
-        if (direction.sqrMagnitude <= 0.001f) return;
+        if (direction.sqrMagnitude <= 0.001f)
+            return;
 
         direction.Normalize();
+
+        if (turretPivot != null)
+            turretPivot.rotation = Quaternion.LookRotation(direction, Vector3.up);
 
         Shoot(direction);
         cooldownTimer = fireCooldown;
@@ -67,13 +96,13 @@ public class GatlingWagonBrain : WagonBrain
     {
         GameObject bulletGO = bulletPool.Get();
 
-        bulletGO.transform.position = firePoint.position;
-        bulletGO.transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
+        bulletGO.transform.SetPositionAndRotation(
+            firePoint.position,
+            Quaternion.LookRotation(direction, Vector3.up)
+        );
 
         if (bulletGO.TryGetComponent(out IBullet bullet))
-        {
             bullet.ResetState(bulletType);
-        }
     }
 
     private GameObject CreateBullet()
@@ -81,9 +110,7 @@ public class GatlingWagonBrain : WagonBrain
         GameObject bulletGO = Instantiate(bulletPrefab);
 
         if (bulletGO.TryGetComponent(out IBullet bullet))
-        {
             bullet.BulletPool = bulletPool;
-        }
 
         bulletGO.SetActive(false);
         return bulletGO;
@@ -96,8 +123,7 @@ public class GatlingWagonBrain : WagonBrain
 
     private void OnReturnBulletToPool(GameObject bulletGO)
     {
-        Rigidbody rb = bulletGO.GetComponent<Rigidbody>();
-        if (rb != null)
+        if (bulletGO.TryGetComponent(out Rigidbody rb))
         {
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
@@ -113,16 +139,12 @@ public class GatlingWagonBrain : WagonBrain
 
     private void WarmUp(int count)
     {
-        GameObject[] prewarm = new GameObject[count];
+        GameObject[] bullets = new GameObject[count];
 
         for (int i = 0; i < count; i++)
-        {
-            prewarm[i] = bulletPool.Get();
-        }
+            bullets[i] = bulletPool.Get();
 
         for (int i = 0; i < count; i++)
-        {
-            bulletPool.Release(prewarm[i]);
-        }
+            bulletPool.Release(bullets[i]);
     }
 }

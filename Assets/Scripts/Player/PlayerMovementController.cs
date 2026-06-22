@@ -6,7 +6,7 @@ public class PlayerMovementController
     [Header("Movement")]
     [SerializeField] private float speed = 5f;
     [SerializeField] private float acceleration = 50f;
-    [SerializeField] private float deceleration = 80f;
+    [SerializeField] private float deceleration = 100f;
 
     private Rigidbody rb;
     private LookObjectToMouse lookToMouseController;
