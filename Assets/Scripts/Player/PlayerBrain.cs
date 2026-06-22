@@ -61,6 +61,11 @@ public class PlayerBrain : MonoBehaviour
     {
         playerInteractionsController.Update();
         if (!IsRepairing && canAttack) playerAttackController.Update();
+
+        if (Keyboard.current.f8Key.wasPressedThisFrame)
+        {
+            Inventory.GoldAmount += 100;
+        }
     }
 
     private void FixedUpdate()

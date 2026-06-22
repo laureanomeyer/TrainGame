@@ -9,8 +9,9 @@ public class PlayerInteractions
     private WagonBrain currentWagon;
     private WagonShopButton currentButton;
     private ShopZone currentShopZone;
-    private ActiveTurretStation currentTurretStation;
-    private ActiveTurretStation usingTurretStation;
+
+    private WagonTurret currentTurret;
+    private WagonTurret usingTurret;
 
     private PlayerInventory playerInventory;
     private PlayerBrain playerBrain;
@@ -78,10 +79,9 @@ public class PlayerInteractions
 
         if (other.CompareTag("ActiveTurret"))
         {
-            other.TryGetComponent(out ActiveTurretStation turretStation);
-            currentTurretStation = turretStation;
+            currentTurret = other.GetComponentInParent<WagonTurret>();
 
-            if (!isUsingTurret && currentTurretStation != null && interactionUIManager != null)
+            if (!isUsingTurret && currentTurret != null && interactionUIManager != null)
             {
                 interactionUIManager.ShowText("Usar torreta");
             }
@@ -127,9 +127,11 @@ public class PlayerInteractions
 
         if (other.CompareTag("ActiveTurret"))
         {
-            if (other.TryGetComponent(out ActiveTurretStation turretStation) && turretStation == currentTurretStation)
+            WagonTurret turret = other.GetComponentInParent<WagonTurret>();
+
+            if (turret != null && turret == currentTurret)
             {
-                currentTurretStation = null;
+                currentTurret = null;
 
                 if (!isUsingTurret && interactionUIManager != null)
                 {
@@ -152,17 +154,24 @@ public class PlayerInteractions
             return;
         }
 
-        if (currentTurretStation != null)
+        if (currentTurret != null)
         {
-            StartUsingTurret(currentTurretStation);
+            StartUsingTurret(currentTurret);
             return;
         }
     }
 
-    void StartUsingTurret(ActiveTurretStation turretStation)
+    void StartUsingTurret(WagonTurret turret)
     {
-        usingTurretStation = turretStation;
+        if (turret == null) return;
+        if (turret.IsOccupied) return;
+
+        usingTurret = turret;
         isUsingTurret = true;
+
+        turret.EnterTurret();
+
+        playerBrain.SetCanAttack(false);
 
         if (playerMovementController != null)
         {
@@ -178,8 +187,15 @@ public class PlayerInteractions
 
     void StopUsingTurret()
     {
+        if (usingTurret != null)
+        {
+            usingTurret.ExitTurret();
+        }
+
         isUsingTurret = false;
-        usingTurretStation = null;
+        usingTurret = null;
+
+        playerBrain.SetCanAttack(true);
 
         if (playerMovementController != null)
         {
@@ -196,23 +212,26 @@ public class PlayerInteractions
     void HandleTurretUse()
     {
         if (!isUsingTurret) return;
-        if (usingTurretStation == null) return;
-        if (usingTurretStation.Turret == null) return;
+        if (usingTurret == null) return;
         if (lookObjectToMouse == null) return;
 
-        Transform aimOrigin = usingTurretStation.Turret.FirePoint != null
-            ? usingTurretStation.Turret.FirePoint
-            : usingTurretStation.Turret.transform;
+        Transform aimOrigin = usingTurret.FirePoint != null
+            ? usingTurret.FirePoint
+            : usingTurret.transform;
 
+        Vector3 direction = lookObjectToMouse.GetMouseDirection(aimOrigin);
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude <= 0.001f)
+            return;
+
+        // La torreta rota siempre hacia el mouse.
+        usingTurret.Aim(direction);
+
+        // Solo dispara mientras mantenés click.
         if (Mouse.current.leftButton.isPressed)
         {
-            Vector3 direction = lookObjectToMouse.GetMouseDirection(aimOrigin);
-            direction.y = 0f;
-
-            if (direction.sqrMagnitude > 0.001f)
-            {
-                usingTurretStation.Turret.TryShoot(direction);
-            }
+            usingTurret.TryShoot(direction);
         }
     }
 
