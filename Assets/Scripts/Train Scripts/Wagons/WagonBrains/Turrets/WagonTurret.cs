@@ -61,7 +61,8 @@ public class WagonTurret : MonoBehaviour
 
     public void Aim(Vector3 direction)
     {
-        if (turretPivot == null) return;
+        if (turretPivot == null)
+            return;
 
         direction.y = 0f;
 
