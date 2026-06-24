@@ -87,5 +87,9 @@ public class InteractionZone : MonoBehaviour
             GameEvents.HideInteract();
             GameEvents.ShowCursor(false);
         }
+        else
+        {
+            DeactivateUI();
+        }
     }
 }
