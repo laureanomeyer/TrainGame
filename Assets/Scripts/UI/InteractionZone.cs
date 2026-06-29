@@ -43,6 +43,8 @@ public class InteractionZone : MonoBehaviour
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
 
+        playerBrain.SetCanMove(true);
+
         playerBrain = null;
         ui = null;
         GameEvents.HideInteract();
