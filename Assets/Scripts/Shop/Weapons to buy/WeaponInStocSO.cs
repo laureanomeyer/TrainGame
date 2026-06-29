@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "WeaponInStock", menuName = "Store/Weapon")]
 public class WeaponInStocSO : ScriptableObject
@@ -7,7 +8,15 @@ public class WeaponInStocSO : ScriptableObject
     [SerializeField] private GameObject weapon;
     public GameObject Weapon => weapon;
 
-    [Header("Price")]
+    [Header("ScriptableObject")]
+    [SerializeField] private WeaponDataSO weaponData;
+    public WeaponDataSO WeaponData => weaponData;
+
+    [Header("Items")]
     [SerializeField] private float price;
+    [SerializeField] private Sprite gunSprite;
+    [SerializeField] private string descriptionText = "hola";
     public float Price => price;
+    public Sprite GunSprite => gunSprite;
+    public string DescriptionText => descriptionText;
 }
