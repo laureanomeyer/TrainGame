@@ -81,38 +81,47 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         {
             DeactivateAllButtons();
         }
-        
     }
 
     public void MaxHPUpgrade()
     {
         locomotiveUpgrade.trainMaxHp = GetCurrentUpgrade(StatType.MaxHp).maxHp;
         GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
-        DeactivateAllButtons();   
+        DeactivateAllButtons();
+
+        GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void AttackSpeedUpgrade()
     {
         locomotiveUpgrade.attackSpeed = GetCurrentUpgrade(StatType.AttackSpeed).attackSpeed;
         GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
+
+        GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void DamageMultiplierUpgrade()
     {
         locomotiveUpgrade.damageBonus = GetCurrentUpgrade(StatType.DamageMultiplier).damageMultiplier;
         GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
+
+        GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void DefenseUpgrade()
     {
         locomotiveUpgrade.shields = GetCurrentUpgrade(StatType.Defense).defense;
         GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
+
+        GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void GoldMultiplierUpgrade()
     {
         locomotiveUpgrade.goldBonus = GetCurrentUpgrade(StatType.GoldMultiplier).goldMultiplier;
         GameManager.Instance.Session.TrainData.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
+
+        GameManager.Instance.Session.RebuildStatsSystem();
     }
 
     private LevelLocomotivesUpgradesSO GetCurrentUpgrade(StatType type)
@@ -137,7 +146,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     {
         self.SetActive(false);
         uiRunSelector.SetActive(true);
-
     }
 
     public void ChangeUsedUpgrades()
