@@ -17,6 +17,7 @@ public class PauseMenuManager : MonoBehaviour
 
     private InputAction pauseAction;
     private bool isPaused;
+    private CursorType currentCursor;
 
     public bool IsPaused => isPaused;
 
@@ -88,6 +89,8 @@ public class PauseMenuManager : MonoBehaviour
 
     public void PauseGame()
     {
+        currentCursor = GameManager.Instance.GetCurrentCursor();
+
         isPaused = true;
 
         Time.timeScale = 0f;
@@ -97,7 +100,7 @@ public class PauseMenuManager : MonoBehaviour
             pausePanel.SetActive(true);
         }
         GameEvents.HideInteract();
-        GameEvents.ShowCursor(false);
+        GameEvents.ShowCursor(CursorType.Real);
     }
 
     public void ResumeGame()
@@ -110,7 +113,7 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(false);
         }
-        GameEvents.ShowCursor(true);
+        GameEvents.ShowCursor(currentCursor);
 
     }
 

@@ -4,6 +4,7 @@ public enum InteractableType { CoalBox, GoldBox }
 public enum ModifierType { Additive, Multipicaive}
 public enum StatType { MaxHp, Defense, GoldMultiplier, DamageMultiplier, AttackSpeed, FuelOptimizer, Speed }
 public enum GameState { Tutorial, Gameplay, Menu, Transition}
+public enum CursorType { Real, Hidden, Gameplay}
 public enum TutorialStep
 {
     FreeMove,
@@ -83,7 +84,6 @@ public struct TrainStats
         };
     }
 }
-
 public readonly struct StatModifier
 {
     public readonly StatType StatType;

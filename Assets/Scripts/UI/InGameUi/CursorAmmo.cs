@@ -39,7 +39,7 @@ public class CursorAmmo : MonoBehaviour
         GameEvents.OnAmmoChanged += UpdateText;
         GameEvents.OnReloadStarted += StartReloadFill;
         GameEvents.OnShoot += StartShootCrosshairAnimation;
-        GameEvents.OnShowCursor += SetCursorVisibility;
+        GameEvents.OnShowGameplayCursor += SetCursorVisibility;
         TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
     }
 
@@ -148,7 +148,7 @@ public class CursorAmmo : MonoBehaviour
         GameEvents.OnAmmoChanged -= UpdateText;
         GameEvents.OnReloadStarted -= StartReloadFill;
         GameEvents.OnShoot -= StartShootCrosshairAnimation;
-        GameEvents.OnShowCursor -= SetCursorVisibility;
+        GameEvents.OnShowGameplayCursor -= SetCursorVisibility;
         TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }
 }

@@ -52,7 +52,7 @@ public class PlayerBrain : MonoBehaviour
         GameEvents.OnActivateUi += SetCanAttack;
         GameEvents.OnShowInteract += ShowInteract;
         GameEvents.OnHideInteract += HideInteract;
-        GameEvents.OnShowCursor += SetCanAttack;
+        GameEvents.OnShowGameplayCursor += SetCanAttack;
 
         IsRepairing = false;
         HideInteract();
@@ -153,7 +153,7 @@ public class PlayerBrain : MonoBehaviour
         TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
         GameEvents.OnShowInteract -= ShowInteract;
         GameEvents.OnHideInteract -= HideInteract;
-        GameEvents.OnShowCursor -= SetCanAttack;
+        GameEvents.OnShowGameplayCursor -= SetCanAttack;
     }
 
 

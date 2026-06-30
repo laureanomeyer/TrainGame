@@ -48,7 +48,7 @@ public class InteractionZone : MonoBehaviour
         playerBrain = null;
         ui = null;
         GameEvents.HideInteract();
-        GameEvents.ShowCursor(true);
+        GameEvents.ShowCursor(CursorType.Gameplay);
     }
 
     public void DeactivateUI()
@@ -61,7 +61,7 @@ public class InteractionZone : MonoBehaviour
         playerBrain.SetCanMove(true);
 
         GameEvents.ShowInteract();
-        GameEvents.ShowCursor(true);
+        GameEvents.ShowCursor(CursorType.Real);
     }
 
     private void OnPlayerInteract()
@@ -91,7 +91,7 @@ public class InteractionZone : MonoBehaviour
             playerBrain.SetCanMove(false);
 
             GameEvents.HideInteract();
-            GameEvents.ShowCursor(false);
+            GameEvents.ShowCursor(CursorType.Real);
         }
         else
         {
