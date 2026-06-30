@@ -4,8 +4,9 @@ using UnityEngine.InputSystem;
 
 public class StatPanelController : MonoBehaviour
 {
-    [Header ("Object References")]
-    [SerializeField] private GameObject statsPanelCanvas;
+    [Header("Object References")]
+    [SerializeField] private CanvasGroup currentGold;
+    [SerializeField] private CanvasGroup stats;
     [SerializeField] private InputActionAsset inputActions;
 
     [Header("Stats")]
@@ -37,18 +38,23 @@ public class StatPanelController : MonoBehaviour
 
     private void OnToggleStats(InputAction.CallbackContext ctx)
     {
-        if(statsPanelCanvas)
-            statsPanelCanvas.SetActive(!statsPanelCanvas.activeSelf);
+        if (stats)
+        {
+            if (stats.alpha != 0)
+            {
+                stats.alpha = 0;
+                currentGold.alpha = 0.5f;
+            }
+            else
+            {
+                stats.alpha = 1;
+                currentGold.alpha = 1;
+            }
+        }
     }
 
     private void SetupTexts()
     {
-        /* hpText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp) * 100 + "%";
-         shieldsText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense) * 100 + "%";
-         damageText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier) * 100 + "%";
-         attackSpeedText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed) * 100 + "%";
-         bonusGoldText.text = GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier) * 100 + "%";*/
-
         hpText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp));
         shieldsText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense) + 1);
         damageText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier));
