@@ -33,8 +33,7 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private TMP_Text currentLevel;
 
     private LocomotiveBrain locomotive;
-    private float threshold = 0.8f;
-
+    private float lerpedShield = 1;
 
     private void Start()
     {
@@ -66,14 +65,6 @@ public class UIPlayerManager : MonoBehaviour
     {
         if (locomotive != null && locomotive.fuelController != null)
         {
-            var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, currentFuel));
-
-            var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
-            shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentShield));
-            if (currentShield <= threshold)
-                shieldImage.fillAmount = currentShield;
-
             if (locomotive.fuelController.CurrentFuel < locomotive.fuelController.FuelMaxCapaciy / 3)
             {
                 if (animator != null) animator.SetBool("FuelLow", true);
@@ -87,9 +78,16 @@ public class UIPlayerManager : MonoBehaviour
                     lowFuel.SetActive(false);
             } 
 
+            var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
+            lerpedShield = Mathf.MoveTowards(lerpedShield, currentShield, Time.deltaTime);
+            shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedShield));
+            shieldImage.fillAmount = lerpedShield;
+
+            var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
+            fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, currentFuel));
+
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
-            if (currentCapacity < threshold)
-                fuelImage.fillAmount = currentCapacity;
+            fuelImage.fillAmount = currentCapacity;
             fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentCapacity));
         }
     }
