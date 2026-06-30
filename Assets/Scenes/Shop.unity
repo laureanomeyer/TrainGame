@@ -400,6 +400,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 464905830}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &204924689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 926235677212252361, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+  m_PrefabInstance: {fileID: 8031979763515567620}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &208263415
 GameObject:
   m_ObjectHideFlags: 0
@@ -11090,7 +11101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
-  displayTrain: {fileID: 0}
+  displayTrain: {fileID: 1941933556}
   wagonsCollectionSOs:
   - {fileID: 11400000, guid: 75438e9ddb3306c4aad1837426422a2c, type: 2}
   spawnWagonPoint: {fileID: 118387131}
@@ -11134,7 +11145,9 @@ MonoBehaviour:
   buyButton: {fileID: 1489797407}
   rerollButton: {fileID: 2015611494}
   closeButton: {fileID: 1605214084}
+  nameTextUI: {fileID: 204924689}
   descriptionTextUI: {fileID: 55094474}
+  priceTextUI: {fileID: 1573069981}
 --- !u!4 &505731351
 Transform:
   m_ObjectHideFlags: 0
@@ -12572,7 +12585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
-  displayTrain: {fileID: 0}
+  displayTrain: {fileID: 1941933556}
   wagonsCollectionSOs:
   - {fileID: 11400000, guid: f8ddc02069f80cc4c9aba836b460f664, type: 2}
   spawnWagonPoint: {fileID: 937126556}
@@ -18290,7 +18303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98c8b02b0a82ed94291b0e073978a18d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WagonShopButton
-  displayTrain: {fileID: 0}
+  displayTrain: {fileID: 1941933556}
   wagonsCollectionSOs:
   - {fileID: 11400000, guid: b79d19ce7746e8b408e3bbaddd7feb3d, type: 2}
   spawnWagonPoint: {fileID: 1921304405}
@@ -23217,6 +23230,17 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1573069981 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3246148784332266073, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+  m_PrefabInstance: {fileID: 8031979763515567620}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1587032996 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6058667659620982090, guid: 90bc4566177efe349ae4575c6c9da7f8, type: 3}
@@ -24442,6 +24466,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: displayTrain
+      value: 
+      objectReference: {fileID: 1941933556}
     - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: storeManager
       value: 
