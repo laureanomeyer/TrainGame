@@ -10,25 +10,23 @@ public class SceneRunController : MonoBehaviour
     private bool runStarted = true;
 
     [Header("Cinematic")]
-    [SerializeField] private Cinematic victoryCinematic;
+    [SerializeField] private CinematicSystem cinematicSystem;
 
     public float Progress => 1f - Mathf.Clamp01(currentTime / sceneDuration);
 
     private void Awake()
     {
-        if (victoryCinematic == null)
-        {
-            victoryCinematic = FindFirstObjectByType<Cinematic>(FindObjectsInactive.Include);
-        }
-
         sceneDuration = GameManager.Instance.Session.SessionConfig.RunDurantion;
         currentTime = sceneDuration;
         runFinished = false;
 
         TutorialEvents.OnSetTimerStarted += SetRunStarted;
+
+        if (cinematicSystem != null)
+            cinematicSystem.OnCinematicFinished += FinishRun;
     }
 
-    void Update()
+    private void Update()
     {
         if (runFinished) return;
         if (!GameManager.Instance.IsGameplayState) return;
@@ -36,25 +34,31 @@ public class SceneRunController : MonoBehaviour
         if (runStarted)
             currentTime -= Time.deltaTime;
 
-        if (currentTime < 0)
+        if (currentTime <= 0f)
         {
             runFinished = true;
 
-            if (victoryCinematic == null)
+            if (cinematicSystem == null)
             {
-                Debug.LogError("Victory Cinematic no está asignado en " + gameObject.name);
+                Debug.LogError("CinematicSystem no está asignado.");
                 return;
             }
 
-            // Salgo del GameplayState antes de la cinemática.
-            GameManager.Instance.EnterTransitionState();
-
-            // Ahora empieza la cinemática.
-            victoryCinematic.PlayCinematic();
+            cinematicSystem.CinematicPlay();
         }
     }
 
-    void SetRunStarted(bool runStarted)
+    private void FinishRun()
+    {
+        GameManager.Instance.EnterTransitionState();
+
+        SceneTransitionManager.Instance.TransitionToScene(
+            "Shop",
+            SceneTransitionType.EndingRun
+        );
+    }
+
+    private void SetRunStarted(bool runStarted)
     {
         this.runStarted = runStarted;
     }
@@ -62,5 +66,8 @@ public class SceneRunController : MonoBehaviour
     private void OnDestroy()
     {
         TutorialEvents.OnSetTimerStarted -= SetRunStarted;
+
+        if (cinematicSystem != null)
+            cinematicSystem.OnCinematicFinished -= FinishRun;
     }
 }
