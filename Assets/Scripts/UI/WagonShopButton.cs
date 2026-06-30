@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Collections;
 
 public class WagonShopButton : MonoBehaviour
 {
@@ -40,6 +41,15 @@ public class WagonShopButton : MonoBehaviour
 
     private bool canDoReroll = true;
     private bool usedReroll = false;
+
+
+    [Header("Wagon Arrival Animation")]
+    [SerializeField] private float wagonArrivalDuration = 1.5f;
+
+    [Tooltip("Distancia desde la izquierda donde aparece antes de entrar.")]
+    [SerializeField] private float wagonStartOffsetX = -35f;
+
+    private bool isBuyingWagon;
 
     private void Start()
     {
@@ -94,18 +104,16 @@ public class WagonShopButton : MonoBehaviour
 
     public void Interact()
     {
-        if (wagonsInStock.Length == 0) return;
-        if (storeManager.TryConsumeGold(currentWagonInStock.Price))
-        {
-            displayTrain.AddWagon(currentWagonInStock);
-            GameManager.Instance.Session.RebuildStatsSystem();
-            SetWagonInStock();
+        if (wagonsInStock.Length == 0)
+            return;
 
-            if (wagonShopParticleSystem)
-            {
-                wagonShopParticleSystem.Play();
-            }
-        }
+        if (isBuyingWagon)
+            return;
+
+        if (!storeManager.TryConsumeGold(currentWagonInStock.Price))
+            return;
+
+        StartCoroutine(BuyWagonCoroutine());
     }
 
     private void SetWagonInStock()
@@ -224,5 +232,66 @@ public class WagonShopButton : MonoBehaviour
 
             storeManager.closeButton.onClick.RemoveListener(CloseFuction);
         }
+    }
+
+    //coroutine
+    private IEnumerator BuyWagonCoroutine()
+    {
+        isBuyingWagon = true;
+
+        // Evita comprar o rerollear dos veces durante la animación.
+        storeManager.buyButton.interactable = false;
+        storeManager.rerollButton.interactable = false;
+
+        // Se crea en la posición final correcta del tren.
+        GameObject newWagon = displayTrain.AddWagon(currentWagonInStock);
+
+        if (newWagon != null)
+        {
+            Vector3 finalPosition = newWagon.transform.position;
+            Quaternion finalRotation = newWagon.transform.rotation;
+
+            // Lo ubicamos a la izquierda antes de que se renderice el siguiente frame.
+            Vector3 startPosition = finalPosition;
+            startPosition.x += wagonStartOffsetX;
+
+            newWagon.transform.position = startPosition;
+            newWagon.transform.rotation = finalRotation;
+
+            float timer = 0f;
+
+            while (timer < wagonArrivalDuration)
+            {
+                timer += Time.deltaTime;
+
+                float t = Mathf.Clamp01(timer / wagonArrivalDuration);
+
+                // Entrada suave y frenado suave.
+                t = t * t * (3f - 2f * t);
+
+                newWagon.transform.position = Vector3.Lerp(
+                    startPosition,
+                    finalPosition,
+                    t
+                );
+
+                yield return null;
+            }
+
+            newWagon.transform.position = finalPosition;
+        }
+
+        GameManager.Instance.Session.RebuildStatsSystem();
+
+        SetWagonInStock();
+
+        if (wagonShopParticleSystem != null)
+        {
+            wagonShopParticleSystem.Play();
+        }
+
+        isBuyingWagon = false;
+
+        CheckReroll();
     }
 }
