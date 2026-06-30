@@ -50,7 +50,7 @@ public class StoreUiInteracts : MonoBehaviour
         uiUpgrades.SetActive(false);
 
         GameEvents.HideInteract();
-        GameEvents.ShowCursor(true);
+        GameEvents.ShowCursor(CursorType.Gameplay);
     }
 
     private void DeactivateUI()
@@ -63,7 +63,7 @@ public class StoreUiInteracts : MonoBehaviour
         uiUpgrades.SetActive(false);
 
         GameEvents.ShowInteract();
-        GameEvents.ShowCursor(true);
+        GameEvents.ShowCursor(CursorType.Gameplay);
     }
 
     private void OnPlayerInteract()
@@ -74,6 +74,6 @@ public class StoreUiInteracts : MonoBehaviour
         playerBrain.SetCanAttack(false);
         playerBrain.SetCanMove(false);
 
-        GameEvents.ShowCursor(false);
+        GameEvents.ShowCursor(CursorType.Real);
     }
 }

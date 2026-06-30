@@ -28,7 +28,9 @@ public static class GameEvents
 
     public static event Action<bool> OnActivateUi;
 
-    public static event Action<bool> OnShowCursor;
+    public static event Action<CursorType> OnShowCursor;
+
+    public static event Action<bool> OnShowGameplayCursor;
 
     public static event Action OnShowInteract;
 
@@ -78,9 +80,13 @@ public static class GameEvents
     {
         OnAmmoChanged?.Invoke(currentAmmo);
     }
-    public static void ShowCursor(bool showCursor)
+    public static void ShowCursor(CursorType cursor)
     {
-        OnShowCursor?.Invoke(showCursor);
+        OnShowCursor?.Invoke(cursor);
+    }
+    public static void ShowGameplayCursor(bool show)
+    {
+        OnShowGameplayCursor?.Invoke(show);
     }
     public static void CoalEmpty()
     {

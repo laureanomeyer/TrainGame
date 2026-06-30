@@ -1,5 +1,3 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,43 +9,46 @@ public class DisplayTrain : MonoBehaviour
 
     [SerializeField] private List<WagonInStockSO> wagonAssets;
 
-    private Dictionary<string , GameObject> wagonAssetsReference;
+    private Dictionary<string, GameObject> wagonAssetsReference;
 
     private void Start()
     {
         wagonAssetsReference = new Dictionary<string, GameObject>();
 
-        if (wagonAssets.Count > 0)
+        foreach (var asset in wagonAssets)
         {
-            foreach (var asset in wagonAssets)
-            {
-                wagonAssetsReference.Add(asset.wagonName, asset.shopModel);
-            }
+            wagonAssetsReference.Add(asset.wagonName, asset.shopModel);
         }
 
         wagonList = StoreManager.Instance.wagonsInTrain;
 
-        if (wagonList.Count > 0)
+        foreach (var wagon in wagonList)
         {
-            foreach (var wagon in wagonList)
-            {
-                CreateWagon(wagonAssetsReference[wagon.WagonName]);
-            }
+            CreateWagon(wagonAssetsReference[wagon.WagonName]);
         }
     }
 
-    private void CreateWagon(GameObject wagonModel)
+    // Ahora devuelve el GameObject creado.
+    private GameObject CreateWagon(GameObject wagonModel)
     {
-        GameObject currentWagon = Instantiate(wagonModel, currentTail.position, currentTail.rotation);
+        GameObject currentWagon = Instantiate(
+            wagonModel,
+            currentTail.position,
+            currentTail.rotation
+        );
 
-        Transform tail = currentWagon.GetComponent<ShopWagonData>().tail;
-        currentTail = tail;
+        Transform newTail = currentWagon.GetComponent<ShopWagonData>().tail;
+        currentTail = newTail;
+
+        return currentWagon;
     }
 
-    public void AddWagon(WagonInStockSO wagonID)
+    // También devuelve el modelo nuevo para animarlo desde WagonShopButton.
+    public GameObject AddWagon(WagonInStockSO wagonID)
     {
         wagonList.Add(new WagonStore(wagonID.Wagon, wagonID.wagonName));
-        CreateWagon(wagonID.shopModel);
+
+        return CreateWagon(wagonID.shopModel);
     }
 
     public List<IWagonID> ChangeWagonIDList()

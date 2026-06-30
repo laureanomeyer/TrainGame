@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     private bool gameEnded;
     private bool isChangingScene;
+    private CursorType currentCursor;
 
     private GameState stateAfterTransition;
     public bool IsGameplayState => CurrentState == GameState.Gameplay || CurrentState == GameState.Tutorial;
@@ -53,11 +54,11 @@ public class GameManager : MonoBehaviour
         CurrentState = GameState.Menu;
         stateAfterTransition = GameState.Menu;
 
-        GameEvents.OnShowCursor += ShowRealCursor;
+        GameEvents.OnShowCursor += ShowCursor;
     }
     private void OnDestroy()
     {
-        GameEvents.OnShowCursor -= ShowRealCursor;
+        GameEvents.OnShowCursor -= ShowCursor;
     }
 
     public bool IsFinalStation()
@@ -107,7 +108,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
-        Cursor.visible = true;
+        ShowCursor(CursorType.Real);
     }
     public void GoToTutorial()
     {
@@ -133,7 +134,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         SceneManager.LoadScene(FinalScene);
-        Cursor.visible = true;
+        ShowCursor(CursorType.Real);
     }
 
     public void Victory()
@@ -147,7 +148,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
 
         ChangeScene(FinalScene, SceneTransitionType.Final, GameState.Menu);
-        Cursor.visible = true;
+        ShowCursor(CursorType.Real);
     }
 
     public void StartNewSession()
@@ -189,12 +190,36 @@ public class GameManager : MonoBehaviour
     {
         isChangingScene = false;
         CurrentState = stateAfterTransition;
-        if (IsGameplayScene) Cursor.visible = false;
-        else Cursor.visible = true;
-    }
 
-    private void ShowRealCursor(bool show)
+        if (IsTutorial) ShowCursor(CursorType.Hidden);
+        else if (IsGameplayScene) ShowCursor(CursorType.Gameplay);
+        else ShowCursor(CursorType.Real);
+    }
+    public CursorType GetCurrentCursor()
     {
-        Cursor.visible = !show;
+        Debug.Log(currentCursor.ToString());
+        return currentCursor;
+    }
+    private void ShowCursor(CursorType cursor)
+    {
+        currentCursor = cursor;
+
+        switch (cursor) 
+        {
+            case CursorType.Real: 
+                Cursor.visible = true;
+                GameEvents.ShowGameplayCursor(false);
+                break;
+
+            case CursorType.Gameplay: 
+                Cursor.visible = false; 
+                GameEvents.ShowGameplayCursor(true); 
+                break;
+            case CursorType.Hidden: 
+                Cursor.visible = false;
+                GameEvents.ShowGameplayCursor(false);
+                break;
+        }
+
     }
 }
