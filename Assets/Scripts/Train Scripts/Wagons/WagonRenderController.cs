@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class WagonRenderController
@@ -5,7 +7,13 @@ public class WagonRenderController
     private WagonBrain wagonBrain;
     private Mesh wagonTopMesh;
 
-    public WagonRenderController (WagonBrain brain)
+    private int alphaPropertyID;
+
+    private Coroutine fadeRoutine;
+    private float currentTopAlpha = 1f;
+    private const float fadeDuration = 0.25f;
+
+    public WagonRenderController(WagonBrain brain)
     {
         wagonBrain = brain;
 
@@ -13,54 +21,51 @@ public class WagonRenderController
         {
             wagonTopMesh = wagonBrain.topMeshFilterWagon.mesh;
         }
+
+        alphaPropertyID = Shader.PropertyToID("_Alpha");
+
+        currentTopAlpha = 1f;
     }
 
     public void CheckWagonToChangeRender(bool canBreak)
     {
-        if (canBreak)
-        {
-            ChangeToDestroyWagon();
-        }
-        else
-        {
-            ChangeToDestroyWagonFloor();
-        }
+        if (canBreak) ChangeToDestroyWagon();
+        else ChangeToDestroyWagonFloor();
     }
 
     private void ChangeToDestroyWagon()
     {
-        //Change floor
+        if (fadeRoutine != null)
+        {
+            wagonBrain.StopCoroutine(fadeRoutine);
+            fadeRoutine = null;
+        }
+
         if (wagonBrain.floorMeshFilterWagon != null)
         {
             wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
             wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
         }
 
-        //Change body
         if (wagonBrain.bodyMeshFilterWagon != null)
         {
             wagonBrain.bodyMeshFilterWagon.mesh = wagonBrain.bodyMeshDestroyWagon;
             wagonBrain.bodyRenderWagon.material = wagonBrain.destroyWagonMaterial;
         }
 
-        //Change top
         if (wagonBrain.topMeshFilterWagon != null)
         {
             wagonBrain.topMeshFilterWagon.mesh = null;
-            wagonBrain.topRenderWagon.material = null;
         }
 
         if (wagonBrain.particles != null)
         {
             wagonBrain.particles.Play();
         }
-
-        //Change extra elements in wagon
     }
 
     private void ChangeToDestroyWagonFloor()
     {
-        //Change floor
         if (wagonBrain.floorMeshFilterWagon != null)
         {
             wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
@@ -79,17 +84,55 @@ public class WagonRenderController
 
     public void ActivateWagonTop()
     {
-        if (wagonBrain.topMeshFilterWagon != null && wagonBrain.HPController.IsBroken == false)
-        {
-            wagonBrain.topMeshFilterWagon.mesh = wagonTopMesh;
-        }
+        if (wagonBrain.topMeshFilterWagon == null) return;
+        if (wagonBrain.HPController != null && wagonBrain.HPController.IsBroken) return;
+
+        wagonBrain.topMeshFilterWagon.mesh = wagonTopMesh;
+        StartFade(1f);
     }
 
     public void DeactivateWagonTop()
     {
-        if (wagonBrain.topMeshFilterWagon != null)
+        if (wagonBrain.topMeshFilterWagon == null) return;
+        if (wagonBrain.HPController != null && wagonBrain.HPController.IsBroken) return;
+
+        StartFade(0f, () =>
         {
             wagonBrain.topMeshFilterWagon.mesh = null;
+        });
+    }
+
+    private void StartFade(float targetAlpha, Action onComplete = null)
+    {
+        if (fadeRoutine != null)
+        {
+            wagonBrain.StopCoroutine(fadeRoutine);
         }
+
+        fadeRoutine = wagonBrain.StartCoroutine(FadeTopAlpha(currentTopAlpha, targetAlpha, onComplete));
+    }
+
+    private IEnumerator FadeTopAlpha(float from, float to, Action onComplete)
+    {
+        var rend = wagonBrain.topRenderWagon;
+        float t = 0f;
+
+        while (t < fadeDuration)
+        {
+            t += Time.deltaTime;
+            currentTopAlpha = Mathf.Lerp(from, to, t / fadeDuration);
+
+            wagonBrain.topRenderWagon.material.SetFloat(alphaPropertyID, currentTopAlpha);
+            wagonBrain.topRenderWagon.material.GetFloat(alphaPropertyID);
+            Debug.Log(wagonBrain.topRenderWagon.material.GetFloat(alphaPropertyID));
+
+            yield return null;
+        }
+
+        currentTopAlpha = to;
+        wagonBrain.topRenderWagon.material.SetFloat(alphaPropertyID, to);
+
+        fadeRoutine = null;
+        onComplete?.Invoke();
     }
 }
