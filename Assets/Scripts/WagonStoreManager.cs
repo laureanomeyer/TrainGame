@@ -20,7 +20,9 @@ public class WagonStoreManager : MonoBehaviour
 
     //[SerializeField] public int maxLevel;
 
+    [SerializeField] public TextMeshProUGUI nameTextUI;
     [SerializeField] public TextMeshProUGUI descriptionTextUI;
+    [SerializeField] public TextMeshProUGUI priceTextUI;
 
     private void Start()
     {

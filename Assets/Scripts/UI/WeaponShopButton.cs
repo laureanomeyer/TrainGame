@@ -16,7 +16,14 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     private GameObject currentWeapon;
     private float currentWeaponprice = 0;
 
-    [SerializeField] private TextMeshProUGUI buttonText;
+    [Header("Button UI")]
+    [SerializeField] private TextMeshProUGUI weaponNameText;
+    [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI damageText;
+    [SerializeField] private TextMeshProUGUI rofText;
+    [SerializeField] private TextMeshProUGUI ammunitionText;
+    [SerializeField] private Image weaponImage;
+
     private Button button;
 
     public void SetValuesInStock()
@@ -27,14 +34,16 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         {
             currentWeapon = weaponInStock[weaponInStock.Length].Weapon;
             currentWeaponprice = weaponInStock[weaponInStock.Length].Price;
+
+            UpdateInfo(weaponInStock[weaponInStock.Length]);
         }
         else
         {
             currentWeapon = weaponInStock[level - 1].Weapon;
             currentWeaponprice = weaponInStock[level - 1].Price;
-        }
 
-        buttonText.text = currentWeapon.name + "   $" + currentWeaponprice;
+            UpdateInfo(weaponInStock[level - 1]);
+        }
 
         button.onClick.AddListener(BuyWeapon);
 
@@ -56,7 +65,21 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
         }
-       
+    }
+
+    private void UpdateInfo(WeaponInStocSO stockInfo)
+    {
+        currentWeapon = stockInfo.Weapon;
+        currentWeaponprice = stockInfo.Price;
+
+        weaponNameText.text = currentWeapon.name;
+        priceText.text = currentWeaponprice.ToString() + "$";
+
+        damageText.text = stockInfo.WeaponData.damage.ToString();
+        ammunitionText.text = stockInfo.WeaponData.ammun.ToString();
+        rofText.text = stockInfo.WeaponData.rateOfFire.ToString();
+
+        weaponImage.sprite = stockInfo.GunSprite;
     }
 
     public void ActivateButton()

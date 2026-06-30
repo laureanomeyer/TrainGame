@@ -15,8 +15,6 @@ public class WeaponInStocSO : ScriptableObject
     [Header("Items")]
     [SerializeField] private float price;
     [SerializeField] private Sprite gunSprite;
-    [SerializeField] private string descriptionText = "hola";
     public float Price => price;
     public Sprite GunSprite => gunSprite;
-    public string DescriptionText => descriptionText;
 }

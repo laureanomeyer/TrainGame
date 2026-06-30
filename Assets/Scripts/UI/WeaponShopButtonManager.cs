@@ -25,7 +25,7 @@ public class WeaponShopButtonManager : MonoBehaviour
     void Start()
     {
        PlayerBrain playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBrain>();
-        closeButton.onClick.AddListener(CloseButton);
+       closeButton.onClick.AddListener(CloseButton);
 
        for (int i = 0; i < shopButtons.Length; i++)
        {

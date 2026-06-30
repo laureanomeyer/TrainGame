@@ -32,13 +32,20 @@ public class WagonShopButton : MonoBehaviour
 
     [SerializeField] private WagonStoreManager storeManager;
 
-    private TextMeshProUGUI textUI;
+    private TextMeshProUGUI nameTextUI;
+    private TextMeshProUGUI descriptionTextUI;
+    private TextMeshProUGUI priceTextUI;
 
     private InteractionZone interacZone;
 
+    private bool canDoReroll = true;
+    private bool usedReroll = false;
+
     private void Start()
     {
-        textUI = storeManager.descriptionTextUI;
+        nameTextUI = storeManager.nameTextUI;
+        descriptionTextUI = storeManager.descriptionTextUI;
+        priceTextUI = storeManager.priceTextUI;
 
         interacZone = GetComponent<InteractionZone>();
 
@@ -64,8 +71,6 @@ public class WagonShopButton : MonoBehaviour
             }
         }
 
-
-
         if (wagonsInStock.Length > 0)
         {
             SetWagonInStock();
@@ -74,8 +79,14 @@ public class WagonShopButton : MonoBehaviour
         }
         else
         {
+            nameTextUI.text = null;
+
             string closeText = "No hay vagones actualmente. \n\n¡Vuelva Pronto!";
             descriptionText = closeText;
+
+            canDoReroll = false;
+
+            priceTextUI.text = null;
 
             storeManager.DeactivateButtons();
         }
@@ -105,8 +116,13 @@ public class WagonShopButton : MonoBehaviour
         }
 
         currentWagonInStock = SelectRandomWagon();
-        descriptionText = (currentWagonInStock.wagonName + "\n\n" + "$" + currentWagonInStock.Price + "\n\n" + currentWagonInStock.Description);
-        textUI.text = descriptionText;
+
+        nameTextUI.text = currentWagonInStock.wagonName;
+
+        descriptionText = (currentWagonInStock.Description);
+        descriptionTextUI.text = descriptionText;
+
+        priceTextUI.text = currentWagonInStock.Price.ToString() + "$";
 
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
@@ -119,6 +135,35 @@ public class WagonShopButton : MonoBehaviour
         return wagonSelected;
     }
 
+    public void UpdateUI()
+    {
+        if (wagonsInStock.Length > 0)
+        {
+            nameTextUI.text = currentWagonInStock.wagonName;
+
+            descriptionText = (currentWagonInStock.Description);
+            descriptionTextUI.text = descriptionText;
+
+            priceTextUI.text = currentWagonInStock.Price.ToString() + "$";
+
+            storeManager.ActivateButtons();
+            CheckReroll();
+        }
+        else
+        {
+            nameTextUI.text = null;
+
+            string closeText = "No hay vagones actualmente. \n\n¡Vuelva Pronto!";
+            descriptionText = closeText;
+
+            canDoReroll = false;
+
+            priceTextUI.text = null;
+
+            storeManager.DeactivateButtons();
+        }
+    }
+
     private void UsedReroll()
     {
         SetWagonInStock();
@@ -128,7 +173,30 @@ public class WagonShopButton : MonoBehaviour
             wagonShopParticleSystem.Play();
         }
 
+        usedReroll = true;
         storeManager.rerollButton.interactable = false;
+    }
+
+    private void CheckReroll()
+    {
+        if (canDoReroll)
+        {
+            if (usedReroll && storeManager.rerollButton.interactable == true)
+            {
+                storeManager.rerollButton.interactable = false;
+            }
+            else
+            {
+                storeManager.rerollButton.interactable = true;
+            }
+        }
+        else
+        {
+            if (storeManager.rerollButton.interactable == true)
+            {
+                storeManager.rerollButton.interactable = false;
+            }
+        }
     }
 
     public void CloseFuction()
@@ -144,8 +212,6 @@ public class WagonShopButton : MonoBehaviour
             storeManager.buyButton.onClick.AddListener(Interact);
 
             storeManager.closeButton.onClick.AddListener(CloseFuction);
-
-            //Debug.Log(this.gameObject);
         }
     }
 
@@ -157,8 +223,6 @@ public class WagonShopButton : MonoBehaviour
             storeManager.buyButton.onClick.RemoveListener(Interact);
 
             storeManager.closeButton.onClick.RemoveListener(CloseFuction);
-
-            //Debug.Log(this.gameObject);
         }
     }
 }

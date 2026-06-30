@@ -72,9 +72,13 @@ public class InteractionZone : MonoBehaviour
         {
             isOpen = true;
 
-            string textToShow = TryGetComponent(out WagonShopButton shopButton)
-                 ? shopButton.DescriptionText
-                 : message;
+            string textToShow = null;
+
+            if (TryGetComponent<WagonShopButton>(out WagonShopButton shopButton))
+            {
+                shopButton.UpdateUI();
+                textToShow = shopButton.DescriptionText;
+            }
 
             if (zoneType == ZoneType.Text)
                 ui.ShowText(textToShow);
