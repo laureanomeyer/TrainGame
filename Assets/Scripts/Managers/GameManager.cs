@@ -79,6 +79,13 @@ public class GameManager : MonoBehaviour
 
         ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
     }
+    public void SkipRun()
+    {
+        Session.SessionConfig.AdvanceRun();
+        Session.RebuildStatsSystem();
+
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+    }
 
     public void GoToRun()
     {

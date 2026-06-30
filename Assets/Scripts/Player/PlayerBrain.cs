@@ -85,9 +85,9 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController.OnInteract();
     }
 
-    private void OnAddWag()
+    private void OnSkipScene()
     {
-        GameManager.Instance.StartNewSession();
+        GameManager.Instance.SkipRun();
     }
 
     private void OnOpenMainMenu()
