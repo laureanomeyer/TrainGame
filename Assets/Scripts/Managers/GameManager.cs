@@ -175,9 +175,7 @@ public class GameManager : MonoBehaviour
         stateAfterTransition = nextState;
         CurrentState = GameState.Transition;
 
-        SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);
-
-        
+        SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);    
     }
 
     public void FinishSceneChange()
