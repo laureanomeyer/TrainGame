@@ -65,6 +65,7 @@ public class LocomotiveFuel
     public void AddFuel()
     {
         currentFuel = currentMaxFuel;
+        AudioManager.Instance.Play("VaultOpening");
         UpdateSharedSpeed();
     }
 

@@ -104,6 +104,7 @@ public class PlayerAttackController
                 currentReloadTime = 0;
                 weapon.RestockBullets();
                 weapon.IsReloading = false;
+                AudioManager.Instance.Play($"RevolverMusketReload{1}");
                 GameEvents.AmmoChanged(weapon.CurrentAmmunition);
             }
         }

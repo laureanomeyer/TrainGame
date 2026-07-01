@@ -39,26 +39,26 @@ public class MusicManager : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.instance.Play(CurrentTrackName);
+        AudioManager.Instance.Play(CurrentTrackName);
     }
 
     private void Update()
     {
         UpdateTargets();
 
-        AudioSource src = AudioManager.instance.GetSource(CurrentTrackName);
+        AudioSource src = AudioManager.Instance.GetSource(CurrentTrackName);
         if (src != null)
         {
             src.pitch = Mathf.MoveTowards(src.pitch, targetPitch, pitchTransitionSpeed * Time.deltaTime);
             src.volume = Mathf.MoveTowards(src.volume, targetVolume, volumeTransitionSpeed * Time.deltaTime);
         }
 
-        if (!AudioManager.instance.IsPlaying(CurrentTrackName))
+        if (!AudioManager.Instance.IsPlaying(CurrentTrackName))
         {
             currentTrackIndex = currentTrackIndex % trackCount + 1;
-            AudioManager.instance.Play(CurrentTrackName);
-            AudioManager.instance.SetPitch(CurrentTrackName, targetPitch);
-            AudioManager.instance.SetVolume(CurrentTrackName, targetVolume);
+            AudioManager.Instance.Play(CurrentTrackName);
+            AudioManager.Instance.SetPitch(CurrentTrackName, targetPitch);
+            AudioManager.Instance.SetVolume(CurrentTrackName, targetVolume);
         }
     }
 

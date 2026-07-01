@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class GameEvents
 {
@@ -71,10 +72,12 @@ public static class GameEvents
     public static void ShootPerformed(float rateOfFire)
     {
         OnShoot?.Invoke(rateOfFire);
+        AudioManager.Instance.Play($"RevolverShot{UnityEngine.Random.Range(3,4)}");
     }
     public static void ReloadStarted(float reloadTimer)
     {
         OnReloadStarted?.Invoke(reloadTimer);
+        AudioManager.Instance.Play($"RevolverMusket{2}");
     }
     public static void AmmoChanged(float currentAmmo)
     {
@@ -91,11 +94,13 @@ public static class GameEvents
     public static void CoalEmpty()
     {
         OnCoalEmpty?.Invoke();
+
     }
 
     public static void ShieldsBroken()
     {
         OnShieldsBroken?.Invoke();
+        AudioManager.Instance.Play("Projectile");
     }
 
     public static void WagonDestroyed()
