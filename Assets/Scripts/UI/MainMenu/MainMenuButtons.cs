@@ -3,21 +3,77 @@ using UnityEngine.UI;
 
 public class MainMenuButtons : MonoBehaviour
 {
+    [Header("Buttons")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button quitButton;
-    //[SerializeField] private Button tutorialButton;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private Button closeSettingsButton;
+
+    [Header("Settings Panel")]
+    [SerializeField] private GameObject settingsPanel;
+
+    [Header("Audio Settings")]
+    [SerializeField] private Slider masterVolumeSlider;
+    [SerializeField] private Slider musicVolumeSlider;
+
     private void Start()
     {
         startButton.onClick.AddListener(GameManager.Instance.GoToTutorial);
         quitButton.onClick.AddListener(Quit);
-        //tutorialButton.onClick.AddListener(GameManager.Instance.GoToTutorial);
+
+        settingsButton.onClick.AddListener(OpenSettings);
+        closeSettingsButton.onClick.AddListener(CloseSettings);
+
+        float savedMasterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
+        float savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+
+        masterVolumeSlider.value = savedMasterVolume;
+        musicVolumeSlider.value = savedMusicVolume;
+
+        SetMasterVolume(savedMasterVolume);
+        SetMusicVolume(savedMusicVolume);
+
+        masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
+        musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
+
+        settingsPanel.SetActive(false);
+    }
+
+    private void OpenSettings()
+    {
+        settingsPanel.SetActive(true);
+    }
+
+    private void CloseSettings()
+    {
+        settingsPanel.SetActive(false);
+    }
+
+    private void SetMasterVolume(float volume)
+    {
+        AudioListener.volume = volume;
+
+        PlayerPrefs.SetFloat("MasterVolume", volume);
+        PlayerPrefs.Save();
+    }
+
+    private void SetMusicVolume(float volume)
+    {
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.SetVolume(volume);
+        }
     }
 
     private void OnDestroy()
     {
         startButton.onClick.RemoveAllListeners();
         quitButton.onClick.RemoveAllListeners();
-        //tutorialButton.onClick.RemoveAllListeners();
+        settingsButton.onClick.RemoveAllListeners();
+        closeSettingsButton.onClick.RemoveAllListeners();
+
+        masterVolumeSlider.onValueChanged.RemoveAllListeners();
+        musicVolumeSlider.onValueChanged.RemoveAllListeners();
     }
 
     private void Quit()

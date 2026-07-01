@@ -42,6 +42,9 @@ public class MusicManager : MonoBehaviour
         foreach (var s in storeOST) AudioManager.Instance.InitializeSound(s);
         foreach (var s in gameplayOST) AudioManager.Instance.InitializeSound(s);
         foreach (var s in menuOST) AudioManager.Instance.InitializeSound(s);
+
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+
         SetMenuMusic();
     }
 
@@ -49,48 +52,64 @@ public class MusicManager : MonoBehaviour
     public void SetStoreMusic()
     {
         AudioManager.Instance.Stop(currentOST);
+
         currentOST = storeOST[Random.Range(0, storeOST.Length)];
-        currentOST.volume = musicVolume;
+
         AudioManager.Instance.Play(currentOST);
+        currentOST.source.volume = musicVolume;
+
         Debug.Log("Store");
     }
 
-    public void SetGameplayMusic() 
+    public void SetGameplayMusic()
     {
         AudioManager.Instance.Stop(currentOST);
+
         currentOST = gameplayOST[Random.Range(0, gameplayOST.Length)];
-        currentOST.volume = musicVolume;
+
         AudioManager.Instance.Play(currentOST);
+        currentOST.source.volume = musicVolume;
+
         Debug.Log("Gameplay");
     }
-    public void SetMenuMusic() 
+
+    public void SetMenuMusic()
     {
         AudioManager.Instance.Stop(currentOST);
+
         currentOST = menuOST[Random.Range(0, menuOST.Length)];
-        currentOST.volume = musicVolume;
+
         AudioManager.Instance.Play(currentOST);
+        currentOST.source.volume = musicVolume;
+
         Debug.Log("Menu");
     }
 
     public void SetVolume(float volume)
     {
         musicVolume = volume;
-        if (currentOST != null && currentOST.source != null)  
-            currentOST.source.volume = musicVolume;
-    }
-  /*  private void UpdateTargets()
-    {
-        if (GameManager.Instance == null) return;
 
-        if (GameManager.Instance.IsInCombat)
+        if (currentOST != null && currentOST.source != null)
         {
-            targetPitch = combatPitch;
-            targetVolume = musicVolume;
+            currentOST.source.volume = musicVolume;
         }
-        else if (GameManager.Instance.IsInShop)
-        {
-            targetPitch = shopPitch;
-            targetVolume = musicVolume;
-        }
-    }*/
+
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+        PlayerPrefs.Save();
+    }
+    /*  private void UpdateTargets()
+      {
+          if (GameManager.Instance == null) return;
+
+          if (GameManager.Instance.IsInCombat)
+          {
+              targetPitch = combatPitch;
+              targetVolume = musicVolume;
+          }
+          else if (GameManager.Instance.IsInShop)
+          {
+              targetPitch = shopPitch;
+              targetVolume = musicVolume;
+          }
+      }*/
 }
