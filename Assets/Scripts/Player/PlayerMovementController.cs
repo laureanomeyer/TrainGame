@@ -5,7 +5,7 @@ public class PlayerMovementController
 {
     [Header("Movement")]
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float acceleration = 50f;
+    [SerializeField] private float acceleration = 125f;
     [SerializeField] private float deceleration = 1000f;
 
     private Rigidbody rb;
