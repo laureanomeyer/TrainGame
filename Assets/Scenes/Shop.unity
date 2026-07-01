@@ -11993,9 +11993,9 @@ MonoBehaviour:
   spawnWagonPoint: {fileID: 118387131}
   wagonShopParticleSystem: {fileID: 259471149}
   storeManager: {fileID: 505731350}
-  wagonArrivalDuration: 1.5
+  wagonArrivalDuration: 0.5
   wagonStartOffsetX: -50
-  waitTimeToBuy: 0.3
+  waitTimeToBuy: 0
 --- !u!1 &505731349
 GameObject:
   m_ObjectHideFlags: 0
@@ -13912,9 +13912,9 @@ MonoBehaviour:
   spawnWagonPoint: {fileID: 937126556}
   wagonShopParticleSystem: {fileID: 1428801579}
   storeManager: {fileID: 505731350}
-  wagonArrivalDuration: 1.5
+  wagonArrivalDuration: 0.5
   wagonStartOffsetX: -50
-  waitTimeToBuy: 0.3
+  waitTimeToBuy: 0
 --- !u!1 &824083486
 GameObject:
   m_ObjectHideFlags: 0
@@ -20523,9 +20523,9 @@ MonoBehaviour:
   spawnWagonPoint: {fileID: 1921304405}
   wagonShopParticleSystem: {fileID: 1559588810}
   storeManager: {fileID: 505731350}
-  wagonArrivalDuration: 1.5
+  wagonArrivalDuration: 0.5
   wagonStartOffsetX: -50
-  waitTimeToBuy: 0.3
+  waitTimeToBuy: 0
 --- !u!114 &1489797407 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3261780068120658410, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
@@ -28575,11 +28575,15 @@ PrefabInstance:
       objectReference: {fileID: 505731350}
     - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: waitTimeToBuy
-      value: 0.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: wagonStartOffsetX
       value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
+      propertyPath: wagonArrivalDuration
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4268736138887028017, guid: 2d62314a6661f8e42b8b842b7910179e, type: 3}
       propertyPath: wagonShopParticleSystem
