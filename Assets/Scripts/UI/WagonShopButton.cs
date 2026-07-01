@@ -49,6 +49,8 @@ public class WagonShopButton : MonoBehaviour
     [Tooltip("Distancia desde la izquierda donde aparece antes de entrar.")]
     [SerializeField] private float wagonStartOffsetX = -35f;
 
+    [SerializeField] private float waitTimeToBuy;
+
     private bool isBuyingWagon;
 
     private void Start()
@@ -290,7 +292,7 @@ public class WagonShopButton : MonoBehaviour
             wagonShopParticleSystem.Play();
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(waitTimeToBuy);
 
         isBuyingWagon = false;
 
