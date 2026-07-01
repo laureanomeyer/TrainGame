@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 public class StatPanelController : MonoBehaviour
 {
     [Header("Object References")]
-    [SerializeField] private CanvasGroup currentGold;
     [SerializeField] private CanvasGroup stats;
     [SerializeField] private InputActionAsset inputActions;
 
@@ -43,12 +42,10 @@ public class StatPanelController : MonoBehaviour
             if (stats.alpha != 0)
             {
                 stats.alpha = 0;
-                currentGold.alpha = 0.5f;
             }
             else
             {
                 stats.alpha = 1;
-                currentGold.alpha = 1;
             }
         }
     }
