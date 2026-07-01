@@ -10,6 +10,7 @@ public class PauseMenuManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button resumeButton;
+    [SerializeField] private Button menuButton;
 
     [Header("Scenes")]
     [SerializeField] private string[] pausableScenes = { "LauScene", "Shop", "TutorialScene" };
@@ -47,6 +48,11 @@ public class PauseMenuManager : MonoBehaviour
             resumeButton.onClick.AddListener(ResumeGame);
         }
 
+        if (menuButton != null)
+        {
+            resumeButton.onClick.AddListener(QuitToMainMenu);
+        }
+
         if (pauseAction != null)
         {
             pauseAction.performed += OnPausePressed;
@@ -59,7 +65,11 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (resumeButton != null)
         {
-            resumeButton.onClick.RemoveListener(ResumeGame);
+            resumeButton.onClick.RemoveAllListeners();
+        }
+        if (menuButton != null)
+        {
+            resumeButton.onClick.RemoveAllListeners();
         }
 
         if (pauseAction != null)
