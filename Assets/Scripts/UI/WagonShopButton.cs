@@ -239,11 +239,11 @@ public class WagonShopButton : MonoBehaviour
     {
         isBuyingWagon = true;
 
-        // Evita comprar o rerollear dos veces durante la animación.
+
         storeManager.buyButton.interactable = false;
         storeManager.rerollButton.interactable = false;
 
-        // Se crea en la posición final correcta del tren.
+
         GameObject newWagon = displayTrain.AddWagon(currentWagonInStock);
 
         if (newWagon != null)
@@ -251,7 +251,7 @@ public class WagonShopButton : MonoBehaviour
             Vector3 finalPosition = newWagon.transform.position;
             Quaternion finalRotation = newWagon.transform.rotation;
 
-            // Lo ubicamos a la izquierda antes de que se renderice el siguiente frame.
+
             Vector3 startPosition = finalPosition;
             startPosition.x += wagonStartOffsetX;
 
@@ -266,7 +266,7 @@ public class WagonShopButton : MonoBehaviour
 
                 float t = Mathf.Clamp01(timer / wagonArrivalDuration);
 
-                // Entrada suave y frenado suave.
+
                 t = t * t * (3f - 2f * t);
 
                 newWagon.transform.position = Vector3.Lerp(
@@ -290,7 +290,11 @@ public class WagonShopButton : MonoBehaviour
             wagonShopParticleSystem.Play();
         }
 
+        yield return new WaitForSeconds(1f);
+
         isBuyingWagon = false;
+
+        storeManager.buyButton.interactable = true;
 
         CheckReroll();
     }
