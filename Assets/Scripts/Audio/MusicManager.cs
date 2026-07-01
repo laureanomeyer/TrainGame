@@ -75,8 +75,8 @@ public class MusicManager : MonoBehaviour
     public void SetVolume(float volume)
     {
         musicVolume = volume;
-        currentOST.volume = musicVolume;
-        
+        if (currentOST != null && currentOST.source != null)  
+            currentOST.source.volume = musicVolume;
     }
   /*  private void UpdateTargets()
     {
