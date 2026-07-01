@@ -214,10 +214,5 @@ public class SceneTransitionManager : MonoBehaviour
     void LogAudioListeners()
     {
         AudioListener[] listeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
-        Debug.Log($"[DEBUG] AudioListeners encontrados: {listeners.Length}");
-        foreach (var l in listeners)
-        {
-            Debug.Log($"  -> {l.gameObject.name} (persistente: {l.gameObject.scene.name == "DontDestroyOnLoad"})", l.gameObject);
-        }
     }
 }

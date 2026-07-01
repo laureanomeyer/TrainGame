@@ -39,7 +39,10 @@ public class CursorAmmo : MonoBehaviour
         GameEvents.OnAmmoChanged += UpdateText;
         GameEvents.OnReloadStarted += StartReloadFill;
         GameEvents.OnShoot += StartShootCrosshairAnimation;
-        GameEvents.OnShowGameplayCursor += SetCursorVisibility;
+
+        if (!GameManager.Instance.IsTutorial)
+            GameEvents.OnShowGameplayCursor += SetCursorVisibility;
+
         TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
     }
 
@@ -52,6 +55,17 @@ public class CursorAmmo : MonoBehaviour
         cursorRect.localScale = Vector3.one * normalScale;
         cursorCenterRect.localScale = Vector3.one * normalScale;
 
+    }
+    private void OnDestroy()
+    {
+        GameEvents.OnAmmoChanged -= UpdateText;
+        GameEvents.OnReloadStarted -= StartReloadFill;
+        GameEvents.OnShoot -= StartShootCrosshairAnimation;
+
+        if (!GameManager.Instance.IsTutorial)
+            GameEvents.OnShowGameplayCursor -= SetCursorVisibility;
+
+        TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }
     private void LateUpdate()
     {
@@ -142,13 +156,5 @@ public class CursorAmmo : MonoBehaviour
         cursorImage.gameObject.SetActive(visible);
         cursorImageCenter.gameObject.SetActive(visible);
         ammoText.gameObject.SetActive(visible);
-    }
-    private void OnDestroy()
-    {
-        GameEvents.OnAmmoChanged -= UpdateText;
-        GameEvents.OnReloadStarted -= StartReloadFill;
-        GameEvents.OnShoot -= StartShootCrosshairAnimation;
-        GameEvents.OnShowGameplayCursor -= SetCursorVisibility;
-        TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }
 }

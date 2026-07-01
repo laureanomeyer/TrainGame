@@ -49,13 +49,24 @@ public class PlayerBrain : MonoBehaviour
         attackAction.canceled += DeactiveAttack;
 
         TutorialEvents.OnSetAttackEnabled += SetCanAttack;
-        GameEvents.OnActivateUi += SetCanAttack;
         GameEvents.OnShowInteract += ShowInteract;
         GameEvents.OnHideInteract += HideInteract;
-        GameEvents.OnShowGameplayCursor += SetCanAttack;
+        GameEvents.OnActivateUi += SetCanAttack;
 
         IsRepairing = false;
         HideInteract();
+    }
+    private void OnDestroy()
+    {
+        playerInteractionsController.Cleanup();
+        attackAction.performed -= ActiveAttack;
+        attackAction.canceled -= DeactiveAttack;
+
+        TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
+
+        GameEvents.OnActivateUi -= SetCanAttack;
+        GameEvents.OnShowInteract -= ShowInteract;
+        GameEvents.OnHideInteract -= HideInteract;
     }
     private void Update()
     {
@@ -116,6 +127,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void SetCanAttack(bool canAttack)
     {
+        Debug.Log(this.canAttack);
         this.canAttack = canAttack;
     }
 
@@ -144,17 +156,7 @@ public class PlayerBrain : MonoBehaviour
         Interactimage.SetActive(false);
     }
 
-    private void OnDestroy()
-    {
-        playerInteractionsController.Cleanup();
-        attackAction.performed -= ActiveAttack;
-        attackAction.canceled -= DeactiveAttack;
-        GameEvents.OnActivateUi -= SetCanAttack;
-        TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
-        GameEvents.OnShowInteract -= ShowInteract;
-        GameEvents.OnHideInteract -= HideInteract;
-        GameEvents.OnShowGameplayCursor -= SetCanAttack;
-    }
+
 
 
 }
