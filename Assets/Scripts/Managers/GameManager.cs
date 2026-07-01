@@ -30,8 +30,8 @@ public class GameManager : MonoBehaviour
     public bool IsTutorial => SceneManager.GetActiveScene().name == "TutorialScene";
     public bool IsGameplayScene => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene" || SceneManager.GetActiveScene().name == "Shop";
 
-    public bool IsInShop => SceneManager.GetActiveScene().name == "Shop";
-    public bool IsInCombat => SceneManager.GetActiveScene().name == "LauScene";
+    public bool IsInShop => SceneManager.GetActiveScene().name == "Shop" ||  SceneManager.GetActiveScene().name == "MainMenu" || SceneManager.GetActiveScene().name == "FinalScene";
+    public bool IsInCombat => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene";
 
     private const string MainMenuScene = "MainMenu";
     private const string ShopScene = "Shop";
