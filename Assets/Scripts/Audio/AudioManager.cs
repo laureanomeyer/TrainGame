@@ -87,6 +87,33 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+
+    public AudioSource GetSource(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        return s?.source;
+    }
+
+    public bool IsPlaying(string name)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        return s != null && s.source.isPlaying;
+    }
+
+    public void SetPitch(string name, float pitch)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s != null)
+            s.source.pitch = pitch;
+    }
+
+    public void SetVolume(string name, float volume)
+    {
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s != null)
+            s.source.volume = volume;
+    }
+
     IEnumerator Play_Coroutine(string name, float duration)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
