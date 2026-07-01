@@ -5,6 +5,9 @@ public class DisplayTrain : MonoBehaviour
 {
     [SerializeField] private Transform currentTail;
 
+    [Header("Wagon Spacing")]
+    [SerializeField] private float wagonGap = 2.5f;
+
     private List<IWagonID> wagonList;
 
     [SerializeField] private List<WagonInStockSO> wagonAssets;
@@ -28,12 +31,13 @@ public class DisplayTrain : MonoBehaviour
         }
     }
 
-    // Ahora devuelve el GameObject creado.
     private GameObject CreateWagon(GameObject wagonModel)
     {
+        Vector3 spawnPosition = currentTail.position - currentTail.forward * wagonGap;
+
         GameObject currentWagon = Instantiate(
             wagonModel,
-            currentTail.position,
+            spawnPosition,
             currentTail.rotation
         );
 
@@ -43,7 +47,6 @@ public class DisplayTrain : MonoBehaviour
         return currentWagon;
     }
 
-    // También devuelve el modelo nuevo para animarlo desde WagonShopButton.
     public GameObject AddWagon(WagonInStockSO wagonID)
     {
         wagonList.Add(new WagonStore(wagonID.Wagon, wagonID.wagonName));
