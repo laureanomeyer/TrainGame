@@ -50,7 +50,7 @@ public class PauseMenuManager : MonoBehaviour
 
         if (menuButton != null)
         {
-            resumeButton.onClick.AddListener(QuitToMainMenu);
+            menuButton.onClick.AddListener(QuitToMainMenu);
         }
 
         if (pauseAction != null)
@@ -69,7 +69,7 @@ public class PauseMenuManager : MonoBehaviour
         }
         if (menuButton != null)
         {
-            resumeButton.onClick.RemoveAllListeners();
+            menuButton.onClick.RemoveAllListeners();
         }
 
         if (pauseAction != null)
@@ -139,6 +139,8 @@ public class PauseMenuManager : MonoBehaviour
         }
         SceneManager.LoadScene(mainMenuSceneName);
         Cursor.visible = true;
+
+        MusicManager.Instance.SetMenuMusic();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

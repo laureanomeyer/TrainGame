@@ -40,6 +40,12 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(Play_Coroutine(name, duration));
     }
 
+    public void Play(Sound sound)
+    {
+        if (sound != null)
+            StartCoroutine(Play_Coroutine(sound));
+    }
+
     public void ChangeVolume(string name, float changed, float duration = 0)
     {
         StartCoroutine(ChangeVolume_Coroutine(name, changed, duration));
@@ -50,6 +56,11 @@ public class AudioManager : MonoBehaviour
         if (s == null)
             return;
         s.source.Stop();
+    }
+    public void Stop(Sound sound)
+    {
+        if (sound != null)
+            sound.source.Stop();
     }
 
     public void Pause(string name)
@@ -128,5 +139,24 @@ public class AudioManager : MonoBehaviour
                 s.source.Stop();
             }
         }
+    }
+    IEnumerator Play_Coroutine(Sound soundToPlay)
+    {
+        if (soundToPlay == null)
+            yield return null;
+        soundToPlay.source.Play();
+        yield return new WaitForSeconds(1f);
+    }
+
+    public void InitializeSound(Sound s)
+    {
+        if(s.source != null) return;
+
+        s.source = gameObject.AddComponent<AudioSource>();
+        s.source.clip = s.clip;
+        s.source.volume = s.volume;
+        s.source.pitch = s.pitch;
+        s.source.loop = s.loop;
+
     }
 }

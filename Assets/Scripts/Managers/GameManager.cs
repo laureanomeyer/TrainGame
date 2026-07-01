@@ -29,8 +29,7 @@ public class GameManager : MonoBehaviour
     public bool IsTransitioning => CurrentState == GameState.Transition;
     public bool IsTutorial => SceneManager.GetActiveScene().name == "TutorialScene";
     public bool IsGameplayScene => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene" || SceneManager.GetActiveScene().name == "Shop";
-
-    public bool IsInShop => SceneManager.GetActiveScene().name == "Shop" ||  SceneManager.GetActiveScene().name == "MainMenu" || SceneManager.GetActiveScene().name == "FinalScene";
+    public bool IsInShop => SceneManager.GetActiveScene().name == "Shop";
     public bool IsInCombat => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene";
 
     private const string MainMenuScene = "MainMenu";
@@ -197,6 +196,10 @@ public class GameManager : MonoBehaviour
         if (IsTutorial) ShowCursor(CursorType.Hidden);
         else if (IsGameplayScene) ShowCursor(CursorType.Gameplay);
         else ShowCursor(CursorType.Real);
+
+        if (IsInCombat) MusicManager.Instance.SetGameplayMusic();
+        else if (IsInShop) MusicManager.Instance.SetStoreMusic();
+        else MusicManager.Instance.SetMenuMusic();
     }
     public CursorType GetCurrentCursor()
     {

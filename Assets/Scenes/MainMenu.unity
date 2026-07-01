@@ -380,6 +380,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2350012072278053763, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
+      propertyPath: menuButton
+      value: 
+      objectReference: {fileID: 1966521103}
     - target: {fileID: 2781774589969510811, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1113,6 +1117,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1818629079590544584, guid: ab025b4c570b7864ea25e6bbacf93b46, type: 3}
+      propertyPath: sounds.Array.size
+      value: 22
+      objectReference: {fileID: 0}
     - target: {fileID: 8964365368582775269, guid: ab025b4c570b7864ea25e6bbacf93b46, type: 3}
       propertyPath: m_Name
       value: AudioManager
@@ -1378,6 +1386,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1762137833}
   m_CullTransparentMesh: 1
+--- !u!114 &1966521103 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8339702436624532599, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
+  m_PrefabInstance: {fileID: 838026706}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &2129782212
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,6 +1542,70 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: musicVolume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: menuOST.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: storeOST.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: gameplayOST.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: menuOST.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: d61e73d5112e33d409b0a6b82e05742f, type: 3}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: menuOST.Array.data[0].name
+      value: Menu1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: menuOST.Array.data[0].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: storeOST.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: c486ff5d862680c4480db42a699b8a40, type: 3}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: storeOST.Array.data[0].name
+      value: Store1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: menuOST.Array.data[0].volume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: storeOST.Array.data[0].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: storeOST.Array.data[0].volume
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: gameplayOST.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: b7f35a43cee3f5845984b47551868147, type: 3}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: gameplayOST.Array.data[0].name
+      value: Gameplay1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: gameplayOST.Array.data[0].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6330522054240825165, guid: cf244800c5830be4897d89fa09921784, type: 3}
+      propertyPath: gameplayOST.Array.data[0].volume
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 1417142779928747320, guid: cf244800c5830be4897d89fa09921784, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.51937

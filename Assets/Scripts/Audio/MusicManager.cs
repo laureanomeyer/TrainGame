@@ -9,18 +9,21 @@ public class MusicManager : MonoBehaviour
 
     [Header("Pitch por estado")]
     [SerializeField] private float shopPitch = 1f;
-    [SerializeField] private float combatPitch = 1.25f;
+    [SerializeField] private float combatPitch = 1f;
     [SerializeField] private float pitchTransitionSpeed = 1.5f;
 
     [Header("Volumen por estado")]
-    [SerializeField] private float shopVolume = 0.6f;
-    [SerializeField] private float combatVolume = 1f;
+    [SerializeField] private float musicVolume = 1f;
     [SerializeField] private float volumeTransitionSpeed = 1f;
 
-    private int currentTrackIndex = 1; // arranca en OST1
-    private float targetPitch = 1f;
-    private float targetVolume = 1f;
-    private string CurrentTrackName => $"OST{currentTrackIndex}";
+    [Header("Bandas Sonoras")]
+    [SerializeField] Sound[] storeOST;
+    [SerializeField] Sound[] gameplayOST;
+    [SerializeField] Sound[] menuOST;
+
+    private Sound currentOST;
+
+   // private string CurrentTrackName => $"OST{currentTrackIndex}";
 
     private void Awake()
     {
@@ -32,49 +35,62 @@ public class MusicManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
-
-        targetPitch = shopPitch;
-        targetVolume = shopVolume;
     }
 
     private void Start()
     {
-        AudioManager.Instance.Play(CurrentTrackName);
+        foreach (var s in storeOST) AudioManager.Instance.InitializeSound(s);
+        foreach (var s in gameplayOST) AudioManager.Instance.InitializeSound(s);
+        foreach (var s in menuOST) AudioManager.Instance.InitializeSound(s);
+        SetMenuMusic();
     }
 
-    private void Update()
+
+    public void SetStoreMusic()
     {
-        UpdateTargets();
-
-        AudioSource src = AudioManager.Instance.GetSource(CurrentTrackName);
-        if (src != null)
-        {
-            src.pitch = Mathf.MoveTowards(src.pitch, targetPitch, pitchTransitionSpeed * Time.deltaTime);
-            src.volume = Mathf.MoveTowards(src.volume, targetVolume, volumeTransitionSpeed * Time.deltaTime);
-        }
-
-        if (!AudioManager.Instance.IsPlaying(CurrentTrackName))
-        {
-            currentTrackIndex = currentTrackIndex % trackCount + 1;
-            AudioManager.Instance.Play(CurrentTrackName);
-            AudioManager.Instance.SetPitch(CurrentTrackName, targetPitch);
-            AudioManager.Instance.SetVolume(CurrentTrackName, targetVolume);
-        }
+        AudioManager.Instance.Stop(currentOST);
+        currentOST = storeOST[Random.Range(0, storeOST.Length)];
+        currentOST.volume = musicVolume;
+        AudioManager.Instance.Play(currentOST);
+        Debug.Log("Store");
     }
 
-    private void UpdateTargets()
+    public void SetGameplayMusic() 
+    {
+        AudioManager.Instance.Stop(currentOST);
+        currentOST = gameplayOST[Random.Range(0, gameplayOST.Length)];
+        currentOST.volume = musicVolume;
+        AudioManager.Instance.Play(currentOST);
+        Debug.Log("Gameplay");
+    }
+    public void SetMenuMusic() 
+    {
+        AudioManager.Instance.Stop(currentOST);
+        currentOST = menuOST[Random.Range(0, menuOST.Length)];
+        currentOST.volume = musicVolume;
+        AudioManager.Instance.Play(currentOST);
+        Debug.Log("Menu");
+    }
+
+    public void SetVolume(float volume)
+    {
+        musicVolume = volume;
+        currentOST.volume = musicVolume;
+        
+    }
+  /*  private void UpdateTargets()
     {
         if (GameManager.Instance == null) return;
 
         if (GameManager.Instance.IsInCombat)
         {
             targetPitch = combatPitch;
-            targetVolume = combatVolume;
+            targetVolume = musicVolume;
         }
         else if (GameManager.Instance.IsInShop)
         {
             targetPitch = shopPitch;
-            targetVolume = shopVolume;
+            targetVolume = musicVolume;
         }
-    }
+    }*/
 }
