@@ -21,6 +21,9 @@ public class MusicManager : MonoBehaviour
     [SerializeField] Sound[] gameplayOST;
     [SerializeField] Sound[] menuOST;
 
+    [Header("Bandas Sonoras")]
+    [SerializeField] Sound[] ambientSound;
+
     private Sound currentOST;
 
    // private string CurrentTrackName => $"OST{currentTrackIndex}";
@@ -97,6 +100,14 @@ public class MusicManager : MonoBehaviour
         PlayerPrefs.SetFloat("MusicVolume", musicVolume);
         PlayerPrefs.Save();
     }
+
+    public void SetAmbientSound(float volume) 
+    {
+        AudioManager.Instance.Play("TrainPassing", volume);
+
+
+    }
+
     /*  private void UpdateTargets()
       {
           if (GameManager.Instance == null) return;

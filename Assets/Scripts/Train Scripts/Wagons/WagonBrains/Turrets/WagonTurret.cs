@@ -88,6 +88,7 @@ public class WagonTurret : MonoBehaviour
         Aim(direction);
 
         GameObject bulletGO = bulletPool.Get();
+        AudioManager.Instance.Play("RevolverShot4");
 
         bulletGO.transform.SetPositionAndRotation(
             firePoint.position,
