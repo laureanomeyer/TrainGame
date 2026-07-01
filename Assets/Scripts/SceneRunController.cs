@@ -50,12 +50,7 @@ public class SceneRunController : MonoBehaviour
 
     private void FinishRun()
     {
-        GameManager.Instance.EnterTransitionState();
-
-        SceneTransitionManager.Instance.TransitionToScene(
-            "Shop",
-            SceneTransitionType.EndingRun
-        );
+        GameManager.Instance.GoToStore();
     }
 
     private void SetRunStarted(bool runStarted)
