@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+        ShowCursor(CursorType.Gameplay);
     }
     public void SkipRun()
     {
@@ -97,6 +98,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(RunScene, SceneTransitionType.StartingRun, GameState.Gameplay);
+        ShowCursor(CursorType.Gameplay);
     }
 
     public void GoToMainMenu()
@@ -123,7 +125,7 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
 
         ChangeScene(TutorialScene, SceneTransitionType.Generic, GameState.Tutorial);
-
+        ShowCursor(CursorType.Gameplay);
     }
 
     public void Defeat()
@@ -193,7 +195,7 @@ public class GameManager : MonoBehaviour
         isChangingScene = false;
         CurrentState = stateAfterTransition;
 
-        if (IsTutorial) ShowCursor(CursorType.Hidden);
+        if (IsTutorial) ShowCursor(CursorType.Gameplay);
         else if (IsGameplayScene) ShowCursor(CursorType.Gameplay);
         else ShowCursor(CursorType.Real);
 

@@ -6,7 +6,7 @@ public class DisplayTrain : MonoBehaviour
     [SerializeField] private Transform currentTail;
 
     [Header("Wagon Spacing")]
-    [SerializeField] private float wagonGap = 2.5f;
+    private float wagonGap = -0.6f;
 
     private List<IWagonID> wagonList;
 

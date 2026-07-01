@@ -42,7 +42,8 @@ public class GoldBox : IInteractableWithInventory
     public void SetCanInteract(bool canInteract)
     {
         this.canInteract = canInteract;
-        collider.enabled = canInteract;
+        if (collider != null)
+            collider.enabled = canInteract;
     }
 
     public void OnDestroyObject() 
