@@ -13,6 +13,7 @@ public class StoreUiInteracts : MonoBehaviour
     private PlayerBrain playerBrain;
 
     private bool playerInZone;
+    private bool uiOpen = false;    
 
     private void OnEnable()
     {
@@ -69,11 +70,25 @@ public class StoreUiInteracts : MonoBehaviour
     private void OnPlayerInteract()
     {
         if (!playerInZone) return;
-        uiToShow.SetActive(true);
 
-        playerBrain.SetCanAttack(false);
-        playerBrain.SetCanMove(false);
+        if (!uiOpen)
+        {
+            uiOpen = true;
 
-        GameEvents.ShowCursor(CursorType.Real);
+            uiToShow.SetActive(true);
+
+            playerBrain.SetCanAttack(false);
+            playerBrain.SetCanMove(false);
+
+            GameEvents.ShowCursor(CursorType.Real);
+        }
+        else
+        {
+            uiOpen = false;
+
+            DeactivateUI();
+        }
+
+        
     }
 }
