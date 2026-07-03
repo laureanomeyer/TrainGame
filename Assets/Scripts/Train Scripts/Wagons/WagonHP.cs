@@ -55,4 +55,9 @@ public class WagonHP : IDamagable
         maxHp = newMaxHp;
         currentHp = maxHp * ratio;
     }
+
+    public void forceHp(float amount)
+    {
+        currentHp = amount;
+    }
 }

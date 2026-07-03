@@ -47,11 +47,14 @@ public class GoldenWagonBrain : WagonBrain
     public override void TakeDamage(float damageAmount)
     {
         base.TakeDamage(damageAmount);
-        if (hpController.CurrentHp <= 0 && hpController != null)
+        if (hpController.CurrentHp <= hpController.MaxHp/4 && GameManager.Instance.IsTutorial)
+        {
+            hpController.forceHp(hpController.MaxHp / 4);
+        }
+        else if (hpController.CurrentHp <= 0 && hpController != null)
         {
             collector.EmptyGold();
         }
-
     }
 
     public void setGoldCoins(float currentGold, float maxGold)

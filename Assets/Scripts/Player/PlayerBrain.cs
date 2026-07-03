@@ -127,8 +127,8 @@ public class PlayerBrain : MonoBehaviour
 
     public void SetCanAttack(bool canAttack)
     {
-        Debug.Log(this.canAttack);
         this.canAttack = canAttack;
+        playerMovementController.SetCanRotate(canAttack);
     }
 
     public void SetCanMove(bool canMove)

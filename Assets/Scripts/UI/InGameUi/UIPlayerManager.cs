@@ -34,6 +34,8 @@ public class UIPlayerManager : MonoBehaviour
 
     private LocomotiveBrain locomotive;
     private float lerpedShield = 1;
+    private float lerpedFuel = 1f;
+    private float lerpedCapacity = 1f;
 
     private void Start()
     {
@@ -84,11 +86,13 @@ public class UIPlayerManager : MonoBehaviour
             shieldImage.fillAmount = lerpedShield;
 
             var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, currentFuel));
+            lerpedFuel = Mathf.MoveTowards(lerpedFuel, currentFuel, Time.deltaTime);
+            fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, lerpedFuel));
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
-            fuelImage.fillAmount = currentCapacity;
-            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, currentCapacity));
+            lerpedCapacity = Mathf.MoveTowards(lerpedCapacity, currentCapacity, Time.deltaTime);
+            fuelImage.fillAmount = lerpedCapacity;
+            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedCapacity));
         }
     }
 
