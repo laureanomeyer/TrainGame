@@ -22,6 +22,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI rofText;
     [SerializeField] private TextMeshProUGUI ammunitionText;
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image weaponImage;
 
     private Button button;
@@ -85,10 +86,14 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     public void ActivateButton()
     {
         button.interactable = true;
+        canvasGroup.alpha = 0f;
+        canvasGroup.interactable = true;
     }
 
     public void DeactivateButton()
     {
         button.interactable = false;
+        canvasGroup.alpha = 1f;
+        canvasGroup.interactable = false;
     }
 }
