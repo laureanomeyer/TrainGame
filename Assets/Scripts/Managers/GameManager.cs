@@ -10,14 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LocomotiveStatsSO baseStats;
     [SerializeField] private LocomotiveStatsSO baseMultStats;
 
-    [Header("Cursor Data")]
-    [SerializeField] private Texture2D menuCursor;
-
     [SerializeField] private int lastStation = 6;
 
     public RunResult LastRunResult { get; private set; } = RunResult.None;
     public GameState CurrentState { get; private set; }
-
     public GameSession Session { get; private set; }
 
     private bool gameEnded;
