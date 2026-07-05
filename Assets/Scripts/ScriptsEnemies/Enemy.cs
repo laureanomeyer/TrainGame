@@ -94,6 +94,12 @@ public class Enemy : MonoBehaviour
         GameEvents.EnemyHit(transform.position);
         flash.Flash();
 
+        DamagePopupManager.Instance?.ShowDamage(
+        damage,
+        transform.position
+    );
+
+
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
