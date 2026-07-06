@@ -86,7 +86,8 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
-        playerMovementController.SetMoveInput(value.Get<Vector2>());
+        if (playerMovementController != null && value != null)
+            playerMovementController.SetMoveInput(value.Get<Vector2>());
     }
 
     private void OnInteract()
