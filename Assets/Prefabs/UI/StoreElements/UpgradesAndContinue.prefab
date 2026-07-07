@@ -277,7 +277,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &308884833659829397
 RectTransform:
   m_ObjectHideFlags: 0
@@ -687,6 +687,7 @@ GameObject:
   - component: {fileID: 7944349135785196109}
   - component: {fileID: 6166488940656545430}
   - component: {fileID: 1772667752573348427}
+  - component: {fileID: 1404904460170223780}
   m_Layer: 5
   m_Name: Upgrade
   m_TagString: Untagged
@@ -709,10 +710,10 @@ RectTransform:
   - {fileID: 9032743559600473488}
   m_Father: {fileID: 4649108046504463133}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 457.1808, y: -134.1791}
-  m_SizeDelta: {x: 914.3616, y: 228.35818}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7944349135785196109
 CanvasRenderer:
@@ -808,6 +809,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1404904460170223780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6579582775192195584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!1 &8299854634235472155
 GameObject:
   m_ObjectHideFlags: 0
@@ -820,6 +834,7 @@ GameObject:
   - component: {fileID: 1885202446255015399}
   - component: {fileID: 7022142487526939103}
   - component: {fileID: 5698100950331346701}
+  - component: {fileID: 7969625050869099153}
   m_Layer: 5
   m_Name: Continue
   m_TagString: Untagged
@@ -842,10 +857,10 @@ RectTransform:
   - {fileID: 4534775462984965340}
   m_Father: {fileID: 4649108046504463133}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 457.1808, y: -390.5373}
-  m_SizeDelta: {x: 914.3616, y: 224.35818}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1885202446255015399
 CanvasRenderer:
@@ -941,3 +956,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7969625050869099153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8299854634235472155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5

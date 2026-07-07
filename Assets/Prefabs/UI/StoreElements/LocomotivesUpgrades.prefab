@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &824714424325096959
 RectTransform:
   m_ObjectHideFlags: 0
@@ -214,6 +214,7 @@ GameObject:
   - component: {fileID: 1814427659616932126}
   - component: {fileID: 373043800238923450}
   - component: {fileID: 8324360522720968241}
+  - component: {fileID: 367023071903753343}
   - component: {fileID: 7628223489649111458}
   m_Layer: 5
   m_Name: Upgrades max HP
@@ -324,6 +325,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &367023071903753343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1010070542906421480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!114 &7628223489649111458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,6 +366,7 @@ GameObject:
   - component: {fileID: 7318668228720605086}
   - component: {fileID: 8249245985285743289}
   - component: {fileID: 14035184469026694}
+  - component: {fileID: 3523694456772867496}
   m_Layer: 5
   m_Name: Close button
   m_TagString: Untagged
@@ -473,6 +488,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &3523694456772867496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167999050472885278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!1 &2183767478793178021
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,6 +881,7 @@ GameObject:
   - component: {fileID: 3118823258504348008}
   - component: {fileID: 8074172817724283782}
   - component: {fileID: 8358430975747795986}
+  - component: {fileID: 7775172140188775682}
   - component: {fileID: 1858860438539848984}
   m_Layer: 5
   m_Name: Upgrades damage multiplier
@@ -963,6 +992,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7775172140188775682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2899805885725438222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!114 &1858860438539848984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +1032,7 @@ GameObject:
   - component: {fileID: 4744650795573117583}
   - component: {fileID: 2080217758972854671}
   - component: {fileID: 4918064080451478128}
+  - component: {fileID: 2245180864510399963}
   - component: {fileID: 794717651370774172}
   m_Layer: 5
   m_Name: Upgrades gold multyplier
@@ -1100,6 +1143,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2245180864510399963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4391960701601860168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!114 &794717651370774172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1401,6 +1457,7 @@ GameObject:
   - component: {fileID: 1963247452947679708}
   - component: {fileID: 3212071136313904591}
   - component: {fileID: 5316896505109983243}
+  - component: {fileID: 1457624782515681758}
   - component: {fileID: 3725536754182478984}
   m_Layer: 5
   m_Name: Upgrades Attack speed
@@ -1511,6 +1568,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1457624782515681758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5953576495234691016}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!114 &3725536754182478984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1894,6 +1964,7 @@ GameObject:
   - component: {fileID: 3185080567308886729}
   - component: {fileID: 6899250357531743159}
   - component: {fileID: 5567224907279864497}
+  - component: {fileID: 3115792540783882686}
   - component: {fileID: 2702155068078962608}
   m_Layer: 5
   m_Name: Upgrades defense
@@ -2004,6 +2075,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3115792540783882686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8442084254645986126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.5
 --- !u!114 &2702155068078962608
 MonoBehaviour:
   m_ObjectHideFlags: 0
