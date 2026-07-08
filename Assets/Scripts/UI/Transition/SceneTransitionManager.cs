@@ -154,24 +154,36 @@ public class SceneTransitionManager : MonoBehaviour
     private string GetTransitionText(SceneTransitionType transitionType)
     {
         int currentLevel = 1;
+        string currentStationName = "Estación desconocida";
 
         if (GameManager.Instance != null &&
             GameManager.Instance.Session != null &&
             GameManager.Instance.Session.SessionConfig != null)
         {
             currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+            currentStationName = GameManager.Instance.GetCurrentStationName();
         }
 
         switch (transitionType)
         {
             case SceneTransitionType.StartingRun:
-                return $"Emprendiendo viaje {currentLevel}...";
+                return $"Emprendiendo viaje {currentLevel} hacia {currentStationName}...";
 
             case SceneTransitionType.EndingRun:
-                return $"¡Tramo superado! Llegando a la estacion {currentLevel}";
+                {
+                    int arrivedLevel = Mathf.Max(currentLevel - 1, 1);
+                    string arrivedStationName = "Estación desconocida";
+
+                    if (GameManager.Instance != null)
+                    {
+                        arrivedStationName = GameManager.Instance.GetStationNameByLevel(arrivedLevel);
+                    }
+
+                    return $"¡Tramo superado! Llegando a {arrivedStationName}";
+                }
 
             case SceneTransitionType.MainMenu:
-                return "Volviendo al menu principal";
+                return "Volviendo al menú principal";
 
             case SceneTransitionType.Final:
                 return "Finalizando viaje";

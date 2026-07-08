@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int lastStation = 6;
 
+    [Header("Stations")]
+    [SerializeField] private StationRouteSO stationRoute;
+
     public RunResult LastRunResult { get; private set; } = RunResult.None;
     public GameState CurrentState { get; private set; }
     public GameSession Session { get; private set; }
@@ -63,6 +66,34 @@ public class GameManager : MonoBehaviour
     {
         return Session.SessionConfig.CurrentLevel >= lastStation;
     }
+
+    public string GetCurrentStationName() //STATIONNAMES
+    {
+        if (stationRoute == null)
+        {
+            return "Estación desconocida";
+        }
+
+        int currentLevel = 1;
+
+        if (Session != null && Session.SessionConfig != null)
+        {
+            currentLevel = Session.SessionConfig.CurrentLevel;
+        }
+
+        return stationRoute.GetStationNameByLevel(currentLevel);
+    }
+
+    public string GetStationNameByLevel(int level)
+    {
+        if (stationRoute == null)
+        {
+            return "Estación desconocida";
+        }
+
+        return stationRoute.GetStationNameByLevel(level);
+    }
+
 
     public void EnterTransitionState()
     {
