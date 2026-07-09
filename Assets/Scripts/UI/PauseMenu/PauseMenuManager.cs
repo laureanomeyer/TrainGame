@@ -137,7 +137,7 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(false);
         }
-        SceneManager.LoadScene(mainMenuSceneName);
+        GameManager.Instance.GoToMainMenu();
         Cursor.visible = true;
 
         MusicManager.Instance.SetMenuMusic();

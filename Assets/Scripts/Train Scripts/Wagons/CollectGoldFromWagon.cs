@@ -29,6 +29,7 @@ public class CollectGoldFromWagon : MonoBehaviour
     private void OnDestroy()
     {
         TutorialEvents.OnEnemyKilled -= Activate;
+        inputHandler.Dispose();
     }
 
     private void SetGoldInPlayerInventory()

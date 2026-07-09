@@ -48,7 +48,7 @@ public class GoldBox : IInteractableWithInventory
 
     public void OnDestroyObject() 
     {
-        TutorialEvents.OnEnableGoldBox += SetCanInteract;
+        TutorialEvents.OnEnableGoldBox -= SetCanInteract;
     }
 }
 
