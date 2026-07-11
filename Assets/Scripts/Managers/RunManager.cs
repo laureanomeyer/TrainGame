@@ -37,7 +37,7 @@ public class RunManager : MonoBehaviour
         Instance = this;
         #endregion
 
-        statSystem = GameManager.Instance.Session.StatSystem;
+        statSystem = GameManager.Instance.Session._StatSystem;
         speed = statSystem.GetStat(StatType.Speed);
     }
 
@@ -67,9 +67,9 @@ public class RunManager : MonoBehaviour
 
     public void OnWagonDestroyed(IWagonID wagon)
     {
-        GameManager.Instance.Session.TrainData.RemoveWagonID(wagon);
+        GameManager.Instance.Session._TrainData.RemoveWagonID(wagon);
         GameManager.Instance.Session.RebuildStatsSystem();
-        statSystem = GameManager.Instance.Session.StatSystem;
+        statSystem = GameManager.Instance.Session._StatSystem;
     }
     public void OnRunFinished()
     {

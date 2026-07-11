@@ -37,7 +37,7 @@ public class GoldBox : IInteractableWithInventory
 
     public void ChangeGoldInData(float amount)
     {
-        GameManager.Instance.Session.PlayerData.AddPlayerGold(amount);
+        GameManager.Instance.Session._PlayerData.AddPlayerGold(amount);
     }
     public void SetCanInteract(bool canInteract)
     {

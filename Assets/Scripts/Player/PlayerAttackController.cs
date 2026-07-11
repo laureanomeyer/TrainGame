@@ -32,13 +32,13 @@ public class PlayerAttackController
         this.spawnPoint = spawnPoint;
 
         //Se establece el arma equipada
-        if (GameManager.Instance.Session.PlayerData.CheckWeapon() == false)
+        if (GameManager.Instance.Session._PlayerData.CheckWeapon() == false)
         {
             SetWeapon(weaponItem);
         }
         else
         {
-            SetWeapon(GameManager.Instance.Session.PlayerData.PlayerWeapon);
+            SetWeapon(GameManager.Instance.Session._PlayerData.PlayerWeapon);
         }
 
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);
@@ -113,15 +113,15 @@ public class PlayerAttackController
 
     public void ReseatCadenceStats()
     {
-        rateOfFire = weapon.WeaponData.rateOfFire / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed);
-        reloadTime = weapon.WeaponData.reloadTime / GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed); ;
+        rateOfFire = weapon.WeaponData.rateOfFire / GameManager.Instance.Session._StatSystem.GetStat(StatType.AttackSpeed);
+        reloadTime = weapon.WeaponData.reloadTime / GameManager.Instance.Session._StatSystem.GetStat(StatType.AttackSpeed); ;
     }
 
     //Funcion para setear el arma equipada
     public void SetWeapon(GameObject weaponObtein)
     {
         weaponItem = weaponObtein;
-        GameManager.Instance.Session.PlayerData.ChangeWeaponData(weaponItem);
+        GameManager.Instance.Session._PlayerData.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.SetPlayerAtkReference(this);
         ReseatCadenceStats();

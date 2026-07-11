@@ -10,7 +10,7 @@ public class MoneyManager : MonoBehaviour
     
     void Start()
     {
-        playerMoney = GameManager.Instance.Session.PlayerData.GivePlayerGold();
+        playerMoney = GameManager.Instance.Session._PlayerData.GivePlayerGold();
         GameEvents.OnChangeGold += ChangePlayerGoldData;
 
         goldDisplay.UpdatedGold(playerMoney);
@@ -18,7 +18,7 @@ public class MoneyManager : MonoBehaviour
 
     private void ChangePlayerGoldData()
     {
-        GameManager.Instance.Session.PlayerData.ChangePlayerGold(playerMoney);
+        GameManager.Instance.Session._PlayerData.ChangePlayerGold(playerMoney);
     }
 
     public void ConsumePlayerGold(float amount)

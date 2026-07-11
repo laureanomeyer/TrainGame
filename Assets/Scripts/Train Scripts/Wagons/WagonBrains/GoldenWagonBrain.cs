@@ -19,7 +19,7 @@ public class GoldenWagonBrain : WagonBrain
 
     private void Awake()
     {
-        GameManager.Instance.Session.TrainData.SetGoldBox(goldBox);
+        GameManager.Instance.Session._TrainData.SetGoldBox(goldBox);
     }
     public override void Start()
     {

@@ -52,11 +52,11 @@ public class StatPanelController : MonoBehaviour
 
     private void SetupTexts()
     {
-        hpText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.MaxHp));
-        shieldsText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.Defense) + 1);
-        damageText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.DamageMultiplier));
-        attackSpeedText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.AttackSpeed));
-        bonusGoldText.text = "x " + FormatStat(GameManager.Instance.Session.StatSystem.GetStat(StatType.GoldMultiplier));
+        hpText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.MaxHp));
+        shieldsText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.Defense) + 1);
+        damageText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.DamageMultiplier));
+        attackSpeedText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.AttackSpeed));
+        bonusGoldText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.GoldMultiplier));
     }
     private string FormatStat(float value)
     {

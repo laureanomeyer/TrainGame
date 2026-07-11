@@ -15,6 +15,8 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private Animator animator;
     private bool canBeRepaired = false;
 
+    private StatSystem stats;
+
     public bool CanBeRepaired => canBeRepaired;
     public WagonHP HPController => hpController;
 
@@ -61,8 +63,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public virtual void Start()
     {
-        var statSystem = RunManager.Instance.StatSystem;
-        statSystem.OnStatChanged += OnStatChanged;
+        stats.OnStatChanged += OnStatChanged;
         animator = GetComponent<Animator>();
 
         Flash = GetComponent<DamageFlash>();
@@ -70,6 +71,8 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public virtual void StartWagon()
     {
+        if (stats == null) { stats = ServiceLocator.Get<StatSystem>(); }
+
         SetUpWagonHP();
         hpWorldUI = new WagonHPWorldUI(hpImage, hpBackgroundImage);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
@@ -84,8 +87,10 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public void RegisterModifiers()
     {
+        if (stats == null) { stats = ServiceLocator.Get<StatSystem>(); }
+
         foreach (var mod in GetModifiers())
-            RunManager.Instance.StatSystem.AddModifier(mod);
+            stats.AddModifier(mod);
     }
 
     public virtual void TakeDamage(float damageAmount)
@@ -121,8 +126,6 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     public void SetUpWagonHP() 
     {
-        var stats = RunManager.Instance.StatSystem;
-
         float maxHp = SM * stats.GetStat(StatType.MaxHp);
         float def = RES * stats.GetStat(StatType.Defense);
         
@@ -153,14 +156,14 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
     private void OnStatChanged(StatType type, float newValue)
     {
-        hpController.OnMaxHpChanged(SM * RunManager.Instance.StatSystem.GetStat(StatType.MaxHp));
+        hpController.OnMaxHpChanged(SM * stats.GetStat(StatType.MaxHp));
     }
 
     public void Break()
     {
         if (hpController.IsBroken) return;
 
-        RunManager.Instance.StatSystem.RemoveModifiersFromSource(this);
+        stats.RemoveModifiersFromSource(this);
 
         renderController.CheckWagonToChangeRender(canBreak);
 
@@ -168,13 +171,12 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
         if ( wagonID != null)
         {
-            GameManager.Instance.Session.TrainData.RemoveWagonID(wagonID);
+            GameManager.Instance.Session._TrainData.RemoveWagonID(wagonID);
         }
     }
     public virtual void OnDestroy()
     {
-        var statSystem = RunManager.Instance.StatSystem;
-        statSystem.OnStatChanged -= OnStatChanged;
+        stats.OnStatChanged -= OnStatChanged;
     }
 
     public void ShowHpBar()

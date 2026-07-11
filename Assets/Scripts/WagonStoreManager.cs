@@ -26,7 +26,7 @@ public class WagonStoreManager : MonoBehaviour
 
     private void Start()
     {
-        currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+        currentLevel = GameManager.Instance.Session._SessionConfig.CurrentLevel;
 
         foreach (var button in shopButtons)
         {

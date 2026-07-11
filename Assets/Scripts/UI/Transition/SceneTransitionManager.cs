@@ -158,9 +158,9 @@ public class SceneTransitionManager : MonoBehaviour
 
         if (GameManager.Instance != null &&
             GameManager.Instance.Session != null &&
-            GameManager.Instance.Session.SessionConfig != null)
+            GameManager.Instance.Session._SessionConfig != null)
         {
-            currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+            currentLevel = GameManager.Instance.Session._SessionConfig.CurrentLevel;
             currentStationName = GameManager.Instance.GetCurrentStationName();
         }
 

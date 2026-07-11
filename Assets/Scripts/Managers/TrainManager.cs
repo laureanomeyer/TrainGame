@@ -37,7 +37,7 @@ public class TrainManager : MonoBehaviour
     }
     private void CreateWagons()
     {
-        foreach (var wagonID in GameManager.Instance.Session.TrainData.WagonsIDList)
+        foreach (var wagonID in GameManager.Instance.Session._TrainData.WagonsIDList)
             CreateWagon(wagonID.Prefab, wagonID);
     }
     public void CreateWagon(GameObject wagonToCreate, IWagonID id)

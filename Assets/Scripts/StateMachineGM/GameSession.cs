@@ -6,34 +6,41 @@ public class GameSession
     private readonly LocomotiveStatsSO baseStats;
     private readonly LocomotiveStatsSO baseMultStats;
 
-    public PlayerData PlayerData { get; private set; }
-    public TrainData TrainData { get; private set; }
-    public StatSystem StatSystem { get; private set; }
-    public SessionConfig SessionConfig { get; private set; }
+    public PlayerData _PlayerData { get; private set; }
+    public TrainData _TrainData { get; private set; }
+    public StatSystem _StatSystem { get; private set; }
+    public SessionConfig _SessionConfig { get; private set; }
 
     public GameSession(LocomotiveStatsSO baseStats, LocomotiveStatsSO baseMultStats)
     {
         this.baseStats = baseStats;
         this.baseMultStats = baseMultStats;
 
-        PlayerData = new PlayerData();
-        TrainData = new TrainData(baseStats, baseMultStats);
-        SessionConfig = new SessionConfig();
-        StatSystem = new StatSystem(baseStats, TrainData);
+        _PlayerData = new PlayerData();
+        _TrainData = new TrainData(baseStats, baseMultStats);
+        _SessionConfig = new SessionConfig();
+        _StatSystem = new StatSystem(baseStats, _TrainData);
+
+        ServiceLocator.Register<PlayerData>(_PlayerData);
+        ServiceLocator.Register<TrainData>(_TrainData);
+        ServiceLocator.Register<StatSystem>(_StatSystem);
+        ServiceLocator.Register<SessionConfig>(_SessionConfig);
     }
 
     public void RebuildStatsSystem()
     {
-        StatSystem = new StatSystem(baseStats, TrainData);
+        _StatSystem = new StatSystem(baseStats, _TrainData);
         GameEvents.StatChanged();
     }
 
     public void Reset()
     {
-        this.PlayerData = new PlayerData();
-        TrainData = new TrainData(baseStats, baseMultStats);
-        SessionConfig = new SessionConfig();
-        StatSystem = new StatSystem(baseStats, TrainData);
+        this._PlayerData = new PlayerData();
+        _TrainData = new TrainData(baseStats, baseMultStats);
+        _SessionConfig = new SessionConfig();
+        _StatSystem = new StatSystem(baseStats, _TrainData);
+
+        ServiceLocator.Clear();
     }
 }
 

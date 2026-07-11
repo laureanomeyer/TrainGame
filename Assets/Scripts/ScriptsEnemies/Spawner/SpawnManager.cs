@@ -61,7 +61,7 @@ public class SpawnManager : MonoBehaviour
         SetLevelData();
         BuildPool();
         TrySpawn();
-        goldBox = GameManager.Instance.Session.TrainData.GoldBoxPosition;
+        goldBox = GameManager.Instance.Session._TrainData.GoldBoxPosition;
     }
 
     void Update()
@@ -156,7 +156,7 @@ public class SpawnManager : MonoBehaviour
 
     void SetLevelData()
     {
-        int index = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+        int index = GameManager.Instance.Session._SessionConfig.CurrentLevel;
 
         if (index > levelList.Count-1)
             currentlevelData = levelList.Last();

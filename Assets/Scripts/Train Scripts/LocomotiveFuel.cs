@@ -44,7 +44,7 @@ public class LocomotiveFuel
 
         TutorialEvents.OnSetCanConsume += SetCanConsume;
 
-        GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
+        GameManager.Instance.Session._TrainData.SetSpeed(actualSpeed);
 
         canConsume = !GameManager.Instance.IsTutorial;
     }
@@ -55,7 +55,7 @@ public class LocomotiveFuel
 
         if (!hasFuel)
         {
-            GameManager.Instance.Session.TrainData.SetSpeed(0);
+            GameManager.Instance.Session._TrainData.SetSpeed(0);
             return;
         }
 
@@ -92,11 +92,11 @@ public class LocomotiveFuel
     {
         if (hasFuel)
         {
-            GameManager.Instance.Session.TrainData.SetSpeed(actualSpeed);
+            GameManager.Instance.Session._TrainData.SetSpeed(actualSpeed);
         }
         else
         {
-            GameManager.Instance.Session.TrainData.SetSpeed(0);
+            GameManager.Instance.Session._TrainData.SetSpeed(0);
             GameManager.Instance.Defeat();
         }
     }

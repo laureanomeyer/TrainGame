@@ -48,7 +48,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
 
         button.onClick.AddListener(BuyWeapon);
 
-        if (GameManager.Instance.Session.PlayerData.PlayerWeapon == currentWeapon)
+        if (GameManager.Instance.Session._PlayerData.PlayerWeapon == currentWeapon)
         {
             DeactivateButton();
         }
@@ -62,7 +62,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         }
         else
         {
-            GameManager.Instance.Session.PlayerData.ChangeWeaponData(currentWeapon);
+            GameManager.Instance.Session._PlayerData.ChangeWeaponData(currentWeapon);
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
         }

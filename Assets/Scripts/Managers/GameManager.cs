@@ -50,10 +50,10 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         #endregion
 
-        Session = new GameSession(baseStats, baseMultStats);
-
         CurrentState = GameState.Menu;
         stateAfterTransition = GameState.Menu;
+
+        Session = new GameSession(baseStats, baseMultStats);
 
         GameEvents.OnShowCursor += ShowCursor;
     }
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     public bool IsFinalStation()
     {
-        return Session.SessionConfig.CurrentLevel >= lastStation;
+        return Session._SessionConfig.CurrentLevel >= lastStation;
     }
 
     public string GetCurrentStationName() //STATIONNAMES
@@ -76,9 +76,9 @@ public class GameManager : MonoBehaviour
 
         int currentLevel = 1;
 
-        if (Session != null && Session.SessionConfig != null)
+        if (Session != null && Session._SessionConfig != null)
         {
-            currentLevel = Session.SessionConfig.CurrentLevel;
+            currentLevel = Session._SessionConfig.CurrentLevel;
         }
 
         return stationRoute.GetStationNameByLevel(currentLevel);
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
     {
         if (isChangingScene) return;
 
-        Session.SessionConfig.AdvanceRun();
+        Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
         ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour
     }
     public void SkipRun()
     {
-        Session.SessionConfig.AdvanceRun();
+        Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
         ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
@@ -135,11 +135,13 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        Session.Reset();
-        Session.RebuildStatsSystem();
 
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
         ShowCursor(CursorType.Real);
+
+        Session.Reset();
+        Session.RebuildStatsSystem();
+        Session = new GameSession(baseStats, baseMultStats);
     }
     public void GoToTutorial()
     {
@@ -148,7 +150,6 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        Session.Reset();
         Session.RebuildStatsSystem();
 
         ChangeScene(TutorialScene, SceneTransitionType.Generic, GameState.Tutorial);
@@ -191,6 +192,7 @@ public class GameManager : MonoBehaviour
 
         Session.Reset();
         Session.RebuildStatsSystem();
+        Session = new GameSession(baseStats, baseMultStats);
 
         ChangeScene(ShopScene, SceneTransitionType.Generic, GameState.Gameplay);
     }
@@ -202,9 +204,9 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        Session.Reset();
-
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
+
+        Session.Reset();
     }
 
     private void ChangeScene(string sceneName, SceneTransitionType transitionType, GameState nextState)

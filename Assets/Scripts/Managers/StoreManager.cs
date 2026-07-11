@@ -24,12 +24,12 @@ public class StoreManager : MonoBehaviour
         Instance = this;
         #endregion
 
-        wagonsInTrain = GameManager.Instance.Session.TrainData.WagonsIDList;
+        wagonsInTrain = GameManager.Instance.Session._TrainData.WagonsIDList;
     }
 
     private void Start()
     {
-        playerData = GameManager.Instance.Session.PlayerData;
+        playerData = GameManager.Instance.Session._PlayerData;
         goldDisplay.UpdatedGold(playerData.Gold);
     }
 
@@ -46,7 +46,7 @@ public class StoreManager : MonoBehaviour
 
     public void ChangeWagonList()
     {
-        GameManager.Instance.Session.TrainData.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+        GameManager.Instance.Session._TrainData.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
         GameManager.Instance.Session.RebuildStatsSystem();
     }
 

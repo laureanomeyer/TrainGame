@@ -144,6 +144,6 @@ public class UIPlayerManager : MonoBehaviour
 
     void SetLevelText()
     {
-        if (currentLevel != null) currentLevel.text = "Nivel: " + GameManager.Instance.Session.SessionConfig.CurrentLevel;
+        if (currentLevel != null) currentLevel.text = "Nivel: " + GameManager.Instance.Session._SessionConfig.CurrentLevel;
     }
 }

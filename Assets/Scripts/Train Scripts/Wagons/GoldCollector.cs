@@ -46,7 +46,7 @@ public class GoldCollector
     {
         if (wagonHP.IsBroken == false)
         {
-            gold += amount * GameManager.Instance.Session.StatSystem.GetLocoMultiplier(StatType.GoldMultiplier);
+            gold += amount * GameManager.Instance.Session._StatSystem.GetLocoMultiplier(StatType.GoldMultiplier);
 
             setCoinsModels(gold, storageCapacity);
             goldDisplayUI.text = "$" + gold;

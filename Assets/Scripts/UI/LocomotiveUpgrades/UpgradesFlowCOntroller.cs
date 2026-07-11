@@ -14,7 +14,7 @@ public class UpgradesFlowController : MonoBehaviour
     private void Start()
     {
         HideAll();
-        currentLevel = GameManager.Instance.Session.SessionConfig.CurrentLevel;
+        currentLevel = GameManager.Instance.Session._SessionConfig.CurrentLevel;
         if (currentLevel <= 0)
         {
             upgradesPanelButton.interactable = false;
