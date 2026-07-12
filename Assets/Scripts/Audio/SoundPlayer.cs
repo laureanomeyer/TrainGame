@@ -1,24 +1,51 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+
+[RequireComponent(typeof(AudioSource))]
 public class SoundPlayer : MonoBehaviour
 {
-    public bool isPlaying;
-    public SoundPlayer()
+    AudioSource source;
+    Coroutine playingCoroutine;
+
+    private void Awake()
     {
-        isPlaying = false;
+        source = GetComponent<AudioSource>();
     }
 
-
-    public void PlaySound(Sound soundToPlay, float duration)
+    public void Play(Sound sound)
     {
-        StartCoroutine(Play_Coroutine(soundToPlay, duration));
+        if (playingCoroutine != null)
+        {
+            StopCoroutine(playingCoroutine);
+        }
+        InitializeSound(sound);
+        source.Play();
+        playingCoroutine = StartCoroutine(WaitForSoundToEnd());
     }
-    public IEnumerator Play_Coroutine(Sound soundToPlay, float duration)
+
+    public void Stop()
     {
-        isPlaying = true;
-        soundToPlay.source.Play();
-        yield return new WaitForSeconds(duration);
-        isPlaying = false;
+        if (playingCoroutine != null)
+        {
+            StopCoroutine(playingCoroutine);
+            playingCoroutine = null;
+        }
+        source.Stop();
+        AudioManager.Instance.ReturnToPool(this);
+    }
+
+    public void InitializeSound(Sound data)
+    {
+        source.clip = data.clip;
+        source.volume = data.volume;
+        source.loop = data.loop;
+        source.pitch = data.pitch;
+    }
+
+    IEnumerator WaitForSoundToEnd()
+    {
+        yield return new WaitWhile(() => source.isPlaying);
+        AudioManager.Instance.ReturnToPool(this);
     }
 }

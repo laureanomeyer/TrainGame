@@ -103,9 +103,7 @@ public class MusicManager : MonoBehaviour
 
     public void SetAmbientSound(float volume) 
     {
-        AudioManager.Instance.Play("TrainPassing", volume);
-
-
+        AudioManager.Instance.Play("TrainPassing");
     }
 
     /*  private void UpdateTargets()

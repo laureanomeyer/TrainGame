@@ -33,14 +33,14 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (button != null) 
         {
-            AudioManager.Instance.Play("ButtonHoverSound", 0);
+            AudioManager.Instance.Play("ButtonHoverSound");
         }
     }
     private void PlayPressSound()
     {
         if (button != null)
         {
-            AudioManager.Instance.Play("ButtonPressedSound", 0);
+            AudioManager.Instance.Play("ButtonPressedSound");
             ReverseHoverAnimation();
         }
     }

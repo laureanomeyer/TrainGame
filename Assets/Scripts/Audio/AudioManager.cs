@@ -3,13 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     [SerializeField] Sound[] sounds;
     public static AudioManager Instance;
-    private List<SoundPlayer> players = new List<SoundPlayer>();
+    IObjectPool<SoundPlayer> soundPlayerPool;
+    readonly List<SoundPlayer> activeSoundPlayers = new List<SoundPlayer>();
+    public readonly Dictionary<Sound, int> Counts = new Dictionary<Sound, int>();
+
+    [SerializeField] private SoundPlayer soundPlayerPrefab;
+    [SerializeField] private bool collectionCheck = true;
+    [SerializeField] private int defaultCapacity = 10;
+    [SerializeField] private int maxPoolSize = 100;
+    [SerializeField] private int maxSoundInstances = 30;
 
     private void Awake()
     {
@@ -36,19 +45,15 @@ public class AudioManager : MonoBehaviour
             s.source.loop = s.loop;
         }
 
-        players.Add(new SoundPlayer());
-      /*  players.Add(new SoundPlayer());
-        players.Add(new SoundPlayer());
-        players.Add(new SoundPlayer());
-        players.Add(new SoundPlayer());
-        players.Add(new SoundPlayer());
-        players.Add(new SoundPlayer());
-        players.Add(new SoundPlayer());*/
+        InitializePool();
     }
 
-    public void Play(string name, float duration = 0)
+    public void Play(string name)
     {
-        Play_Coroutine(name, duration);
+        SoundPlayer emitter = soundPlayerPool.Get();
+
+        Sound s = Array.Find(sounds, sound => sound.name == name);
+        if (s != null) emitter.Play(s);
     }
 
     public void Play(Sound sound)
@@ -136,19 +141,6 @@ public class AudioManager : MonoBehaviour
             s.source.volume = volume;
     }
 
-    void Play_Coroutine(string name, float duration)
-    {
-
-        for (int i = 0; i <= players.Count; i++)
-        {
-            if (!players[i].isPlaying)
-            {
-                var s = Array.Find(sounds, sound => sound.name == name);
-                players[i].PlaySound( s, duration);
-                break;
-            }
-        }
-    }
     IEnumerator Play_Coroutine(Sound soundToPlay)
     {
         if (soundToPlay == null)
@@ -166,6 +158,60 @@ public class AudioManager : MonoBehaviour
         s.source.volume = s.volume;
         s.source.pitch = s.pitch;
         s.source.loop = s.loop;
-
     }
+
+    #region Object Pool
+    void InitializePool()
+    {
+        soundPlayerPool = new ObjectPool<SoundPlayer>(
+            CreateSoundPlayer,
+            OnTakeFromPool,
+            OnReturnToPool,
+            OnDestroyPool,
+            collectionCheck,
+            defaultCapacity,
+            maxPoolSize);
+
+        for (int i = 0; i <= defaultCapacity; i++) 
+        {
+            soundPlayerPool.Release(CreateSoundPlayer());
+        } 
+    }
+
+    public SoundPlayer Get()
+    {
+        return soundPlayerPool.Get();
+    }
+
+    public void ReturnToPool(SoundPlayer soundPlayer)
+    {
+        soundPlayerPool.Release(soundPlayer);
+    }
+
+    public bool CanPlaySound(Sound sound)
+    {
+        return !Counts.TryGetValue(sound, out var count) || count < maxSoundInstances;
+    }
+    SoundPlayer CreateSoundPlayer()
+    {
+        var soundPlayer = Instantiate(soundPlayerPrefab, this.transform);
+        soundPlayer.gameObject.SetActive(false);
+        return soundPlayer;
+    }
+
+    void OnTakeFromPool(SoundPlayer soundPlayer)
+    {
+        soundPlayer.gameObject.SetActive(true);
+        activeSoundPlayers.Add(soundPlayer);
+    }
+    void OnReturnToPool(SoundPlayer soundPlayer)
+    {
+        soundPlayer.gameObject.SetActive(false);
+        activeSoundPlayers.Remove(soundPlayer);
+    }
+    void OnDestroyPool(SoundPlayer soundPlayer)
+    {
+        Destroy(soundPlayer.gameObject);
+    }
+    #endregion
 }
