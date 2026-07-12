@@ -60,8 +60,6 @@ public class MusicManager : MonoBehaviour
 
         AudioManager.Instance.Play(currentOST);
         currentOST.source.volume = musicVolume;
-
-        Debug.Log("Store");
     }
 
     public void SetGameplayMusic()
@@ -72,8 +70,6 @@ public class MusicManager : MonoBehaviour
 
         AudioManager.Instance.Play(currentOST);
         currentOST.source.volume = musicVolume;
-
-        Debug.Log("Gameplay");
     }
 
     public void SetMenuMusic()
@@ -84,8 +80,6 @@ public class MusicManager : MonoBehaviour
 
         AudioManager.Instance.Play(currentOST);
         currentOST.source.volume = musicVolume;
-
-        Debug.Log("Menu");
     }
 
     public void SetVolume(float volume)
@@ -105,20 +99,4 @@ public class MusicManager : MonoBehaviour
     {
         AudioManager.Instance.Play("TrainPassing");
     }
-
-    /*  private void UpdateTargets()
-      {
-          if (GameManager.Instance == null) return;
-
-          if (GameManager.Instance.IsInCombat)
-          {
-              targetPitch = combatPitch;
-              targetVolume = musicVolume;
-          }
-          else if (GameManager.Instance.IsInShop)
-          {
-              targetPitch = shopPitch;
-              targetVolume = musicVolume;
-          }
-      }*/
 }

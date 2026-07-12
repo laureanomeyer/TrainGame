@@ -17,7 +17,6 @@ public static class ServiceLocator
         }
 
         services.Add(type, service);
-        Debug.Log("Servicio de tipo!" + type.ToString() + " registrado");
     }
 
     public static T Get<T>()
@@ -26,7 +25,6 @@ public static class ServiceLocator
 
         if (services.TryGetValue(type, out object service))
         {
-            Debug.Log("Entregue servicio del tipo: " + type.ToString());
             return (T)service;
         }
 
@@ -59,7 +57,6 @@ public static class ServiceLocator
 
     public static void Clear()
     {
-        Debug.Log("Clear");
         services.Clear();
     }
 }

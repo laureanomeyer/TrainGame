@@ -111,20 +111,21 @@ public class PauseMenuManager : MonoBehaviour
         }
         GameEvents.HideInteract();
         GameEvents.ShowCursor(CursorType.Real);
+        GameEvents.UiActivated(true);
     }
 
     public void ResumeGame()
     {
-        isPaused = false;
-
-        Time.timeScale = 1f;
-
         if (pausePanel != null)
         {
             pausePanel.SetActive(false);
         }
+
         GameEvents.ShowCursor(currentCursor);
 
+        Time.timeScale = 1f;
+        isPaused = false;
+        GameEvents.UiActivated(false);
     }
 
     public void QuitToMainMenu()
