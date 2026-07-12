@@ -502,7 +502,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370054582435793462}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -724,7 +724,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1037758438865585176}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1178,7 +1178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4a3c8cd35264f408bb5a1c2332d401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButton
-  weaponInStock: []
   weaponNameText: {fileID: 920312647448234089}
   priceText: {fileID: 7691017700318728487}
   damageText: {fileID: 1241465417216195446}
@@ -1186,6 +1185,7 @@ MonoBehaviour:
   ammunitionText: {fileID: 6380403970902382356}
   canvasGroup: {fileID: 6447915955306221871}
   weaponImage: {fileID: 2486181240307526076}
+  weaponInStock: []
 --- !u!225 &3935980255720770902
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2296,7 +2296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4a3c8cd35264f408bb5a1c2332d401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButton
-  weaponInStock: []
   weaponNameText: {fileID: 7031868811798047451}
   priceText: {fileID: 4609878733376685809}
   damageText: {fileID: 3841134427962435724}
@@ -2304,6 +2303,7 @@ MonoBehaviour:
   ammunitionText: {fileID: 5299556766927596589}
   canvasGroup: {fileID: 3893401991635229953}
   weaponImage: {fileID: 2446395591622068152}
+  weaponInStock: []
 --- !u!225 &3330359468855410361
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2653,7 +2653,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3181723397359993322}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -3476,7 +3476,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9154762082524065976
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3550,8 +3550,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButtonManager
   shopButtons:
   - {fileID: 1241900437301155120}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6016328301854417066}
+  - {fileID: 2625291814497048711}
   level: 1
   firtsSlotWeapons:
   - {fileID: 11400000, guid: 2fc2b07622995344caa92dcd420b41b8, type: 2}
@@ -4109,7 +4109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4a3c8cd35264f408bb5a1c2332d401, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponShopButton
-  weaponInStock: []
   weaponNameText: {fileID: 3377798141107347315}
   priceText: {fileID: 2659614441185293593}
   damageText: {fileID: 8955457970504620011}
@@ -4117,6 +4116,7 @@ MonoBehaviour:
   ammunitionText: {fileID: 1828247854268637346}
   canvasGroup: {fileID: 7806564281213057740}
   weaponImage: {fileID: 2354068536741692358}
+  weaponInStock: []
 --- !u!225 &7614882517594880772
 CanvasGroup:
   m_ObjectHideFlags: 0

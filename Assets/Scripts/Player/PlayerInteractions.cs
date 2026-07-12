@@ -269,7 +269,7 @@ public class PlayerInteractions
 
     public void OpenMainMenu()
     {
-        GameManager.Instance.EndSession();
+        GameManager.Instance.GoToMainMenu();
     }
 
     public void Cleanup()

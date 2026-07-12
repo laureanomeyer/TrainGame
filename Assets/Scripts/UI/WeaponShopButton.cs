@@ -4,15 +4,9 @@ using UnityEngine.UI;
 
 public class WeaponShopButton : MonoBehaviour, IShopButton
 {
-    public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
     private PlayerBrain playerReference;
-    public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
-    private WeaponShopButtonManager buttonManager;
-    public int Level { get => level; set => level = value; }
     private int level;
-    public WeaponInStocSO[] WeaponInStock { get => weaponInStock; set => weaponInStock = value; }
-    public WeaponInStocSO[] weaponInStock;
-
+    private PlayerData playerDataRef;
     private GameObject currentWeapon;
     private float currentWeaponprice = 0;
 
@@ -26,7 +20,17 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     [SerializeField] private Image weaponImage;
 
     private Button button;
+    public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
+    public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
+    private WeaponShopButtonManager buttonManager;
+    public int Level { get => level; set => level = value; }
+    public WeaponInStocSO[] WeaponInStock { get => weaponInStock; set => weaponInStock = value; }
+    public WeaponInStocSO[] weaponInStock;
 
+    private void Awake()
+    {
+        playerDataRef = ServiceLocator.Get<PlayerData>();
+    }
     public void SetValuesInStock()
     {
         button = GetComponent<Button>();
@@ -48,7 +52,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
 
         button.onClick.AddListener(BuyWeapon);
 
-        if (GameManager.Instance.Session._PlayerData.PlayerWeapon == currentWeapon)
+        if (playerDataRef.PlayerWeapon == currentWeapon)
         {
             DeactivateButton();
         }
@@ -62,7 +66,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         }
         else
         {
-            GameManager.Instance.Session._PlayerData.ChangeWeaponData(currentWeapon);
+            playerDataRef.ChangeWeaponData(currentWeapon);
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
         }

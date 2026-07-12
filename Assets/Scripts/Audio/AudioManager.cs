@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -8,6 +9,7 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] Sound[] sounds;
     public static AudioManager Instance;
+    private List<SoundPlayer> players = new List<SoundPlayer>();
 
     private void Awake()
     {
@@ -33,11 +35,20 @@ public class AudioManager : MonoBehaviour
             s.source.pitch = s.pitch;
             s.source.loop = s.loop;
         }
+
+        players.Add(new SoundPlayer());
+      /*  players.Add(new SoundPlayer());
+        players.Add(new SoundPlayer());
+        players.Add(new SoundPlayer());
+        players.Add(new SoundPlayer());
+        players.Add(new SoundPlayer());
+        players.Add(new SoundPlayer());
+        players.Add(new SoundPlayer());*/
     }
 
     public void Play(string name, float duration = 0)
     {
-        StartCoroutine(Play_Coroutine(name, duration));
+        Play_Coroutine(name, duration);
     }
 
     public void Play(Sound sound)
@@ -125,18 +136,16 @@ public class AudioManager : MonoBehaviour
             s.source.volume = volume;
     }
 
-    IEnumerator Play_Coroutine(string name, float duration)
+    void Play_Coroutine(string name, float duration)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null)
-            yield return null;
-        else
+
+        for (int i = 0; i <= players.Count; i++)
         {
-            s.source.Play();
-            yield return new WaitForSeconds(duration);
-            if (duration > 0)
+            if (!players[i].isPlaying)
             {
-                s.source.Stop();
+                var s = Array.Find(sounds, sound => sound.name == name);
+                players[i].PlaySound( s, duration);
+                break;
             }
         }
     }

@@ -3,14 +3,15 @@ using UnityEngine;
 public class MoneyManager : MonoBehaviour
 {
     private float playerMoney;
-
+    private PlayerData playerDataRef;
     public float PlayerMoney {  get { return playerMoney; } }
 
     [SerializeField] private GoldUIDisplay goldDisplay;
     
     void Start()
     {
-        playerMoney = GameManager.Instance.Session._PlayerData.GivePlayerGold();
+        playerDataRef = ServiceLocator.Get<PlayerData>();
+        playerMoney = playerDataRef.GivePlayerGold();
         GameEvents.OnChangeGold += ChangePlayerGoldData;
 
         goldDisplay.UpdatedGold(playerMoney);
@@ -18,7 +19,7 @@ public class MoneyManager : MonoBehaviour
 
     private void ChangePlayerGoldData()
     {
-        GameManager.Instance.Session._PlayerData.ChangePlayerGold(playerMoney);
+        playerDataRef.ChangePlayerGold(playerMoney);
     }
 
     public void ConsumePlayerGold(float amount)

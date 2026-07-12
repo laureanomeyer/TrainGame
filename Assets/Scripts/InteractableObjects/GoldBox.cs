@@ -4,6 +4,7 @@ public class GoldBox : IInteractableWithInventory
 {
     private bool canInteract = true;
     BoxCollider collider;
+    private PlayerData playerDataRef;
 
     private float currentGold;
     public float CurrentGold => currentGold;
@@ -13,9 +14,10 @@ public class GoldBox : IInteractableWithInventory
         currentGold = 0;
         this.collider = collider;
         TutorialEvents.OnEnableGoldBox += SetCanInteract;
+        playerDataRef = ServiceLocator.Get<PlayerData>();
     }
 
-    public void Interact(IInventory playerRef) 
+    public void Interact(IInventory playerRef)
     {
         if (!canInteract) return;
 
@@ -24,7 +26,7 @@ public class GoldBox : IInteractableWithInventory
         GameEvents.DropGold();
     }
 
-    public void AddGold(float amount) 
+    public void AddGold(float amount)
     {
         if (amount <= 0) return;
         currentGold += amount;
@@ -37,7 +39,7 @@ public class GoldBox : IInteractableWithInventory
 
     public void ChangeGoldInData(float amount)
     {
-        GameManager.Instance.Session._PlayerData.AddPlayerGold(amount);
+        playerDataRef.AddPlayerGold(amount);
     }
     public void SetCanInteract(bool canInteract)
     {
@@ -46,7 +48,7 @@ public class GoldBox : IInteractableWithInventory
             collider.enabled = canInteract;
     }
 
-    public void OnDestroyObject() 
+    public void OnDestroyObject()
     {
         TutorialEvents.OnEnableGoldBox -= SetCanInteract;
     }

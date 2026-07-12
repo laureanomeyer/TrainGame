@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 3327717192182619807}
   - component: {fileID: 1436801418499423679}
   m_Layer: 5
-  m_Name: Reroll
+  m_Name: Buy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -326,6 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.25
 --- !u!114 &1436801418499423679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,8 +484,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.025757, y: -8.748}
-  m_SizeDelta: {x: 5263.9, y: 2545.459}
+  m_AnchoredPosition: {x: -0.025757, y: -0.0071716}
+  m_SizeDelta: {x: 5263.9, y: 2738.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5907856046390235695
 MonoBehaviour:
@@ -776,7 +777,7 @@ GameObject:
   - component: {fileID: 2658313007977631037}
   - component: {fileID: 362380510526522244}
   m_Layer: 5
-  m_Name: Buy
+  m_Name: Reroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -852,6 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
+  animTime: 0.25
 --- !u!114 &362380510526522244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -934,7 +936,7 @@ RectTransform:
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5000001}
 --- !u!114 &6571631033491669639
 MonoBehaviour:
   m_ObjectHideFlags: 0

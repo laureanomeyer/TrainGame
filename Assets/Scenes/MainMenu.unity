@@ -119,24 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &302465520 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3986519398209192167, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-  m_PrefabInstance: {fileID: 838026706}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &302465526
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302465520}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
-  animTime: 0.25
 --- !u!1001 &339993419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,10 +206,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1825186185895804731, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2781774589969510811, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -312,45 +290,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PauseMenuManager_
       objectReference: {fileID: 0}
-    - target: {fileID: 5431098986266513804, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470174668117080510, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-      propertyPath: m_RaycastTarget
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5554950797606364686, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-    - {fileID: 2118898159829205090, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3986519398209192167, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 302465526}
-    - targetCorrespondingSourceObject: {fileID: 3972229029197293124, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 894618173}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
---- !u!1 &894618167 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3972229029197293124, guid: 270684308eb34b642ae15d23776e1e25, type: 3}
-  m_PrefabInstance: {fileID: 838026706}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &894618173
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 894618167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a708c8e7bedf017488423828ecb8931d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
-  animTime: 0.25
 --- !u!1 &1339369621 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8774751346129430202, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
@@ -1042,11 +986,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 884010208205832627, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 441.7167
       objectReference: {fileID: 0}
     - target: {fileID: 884010208205832627, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 101.494835
       objectReference: {fileID: 0}
     - target: {fileID: 884010208205832627, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1158,11 +1102,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5062590222873357463, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 441.7167
       objectReference: {fileID: 0}
     - target: {fileID: 5062590222873357463, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 97.55947
       objectReference: {fileID: 0}
     - target: {fileID: 5062590222873357463, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1175,6 +1119,22 @@ PrefabInstance:
     - target: {fileID: 5343116411402921422, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_Spacing
       value: 42.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343116411402921422, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
+      propertyPath: m_ChildControlWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343116411402921422, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343116411402921422, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
+      propertyPath: m_ChildForceExpandWidth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343116411402921422, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6348688625997607535, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_Pivot.x
@@ -1334,11 +1294,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8545852937000144430, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 441.7167
       objectReference: {fileID: 0}
     - target: {fileID: 8545852937000144430, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 100.452095
       objectReference: {fileID: 0}
     - target: {fileID: 8545852937000144430, guid: 1d040a195e37e044da6c3b5f181881ba, type: 3}
       propertyPath: m_AnchoredPosition.x

@@ -16,6 +16,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private bool canBeRepaired = false;
 
     private StatSystem stats;
+    private TrainData trainData;
 
     public bool CanBeRepaired => canBeRepaired;
     public WagonHP HPController => hpController;
@@ -67,6 +68,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
         animator = GetComponent<Animator>();
 
         Flash = GetComponent<DamageFlash>();
+        trainData = ServiceLocator.Get<TrainData>();
     }
 
     public virtual void StartWagon()
@@ -85,12 +87,11 @@ public class WagonBrain : MonoBehaviour, IDamagable
         yield break;
     }
 
-    public void RegisterModifiers()
+    public void RegisterModifiers(StatSystem stats)
     {
-        if (stats == null) { stats = ServiceLocator.Get<StatSystem>(); }
-
-        foreach (var mod in GetModifiers())
-            stats.AddModifier(mod);
+        if (stats == null) { stats = ServiceLocator.Get<StatSystem>(); } else this.stats = stats;
+            foreach (var mod in GetModifiers())
+                stats.AddModifier(mod);
     }
 
     public virtual void TakeDamage(float damageAmount)
@@ -171,7 +172,7 @@ public class WagonBrain : MonoBehaviour, IDamagable
 
         if ( wagonID != null)
         {
-            GameManager.Instance.Session._TrainData.RemoveWagonID(wagonID);
+            trainData.RemoveWagonID(wagonID);
         }
     }
     public virtual void OnDestroy()

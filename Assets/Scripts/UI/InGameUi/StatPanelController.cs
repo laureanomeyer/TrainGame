@@ -16,13 +16,14 @@ public class StatPanelController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bonusGoldText;
 
     private InputAction toggleAction;
+    private StatSystem statsSystemRef;
 
     void Awake()
     {
         toggleAction = inputActions.FindAction("CallUi");
         toggleAction.Enable();
         toggleAction.performed += OnToggleStats;
-
+        statsSystemRef = ServiceLocator.Get<StatSystem>();
         GameEvents.OnStatChanged += SetupTexts;
 
         SetupTexts();
@@ -52,11 +53,11 @@ public class StatPanelController : MonoBehaviour
 
     private void SetupTexts()
     {
-        hpText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.MaxHp));
-        shieldsText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.Defense) + 1);
-        damageText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.DamageMultiplier));
-        attackSpeedText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.AttackSpeed));
-        bonusGoldText.text = "x " + FormatStat(GameManager.Instance.Session._StatSystem.GetStat(StatType.GoldMultiplier));
+        hpText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.MaxHp));
+        shieldsText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.Defense) + 1);
+        damageText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.DamageMultiplier));
+        attackSpeedText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.AttackSpeed));
+        bonusGoldText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.GoldMultiplier));
     }
     private string FormatStat(float value)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -37,6 +38,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     private int currentLevel = 1;
 
     public TrainStats locomotiveUpgrade;
+    private TrainData trainDataRef;
 
     [Header("UI components")]
     [SerializeField] public TextMeshProUGUI descriptionUI;
@@ -46,6 +48,8 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     void Start()
     {
+        trainDataRef = ServiceLocator.Get<TrainData>();
+
         upgradesLevelDictionary = new Dictionary<int, LevelLocomotivesUpgradesSO>();
         self = this.gameObject;
 
@@ -86,7 +90,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     public void MaxHPUpgrade()
     {
         locomotiveUpgrade.trainMaxHp = GetCurrentUpgrade(StatType.MaxHp).maxHp;
-        GameManager.Instance.Session._TrainData.AddStats(locomotiveUpgrade);
+        trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
         GameManager.Instance.Session.RebuildStatsSystem();
@@ -94,7 +98,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     public void AttackSpeedUpgrade()
     {
         locomotiveUpgrade.attackSpeed = GetCurrentUpgrade(StatType.AttackSpeed).attackSpeed;
-        GameManager.Instance.Session._TrainData.AddStats(locomotiveUpgrade);
+        trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
         GameManager.Instance.Session.RebuildStatsSystem();
@@ -102,7 +106,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     public void DamageMultiplierUpgrade()
     {
         locomotiveUpgrade.damageBonus = GetCurrentUpgrade(StatType.DamageMultiplier).damageMultiplier;
-        GameManager.Instance.Session._TrainData.AddStats(locomotiveUpgrade);
+        trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
         GameManager.Instance.Session.RebuildStatsSystem();
@@ -110,7 +114,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     public void DefenseUpgrade()
     {
         locomotiveUpgrade.shields = GetCurrentUpgrade(StatType.Defense).defense;
-        GameManager.Instance.Session._TrainData.AddStats(locomotiveUpgrade);
+        trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
         GameManager.Instance.Session.RebuildStatsSystem();
@@ -118,7 +122,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     public void GoldMultiplierUpgrade()
     {
         locomotiveUpgrade.goldBonus = GetCurrentUpgrade(StatType.GoldMultiplier).goldMultiplier;
-        GameManager.Instance.Session._TrainData.AddStats(locomotiveUpgrade);
+        trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
         GameManager.Instance.Session.RebuildStatsSystem();
@@ -126,7 +130,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     private LevelLocomotivesUpgradesSO GetCurrentUpgrade(StatType type)
     {
-        int levelT = GameManager.Instance.Session._TrainData.GetStatLevel(type);
+        int levelT = trainDataRef.GetStatLevel(type);
         var level = upgradesLevelDictionary[levelT];
         return level;
     }

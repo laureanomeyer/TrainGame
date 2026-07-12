@@ -11,6 +11,7 @@ public class PlayerAttackController
     private BulletPool pool;
     private LookObjectToMouse lookToMouseController;
     private PlayerBrain brain;
+    private PlayerData playerDataRef;
 
     private float waitToFire = 0;
 
@@ -31,14 +32,16 @@ public class PlayerAttackController
         this.pool = pool;
         this.spawnPoint = spawnPoint;
 
+        playerDataRef = ServiceLocator.Get<PlayerData>();
+
         //Se establece el arma equipada
-        if (GameManager.Instance.Session._PlayerData.CheckWeapon() == false)
+        if (playerDataRef.CheckWeapon() == false)
         {
             SetWeapon(weaponItem);
         }
         else
         {
-            SetWeapon(GameManager.Instance.Session._PlayerData.PlayerWeapon);
+            SetWeapon(playerDataRef.PlayerWeapon);
         }
 
         GameEvents.AmmoChanged(weapon.CurrentAmmunition);
@@ -113,15 +116,16 @@ public class PlayerAttackController
 
     public void ReseatCadenceStats()
     {
-        rateOfFire = weapon.WeaponData.rateOfFire / GameManager.Instance.Session._StatSystem.GetStat(StatType.AttackSpeed);
-        reloadTime = weapon.WeaponData.reloadTime / GameManager.Instance.Session._StatSystem.GetStat(StatType.AttackSpeed); ;
+        var statsRef = ServiceLocator.Get<StatSystem>();
+        rateOfFire = weapon.WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        reloadTime = weapon.WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed); ;
     }
 
     //Funcion para setear el arma equipada
     public void SetWeapon(GameObject weaponObtein)
     {
         weaponItem = weaponObtein;
-        GameManager.Instance.Session._PlayerData.ChangeWeaponData(weaponItem);
+        playerDataRef.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.SetPlayerAtkReference(this);
         ReseatCadenceStats();

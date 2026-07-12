@@ -20,6 +20,7 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float textStayDuration = 1f;
 
     private bool isTransitioning;
+    private SessionConfig sessionConfig;
 
     private void Awake()
     {
@@ -35,6 +36,7 @@ public class SceneTransitionManager : MonoBehaviour
         #endregion
 
         HideTransitionInstantly();
+        sessionConfig = ServiceLocator.Get<SessionConfig>();
     }
 
     public void TransitionToScene(string sceneName, SceneTransitionType transitionType)
@@ -158,9 +160,9 @@ public class SceneTransitionManager : MonoBehaviour
 
         if (GameManager.Instance != null &&
             GameManager.Instance.Session != null &&
-            GameManager.Instance.Session._SessionConfig != null)
+            sessionConfig != null)
         {
-            currentLevel = GameManager.Instance.Session._SessionConfig.CurrentLevel;
+            currentLevel = sessionConfig.CurrentLevel;
             currentStationName = GameManager.Instance.GetCurrentStationName();
         }
 

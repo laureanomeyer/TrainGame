@@ -26,6 +26,7 @@ public class BulletScript : MonoBehaviour, IBullet
     private TrailRenderer tr;
 
     private TrainData dataRef;
+    private StatSystem stats;
 
     private bool isActive = true;
     private float currentLife;
@@ -37,6 +38,9 @@ public class BulletScript : MonoBehaviour, IBullet
         bc = GetComponent<BoxCollider>();
         render = GetComponent<Renderer>();
         tr = GetComponent<TrailRenderer>();
+
+        stats = ServiceLocator.Get<StatSystem>();
+        dataRef = ServiceLocator.Get<TrainData>();
     }
 
     void Update()
@@ -50,12 +54,11 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public void ResetState(BulletTypeScriptable type)
     {
-        dataRef = GameManager.Instance.Session._TrainData;
 
         bulletType = type;
         meshFilter.mesh = bulletType.bulletMesh;
         currentLife = bulletType.duration;
-        Damage = bulletType.Damage * (GameManager.Instance.Session._StatSystem.GetStat(StatType.DamageMultiplier));
+        Damage = bulletType.Damage * (stats.GetStat(StatType.DamageMultiplier));
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;

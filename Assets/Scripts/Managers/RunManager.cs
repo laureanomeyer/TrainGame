@@ -14,6 +14,7 @@ public class RunManager : MonoBehaviour
     private MapManager mapManager;
     private LocomotiveBrain locomotiveBrain;
     private StatSystem statSystem;
+    private TrainData trainData;
 
     private List<IWagon> activeWagons = new();
     private Transform trainTail;
@@ -37,7 +38,8 @@ public class RunManager : MonoBehaviour
         Instance = this;
         #endregion
 
-        statSystem = GameManager.Instance.Session._StatSystem;
+        statSystem = ServiceLocator.Get<StatSystem>();
+        trainData = ServiceLocator.Get<TrainData>();
         speed = statSystem.GetStat(StatType.Speed);
     }
 
@@ -67,9 +69,8 @@ public class RunManager : MonoBehaviour
 
     public void OnWagonDestroyed(IWagonID wagon)
     {
-        GameManager.Instance.Session._TrainData.RemoveWagonID(wagon);
+        trainData.RemoveWagonID(wagon);
         GameManager.Instance.Session.RebuildStatsSystem();
-        statSystem = GameManager.Instance.Session._StatSystem;
     }
     public void OnRunFinished()
     {

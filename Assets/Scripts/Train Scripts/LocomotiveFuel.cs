@@ -17,6 +17,7 @@ public class LocomotiveFuel
 
     private float fuelCapacity;
     private float fuelMaxCapacity;
+    private TrainData trainDataRef;
 
     private bool hasFuel => currentFuel > 0f;
     public float CurrentFuel => currentFuel;
@@ -44,7 +45,8 @@ public class LocomotiveFuel
 
         TutorialEvents.OnSetCanConsume += SetCanConsume;
 
-        GameManager.Instance.Session._TrainData.SetSpeed(actualSpeed);
+        trainDataRef = ServiceLocator.Get<TrainData>();
+        trainDataRef.SetSpeed(actualSpeed);
 
         canConsume = !GameManager.Instance.IsTutorial;
     }
@@ -55,7 +57,7 @@ public class LocomotiveFuel
 
         if (!hasFuel)
         {
-            GameManager.Instance.Session._TrainData.SetSpeed(0);
+            trainDataRef.SetSpeed(0);
             return;
         }
 
@@ -92,11 +94,11 @@ public class LocomotiveFuel
     {
         if (hasFuel)
         {
-            GameManager.Instance.Session._TrainData.SetSpeed(actualSpeed);
+            trainDataRef.SetSpeed(actualSpeed);
         }
         else
         {
-            GameManager.Instance.Session._TrainData.SetSpeed(0);
+            trainDataRef.SetSpeed(0);
             GameManager.Instance.Defeat();
         }
     }

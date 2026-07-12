@@ -9,7 +9,8 @@ public class StoreManager : MonoBehaviour
 
     [SerializeField] private DisplayTrain displayTrain;
 
-    private PlayerData playerData;
+    private PlayerData playerDataRef;
+    private TrainData trainDataRef;
 
     public List<IWagonID> wagonsInTrain;
 
@@ -24,29 +25,30 @@ public class StoreManager : MonoBehaviour
         Instance = this;
         #endregion
 
-        wagonsInTrain = GameManager.Instance.Session._TrainData.WagonsIDList;
+        trainDataRef = ServiceLocator.Get<TrainData>();
+        playerDataRef = ServiceLocator.Get<PlayerData>();
+        wagonsInTrain = trainDataRef.WagonsIDList;
     }
 
     private void Start()
     {
-        playerData = GameManager.Instance.Session._PlayerData;
-        goldDisplay.UpdatedGold(playerData.Gold);
+        goldDisplay.UpdatedGold(playerDataRef.Gold);
     }
 
     public bool TrySpendGold(float ammount)
     {
-        if (playerData.Gold < ammount) return false;
+        if (playerDataRef.Gold < ammount) return false;
 
-        playerData.SpendGold(ammount);
-        goldDisplay.UpdatedGold(playerData.Gold);
+        playerDataRef.SpendGold(ammount);
+        goldDisplay.UpdatedGold(playerDataRef.Gold);
         return true;
     }
 
-    public float GetGold() => playerData.Gold;
+    public float GetGold() => playerDataRef.Gold;
 
     public void ChangeWagonList()
     {
-        GameManager.Instance.Session._TrainData.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+        trainDataRef.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
         GameManager.Instance.Session.RebuildStatsSystem();
     }
 

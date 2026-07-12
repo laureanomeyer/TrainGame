@@ -11,8 +11,13 @@ public class TrainManager : MonoBehaviour
     private Transform tail;
     private WagonMovement lastWagon;
 
+    private StatSystem statSystemRef;
+    private TrainData trainDataRef;
+
     private void Awake()
     {
+        trainDataRef = ServiceLocator.Get<TrainData>();
+        statSystemRef = ServiceLocator.Get<StatSystem>();
         BuildTrain();
     }
 
@@ -22,7 +27,7 @@ public class TrainManager : MonoBehaviour
         CreateWagons();
         CreateGoldWagon();
 
-        foreach (var brain in wagonBrains) brain.RegisterModifiers();
+        foreach (var brain in wagonBrains) brain.RegisterModifiers(statSystemRef);
         foreach (var brain in wagonBrains) brain.StartWagon();
         RunManager.Instance.OnTrainReady(tail, wagonsCreated);
     }
@@ -37,7 +42,7 @@ public class TrainManager : MonoBehaviour
     }
     private void CreateWagons()
     {
-        foreach (var wagonID in GameManager.Instance.Session._TrainData.WagonsIDList)
+        foreach (var wagonID in trainDataRef.WagonsIDList)
             CreateWagon(wagonID.Prefab, wagonID);
     }
     public void CreateWagon(GameObject wagonToCreate, IWagonID id)

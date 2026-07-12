@@ -73,12 +73,12 @@ public class UIPlayerManager : MonoBehaviour
                 if (lowFuel != null)
                     lowFuel.SetActive(true);
             }
-            else 
+            else
             {
                 if (animator != null) animator.SetBool("FuelLow", false);
                 if (lowFuel != null)
                     lowFuel.SetActive(false);
-            } 
+            }
 
             var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
             lerpedShield = Mathf.MoveTowards(lerpedShield, currentShield, Time.deltaTime);
@@ -87,7 +87,7 @@ public class UIPlayerManager : MonoBehaviour
 
             var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
             lerpedFuel = Mathf.MoveTowards(lerpedFuel, currentFuel, Time.deltaTime);
-            fuelIndicator.transform.rotation = Quaternion.Euler(0,0, Mathf.Lerp(90, -80, lerpedFuel));
+            fuelIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -80, lerpedFuel));
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
             lerpedCapacity = Mathf.MoveTowards(lerpedCapacity, currentCapacity, Time.deltaTime);
@@ -123,16 +123,16 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateGoldUI(float currentGold)
     {
-            goldText.text = currentGold.ToString(); 
+        goldText.text = currentGold.ToString();
     }
 
     void UpdateRunProgress()
     {
         if (player.Inventory == null) return;
 
-            float progress = sceneRunController.Progress;
+        float progress = sceneRunController.Progress;
 
-            trainIcon.position = Vector3.Lerp(startPoint.position, endPoint.position, progress);
+        trainIcon.position = Vector3.Lerp(startPoint.position, endPoint.position, progress);
 
         if (runProgressFill != null)
         {
@@ -144,6 +144,7 @@ public class UIPlayerManager : MonoBehaviour
 
     void SetLevelText()
     {
-        if (currentLevel != null) currentLevel.text = "Nivel: " + GameManager.Instance.Session._SessionConfig.CurrentLevel;
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        if (currentLevel != null) currentLevel.text = "Nivel: " + sessionConfigRef.CurrentLevel;
     }
 }

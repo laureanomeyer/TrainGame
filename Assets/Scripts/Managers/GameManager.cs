@@ -139,9 +139,7 @@ public class GameManager : MonoBehaviour
         ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
         ShowCursor(CursorType.Real);
 
-        Session.Reset();
-        Session.RebuildStatsSystem();
-        Session = new GameSession(baseStats, baseMultStats);
+        EndSession();
     }
     public void GoToTutorial()
     {
@@ -204,9 +202,9 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
-
         Session.Reset();
+        Session.RebuildStatsSystem();
+        Session = new GameSession(baseStats, baseMultStats);
     }
 
     private void ChangeScene(string sceneName, SceneTransitionType transitionType, GameState nextState)

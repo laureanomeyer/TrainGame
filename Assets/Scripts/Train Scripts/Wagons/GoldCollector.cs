@@ -23,6 +23,7 @@ public class GoldCollector
     private CancellationTokenSource cts;
 
     private Action<float, float> setCoinsModels;
+    private StatSystem statsRef;
 
     public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI, float collectorStorageCapacity, Action<float, float> action)
     {
@@ -32,7 +33,7 @@ public class GoldCollector
         storageCapacity = collectorStorageCapacity;
         GameEvents.OnGoldEarned += CollectGold;
         this.setCoinsModels = action;
-
+        statsRef = ServiceLocator.Get<StatSystem>();
     }
 
     public void ActivateOnDestroy()
@@ -46,7 +47,7 @@ public class GoldCollector
     {
         if (wagonHP.IsBroken == false)
         {
-            gold += amount * GameManager.Instance.Session._StatSystem.GetLocoMultiplier(StatType.GoldMultiplier);
+            gold += amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
 
             setCoinsModels(gold, storageCapacity);
             goldDisplayUI.text = "$" + gold;

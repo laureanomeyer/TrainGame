@@ -35,6 +35,8 @@ public class SpawnController : MonoBehaviour
     float timer;
     int aliveEnemies;
 
+    private TrainData trainDataRef;
+    private SessionConfig sessionConfig;
 
     private void OnEnable()
     {
@@ -44,6 +46,9 @@ public class SpawnController : MonoBehaviour
         TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
 
         canSpawn = !GameManager.Instance.IsTutorial;
+
+        trainDataRef = ServiceLocator.Get<TrainData>();
+        sessionConfig = ServiceLocator.Get<SessionConfig>();
     }
 
     private void OnDisable()
@@ -62,7 +67,7 @@ public class SpawnController : MonoBehaviour
         SetLevelData();
         BuildPool();
         TrySpawn();
-        goldBox = GameManager.Instance.Session._TrainData.GoldBoxPosition;
+        goldBox = trainDataRef.GoldBoxPosition;
 
     }
 
@@ -146,7 +151,7 @@ public class SpawnController : MonoBehaviour
 
     void SetLevelData()
     {
-        int index = GameManager.Instance.Session._SessionConfig.CurrentLevel;
+        int index = sessionConfig.CurrentLevel;
 
         if (index > levelList.Count - 1)
             currentlevelData = levelList.Last();
