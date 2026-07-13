@@ -15,7 +15,7 @@ public class TutorialController : MonoBehaviour
     private bool firstRepair = false;
     private bool firstkilled = false;
     private List<IWagon> wagons = new();
-    private float timer = 5;
+    private float timer = 6;
 
     private void Start()
     {
@@ -35,7 +35,7 @@ public class TutorialController : MonoBehaviour
         TutorialEvents.SetAttackEnabled(false);
 
         TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Presiona WASD para moverte");
+        TutorialEvents.SetTutorialText("Bronco Buckle... back in the saddle again, huh? Let's go over the basics.\n<b>Press WASD to move</b>.");
     }
     private void Update()
     {
@@ -52,7 +52,7 @@ public class TutorialController : MonoBehaviour
             {
                 firstRepair = true;
                 TutorialEvents.SetTutorialTextVisible(true);
-                TutorialEvents.SetTutorialText("Esto es un enemigo. Los enemigos atacan el tren. Debes reparar el vagon de oro presionando R");
+                TutorialEvents.SetTutorialText("That damn train you stole to reach the mysterious ore has every outlaw after you. \n <b>Repair the wagons with R!</b>");
             }
             timer = float.MaxValue;
         }
@@ -66,7 +66,7 @@ public class TutorialController : MonoBehaviour
             started = true;
             TutorialEvents.SetTutorialTextVisible(true);
             TutorialEvents.EnableCoalBox(true);
-            TutorialEvents.SetTutorialText("Tu locomotora nunca debe dejar de moverse. Estate atento, que no se agote su combustible");
+            TutorialEvents.SetTutorialText("One more thing, partner: your locomotive won't run on wishes. \n<b>Feed it coal, or the boiler's gonna blow!</b>");
         }
     }
 
@@ -77,7 +77,7 @@ public class TutorialController : MonoBehaviour
             firstCash = false;
             TutorialEvents.SetTutorialTextVisible(true);
             TutorialEvents.EnableGoldBox(true);
-            TutorialEvents.SetTutorialText("El oro solo esta asegurado en la caja de oro que tiene la locomotora. Recorda recolectarlo y guardarlo tras matar enemigos.");
+            TutorialEvents.SetTutorialText("These fellas <b>burst into gold when they die</b>. The wagon can store it... but it ain't exactly safe. \n<b>Collect it and stash it in the safe.</b>");
         }
     }
 
@@ -86,7 +86,7 @@ public class TutorialController : MonoBehaviour
         RunUi.SetActive(can);
         TutorialEvents.SetCanConsume(true);
         TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Bien, este es el trayecto restante hasta la estacion. ¡Tenes que llegar!");
+        TutorialEvents.SetTutorialText("Well, reckon that's all you need to know. <b>The road ahead is right here</b>. Good luck, Bronco Buckle!");
     }
 
     void SetAttackUi(bool show)
@@ -96,7 +96,7 @@ public class TutorialController : MonoBehaviour
         {
             firstkilled = true;
             TutorialEvents.SetTutorialTextVisible(true);
-            TutorialEvents.SetTutorialText("Excelente, ahora presiona el click izquierdo para disparar una bala y eliminar al enemigo.");
+            TutorialEvents.SetTutorialText("Good. Surely you haven't forgotten how to <b>shoot</b>, right?");
         }
     }
 
