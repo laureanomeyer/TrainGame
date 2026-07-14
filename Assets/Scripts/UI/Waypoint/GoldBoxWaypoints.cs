@@ -16,8 +16,23 @@ public class GoldBoxWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
 
-        GameEvents.OnTakeGold += ActivateWaypointUI;
-        GameEvents.OnDropGold += DeactivateWaypointUI;
+        EventBus.Subscribe<OnTakeGoldEvent>(CallActivateWayPointEvent);
+        EventBus.Subscribe<OnDropGoldEvent>(CallDeactivateWayPointEvent);
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnTakeGoldEvent>(CallActivateWayPointEvent);
+        EventBus.Unsubscribe<OnDropGoldEvent>(CallDeactivateWayPointEvent);
+    }
+
+    public void CallActivateWayPointEvent(OnTakeGoldEvent takeGoldEvent)
+    {
+        ActivateWaypointUI();
+    }
+
+    public void CallDeactivateWayPointEvent(OnDropGoldEvent dropGoldEvent)
+    {
+        DeactivateWaypointUI();
     }
 
     public void ActivateWaypointUI()
@@ -32,9 +47,4 @@ public class GoldBoxWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOffScreen.visible = false;
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnTakeGold -= ActivateWaypointUI;
-        GameEvents.OnDropGold -= DeactivateWaypointUI;
-    }
 }

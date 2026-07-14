@@ -55,11 +55,11 @@ public class GameManager : MonoBehaviour
 
         Session = new GameSession(baseStats, baseMultStats);
 
-        GameEvents.OnShowCursor += ShowCursor;
+        EventBus.Subscribe<OnShowCursorEvent>(ChangeCursorEvent);
     }
     private void OnDestroy()
     {
-        GameEvents.OnShowCursor -= ShowCursor;
+        EventBus.Unsubscribe<OnShowCursorEvent>(ChangeCursorEvent);
     }
 
     public bool IsFinalStation()
@@ -235,6 +235,12 @@ public class GameManager : MonoBehaviour
         Debug.Log(currentCursor.ToString());
         return currentCursor;
     }
+
+    public void ChangeCursorEvent(OnShowCursorEvent showCursorEvent)
+    {
+        ShowCursor(showCursorEvent.Cursor);
+    }
+
     private void ShowCursor(CursorType cursor)
     {
         currentCursor = cursor;
@@ -243,16 +249,16 @@ public class GameManager : MonoBehaviour
         {
             case CursorType.Real: 
                 Cursor.visible = true;
-                GameEvents.ShowGameplayCursor(false);
+                EventBus.Publish(new OnShowGameplayCursorEvent(false));
                 break;
 
             case CursorType.Gameplay: 
-                Cursor.visible = false; 
-                GameEvents.ShowGameplayCursor(true); 
+                Cursor.visible = false;
+                EventBus.Publish(new OnShowGameplayCursorEvent(true));
                 break;
             case CursorType.Hidden: 
                 Cursor.visible = false;
-                GameEvents.ShowGameplayCursor(false);
+                EventBus.Publish(new OnShowGameplayCursorEvent(false));
                 break;
         }
 

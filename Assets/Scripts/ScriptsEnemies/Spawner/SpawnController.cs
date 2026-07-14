@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpawnController : MonoBehaviour
@@ -40,8 +41,8 @@ public class SpawnController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnEnemyDeath += EnemyDead;
-        GameEvents.OnEnemyHit += EnemyHit;
+        EventBus.Subscribe<OnEnemyDeathEvent>(EnemyDead);
+        EventBus.Subscribe<OnEnemyHitEvent>(EnemyHit);
         TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
         TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
 
@@ -53,8 +54,8 @@ public class SpawnController : MonoBehaviour
 
     private void OnDisable()
     {
-        GameEvents.OnEnemyDeath -= EnemyDead;
-        GameEvents.OnEnemyHit -= EnemyHit;
+        EventBus.Unsubscribe<OnEnemyDeathEvent>(EnemyDead);
+        EventBus.Unsubscribe<OnEnemyHitEvent>(EnemyHit);
         TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
         TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
     }
@@ -179,9 +180,9 @@ public class SpawnController : MonoBehaviour
         coinScript.SetTarget(goTo);
     }
 
-    void EnemyDead(Vector3 position)
+    void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
     {
-        SpawCoin(position, goldBox);
+        SpawCoin(enemyDeathEvent.Position, goldBox);
         aliveEnemies--;
     }
 
@@ -190,9 +191,9 @@ public class SpawnController : MonoBehaviour
         ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
     }
 
-    void EnemyHit(Vector3 position)
+    void EnemyHit(OnEnemyHitEvent enemyHitEvent)
     {
-        SpawnParticles(position);
+        SpawnParticles(enemyHitEvent.Position);
     }
 
     void SetCanSpawn(bool canSpawn)

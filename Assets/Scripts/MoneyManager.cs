@@ -12,14 +12,12 @@ public class MoneyManager : MonoBehaviour
     {
         playerDataRef = ServiceLocator.Get<PlayerData>();
         playerMoney = playerDataRef.GivePlayerGold();
-        GameEvents.OnChangeGold += ChangePlayerGoldData;
 
         goldDisplay.UpdatedGold(playerMoney);
     }
-
-    private void ChangePlayerGoldData()
+    private void OnDestroy()
     {
-        playerDataRef.ChangePlayerGold(playerMoney);
+
     }
 
     public void ConsumePlayerGold(float amount)
@@ -38,8 +36,4 @@ public class MoneyManager : MonoBehaviour
         return playerMoney;
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnChangeGold -= ChangePlayerGoldData;
-    }
 }

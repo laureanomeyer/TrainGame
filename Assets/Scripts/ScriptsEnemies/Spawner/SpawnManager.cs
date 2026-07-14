@@ -38,8 +38,8 @@ public class SpawnManager : MonoBehaviour
 
     private void Awake()
     {
-        GameEvents.OnEnemyDeath += EnemyDead;
-        GameEvents.OnEnemyHit += EnemyHit;
+        EventBus.Subscribe<OnEnemyDeathEvent>(EnemyDead);
+        EventBus.Subscribe<OnEnemyHitEvent>(EnemyHit);
         TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
         TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
 
@@ -48,8 +48,8 @@ public class SpawnManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameEvents.OnEnemyDeath -= EnemyDead;
-        GameEvents.OnEnemyHit -= EnemyHit;
+        EventBus.Unsubscribe<OnEnemyDeathEvent>(EnemyDead);
+        EventBus.Unsubscribe<OnEnemyHitEvent>(EnemyHit);
         TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
         TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
     }
@@ -185,9 +185,9 @@ public class SpawnManager : MonoBehaviour
     }
 
 
-    void EnemyDead(Vector3 position)
+    void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
     {
-        SpawCoin(position, goldBox);
+        SpawCoin(enemyDeathEvent.Position, goldBox);
         aliveEnemies--;
     }
 
@@ -197,9 +197,9 @@ public class SpawnManager : MonoBehaviour
     }
 
 
-    void EnemyHit(Vector3 position) 
+    void EnemyHit(OnEnemyHitEvent enemyHitEvent) 
     {
-        SpawnParticles(position);
+        SpawnParticles(enemyHitEvent.Position);
     }
 
     void SetCanSpawn(bool canSpawn)

@@ -33,13 +33,13 @@ public class CoalBox: IInteractableWithInventory
         {
             hasCoal = true;
             playerRef.DepositCoal();
-            GameEvents.TakeFuel();
+            EventBus.Publish(new OnTakeFuelEvent());
         }
         else if (hasCoal && !playerRef.HasCoal)
         {
             hasCoal = true;
             playerRef.CollectCoal();
-            GameEvents.TakeFuel();
+            EventBus.Publish(new OnTakeFuelEvent());
         }
     }
 
@@ -50,7 +50,7 @@ public class CoalBox: IInteractableWithInventory
         charges -= 1;
         playerRef.CollectCoal();
         hasCoal = (charges > 0);
-        GameEvents.TakeFuel();    
+        EventBus.Publish(new OnTakeFuelEvent());    
     }
 
     public void AddCharges(float amount)

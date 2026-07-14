@@ -1,163 +1,162 @@
 using System;
 using UnityEngine;
 
-public static class GameEvents
+public class OnGoldEarnedEvent : IGameEvent 
 {
-    public static event Action<float> OnGoldEarned;
-    
-    public static event Action<float> OnGoldBoxChanged;
+    public float Amount; 
 
-    public static event Action OnChangeGold;
-
-    public static event Action OnChangeTrainData;
-
-    public static event Action<float> OnShoot;
-
-    public static event Action<float> OnReloadStarted;
-
-    public static event Action<float> OnAmmoChanged;
-
-    public static event Action OnShieldsBroken;
-
-    public static event Action OnCoalEmpty;
-
-    public static event Action OnWagonDestroyed;
-
-    public static event Action<UnityEngine.Vector3> OnEnemyDeath;
-
-    public static event Action<UnityEngine.Vector3> OnEnemyHit;
-
-    public static event Action<bool> OnActivateUi;
-
-    public static event Action<CursorType> OnShowCursor;
-
-    public static event Action<bool> OnShowGameplayCursor;
-
-    public static event Action OnShowInteract;
-
-    public static event Action OnHideInteract;
-
-    public static event Action OnTakeFuel;
-
-    public static event Action OnTakeGold;
-
-    public static event Action OnDropFuel;
-
-    public static event Action OnDropGold;
-
-    public static event Action OnInteractPressed;
-
-    public static event Action OnStatChanged;
-
-    public static void GoldEarned(float amount)
-    {
-        OnGoldEarned?.Invoke(amount);
+    public OnGoldEarnedEvent(float amount) 
+    { 
+        Amount = amount;
     }
+}
 
-    public static void GoldBoxChanged(float currentGold)
-    {
-        OnGoldBoxChanged?.Invoke(currentGold);
-    }
+public class OnGoldBoxChangedEvent : IGameEvent
+{
+    public float CurrentGold;
 
-    public static void ChangeGold()
+    public OnGoldBoxChangedEvent(float gold)
     {
-        OnChangeGold?.Invoke();
+        CurrentGold = gold;
     }
+}
 
-    public static void ChangeTrainData()
-    {
-        OnChangeTrainData?.Invoke();
-    }
+public class OnShootEvent : IGameEvent
+{
+    public float RateOfFire;
 
-    public static void ShootPerformed(float rateOfFire)
+    public OnShootEvent(float rateOfFire)
     {
-        OnShoot?.Invoke(rateOfFire);
-        AudioManager.Instance.Play($"RevolverShot{UnityEngine.Random.Range(3,4)}");
+        RateOfFire = rateOfFire;
+        AudioManager.Instance.Play($"RevolverShot{UnityEngine.Random.Range(3, 4)}");
     }
-    public static void ReloadStarted(float reloadTimer)
+}
+
+public class OnReloadEvent : IGameEvent
+{
+    public float ReloadTimer;
+
+    public OnReloadEvent(float reloadTime)
     {
-        OnReloadStarted?.Invoke(reloadTimer);
+        ReloadTimer = reloadTime;
         AudioManager.Instance.Play($"RevolverMusket{2}");
     }
-    public static void AmmoChanged(float currentAmmo)
-    {
-        OnAmmoChanged?.Invoke(currentAmmo);
-    }
-    public static void ShowCursor(CursorType cursor)
-    {
-        OnShowCursor?.Invoke(cursor);
-    }
-    public static void ShowGameplayCursor(bool show)
-    {
-        OnShowGameplayCursor?.Invoke(show);
-    }
-    public static void CoalEmpty()
-    {
-        OnCoalEmpty?.Invoke();
+}
 
-    }
+public class OnAmmoChangedEvent : IGameEvent
+{
+    public float Ammunition;
 
-    public static void ShieldsBroken()
+    public OnAmmoChangedEvent(float ammunition)
     {
-        OnShieldsBroken?.Invoke();
+        Ammunition = ammunition;
+    }
+}
+
+public class OnShieldsBrokenEvent : IGameEvent
+{
+    public OnShieldsBrokenEvent()
+    {
         AudioManager.Instance.Play("Projectile");
     }
+}
 
-    public static void WagonDestroyed()
-    {
-        OnWagonDestroyed?.Invoke();
-    }
+public class OnCoalEmptyEvent : IGameEvent
+{
+    public OnCoalEmptyEvent(){}
+}
 
-    public static void EnemyDeath(UnityEngine.Vector3 position)
-    {
-        OnEnemyDeath?.Invoke(position);
-    }
+public class OnWagonDestroyedEvent : IGameEvent
+{
+    public OnWagonDestroyedEvent() { }
+}
 
-    public static void EnemyHit(UnityEngine.Vector3 position)
-    {
-        OnEnemyHit?.Invoke(position);
-    }
-    public static void UiActivated(bool activated)
-    {
-        OnActivateUi?.Invoke(!activated);
-    }
+public class OnEnemyDeathEvent : IGameEvent
+{
+    public UnityEngine.Vector3 Position;
 
-    public static void ShowInteract()
+    public OnEnemyDeathEvent(UnityEngine.Vector3 position)
     {
-        OnShowInteract?.Invoke();
+        Position = position;
     }
+}
 
-    public static void HideInteract()
-    {
-        OnHideInteract?.Invoke();
-    }
+public class OnEnemyHitEvent : IGameEvent
+{
+    public UnityEngine.Vector3 Position;
 
-    public static void TakeFuel()
+    public OnEnemyHitEvent(UnityEngine.Vector3 position)
     {
-        OnTakeFuel?.Invoke();
+        Position = position;
     }
+}
 
-    public static void TakeGold()
-    {
-        OnTakeGold?.Invoke();
-    }
+public class OnActivateUiEvent : IGameEvent
+{
+    public bool Activated;
 
-    public static void DropFuel()
+    public OnActivateUiEvent(bool activated)
     {
-        OnDropFuel?.Invoke();
+        Activated = activated;
     }
+}
 
-    public static void DropGold()
-    {
-        OnDropGold?.Invoke();
-    }
-    public static void InteractPressed()
-    {
-        OnInteractPressed?.Invoke();
-    }
+public class OnShowCursorEvent : IGameEvent
+{
+    public CursorType Cursor;
 
-    public static void StatChanged()
+    public OnShowCursorEvent(CursorType cursor)
     {
-        OnStatChanged?.Invoke();
+        Cursor = cursor;
     }
+}
+
+public class OnShowGameplayCursorEvent : IGameEvent
+{
+    public bool Show;
+
+    public OnShowGameplayCursorEvent(bool show)
+    {
+        Show = show;
+    }
+}
+
+public class OnShowInteractEvent : IGameEvent
+{
+    public OnShowInteractEvent() { }
+}
+
+public class OnHideInteractEvent : IGameEvent
+{
+    public OnHideInteractEvent() { }
+}
+
+public class OnTakeFuelEvent : IGameEvent
+{
+    public OnTakeFuelEvent() { }
+}
+
+public class OnTakeGoldEvent : IGameEvent
+{
+    public OnTakeGoldEvent() { }
+}
+
+public class OnDropFuelEvent : IGameEvent
+{
+    public OnDropFuelEvent() { }
+}
+
+public class OnDropGoldEvent : IGameEvent
+{
+    public OnDropGoldEvent() { }
+}
+
+public class OnInteractPressedEvent : IGameEvent
+{
+    public OnInteractPressedEvent() { }
+}
+
+public class OnStatChangedEvent : IGameEvent
+{
+    public OnStatChangedEvent() { }
 }

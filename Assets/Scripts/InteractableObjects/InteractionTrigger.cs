@@ -17,9 +17,9 @@ public class InteractionTrigger : MonoBehaviour
         if (!other.CompareTag("Player")) return;
 
         if (objectT != null)
-            objectT.layer = LayerMask.NameToLayer("WhiteOutline");   
-        
-        GameEvents.ShowInteract();
+            objectT.layer = LayerMask.NameToLayer("WhiteOutline");
+
+        EventBus.Publish(new OnShowInteractEvent());
     }
 
     private void OnTriggerExit(Collider other)
@@ -29,6 +29,6 @@ public class InteractionTrigger : MonoBehaviour
         if (objectT != null)
             objectT.layer = LayerMask.NameToLayer("Outline");
 
-        GameEvents.HideInteract();
+        EventBus.Publish(new OnHideInteractEvent());
     }
 }

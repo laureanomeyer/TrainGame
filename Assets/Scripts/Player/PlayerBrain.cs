@@ -49,9 +49,10 @@ public class PlayerBrain : MonoBehaviour
         attackAction.canceled += DeactiveAttack;
 
         TutorialEvents.OnSetAttackEnabled += SetCanAttack;
-        GameEvents.OnShowInteract += ShowInteract;
-        GameEvents.OnHideInteract += HideInteract;
-        GameEvents.OnActivateUi += SetCanAttack;
+
+        EventBus.Subscribe<OnShowInteractEvent>(ShowInteract);
+        EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
+        EventBus.Subscribe<OnActivateUiEvent>(CallSetCanAttackEvent);
 
         IsRepairing = false;
         HideInteract();
@@ -64,9 +65,9 @@ public class PlayerBrain : MonoBehaviour
 
         TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
 
-        GameEvents.OnActivateUi -= SetCanAttack;
-        GameEvents.OnShowInteract -= ShowInteract;
-        GameEvents.OnHideInteract -= HideInteract;
+        EventBus.Unsubscribe<OnShowInteractEvent>(ShowInteract);
+        EventBus.Unsubscribe<OnHideInteractEvent>(CallHideInteractEvent);
+        EventBus.Unsubscribe<OnActivateUiEvent>(CallSetCanAttackEvent);
     }
     private void Update()
     {
@@ -92,7 +93,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnInteract()
     {
-        GameEvents.InteractPressed();
+        EventBus.Publish(new OnInteractPressedEvent());
 
         playerInteractionsController.OnInteract();
     }
@@ -126,6 +127,11 @@ public class PlayerBrain : MonoBehaviour
         playerAttackController.DeactiveAttack();
     }
 
+    public void CallSetCanAttackEvent(OnActivateUiEvent activateUIEvent)
+    {
+        SetCanAttack(activateUIEvent.Activated);
+    }
+
     public void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
@@ -147,9 +153,14 @@ public class PlayerBrain : MonoBehaviour
         playerAttackController.SetWeapon(weapon);
     }
 
-    private void ShowInteract()
+    private void ShowInteract(OnShowInteractEvent showInteractEvent)
     {
         Interactimage.SetActive(true);
+    }
+
+    public void CallHideInteractEvent(OnHideInteractEvent hideInteractEvent)
+    {
+        HideInteract();
     }
 
     private void HideInteract()

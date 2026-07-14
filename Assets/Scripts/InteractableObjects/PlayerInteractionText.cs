@@ -7,16 +7,26 @@ public class PlayerInteractionText : MonoBehaviour
     void Start()
     {
         HidePrompt();
-        GameEvents.OnShowInteract += ShowPrompt;
-        GameEvents.OnHideInteract += HidePrompt;
+        EventBus.Subscribe<OnShowInteractEvent>(ShowPrompt);
+        EventBus.Subscribe<OnHideInteractEvent>(CallHidePromptEvent);
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnShowInteractEvent>(ShowPrompt);
+        EventBus.Unsubscribe<OnHideInteractEvent>(CallHidePromptEvent);
     }
 
-    public void ShowPrompt()
+    public void ShowPrompt(OnShowInteractEvent showInteractEvent)
     {
         if(interactionText != null)
         {
             interactionText.SetActive(true);
         }
+    }
+
+    public void CallHidePromptEvent(OnHideInteractEvent hideInteractEvent)
+    {
+        HidePrompt();
     }
 
     public void HidePrompt()
@@ -27,9 +37,4 @@ public class PlayerInteractionText : MonoBehaviour
         }
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnShowInteract -= ShowPrompt;
-        GameEvents.OnHideInteract -= HidePrompt;
-    }
 }

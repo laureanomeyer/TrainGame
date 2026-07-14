@@ -24,7 +24,7 @@ public class StatPanelController : MonoBehaviour
         toggleAction.Enable();
         toggleAction.performed += OnToggleStats;
         statsSystemRef = ServiceLocator.Get<StatSystem>();
-        GameEvents.OnStatChanged += SetupTexts;
+        EventBus.Subscribe<OnStatChangedEvent>(CallSetUpTextEvent);
 
         SetupTexts();
     }
@@ -33,7 +33,7 @@ public class StatPanelController : MonoBehaviour
     {
         toggleAction.performed -= OnToggleStats;
         toggleAction.Disable();
-        GameEvents.OnStatChanged -= SetupTexts;
+        EventBus.Unsubscribe<OnStatChangedEvent>(CallSetUpTextEvent);
     }
 
     private void OnToggleStats(InputAction.CallbackContext ctx)
@@ -49,6 +49,11 @@ public class StatPanelController : MonoBehaviour
                 stats.alpha = 1;
             }
         }
+    }
+
+    private void CallSetUpTextEvent(OnStatChangedEvent statsChagedEvent)
+    {
+        SetupTexts();
     }
 
     private void SetupTexts()
