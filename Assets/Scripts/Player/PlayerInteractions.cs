@@ -264,7 +264,7 @@ public class PlayerInteractions
     public void OnOpenMainMenu()
     {
         OpenMainMenu();
-        GameEvents.HideInteract();
+        EventBus.Publish(new OnHideInteractEvent());
     }
 
     public void OpenMainMenu()

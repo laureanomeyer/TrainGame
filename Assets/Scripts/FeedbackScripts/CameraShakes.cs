@@ -32,10 +32,19 @@ public class CameraShakes : MonoBehaviour
 
     private void Start()
     {
-        GameEvents.OnCoalEmpty += CoalRunOutShake;
-        GameEvents.OnShoot += ShootCameraShake;
-        GameEvents.OnShieldsBroken += ShieldsRunOutShake;
-        GameEvents.OnWagonDestroyed += WagonDestroyedShake;
+        EventBus.Subscribe<OnCoalEmptyEvent>(CoalRunOutShake);
+        EventBus.Subscribe<OnShootEvent>(ShootCameraShake);
+        EventBus.Subscribe<OnShieldsBrokenEvent>(ShieldsRunOutShake);
+        EventBus.Subscribe<OnWagonDestroyedEvent>(WagonDestroyedShake);
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnCoalEmptyEvent>(CoalRunOutShake);
+        EventBus.Unsubscribe<OnShootEvent>(ShootCameraShake);
+        EventBus.Unsubscribe<OnShieldsBrokenEvent>(ShieldsRunOutShake);
+        EventBus.Unsubscribe<OnWagonDestroyedEvent>(WagonDestroyedShake);
+
+        StopAllCoroutines();
     }
 
     private IEnumerator DoCameraShake(float time, float intensity)
@@ -48,38 +57,29 @@ public class CameraShakes : MonoBehaviour
         noise.AmplitudeGain = 0;
     }
 
-    public void ShootCameraShake(float rateOfFire)
+    public void ShootCameraShake(OnShootEvent shootEvent)
     {
         StopAllCoroutines();
         StartCoroutine(DoCameraShake(shootTimer, shootIntensity));
     }
 
-    public void ShieldsRunOutShake()
+    public void ShieldsRunOutShake(OnShieldsBrokenEvent sheldBrokenEvent)
     {
         StopAllCoroutines();
         StartCoroutine(DoCameraShake(shieldsTimer, shieldsIntensity));
     }
 
-    public void CoalRunOutShake()
+    public void CoalRunOutShake(OnCoalEmptyEvent coalEmptyEvent)
     {
         StopAllCoroutines();
         StartCoroutine(DoCameraShake(coalTimer, coalIntensity));
     }
 
-    public void WagonDestroyedShake()
+    public void WagonDestroyedShake(OnWagonDestroyedEvent wagonDestroyEvent)
     {
         StopAllCoroutines();
         StartCoroutine(DoCameraShake(wagonTimer, wagonIntensity));
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnCoalEmpty -= CoalRunOutShake;
-        GameEvents.OnShoot -= ShootCameraShake;
-        GameEvents.OnShieldsBroken -= ShieldsRunOutShake;
-        GameEvents.OnWagonDestroyed -= WagonDestroyedShake;
-
-        StopAllCoroutines();
-    }
 
 }

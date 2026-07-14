@@ -91,7 +91,7 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        GameEvents.EnemyHit(transform.position);
+        EventBus.Publish(new OnEnemyHitEvent(transform.position));
         flash.Flash();
 
         DamagePopupManager.Instance?.ShowDamage(
@@ -113,8 +113,8 @@ public class Enemy : MonoBehaviour
         if (healthBar != null)
         { healthBar.Hide(); }
         flash.ResetMaterials();
-        GameEvents.GoldEarned(data.gold);
-        GameEvents.EnemyDeath(transform.position);
+        EventBus.Publish(new OnGoldEarnedEvent(data.gold));
+        EventBus.Publish(new OnEnemyDeathEvent(transform.position));
         TutorialEvents.EnemyKilled();
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }

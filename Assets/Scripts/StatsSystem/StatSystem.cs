@@ -20,7 +20,7 @@ public class StatSystem
     {
         modifiers.Add(mod);
         OnStatChanged?.Invoke(mod.StatType, GetStat(mod.StatType));
-        GameEvents.StatChanged();
+        EventBus.Publish(new OnStatChangedEvent());
     }
 
     public void RemoveModifiersFromSource(object source)
@@ -69,7 +69,7 @@ public class StatSystem
         foreach (StatType type in Enum.GetValues(typeof(StatType)))
         {
             OnStatChanged?.Invoke(type, GetStat(type));
-            GameEvents.StatChanged();
+            EventBus.Publish(new OnStatChangedEvent());
         }
     }
 

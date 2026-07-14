@@ -11,8 +11,8 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
 
     void Awake()
     {
-        GameEvents.OnTakeFuel += DeactivateWaypointUI;
-        GameEvents.OnDropFuel += ActivateWaypointUI;
+        EventBus.Subscribe<OnTakeFuelEvent>(CallDeactivateWayPointEvent);
+        EventBus.Subscribe<OnDropFuelEvent>(CallActivateWayPointEvent);
         TutorialEvents.OnEnableCoalBox += SetWaypointVisible;
     }
     void Start()
@@ -22,15 +22,32 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
     }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnTakeFuelEvent>(CallDeactivateWayPointEvent);
+        EventBus.Unsubscribe<OnDropFuelEvent>(CallActivateWayPointEvent);
+        TutorialEvents.OnEnableCoalBox -= SetWaypointVisible;
+    }
     public void SetWaypointVisible(bool set)
     {
         indicatorOnScreen.visible = set;
     }
+
+    public void CallActivateWayPointEvent(OnDropFuelEvent dropFuelEvent)
+    {
+        ActivateWaypointUI();
+    }
+    public void CallDeactivateWayPointEvent(OnTakeFuelEvent takeFuelEvent)
+    {
+        DeactivateWaypointUI();
+    }
+
     public void ActivateWaypointUI()
     {
         indicatorOnScreen.visible = true;
         indicatorOffScreen.visible = true;
     }
+
 
     public void DeactivateWaypointUI()
     {
@@ -38,10 +55,4 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOffScreen.visible = false;
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnTakeFuel -= DeactivateWaypointUI;
-        GameEvents.OnDropFuel -= ActivateWaypointUI;
-        TutorialEvents.OnEnableCoalBox -= SetWaypointVisible;
-    }
 }

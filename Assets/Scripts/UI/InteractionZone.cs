@@ -15,12 +15,12 @@ public class InteractionZone : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnInteractPressed += OnPlayerInteract;
+        EventBus.Subscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
     }
 
     private void OnDestroy()
     {
-        GameEvents.OnInteractPressed -= OnPlayerInteract;
+        EventBus.Unsubscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,7 +31,7 @@ public class InteractionZone : MonoBehaviour
         this.playerBrain = playerBrain;
         ui = playerBrain.InteractionUIManager;
         playerInZone = true;
-        GameEvents.ShowInteract();
+        EventBus.Publish(new OnShowInteractEvent());
     }
 
     private void OnTriggerExit(Collider other)
@@ -48,9 +48,9 @@ public class InteractionZone : MonoBehaviour
         playerBrain = null;
         ui = null;
 
-        GameEvents.UiActivated(isOpen);
-        GameEvents.HideInteract();
-        GameEvents.ShowCursor(CursorType.Gameplay);
+        EventBus.Publish(new OnActivateUiEvent(true));
+        EventBus.Publish(new OnHideInteractEvent());
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
 
     public void DeactivateUI()
@@ -62,9 +62,14 @@ public class InteractionZone : MonoBehaviour
 
         playerBrain.SetCanMove(true);
 
-        GameEvents.UiActivated(isOpen);
-        GameEvents.ShowInteract();
-        GameEvents.ShowCursor(CursorType.Gameplay);
+        EventBus.Publish(new OnActivateUiEvent(true));
+        EventBus.Publish(new OnShowInteractEvent());
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+    }
+
+    private void CallOnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
+    {
+        OnPlayerInteract();
     }
 
     private void OnPlayerInteract()
@@ -93,9 +98,9 @@ public class InteractionZone : MonoBehaviour
 
             playerBrain.SetCanMove(false);
 
-            GameEvents.UiActivated(isOpen);
-            GameEvents.HideInteract();
-            GameEvents.ShowCursor(CursorType.Real);
+            EventBus.Publish(new OnActivateUiEvent(false));
+            EventBus.Publish(new OnHideInteractEvent());
+            EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
         }
         else
         {

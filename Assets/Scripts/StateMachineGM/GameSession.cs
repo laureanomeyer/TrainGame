@@ -30,7 +30,7 @@ public class GameSession
     public void RebuildStatsSystem()
     {
         _StatSystem = new StatSystem(baseStats, _TrainData);
-        GameEvents.StatChanged();
+        EventBus.Publish(new OnStatChangedEvent());
     }
 
     public void Reset()

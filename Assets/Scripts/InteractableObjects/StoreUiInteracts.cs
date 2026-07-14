@@ -17,13 +17,13 @@ public class StoreUiInteracts : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.OnInteractPressed += OnPlayerInteract;
+        EventBus.Subscribe<OnInteractPressedEvent>(OnPlayerInteractEvent);
         closeButton.onClick.AddListener(DeactivateUI);
     }
 
     private void OnDisable()
     {
-        GameEvents.OnInteractPressed -= OnPlayerInteract;
+        EventBus.Unsubscribe<OnInteractPressedEvent>(OnPlayerInteractEvent);
         closeButton.onClick.RemoveListener(DeactivateUI);
     }
 
@@ -38,7 +38,7 @@ public class StoreUiInteracts : MonoBehaviour
 
         playerInZone = true;
 
-        GameEvents.ShowInteract();
+        EventBus.Publish(new OnShowInteractEvent());
     }
 
     private void OnTriggerExit(Collider other)
@@ -50,8 +50,8 @@ public class StoreUiInteracts : MonoBehaviour
         uiContinueConfirmation.SetActive(false);
         uiUpgrades.SetActive(false);
 
-        GameEvents.HideInteract();
-        GameEvents.ShowCursor(CursorType.Gameplay);
+        EventBus.Publish(new OnHideInteractEvent());
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
 
     private void DeactivateUI()
@@ -63,8 +63,13 @@ public class StoreUiInteracts : MonoBehaviour
         uiContinueConfirmation.SetActive(false);
         uiUpgrades.SetActive(false);
 
-        GameEvents.ShowInteract();
-        GameEvents.ShowCursor(CursorType.Gameplay);
+        EventBus.Publish(new OnShowInteractEvent());
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+    }
+
+    public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
+    {
+        OnPlayerInteract();
     }
 
     private void OnPlayerInteract()
@@ -80,7 +85,7 @@ public class StoreUiInteracts : MonoBehaviour
             playerBrain.SetCanAttack(false);
             playerBrain.SetCanMove(false);
 
-            GameEvents.ShowCursor(CursorType.Real);
+            EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
         }
         else
         {

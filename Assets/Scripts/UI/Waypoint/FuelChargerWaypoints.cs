@@ -15,8 +15,23 @@ public class FuelChargerWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
 
-        GameEvents.OnTakeFuel += ActivateWaypointUI;
-        GameEvents.OnDropFuel += DeactivateWaypointUI;
+        EventBus.Subscribe<OnTakeFuelEvent>(CallActivateWayPointEvent);
+        EventBus.Subscribe<OnDropFuelEvent>(CallDeactivateWayPointEvent);
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnTakeFuelEvent>(CallActivateWayPointEvent);
+        EventBus.Unsubscribe<OnDropFuelEvent>(CallDeactivateWayPointEvent);
+    }
+
+    public void CallActivateWayPointEvent(OnTakeFuelEvent takeFuelEvent)
+    {
+        ActivateWaypointUI();
+    }
+
+    public void CallDeactivateWayPointEvent(OnDropFuelEvent dropFuelEvent)
+    {
+        DeactivateWaypointUI();
     }
 
     public void ActivateWaypointUI()
@@ -31,9 +46,4 @@ public class FuelChargerWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOffScreen.visible = false;
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnTakeFuel -= ActivateWaypointUI;
-        GameEvents.OnDropFuel -= DeactivateWaypointUI;
-    }
 }

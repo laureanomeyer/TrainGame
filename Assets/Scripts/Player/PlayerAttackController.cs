@@ -44,7 +44,7 @@ public class PlayerAttackController
             SetWeapon(playerDataRef.PlayerWeapon);
         }
 
-        GameEvents.AmmoChanged(weapon.CurrentAmmunition);
+        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 
     public void Update()
@@ -75,8 +75,8 @@ public class PlayerAttackController
             if (weapon.IsReloading) return;
 
             weapon.Shoot(spawnPoint);
-            GameEvents.ShootPerformed(rateOfFire);
-            GameEvents.AmmoChanged(weapon.CurrentAmmunition);
+            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
             waitToFire = 0;
         }
     }
@@ -108,7 +108,7 @@ public class PlayerAttackController
                 weapon.RestockBullets();
                 weapon.IsReloading = false;
                 AudioManager.Instance.Play($"RevolverMusketReload{1}");
-                GameEvents.AmmoChanged(weapon.CurrentAmmunition);
+                EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
             }
         }
         
@@ -131,6 +131,6 @@ public class PlayerAttackController
         ReseatCadenceStats();
         weapon.RestockBullets();
         weapon.SetPool(pool);
-        GameEvents.AmmoChanged(weapon.CurrentAmmunition);
+        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 }

@@ -31,23 +31,23 @@ public class GoldCollector
         goldDisplayUI = CurrentGoldUI;
         originalFontSize = goldDisplayUI.fontSize;
         storageCapacity = collectorStorageCapacity;
-        GameEvents.OnGoldEarned += CollectGold;
+        EventBus.Subscribe<OnGoldEarnedEvent>(CollectGold);
         this.setCoinsModels = action;
         statsRef = ServiceLocator.Get<StatSystem>();
     }
 
     public void ActivateOnDestroy()
     {
-        GameEvents.OnGoldEarned -= CollectGold;
+        EventBus.Unsubscribe<OnGoldEarnedEvent>(CollectGold);
         cts?.Cancel();
         cts?.Dispose();
     }
 
-    public void CollectGold(float amount)
+    public void CollectGold(OnGoldEarnedEvent goldEvent)
     {
         if (wagonHP.IsBroken == false)
         {
-            gold += amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
+            gold += goldEvent.Amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
 
             setCoinsModels(gold, storageCapacity);
             goldDisplayUI.text = "$" + gold;
@@ -68,7 +68,7 @@ public class GoldCollector
             
             if (goldToGive > 0)
             {
-                GameEvents.TakeGold();
+                EventBus.Publish(new OnTakeGoldEvent());
             }
 
             return goldToGive;

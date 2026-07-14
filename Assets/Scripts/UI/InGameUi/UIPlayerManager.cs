@@ -48,12 +48,12 @@ public class UIPlayerManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        GameEvents.OnGoldBoxChanged += UpdateGoldUI;
+        EventBus.Subscribe<OnGoldBoxChangedEvent>(UpdateGoldUIEvent);
     }
 
     private void OnDisable()
     {
-        GameEvents.OnGoldBoxChanged -= UpdateGoldUI;
+        EventBus.Unsubscribe<OnGoldBoxChangedEvent>(UpdateGoldUIEvent);
     }
 
     void Update()
@@ -119,6 +119,11 @@ public class UIPlayerManager : MonoBehaviour
                 goldImage.fillAmount = 0;
             }
         }
+    }
+
+    void UpdateGoldUIEvent(OnGoldBoxChangedEvent goldChangedEvent) 
+    {
+        UpdateGoldUI(goldChangedEvent.CurrentGold);
     }
 
     void UpdateGoldUI(float currentGold)

@@ -23,14 +23,14 @@ public class GoldBox : IInteractableWithInventory
 
         AddGold(playerRef.DepositGold());
 
-        GameEvents.DropGold();
+        EventBus.Publish(new OnDropGoldEvent());
     }
 
     public void AddGold(float amount)
     {
         if (amount <= 0) return;
         currentGold += amount;
-        GameEvents.GoldBoxChanged(currentGold);
+        EventBus.Publish(new OnGoldBoxChangedEvent (currentGold));
         ChangeGoldInData(amount);
 
         if (GameManager.Instance.CurrentState == GameState.Tutorial)

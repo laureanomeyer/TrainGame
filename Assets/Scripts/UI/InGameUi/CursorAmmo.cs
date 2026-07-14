@@ -36,12 +36,12 @@ public class CursorAmmo : MonoBehaviour
         ammoRect = ammoText.rectTransform;
         canvas = GetComponent<Canvas>();
 
-        GameEvents.OnAmmoChanged += UpdateText;
-        GameEvents.OnReloadStarted += StartReloadFill;
-        GameEvents.OnShoot += StartShootCrosshairAnimation;
+        EventBus.Subscribe<OnAmmoChangedEvent>(UpdateText);
+        EventBus.Subscribe<OnReloadEvent>(StartReloadFill);
+        EventBus.Subscribe<OnShootEvent>(StartShootCrosshairAnimation);
 
         if (!GameManager.Instance.IsTutorial)
-            GameEvents.OnShowGameplayCursor += SetCursorVisibility;
+            EventBus.Subscribe<OnShowGameplayCursorEvent>(SetCursorVisibleEvent);
 
         TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
     }
@@ -58,12 +58,12 @@ public class CursorAmmo : MonoBehaviour
     }
     private void OnDestroy()
     {
-        GameEvents.OnAmmoChanged -= UpdateText;
-        GameEvents.OnReloadStarted -= StartReloadFill;
-        GameEvents.OnShoot -= StartShootCrosshairAnimation;
+        EventBus.Unsubscribe<OnAmmoChangedEvent>(UpdateText);
+        EventBus.Unsubscribe<OnReloadEvent>(StartReloadFill);
+        EventBus.Unsubscribe<OnShootEvent>(StartShootCrosshairAnimation);
 
         if (!GameManager.Instance.IsTutorial)
-            GameEvents.OnShowGameplayCursor -= SetCursorVisibility;
+            EventBus.Unsubscribe<OnShowGameplayCursorEvent>(SetCursorVisibleEvent);
 
         TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
     }
@@ -96,9 +96,9 @@ public class CursorAmmo : MonoBehaviour
         if (reloadTimer >= reloadDuration) CancelReloadFill();
     }
 
-    private void StartShootCrosshairAnimation(float rateOfFire)
+    private void StartShootCrosshairAnimation(OnShootEvent shootEvent)
     {
-        shotCooldownDuration = rateOfFire;
+        shotCooldownDuration = shootEvent.RateOfFire;
 
         shotCooldownTimer = 0;
         isShotCooldown = true;
@@ -132,14 +132,14 @@ public class CursorAmmo : MonoBehaviour
         cursorCenterRect.localScale = Vector3.Lerp(cursorCenterRect.localScale, desiredScale, Time.deltaTime * scaleSmoothSpeed);
     }
 
-    void UpdateText(float currentAmmo)
+    void UpdateText(OnAmmoChangedEvent ammoChagEvent)
     {
-        ammoText.text = $"{currentAmmo}";
+        ammoText.text = $"{ammoChagEvent.Ammunition}";
     }
 
-    void StartReloadFill(float reloadDuration)
+    void StartReloadFill(OnReloadEvent reloadEvent)
     {
-        this.reloadDuration = reloadDuration;
+        this.reloadDuration = reloadEvent.ReloadTimer;
         reloadTimer = 0;
         isReloading = true;
         cursorImage.fillAmount = 0;
@@ -149,6 +149,11 @@ public class CursorAmmo : MonoBehaviour
     {
         isReloading = false;
         cursorImage.fillAmount = 1f;
+    }
+
+    public void SetCursorVisibleEvent(OnShowGameplayCursorEvent showCursorEvent)
+    {
+        SetCursorVisibility(showCursorEvent.Show);
     }
 
     void SetCursorVisibility(bool visible)

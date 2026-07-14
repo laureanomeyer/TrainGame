@@ -13,8 +13,22 @@ public class GolodenWagonBoxWaypoints : MonoBehaviour, IWaypointsUI
 
         indicatorOffScreen.SetRenderer(indicatorRenderer);
 
-        GameEvents.OnTakeGold += DeactivateWaypointUI;
-        GameEvents.OnDropGold += ActivateWaypointUI;
+        EventBus.Subscribe<OnTakeGoldEvent>(CallDeactivateWayPointEvent);
+        EventBus.Subscribe<OnDropGoldEvent>(CallActivateWayPointEvent);
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnTakeGoldEvent>(CallDeactivateWayPointEvent);
+        EventBus.Unsubscribe<OnDropGoldEvent>(CallActivateWayPointEvent);
+    }
+    public void CallActivateWayPointEvent(OnDropGoldEvent activateWayPointEvent)
+    {
+        ActivateWaypointUI();
+    }
+
+    public void CallDeactivateWayPointEvent(OnTakeGoldEvent deactivateWayPointEvent)
+    {
+        DeactivateWaypointUI();
     }
 
     public void ActivateWaypointUI()
@@ -27,9 +41,4 @@ public class GolodenWagonBoxWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOffScreen.visible = false;
     }
 
-    private void OnDestroy()
-    {
-        GameEvents.OnTakeGold -= DeactivateWaypointUI;
-        GameEvents.OnDropGold -= ActivateWaypointUI;
-    }
 }

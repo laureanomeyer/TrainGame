@@ -1,7 +1,8 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class PauseMenuManager : MonoBehaviour
 {
@@ -109,9 +110,9 @@ public class PauseMenuManager : MonoBehaviour
         {
             pausePanel.SetActive(true);
         }
-        GameEvents.HideInteract();
-        GameEvents.ShowCursor(CursorType.Real);
-        GameEvents.UiActivated(true);
+        EventBus.Publish(new OnHideInteractEvent());
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
+        EventBus.Publish(new OnActivateUiEvent(false));
     }
 
     public void ResumeGame()
@@ -121,11 +122,11 @@ public class PauseMenuManager : MonoBehaviour
             pausePanel.SetActive(false);
         }
 
-        GameEvents.ShowCursor(currentCursor);
+        EventBus.Publish(new OnShowCursorEvent(currentCursor));
 
         Time.timeScale = 1f;
         isPaused = false;
-        GameEvents.UiActivated(false);
+        EventBus.Publish(new OnActivateUiEvent(true));
     }
 
     public void QuitToMainMenu()
