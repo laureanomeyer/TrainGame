@@ -16,9 +16,14 @@ public class CoalBox: IInteractableWithInventory
         charges = 1f;
         hasCoal = true;
         this.collider = collider;
-        TutorialEvents.OnEnableCoalBox += SetCanInteract;
+        EventBus.Subscribe<OnEnableCoalBoxEvent>(SetCanInteract);
     }
-    
+
+    public void OnDestroyObject()
+    {
+        EventBus.Unsubscribe<OnEnableCoalBoxEvent>(SetCanInteract);
+    }
+
     public void Interact(IInventory playerRef)
     {
         if (canInteract)
@@ -65,14 +70,11 @@ public class CoalBox: IInteractableWithInventory
     {
         charges = amount;
     }
-    public void SetCanInteract(bool canInteract)
+    public void SetCanInteract(OnEnableCoalBoxEvent canInteractEvent)
     {
-        this.canInteract = canInteract;
-        collider.enabled = canInteract;
+        this.canInteract = canInteractEvent.Enable;
+        collider.enabled = canInteractEvent.Enable;
     }
 
-    public void OnDestroyObject()
-    {
-        TutorialEvents.OnEnableCoalBox -= SetCanInteract;
-    }
+    
 }

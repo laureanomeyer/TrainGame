@@ -13,13 +13,18 @@ public class FuelCharger: MonoBehaviour
 
     private void Awake()
     {
-        TutorialEvents.OnEnableCoalBox += SetActive;
+        EventBus.Subscribe<OnEnableCoalBoxEvent>(SetActive);
     }
     void Start()
     {
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
         inputHandler = new InteractInputHandler(interactAction, OnInteract);
+    }
+    private void OnDestroy()
+    {
+        inputHandler.Dispose();
+        EventBus.Unsubscribe<OnEnableCoalBoxEvent>(SetActive);
     }
 
     void OnInteract()
@@ -40,8 +45,8 @@ public class FuelCharger: MonoBehaviour
 
             if (GameManager.Instance.CurrentState == GameState.Tutorial) 
             {
-                TutorialEvents.SetRunStarted(true);
-                TutorialEvents.SetTimerStarted(true);
+                EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnSetTimerStartedEvent(true));
             }
         }
         else return;
@@ -63,15 +68,10 @@ public class FuelCharger: MonoBehaviour
         }
     }
 
-    void SetActive(bool active)
+    void SetActive(OnEnableCoalBoxEvent enableCoalBoxEvent)
     {
-        canInteract = active;
-        coll.enabled = active;
-    }
-    private void OnDestroy()
-    {
-        inputHandler.Dispose();
-        TutorialEvents.OnEnableCoalBox -= SetActive;
+        canInteract = enableCoalBoxEvent.Enable;
+        coll.enabled = enableCoalBoxEvent.Enable;
     }
 
 

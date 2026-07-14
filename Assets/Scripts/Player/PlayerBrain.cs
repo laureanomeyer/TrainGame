@@ -48,7 +48,7 @@ public class PlayerBrain : MonoBehaviour
         attackAction.performed += ActiveAttack;
         attackAction.canceled += DeactiveAttack;
 
-        TutorialEvents.OnSetAttackEnabled += SetCanAttack;
+        EventBus.Subscribe<OnSetAttackEnabledEvent>(CallSetCanAttackEvent);
 
         EventBus.Subscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
@@ -63,7 +63,7 @@ public class PlayerBrain : MonoBehaviour
         attackAction.performed -= ActiveAttack;
         attackAction.canceled -= DeactiveAttack;
 
-        TutorialEvents.OnSetAttackEnabled -= SetCanAttack;
+        EventBus.Unsubscribe<OnSetAttackEnabledEvent>(CallSetCanAttackEvent);
 
         EventBus.Unsubscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Unsubscribe<OnHideInteractEvent>(CallHideInteractEvent);
@@ -130,6 +130,10 @@ public class PlayerBrain : MonoBehaviour
     public void CallSetCanAttackEvent(OnActivateUiEvent activateUIEvent)
     {
         SetCanAttack(activateUIEvent.Activated);
+    }
+    public void CallSetCanAttackEvent(OnSetAttackEnabledEvent AttackEnableEvent)
+    {
+        SetCanAttack(AttackEnableEvent.Can);
     }
 
     public void SetCanAttack(bool canAttack)

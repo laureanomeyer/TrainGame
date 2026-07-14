@@ -40,8 +40,8 @@ public class SpawnManager : MonoBehaviour
     {
         EventBus.Subscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Subscribe<OnEnemyHitEvent>(EnemyHit);
-        TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
-        TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
+        EventBus.Subscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
+        EventBus.Subscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
 
         canSpawn = !GameManager.Instance.IsTutorial;
     }
@@ -50,8 +50,8 @@ public class SpawnManager : MonoBehaviour
     {
         EventBus.Unsubscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Unsubscribe<OnEnemyHitEvent>(EnemyHit);
-        TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
-        TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
+        EventBus.Unsubscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
+        EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
     }
 
     public void Start()
@@ -101,15 +101,15 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    void SpawnSingleEnemy(Vector3 pos, List<IWagon> targetList)
+    void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
     {
         if (activeZones.Count == 0)
         {
             Debug.Log("lista vacia");
             return;
         }
-        Debug.Log(targetList.Count);
-        SpawnSingle(pos, targetList);
+        Debug.Log(spawnEnemyEvent.List.Count);
+        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List);
     }
 
     void BuildPool()
@@ -200,6 +200,11 @@ public class SpawnManager : MonoBehaviour
     void EnemyHit(OnEnemyHitEvent enemyHitEvent) 
     {
         SpawnParticles(enemyHitEvent.Position);
+    }
+
+    public void CallSetCanSpawnEvent(OnStartSpawningEnemiesEvent spawnEnemiesEvent)
+    {
+        SetCanSpawn(spawnEnemiesEvent.Can);
     }
 
     void SetCanSpawn(bool canSpawn)

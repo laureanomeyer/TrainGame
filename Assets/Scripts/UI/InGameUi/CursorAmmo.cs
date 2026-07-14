@@ -43,7 +43,7 @@ public class CursorAmmo : MonoBehaviour
         if (!GameManager.Instance.IsTutorial)
             EventBus.Subscribe<OnShowGameplayCursorEvent>(SetCursorVisibleEvent);
 
-        TutorialEvents.OnSetAttackEnabled += SetCursorVisibility;
+        EventBus.Subscribe<OnSetAttackEnabledEvent>(SetCursorVisibleEvent);
     }
 
     private void Start()
@@ -65,7 +65,7 @@ public class CursorAmmo : MonoBehaviour
         if (!GameManager.Instance.IsTutorial)
             EventBus.Unsubscribe<OnShowGameplayCursorEvent>(SetCursorVisibleEvent);
 
-        TutorialEvents.OnSetAttackEnabled -= SetCursorVisibility;
+        EventBus.Unsubscribe<OnSetAttackEnabledEvent>(SetCursorVisibleEvent);
     }
     private void LateUpdate()
     {
@@ -154,6 +154,11 @@ public class CursorAmmo : MonoBehaviour
     public void SetCursorVisibleEvent(OnShowGameplayCursorEvent showCursorEvent)
     {
         SetCursorVisibility(showCursorEvent.Show);
+    }
+
+    public void SetCursorVisibleEvent(OnSetAttackEnabledEvent setAttackEnableEvent)
+    {
+        SetCursorVisibility(setAttackEnableEvent.Can);
     }
 
     void SetCursorVisibility(bool visible)

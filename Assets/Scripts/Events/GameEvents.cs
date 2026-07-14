@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class OnGoldEarnedEvent : IGameEvent 
@@ -159,4 +160,106 @@ public class OnInteractPressedEvent : IGameEvent
 public class OnStatChangedEvent : IGameEvent
 {
     public OnStatChangedEvent() { }
+}
+
+public class OnSpawnEnemyEvent : IGameEvent
+{
+    public Vector3 Position;
+    public List<IWagon> List;
+
+    public OnSpawnEnemyEvent(Vector3 position, List<IWagon> list) 
+    {
+        Position = position;
+        List = list;
+    }
+}
+
+public class OnSetAttackEnabledEvent : IGameEvent
+{
+    public bool Can;
+
+    public OnSetAttackEnabledEvent(bool can)
+    {
+        Can = can;
+    }
+}
+
+public class OnEnableCoalBoxEvent : IGameEvent
+{
+    public bool Enable;
+
+    public OnEnableCoalBoxEvent(bool enable)
+    {
+        Enable = enable;
+    }
+}
+
+public class OnEnableGoldBoxEvent : IGameEvent
+{
+    public bool Enable;
+
+    public OnEnableGoldBoxEvent(bool enable)
+    {
+        Enable = enable;
+    }
+}
+
+public class OnStartFuelUseEvent : IGameEvent
+{
+    public OnStartFuelUseEvent() { }
+}
+
+public class OnSetCanConsumeEvent : IGameEvent
+{
+    public bool Can;
+
+    public OnSetCanConsumeEvent(bool can)
+    {
+        Can = can;
+    }
+}
+
+public class OnStartSpawningEnemiesEvent : IGameEvent
+{
+    public bool Can;
+
+    public OnStartSpawningEnemiesEvent(bool can)
+    {
+        Can = can;
+    }
+}
+
+public class OnSetTimerStartedEvent : IGameEvent
+{
+    public bool Can;
+
+    public OnSetTimerStartedEvent(bool can)
+    {
+        Can = can;
+    }
+}
+
+public class OnSetTutorialTextEvent : IGameEvent
+{
+    public string Text;
+
+    public OnSetTutorialTextEvent(string text)
+    {
+        Text = text;
+    }
+}
+
+public class OnEnemyKilledEvent : IGameEvent
+{
+    public OnEnemyKilledEvent() { }
+}
+
+public class OnSetTutorialVisibleEvent : IGameEvent
+{
+    public bool Show;
+
+    public OnSetTutorialVisibleEvent(bool show)
+    {
+        Show = show;
+    }
 }

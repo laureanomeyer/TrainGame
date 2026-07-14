@@ -13,7 +13,7 @@ public class CollectGoldFromWagon : MonoBehaviour
 
     private void Awake()
     {
-        TutorialEvents.OnEnemyKilled += Activate;
+        EventBus.Subscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
     }
     void Start()
     {
@@ -28,7 +28,7 @@ public class CollectGoldFromWagon : MonoBehaviour
 
     private void OnDestroy()
     {
-        TutorialEvents.OnEnemyKilled -= Activate;
+        EventBus.Unsubscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
         inputHandler.Dispose();
     }
 
@@ -55,6 +55,11 @@ public class CollectGoldFromWagon : MonoBehaviour
         {
             playerRef = null;
         }
+    }
+
+    private void CallCollectGoldEvent(OnEnemyKilledEvent enemyKillEvent)
+    {
+        Activate();
     }
 
     void Activate()

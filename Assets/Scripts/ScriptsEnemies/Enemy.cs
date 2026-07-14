@@ -115,7 +115,7 @@ public class Enemy : MonoBehaviour
         flash.ResetMaterials();
         EventBus.Publish(new OnGoldEarnedEvent(data.gold));
         EventBus.Publish(new OnEnemyDeathEvent(transform.position));
-        TutorialEvents.EnemyKilled();
+        EventBus.Publish(new OnEnemyKilledEvent());
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 

@@ -43,8 +43,8 @@ public class SpawnController : MonoBehaviour
     {
         EventBus.Subscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Subscribe<OnEnemyHitEvent>(EnemyHit);
-        TutorialEvents.OnSpawnEnemy += SpawnSingleEnemy;
-        TutorialEvents.OnStartSpawningEnemies += SetCanSpawn;
+        EventBus.Subscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
+        EventBus.Subscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
 
         canSpawn = !GameManager.Instance.IsTutorial;
 
@@ -56,8 +56,8 @@ public class SpawnController : MonoBehaviour
     {
         EventBus.Unsubscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Unsubscribe<OnEnemyHitEvent>(EnemyHit);
-        TutorialEvents.OnSpawnEnemy -= SpawnSingleEnemy;
-        TutorialEvents.OnStartSpawningEnemies -= SetCanSpawn;
+        EventBus.Unsubscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
+        EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
     }
 
 
@@ -103,9 +103,9 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    void SpawnSingleEnemy(Vector3 pos, List<IWagon> targetList)
+    void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
     {
-        SpawnSingle(pos, targetList);
+        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List);
     }
 
     void BuildPool()
@@ -194,6 +194,11 @@ public class SpawnController : MonoBehaviour
     void EnemyHit(OnEnemyHitEvent enemyHitEvent)
     {
         SpawnParticles(enemyHitEvent.Position);
+    }
+
+    public void CallSetCanSpawnEvent(OnStartSpawningEnemiesEvent spawnEnemiesEvent)
+    {
+        SetCanSpawn(spawnEnemiesEvent.Can);
     }
 
     void SetCanSpawn(bool canSpawn)

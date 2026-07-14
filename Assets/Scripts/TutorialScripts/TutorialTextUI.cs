@@ -16,20 +16,31 @@ public class TutorialTextUI : MonoBehaviour
 
     private void OnEnable()
     {
-        TutorialEvents.OnSetTutorialText += SetText;
-        TutorialEvents.OnSetTutorialVisible += SetVisible;
+        EventBus.Subscribe<OnSetTutorialTextEvent>(CallSetTextEvent);
+        EventBus.Subscribe<OnSetTutorialVisibleEvent>(CallSetVisibleTutoriaLEvent);
     }
 
     private void OnDisable()
     {
-        TutorialEvents.OnSetTutorialText -= SetText;
-        TutorialEvents.OnSetTutorialVisible -= SetVisible;
+        EventBus.Unsubscribe<OnSetTutorialTextEvent>(CallSetTextEvent);
+        EventBus.Unsubscribe<OnSetTutorialVisibleEvent>(CallSetVisibleTutoriaLEvent);
+    }
+
+    private void CallSetTextEvent(OnSetTutorialTextEvent setTextEvent)
+    {
+        SetText(setTextEvent.Text);
     }
 
     private void SetText(string text)
     {
         tutorialText.text = text;
     }
+
+    private void CallSetVisibleTutoriaLEvent(OnSetTutorialVisibleEvent tutorialVisibleEvent)
+    {
+        SetVisible(tutorialVisibleEvent.Show);
+    }
+
     private void SetVisible(bool show)
     {
         textContainer.SetActive(show);

@@ -13,7 +13,7 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
     {
         EventBus.Subscribe<OnTakeFuelEvent>(CallDeactivateWayPointEvent);
         EventBus.Subscribe<OnDropFuelEvent>(CallActivateWayPointEvent);
-        TutorialEvents.OnEnableCoalBox += SetWaypointVisible;
+        EventBus.Subscribe<OnEnableCoalBoxEvent>(SetWaypointVisible);
     }
     void Start()
     {
@@ -26,11 +26,11 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
     {
         EventBus.Unsubscribe<OnTakeFuelEvent>(CallDeactivateWayPointEvent);
         EventBus.Unsubscribe<OnDropFuelEvent>(CallActivateWayPointEvent);
-        TutorialEvents.OnEnableCoalBox -= SetWaypointVisible;
+        EventBus.Unsubscribe<OnEnableCoalBoxEvent>(SetWaypointVisible);
     }
-    public void SetWaypointVisible(bool set)
+    public void SetWaypointVisible(OnEnableCoalBoxEvent enableCoalBoxEvent)
     {
-        indicatorOnScreen.visible = set;
+        indicatorOnScreen.visible = enableCoalBoxEvent.Enable;
     }
 
     public void CallActivateWayPointEvent(OnDropFuelEvent dropFuelEvent)

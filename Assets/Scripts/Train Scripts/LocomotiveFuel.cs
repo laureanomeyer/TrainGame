@@ -43,12 +43,17 @@ public class LocomotiveFuel
         shieldTakenDamage = false;
         fuelMaxCapacity = maxFuel;
 
-        TutorialEvents.OnSetCanConsume += SetCanConsume;
+        EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
 
         trainDataRef = ServiceLocator.Get<TrainData>();
         trainDataRef.SetSpeed(actualSpeed);
 
         canConsume = !GameManager.Instance.IsTutorial;
+    }
+
+    public void Destroy()
+    {
+        EventBus.Unsubscribe<OnSetCanConsumeEvent>(SetCanConsume);
     }
 
     public void Move(float deltaTime)
@@ -153,13 +158,10 @@ public class LocomotiveFuel
         }
     }
 
-    public void SetCanConsume(bool canConsume)
+    public void SetCanConsume(OnSetCanConsumeEvent canConsumeEvent)
     {
-        this.canConsume = canConsume;
+        this.canConsume = canConsumeEvent.Can;
     }
 
-    public void Destroy()
-    {
-        TutorialEvents.OnSetCanConsume -= SetCanConsume;
-    }
+    
 }

@@ -36,7 +36,15 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         );
 
         stats.OnStatChanged += OnStatChanged;
-        TutorialEvents.OnStartFuelUse += RemoveFuelTutorial;
+        EventBus.Subscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
+    }
+
+    private void OnDestroy()
+    {
+        if (RunManager.Instance != null)
+            RunManager.Instance.StatSystem.OnStatChanged -= OnStatChanged;
+        fuelController.Destroy();
+        EventBus.Unsubscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
     }
 
     void Update()
@@ -62,7 +70,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     {
         fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.5f);
     }
-    void RemoveFuelTutorial()
+    void RemoveFuelTutorial(OnStartFuelUseEvent startFuelEvent)
     {
         if (!started)
         {
@@ -91,11 +99,5 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     {
     }
 
-    private void OnDestroy()
-    {
-        if (RunManager.Instance != null)
-            RunManager.Instance.StatSystem.OnStatChanged -= OnStatChanged;
-        fuelController.Destroy();
-        TutorialEvents.OnStartFuelUse -= RemoveFuelTutorial;
-    }
+    
 }

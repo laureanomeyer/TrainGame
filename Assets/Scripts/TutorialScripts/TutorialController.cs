@@ -22,20 +22,27 @@ public class TutorialController : MonoBehaviour
         CoalUi.SetActive(false);
         RunUi.SetActive(false);
 
-        TutorialEvents.OnSetAttackEnabled += SetAttackUi;
-        TutorialEvents.OnStartFuelUse += StartFuelConsumption;
-        TutorialEvents.OnStartSpawningEnemies += StartRun;
-        TutorialEvents.OnEnemyKilled += CashGoldWagon;
+        EventBus.Subscribe<OnSetAttackEnabledEvent>(SetAttackUi);
+        EventBus.Subscribe<OnStartFuelUseEvent>(StartFuelConsumption);
+        EventBus.Subscribe<OnStartSpawningEnemiesEvent>(StartRun);
+        EventBus.Subscribe<OnEnemyKilledEvent>(CashGoldWagon);
 
-        TutorialEvents.SetRunStarted(false);
-        TutorialEvents.SetCanConsume(false);
-        TutorialEvents.SetTimerStarted(false);
-        TutorialEvents.EnableCoalBox(false);
-        TutorialEvents.EnableGoldBox(false);
-        TutorialEvents.SetAttackEnabled(false);
+        EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
+        EventBus.Publish(new OnSetCanConsumeEvent(false));
+        EventBus.Publish(new OnSetTimerStartedEvent(false));
+        EventBus.Publish(new OnEnableCoalBoxEvent(false));
+        EventBus.Publish(new OnEnableGoldBoxEvent(false));
+        EventBus.Publish(new OnSetAttackEnabledEvent(false));
 
-        TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Bronco Buckle... back in the saddle again, huh? Let's go over the basics.\n<b>Press WASD to move</b>.");
+        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+        EventBus.Publish(new OnSetTutorialTextEvent("Bronco Buckle... back in the saddle again, huh? Let's go over the basics.\n<b>Press WASD to move</b>."));
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnStartFuelUseEvent>(StartFuelConsumption);
+        EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(StartRun);
+        EventBus.Unsubscribe<OnSetAttackEnabledEvent>(SetAttackUi);
+        EventBus.Unsubscribe<OnEnemyKilledEvent>(CashGoldWagon);
     }
     private void Update()
     {
@@ -45,66 +52,58 @@ public class TutorialController : MonoBehaviour
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
 
-            TutorialEvents.SpawnEnemy(EnemySpawn.position, wagons);
-
+            EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, wagons));
 
             if (!firstRepair)
             {
                 firstRepair = true;
-                TutorialEvents.SetTutorialTextVisible(true);
-                TutorialEvents.SetTutorialText("That damn train you stole to reach the mysterious ore has every outlaw after you. \n <b>Repair the wagons with R!</b>");
+                EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+                EventBus.Publish(new OnSetTutorialTextEvent("That damn train you stole to reach the mysterious ore has every outlaw after you. \n <b>Repair the wagons with R!</b>"));
             }
             timer = float.MaxValue;
         }
     }
 
-    void StartFuelConsumption()
+    void StartFuelConsumption(OnStartFuelUseEvent startFuelEvent)
     {
         if (!started)
         {
             CoalUi.SetActive(true);
             started = true;
-            TutorialEvents.SetTutorialTextVisible(true);
-            TutorialEvents.EnableCoalBox(true);
-            TutorialEvents.SetTutorialText("One more thing, partner: your locomotive won't run on wishes. \n<b>Feed it coal, or the boiler's gonna blow!</b>");
+            EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+            EventBus.Publish(new OnEnableCoalBoxEvent(true));
+            EventBus.Publish(new OnSetTutorialTextEvent("One more thing, partner: your locomotive won't run on wishes. \n<b>Feed it coal, or the boiler's gonna blow!</b>"));
         }
     }
 
-    void CashGoldWagon()
+    void CashGoldWagon(OnEnemyKilledEvent enemyKillEvent)
     {
         if (firstCash)
         {
             firstCash = false;
-            TutorialEvents.SetTutorialTextVisible(true);
-            TutorialEvents.EnableGoldBox(true);
-            TutorialEvents.SetTutorialText("These fellas <b>burst into gold when they die</b>. The wagon can store it... but it ain't exactly safe. \n<b>Collect it and stash it in the safe.</b>");
+            EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+            EventBus.Publish(new OnEnableGoldBoxEvent(true));
+            EventBus.Publish(new OnSetTutorialTextEvent("These fellas <b>burst into gold when they die</b>. The wagon can store it... but it ain't exactly safe. \n<b>Collect it and stash it in the safe.</b>"));
         }
     }
 
-    void StartRun(bool can)
+    void StartRun(OnStartSpawningEnemiesEvent enemiesStartEvent)
     {
-        RunUi.SetActive(can);
-        TutorialEvents.SetCanConsume(true);
-        TutorialEvents.SetTutorialTextVisible(true);
-        TutorialEvents.SetTutorialText("Well, reckon that's all you need to know. <b>The road ahead is right here</b>. Good luck, Bronco Buckle!");
+        RunUi.SetActive(enemiesStartEvent.Can);
+        EventBus.Publish(new OnSetCanConsumeEvent(true));
+        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+        EventBus.Publish(new OnSetTutorialTextEvent("Well, reckon that's all you need to know. <b>The road ahead is right here</b>. Good luck, Bronco Buckle!"));
     }
 
-    void SetAttackUi(bool show)
+    void SetAttackUi(OnSetAttackEnabledEvent setAttackEvent)
     {
 
-        if (!firstkilled && show)
+        if (!firstkilled && setAttackEvent.Can)
         {
             firstkilled = true;
-            TutorialEvents.SetTutorialTextVisible(true);
-            TutorialEvents.SetTutorialText("Good. Surely you haven't forgotten how to <b>shoot</b>, right?");
+            EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+            EventBus.Publish(new OnSetTutorialTextEvent("Good. Surely you haven't forgotten how to <b>shoot</b>, right?"));
         }
     }
 
-    private void OnDestroy()
-    {
-        TutorialEvents.OnStartFuelUse -= StartFuelConsumption;
-        TutorialEvents.OnStartSpawningEnemies -= StartRun;
-        TutorialEvents.OnSetAttackEnabled -= SetAttackUi;
-        TutorialEvents.OnEnemyKilled -= CashGoldWagon;
-    }
 }

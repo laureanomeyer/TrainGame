@@ -21,10 +21,17 @@ public class SceneRunController : MonoBehaviour
         currentTime = sceneDuration;
         runFinished = false;
 
-        TutorialEvents.OnSetTimerStarted += SetRunStarted;
+        EventBus.Subscribe<OnSetTimerStartedEvent>(CallSetRunStartedEvent);
 
         if (cinematicSystem != null)
             cinematicSystem.OnCinematicFinished += FinishRun;
+    }
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnSetTimerStartedEvent>(CallSetRunStartedEvent);
+
+        if (cinematicSystem != null)
+            cinematicSystem.OnCinematicFinished -= FinishRun;
     }
 
     private void Update()
@@ -54,16 +61,14 @@ public class SceneRunController : MonoBehaviour
         GameManager.Instance.GoToStore();
     }
 
+    private void CallSetRunStartedEvent(OnSetTimerStartedEvent startTimerEvent)
+    {
+        SetRunStarted(startTimerEvent.Can);
+    }
+
     private void SetRunStarted(bool runStarted)
     {
         this.runStarted = runStarted;
     }
 
-    private void OnDestroy()
-    {
-        TutorialEvents.OnSetTimerStarted -= SetRunStarted;
-
-        if (cinematicSystem != null)
-            cinematicSystem.OnCinematicFinished -= FinishRun;
-    }
 }

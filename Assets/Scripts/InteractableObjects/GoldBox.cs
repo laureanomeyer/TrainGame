@@ -13,8 +13,13 @@ public class GoldBox : IInteractableWithInventory
     {
         currentGold = 0;
         this.collider = collider;
-        TutorialEvents.OnEnableGoldBox += SetCanInteract;
+        EventBus.Subscribe<OnEnableGoldBoxEvent>(SetCanInteract);
         playerDataRef = ServiceLocator.Get<PlayerData>();
+    }
+
+    public void OnDestroyObject()
+    {
+        EventBus.Unsubscribe<OnEnableGoldBoxEvent>(SetCanInteract);
     }
 
     public void Interact(IInventory playerRef)
@@ -34,23 +39,20 @@ public class GoldBox : IInteractableWithInventory
         ChangeGoldInData(amount);
 
         if (GameManager.Instance.CurrentState == GameState.Tutorial)
-            TutorialEvents.StartFuelUse();
+            EventBus.Publish(new OnStartFuelUseEvent());
     }
 
     public void ChangeGoldInData(float amount)
     {
         playerDataRef.AddPlayerGold(amount);
     }
-    public void SetCanInteract(bool canInteract)
+    public void SetCanInteract(OnEnableGoldBoxEvent enableGoldBoxEvent)
     {
-        this.canInteract = canInteract;
+        this.canInteract = enableGoldBoxEvent.Enable;
         if (collider != null)
-            collider.enabled = canInteract;
+            collider.enabled = enableGoldBoxEvent.Enable;
     }
 
-    public void OnDestroyObject()
-    {
-        TutorialEvents.OnEnableGoldBox -= SetCanInteract;
-    }
+    
 }
 
