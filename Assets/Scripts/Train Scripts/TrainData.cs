@@ -13,7 +13,7 @@ public class TrainData
 
     private Transform tailPosition;
     private Transform goldBoxPosition;
-    private List<IWagonID> wagonsIDList = new();
+    private List<IWagonID> wagonsIDList;
 
     public TrainStats LocomotiveStatsMultiplicator => locomotiveStatsMultiplicator;
     public List<IWagonID> WagonsIDList => wagonsIDList; 
@@ -26,6 +26,7 @@ public class TrainData
         this.baseStats = baseStats;
         locomotiveStatsMultiplicator = new TrainStats(baseMultStats);
         multiplicatorLevel = new Dictionary<StatType, int>();
+        wagonsIDList = new List<IWagonID>();
     }
 
     public void AddWagonID(IWagonID wagon)

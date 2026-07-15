@@ -57,6 +57,6 @@ public static class ServiceLocator
 
     public static void Clear()
     {
-        services.Clear();
+        services = new Dictionary<Type, object>();
     }
 }

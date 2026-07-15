@@ -197,7 +197,6 @@ public class GameManager : MonoBehaviour
 
     public void EndSession()
     {
-        if (isChangingScene) return;
 
         gameEnded = false;
         LastRunResult = RunResult.None;
@@ -232,7 +231,6 @@ public class GameManager : MonoBehaviour
     }
     public CursorType GetCurrentCursor()
     {
-        Debug.Log(currentCursor.ToString());
         return currentCursor;
     }
 

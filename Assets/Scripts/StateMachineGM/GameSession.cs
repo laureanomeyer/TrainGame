@@ -35,12 +35,8 @@ public class GameSession
 
     public void Reset()
     {
-        this._PlayerData = new PlayerData();
-        _TrainData = new TrainData(baseStats, baseMultStats);
-        _SessionConfig = new SessionConfig();
-        _StatSystem = new StatSystem(baseStats, _TrainData);
-
         ServiceLocator.Clear();
+
     }
 }
 
