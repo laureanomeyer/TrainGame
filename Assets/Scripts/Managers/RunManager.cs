@@ -9,7 +9,6 @@ public class RunManager : MonoBehaviour
 
     [SerializeField] private GameObject mapManagerPrefab;
     [SerializeField] private Transform mapStartLocation;
-    [SerializeField] private SpawnManager spawnManager;
 
     private MapManager mapManager;
     private LocomotiveBrain locomotiveBrain;
@@ -25,7 +24,6 @@ public class RunManager : MonoBehaviour
     public List<IWagon> ActiveWagons => activeWagons;
     public LocomotiveBrain LocomotiveBrain => locomotiveBrain;
     public StatSystem StatSystem => statSystem;
-    public SpawnManager SpawnManager => spawnManager;
 
     private void Awake()
     {
