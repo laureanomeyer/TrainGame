@@ -120,6 +120,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void ActiveAttack(InputAction.CallbackContext context)
     {
+        if (!canAttack) return;
         playerAttackController.ActiveAttack();
     }
     public void DeactiveAttack(InputAction.CallbackContext context)
