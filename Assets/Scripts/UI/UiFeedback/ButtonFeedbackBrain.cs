@@ -11,6 +11,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     private Button button;
     private bool isPressed;
     [SerializeField] private float animTime = 0.25f;
+    [SerializeField] private Ease ease = Ease.OutQuart;
 
     private void OnEnable()
     {
@@ -35,7 +36,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     public void OnPointerDown(PointerEventData data) 
     {
         isPressed = true;
-        PlayPressedAnimation(0.1f);
+        PlayPressedAnimation(animTime);
     }
     public void OnPointerUp(PointerEventData data)
     {
@@ -59,15 +60,15 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void PlayHoverAnimation()
     {
-        button.transform.DOScale(1.1f, animTime).SetEase(Ease.OutBounce);
+        button.transform.DOScale(1.1f, animTime).SetEase(ease);
     }
     private void ReverseHoverAnimation(float animTime)
     {
-        button.transform.DOScale(1f, animTime).SetEase(Ease.OutBounce);
+        button.transform.DOScale(1f, animTime).SetEase(ease);
     }
     private void PlayPressedAnimation(float animTime)
     {
-        button.transform.DOScale(0.87f, animTime).SetEase(Ease.InBounce);
+        button.transform.DOScale(0.87f, animTime).SetEase(Ease.InOutBack);
     }
     private void ClearAnimations()
     {
