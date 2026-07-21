@@ -177,6 +177,7 @@ public class PlayerInteractions
         {
             playerMovementController.SetCanMove(false);
             playerMovementController.SetCanRotate(false);
+            playerMovementController.SetFollowTarget(turret.PlayerUsePoint);
         }
 
         if (interactionUIManager != null)
@@ -201,6 +202,7 @@ public class PlayerInteractions
         {
             playerMovementController.SetCanMove(true);
             playerMovementController.SetCanRotate(true);
+            playerMovementController.SetFollowTarget(null); //volver al modo normal
         }
 
         if (interactionUIManager != null)

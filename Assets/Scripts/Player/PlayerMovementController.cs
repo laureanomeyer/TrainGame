@@ -11,6 +11,7 @@ public class PlayerMovementController
     private Rigidbody rb;
     private LookObjectToMouse lookToMouseController;
     private Transform playerTransform;
+    private Transform followTarget;
 
 
     private Vector2 moveInput;
@@ -29,6 +30,13 @@ public class PlayerMovementController
 
     public void FixedUpdate()
     {
+        if (followTarget != null)
+        {
+            rb.MovePosition(followTarget.position);
+            rb.MoveRotation(followTarget.rotation);
+            return;
+        }
+
         if (!canMove)
         {
             rb.linearVelocity = Vector3.zero;
@@ -37,14 +45,17 @@ public class PlayerMovementController
         {
             MovePlayer();
         }
-
         if (!canRotate)
         {
             rb.angularVelocity = Vector3.zero;
             return;
         }
-
         RotateToMouse();
+    }
+
+    public void SetFollowTarget(Transform target)
+    {
+        followTarget = target;
     }
 
     public void SetMoveInput(Vector2 input)
