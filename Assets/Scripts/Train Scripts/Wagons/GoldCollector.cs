@@ -34,6 +34,8 @@ public class GoldCollector
         EventBus.Subscribe<OnGoldEarnedEvent>(CollectGold);
         this.setCoinsModels = action;
         statsRef = ServiceLocator.Get<StatSystem>();
+
+        setCoinsModels(gold,storageCapacity);
     }
 
     public void ActivateOnDestroy()

@@ -30,7 +30,7 @@ public class WagonRenderController
     public void CheckWagonToChangeRender(bool canBreak)
     {
         if (canBreak) ChangeToDestroyWagon();
-        else ChangeToDestroyWagonFloor();
+        else return;
     }
 
     private void ChangeToDestroyWagon()

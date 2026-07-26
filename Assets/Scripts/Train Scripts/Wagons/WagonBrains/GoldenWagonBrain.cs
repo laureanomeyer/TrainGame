@@ -13,14 +13,23 @@ public class GoldenWagonBrain : WagonBrain
     [SerializeField] private Transform goldBox;
 
     [Header("Models")]
-    [SerializeField] private Mesh baseFloorWagonMesh;
-    [SerializeField] private Mesh baseBodyWagonMesh;
     [SerializeField] private GameObject[] goldCoins;
+    [SerializeField] private Transform backDoor;
+
+    private float closedRotation;
+    private float openRotation;
+    private float fixedY;
+    private float fixedZ;
 
     private void Awake()
     {
         var dataRef = ServiceLocator.Get<TrainData>();
         dataRef.SetGoldBox(goldBox);
+
+        closedRotation = backDoor.localEulerAngles.x;
+        openRotation = closedRotation - 110f;
+        fixedY = backDoor.localEulerAngles.y;
+        fixedZ = backDoor.localEulerAngles.z;
     }
     public override void Start()
     {
@@ -28,11 +37,17 @@ public class GoldenWagonBrain : WagonBrain
         collector = new GoldCollector(hpController, currentGoldUI, storageCapacity, setGoldCoins);
     }
 
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        collector.ActivateOnDestroy();
+    }
+
     public override void Repair(float repairAmount)
     {
+        HandleBackDoor();
         if (hpController.IsBroken == true & hpController.CurrentHp > 0)
         {
-            renderController.SetWagonMeshAndMaterial(baseFloorWagonMesh, baseBodyWagonMesh);
             hpController.IsBroken = false;
         }
 
@@ -48,6 +63,7 @@ public class GoldenWagonBrain : WagonBrain
     public override void TakeDamage(float damageAmount)
     {
         base.TakeDamage(damageAmount);
+        HandleBackDoor();
         if (hpController.CurrentHp <= hpController.MaxHp/4 && GameManager.Instance.IsTutorial)
         {
             hpController.forceHp(hpController.MaxHp / 4);
@@ -58,6 +74,14 @@ public class GoldenWagonBrain : WagonBrain
         }
     }
 
+    private void HandleBackDoor()
+    {
+        float t = 1f - (hpController.CurrentHp / hpController.MaxHp);
+        float targetX = Mathf.Lerp(closedRotation, openRotation, t);
+
+        Quaternion targetRotation = Quaternion.Euler(targetX, fixedY, fixedZ);
+        backDoor.localRotation = Quaternion.RotateTowards(backDoor.localRotation, targetRotation, 30f);
+    }
     public void setGoldCoins(float currentGold, float maxGold)
     {
         if(currentGold <= 0)
@@ -93,9 +117,4 @@ public class GoldenWagonBrain : WagonBrain
         }
     }
 
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-        collector.ActivateOnDestroy();
-    }
 }
