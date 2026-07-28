@@ -2,11 +2,27 @@ using UnityEngine;
 
 public class SpawnZone : MonoBehaviour
 {
-    [SerializeField] private Vector2 size;
+    [SerializeField] private float witdh = 150;
 
-    [SerializeField] private Transform cameraTarget;
+    TrainData trainDataRef;
 
-    [SerializeField] private float followSpeed = 5f;
+    float trainLength;
+
+    Vector2 size;
+
+    private void Awake()
+    {
+        trainDataRef = ServiceLocator.Get<TrainData>();
+        trainLength = GetTrainLength();
+        
+    }
+
+    private void Start()
+    {
+        size.x = trainLength * 1.5f;
+        size.y = witdh;
+        transform.position = new Vector3(-trainLength/2, 0, 0); 
+    }
 
     public Vector3 GetRandomPoint(float positiveLimit, float negativeLimit)
     {
@@ -28,16 +44,9 @@ public class SpawnZone : MonoBehaviour
         return center;
     }
 
-    private void LateUpdate()
+    private float GetTrainLength()
     {
-        if (cameraTarget == null)
-            return;
-
-        Vector3 targetPos = cameraTarget.position;
-
-        targetPos.y = transform.position.y;
-
-        transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
+        return Vector3.Distance(Vector3.zero, trainDataRef.GoldBoxPosition.position);
     }
 
     private void OnDrawGizmos()
@@ -45,5 +54,10 @@ public class SpawnZone : MonoBehaviour
         Gizmos.color = Color.green;
 
         Gizmos.DrawWireCube(transform.position, new Vector3(size.x, 0, size.y));
+        
+        if (trainDataRef != null)
+            Gizmos.DrawLine(Vector3.zero, trainDataRef.GoldBoxPosition.position);
+
+
     }
 }
