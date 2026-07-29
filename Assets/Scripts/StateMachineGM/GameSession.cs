@@ -10,6 +10,7 @@ public class GameSession
     public TrainData _TrainData { get; private set; }
     public StatSystem _StatSystem { get; private set; }
     public SessionConfig _SessionConfig { get; private set; }
+    public ICinematicActorRegistry _CinematicActorRegistry { get; private set; }
 
     public GameSession(LocomotiveStatsSO baseStats, LocomotiveStatsSO baseMultStats)
     {
@@ -25,6 +26,7 @@ public class GameSession
         ServiceLocator.Register<TrainData>(_TrainData);
         ServiceLocator.Register<StatSystem>(_StatSystem);
         ServiceLocator.Register<SessionConfig>(_SessionConfig);
+        ServiceLocator.Register<ICinematicActorRegistry>(new CinematicActorRegistry());
     }
 
     public void RebuildStatsSystem()

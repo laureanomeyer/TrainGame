@@ -14,8 +14,16 @@ public class DisplayTrain : MonoBehaviour
 
     private Dictionary<string, GameObject> wagonAssetsReference;
 
+    private ICinematicActorRegistry cinematicActorRegistry;
+
+    private void Awake()
+    {
+        cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
+    }
+
     private void Start()
     {
+        
         wagonAssetsReference = new Dictionary<string, GameObject>();
 
         foreach (var asset in wagonAssets)
@@ -51,7 +59,13 @@ public class DisplayTrain : MonoBehaviour
     {
         wagonList.Add(new WagonStore(wagonID.Wagon, wagonID.wagonName));
 
-        return CreateWagon(wagonID.shopModel);
+        GameObject newWagon = CreateWagon(wagonID.shopModel);
+
+        string key = $"shop_wagon_{wagonList.Count}";
+        cinematicActorRegistry.RegisterDynamic(key, newWagon.transform);
+        EventBus.Publish(new OnWagonAddedToDisplayEvent(key));
+        
+        return newWagon;
     }
 
     public List<IWagonID> ChangeWagonIDList()
