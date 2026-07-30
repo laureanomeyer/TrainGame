@@ -205,7 +205,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Oro
+  m_text: Gold
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
@@ -414,6 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  ease: 12
 --- !u!114 &7628223489649111458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -428,8 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
   button: {fileID: 8324360522720968241}
   description: {fileID: 3698571195992576476}
-  textDescription: "Aumenta la vida m\xE1xima de los vagones y la capacidad m\xE1xima
-    de carb\xF3n."
+  textDescription: Increases the health of all wagons and fuel gauge.
 --- !u!1 &1890939743246844911
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,6 +652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  ease: 12
 --- !u!1 &2183767478793178021
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,7 +718,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Placas
+  m_text: Armor
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
@@ -946,9 +947,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Cerrar
-
-'
+  m_text: Close
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
@@ -1157,6 +1156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  ease: 12
 --- !u!114 &1858860438539848984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1171,7 +1171,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
   button: {fileID: 8358430975747795986}
   description: {fileID: 3698571195992576476}
-  textDescription: "Aumenta el da\xF1o de las armas."
+  textDescription: Increases Bronco's and the train's damage.
 --- !u!1 &3125069599681279339
 GameObject:
   m_ObjectHideFlags: 0
@@ -1384,6 +1384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  ease: 12
 --- !u!114 &794717651370774172
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1398,7 +1399,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
   button: {fileID: 4918064080451478128}
   description: {fileID: 3698571195992576476}
-  textDescription: Aumenta el oro que sueltan los enemigos.
+  textDescription: Increases the amount of gold dropped by enemies.
 --- !u!1 &4692087479821336164
 GameObject:
   m_ObjectHideFlags: 0
@@ -1464,7 +1465,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Vida maxima
+  m_text: Health
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
@@ -1601,7 +1602,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Da\xF1o\n"
+  m_text: Damage
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
@@ -1810,6 +1811,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  ease: 12
 --- !u!114 &3725536754182478984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1824,7 +1826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
   button: {fileID: 5316896505109983243}
   description: {fileID: 3698571195992576476}
-  textDescription: Aumenta la cadencia de las armas.
+  textDescription: Increases the guns firerate and decreases reload time.
 --- !u!1 &6223786991564969267
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,7 +2186,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Cadencia
+  m_text: Speed
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 3e2de39f12428c5499efdebb06ee83ff, type: 2}
@@ -2468,6 +2470,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  ease: 12
 --- !u!114 &2702155068078962608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2482,4 +2485,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocomotiveUpgradeButton
   button: {fileID: 5567224907279864497}
   description: {fileID: 3698571195992576476}
-  textDescription: Aumenta la resistencia del tren y la barra de aguante.
+  textDescription: "Increases train\u2019s defense and the shield gauge."

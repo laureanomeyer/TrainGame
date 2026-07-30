@@ -156,7 +156,7 @@ public class SceneTransitionManager : MonoBehaviour
     private string GetTransitionText(SceneTransitionType transitionType)
     {
         int currentLevel = 1;
-        string currentStationName = "Estación desconocida";
+        string currentStationName = "Unknown station";
 
         if (GameManager.Instance != null &&
             GameManager.Instance.Session != null &&
@@ -169,29 +169,29 @@ public class SceneTransitionManager : MonoBehaviour
         switch (transitionType)
         {
             case SceneTransitionType.StartingRun:
-                return $"Emprendiendo viaje {currentLevel} hacia {currentStationName}...";
+                return $"Trail {currentLevel}, bound for {currentStationName}...";
 
             case SceneTransitionType.EndingRun:
                 {
                     int arrivedLevel = Mathf.Max(currentLevel - 1, 1);
-                    string arrivedStationName = "Estación desconocida";
+                    string arrivedStationName = "Unknown station";
 
                     if (GameManager.Instance != null)
                     {
                         arrivedStationName = GameManager.Instance.GetStationNameByLevel(arrivedLevel);
                     }
 
-                    return $"¡Tramo superado! Llegando a {arrivedStationName}";
+                    return $"Route completed! Arriving at {arrivedStationName}...";
                 }
 
             case SceneTransitionType.MainMenu:
-                return "Volviendo al menú principal";
+                return "Heading back to the main menu...";
 
             case SceneTransitionType.Final:
-                return "Finalizando viaje";
+                return "The journey ends...";
 
             default:
-                return "Cargando...";
+                return "Loading...";
         }
     }
 

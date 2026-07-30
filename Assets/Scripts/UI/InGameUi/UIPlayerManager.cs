@@ -150,6 +150,6 @@ public class UIPlayerManager : MonoBehaviour
     void SetLevelText()
     {
         var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
-        if (currentLevel != null) currentLevel.text = "Nivel: " + sessionConfigRef.CurrentLevel;
+        if (currentLevel != null) currentLevel.text = "Trail " + sessionConfigRef.CurrentLevel;
     }
 }

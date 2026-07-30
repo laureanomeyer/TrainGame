@@ -10,14 +10,14 @@ public class StationRouteSO : ScriptableObject
     {
         if (stations == null || stations.Count == 0)
         {
-            return "Estación desconocida";
+            return "Unknown station";
         }
 
         int index = Mathf.Clamp(level - 1, 0, stations.Count - 1);
 
         if (stations[index] == null)
         {
-            return "Estación desconocida";
+            return "Unknown station";
         }
 
         return stations[index].StationName;

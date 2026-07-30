@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
     {
         if (stationRoute == null)
         {
-            return "Estación desconocida";
+            return "Unknown station";
         }
 
         int currentLevel = 1;
@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
     {
         if (stationRoute == null)
         {
-            return "Estación desconocida";
+            return "Unknown station";
         }
 
         return stationRoute.GetStationNameByLevel(level);
