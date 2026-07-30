@@ -124,7 +124,6 @@ public class WagonRenderController
 
             wagonBrain.topRenderWagon.material.SetFloat(alphaPropertyID, currentTopAlpha);
             wagonBrain.topRenderWagon.material.GetFloat(alphaPropertyID);
-            Debug.Log(wagonBrain.topRenderWagon.material.GetFloat(alphaPropertyID));
 
             yield return null;
         }

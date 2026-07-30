@@ -10,7 +10,8 @@ public class TutorialController : MonoBehaviour
     [SerializeField] GameObject attackCursor;
     [SerializeField] Transform EnemySpawn;
 
-    private bool started = false;
+    private bool fuelConsumptionStarted = false;
+    private bool runStarted = true;
     private bool firstCash = true;
     private bool firstRepair = false;
     private bool firstkilled = false;
@@ -66,10 +67,10 @@ public class TutorialController : MonoBehaviour
 
     void StartFuelConsumption(OnStartFuelUseEvent startFuelEvent)
     {
-        if (!started)
+        if (!fuelConsumptionStarted)
         {
             CoalUi.SetActive(true);
-            started = true;
+            fuelConsumptionStarted = true;
             EventBus.Publish(new OnSetTutorialVisibleEvent(true));
             EventBus.Publish(new OnEnableCoalBoxEvent(true));
             EventBus.Publish(new OnSetTutorialTextEvent("One more thing, partner: your locomotive won't run on wishes. \n<b>Feed it coal, or the boiler's gonna blow!</b>"));
@@ -80,6 +81,7 @@ public class TutorialController : MonoBehaviour
     {
         if (firstCash)
         {
+            runStarted = false;
             firstCash = false;
             EventBus.Publish(new OnSetTutorialVisibleEvent(true));
             EventBus.Publish(new OnEnableGoldBoxEvent(true));
@@ -89,15 +91,21 @@ public class TutorialController : MonoBehaviour
 
     void StartRun(OnStartSpawningEnemiesEvent enemiesStartEvent)
     {
-        RunUi.SetActive(enemiesStartEvent.Can);
-        EventBus.Publish(new OnSetCanConsumeEvent(true));
-        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
-        EventBus.Publish(new OnSetTutorialTextEvent("Well, reckon that's all you need to know. <b>The road ahead is right here</b>. Good luck, Bronco Buckle!"));
+        Debug.Log("me llame");
+        if (runStarted == false)
+        {
+            RunUi.SetActive(enemiesStartEvent.Can);
+            EventBus.Publish(new OnSetCanConsumeEvent(true));
+            EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+            EventBus.Publish(new OnSetTutorialTextEvent("Well, reckon that's all you need to know. <b>The road ahead is right here</b>. Good luck, Bronco Buckle!"));
+
+            StartCoroutine(HideTextCoroutine(5f));
+            runStarted = true;
+        }
     }
 
     void SetAttackUi(OnSetAttackEnabledEvent setAttackEvent)
     {
-
         if (!firstkilled && setAttackEvent.Can)
         {
             firstkilled = true;
@@ -106,4 +114,9 @@ public class TutorialController : MonoBehaviour
         }
     }
 
+    private IEnumerator HideTextCoroutine(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        EventBus.Publish(new OnSetTutorialVisibleEvent(false));
+    }
 }
