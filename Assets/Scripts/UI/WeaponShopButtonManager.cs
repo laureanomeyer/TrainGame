@@ -40,8 +40,8 @@ public class WeaponShopButtonManager : MonoBehaviour
        {
             button.PlayerReference = playerAtk;
             button.ButtonManager = this;
-            button.Level = level;
-            button.SetValuesInStock();
+
+            button.SetValues(level);
        }
     }
 

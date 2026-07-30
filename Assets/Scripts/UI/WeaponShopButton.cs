@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +10,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     private PlayerBrain playerReference;
     private int level;
     private PlayerData playerDataRef;
+
     private GameObject currentWeapon;
     private float currentWeaponprice = 0;
 
@@ -24,37 +28,80 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
     private WeaponShopButtonManager buttonManager;
     public int Level { get => level; set => level = value; }
+
     public WeaponInStocSO[] WeaponInStock { get => weaponInStock; set => weaponInStock = value; }
     public WeaponInStocSO[] weaponInStock;
+
+    [Header("Weapon collection")]
+    public WeaponCollectionInStockSO[] collections;
+
+    private Dictionary<int, WeaponInStocSO[]> weaponCollections = new Dictionary<int, WeaponInStocSO[]>();
+    private WeaponInStocSO[] currentCollection;
 
     private void Awake()
     {
         playerDataRef = ServiceLocator.Get<PlayerData>();
-    }
-    public void SetValuesInStock()
-    {
+
         button = GetComponent<Button>();
-
-        if (level > weaponInStock.Length)
-        {
-            currentWeapon = weaponInStock[weaponInStock.Length].Weapon;
-            currentWeaponprice = weaponInStock[weaponInStock.Length].Price;
-
-            UpdateInfo(weaponInStock[weaponInStock.Length]);
-        }
-        else
-        {
-            currentWeapon = weaponInStock[level - 1].Weapon;
-            currentWeaponprice = weaponInStock[level - 1].Price;
-
-            UpdateInfo(weaponInStock[level - 1]);
-        }
-
         button.onClick.AddListener(BuyWeapon);
+    }
+    public void SetWeapon()
+    {
+        int value = UnityEngine.Random.Range(0, currentCollection.Length - 1);
+
+        currentWeapon = currentCollection[value].Weapon;
+        currentWeaponprice = currentCollection[value].Price;
+
+        UpdateInfo(currentCollection[value]);
 
         if (playerDataRef.PlayerWeapon == currentWeapon)
         {
             DeactivateButton();
+        }
+    }
+
+    public void SetValues(int level)
+    {
+        if (collections.Count() > 0 && level > 0)
+        {
+            foreach (WeaponCollectionInStockSO collection in collections)
+            {
+                weaponCollections.Add(collection.Level, collection.weaponCollection);
+            }
+
+            if (weaponCollections.ContainsKey(level))
+            {
+                currentCollection = weaponCollections[level];
+            }
+            else if (level >= weaponCollections.Count)
+            {
+                currentCollection = weaponCollections[weaponCollections.Count];
+            }
+            else
+            {
+                Debug.Log("Llave no encontrada");
+                DeactivateButton();
+                this.gameObject.SetActive(false);
+            }
+            
+
+            if (currentCollection.Length > 0)
+            {
+                SetWeapon();
+            }
+            else
+            {
+                Debug.Log("Sin elementos en la lista");
+                DeactivateButton();
+                this.gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            Debug.Log("Sin elementos en el diccionario");
+
+            DeactivateButton();
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -69,6 +116,8 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
             playerDataRef.ChangeWeaponData(currentWeapon);
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
+
+            SetWeapon();
         }
     }
 
