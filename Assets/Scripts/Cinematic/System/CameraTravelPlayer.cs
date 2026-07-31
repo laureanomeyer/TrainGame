@@ -1,7 +1,6 @@
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CameraTravelPlayer : MonoBehaviour
 {
@@ -28,13 +27,24 @@ public class CameraTravelPlayer : MonoBehaviour
     }
 
     private void OnEnable() => EventBus.Subscribe<OnWagonAddedToDisplayEvent>(OnWagonAdded);
-    private void OnDisable() => EventBus.Unsubscribe<OnWagonAddedToDisplayEvent>(OnWagonAdded);
+
+    private void OnDisable()
+    {
+        EventBus.Unsubscribe<OnWagonAddedToDisplayEvent>(OnWagonAdded);
+
+        if (activeRoutine != null)
+        {
+            StopCoroutine(activeRoutine);
+            activeRoutine = null;
+            travelCinemachineCamera.Priority = 0;
+        }
+    }
 
     private void OnWagonAdded(OnWagonAddedToDisplayEvent evt)
     {
         if (!registry.TryResolveDynamic(evt.AnchorKey, out Transform target)) return;
 
-        if(activeRoutine != null) StopCoroutine(activeRoutine);
+        if (activeRoutine != null) StopCoroutine(activeRoutine);
         activeRoutine = StartCoroutine(TravelRoutine(target));
     }
 
@@ -42,43 +52,36 @@ public class CameraTravelPlayer : MonoBehaviour
     {
         Transform camT = travelCinemachineCamera.transform;
 
-        camT.position = shopCinemachineCamera.transform.position;
-        camT.rotation = shopCinemachineCamera.transform.rotation;
+        camT.SetPositionAndRotation(
+            shopCinemachineCamera.transform.position,
+            shopCinemachineCamera.transform.rotation);
 
         Vector3 originPos = camT.position;
         Quaternion originRot = camT.rotation;
 
         Vector3 viewPos = target.position + sequence.worldOffsetFromTarget;
-        Quaternion viewRot = sequence.lookAtTarget ? Quaternion.LookRotation(target.position - viewPos) : originRot;
+        Quaternion viewRot = sequence.lookAtTarget
+            ? Quaternion.LookRotation(target.position - viewPos)
+            : originRot;
 
-        float distance = Vector3.Distance(originPos, viewPos); 
-        float travelDuration = Mathf.Clamp(distance / sequence.travelSpeed, sequence.minTravelDuration, sequence.maxTravelDuration);
-
-        float returnDistance = Vector3.Distance(viewPos, originPos);
-        float returnDuration = Mathf.Clamp(returnDistance / sequence.travelSpeed, sequence.minTravelDuration, sequence.maxTravelDuration);
+        float duration = Mathf.Clamp(
+            Vector3.Distance(originPos, viewPos) / sequence.travelSpeed,
+            sequence.minTravelDuration,
+            sequence.maxTravelDuration);
 
         travelCinemachineCamera.Priority = travelPriority;
 
-        yield return Move(camT, originPos, viewPos, originRot, viewRot, travelDuration, sequence.travelCurve);
+        yield return CameraTravel.Move(camT, originPos, originRot,
+            () => viewPos, () => viewRot,
+            duration, sequence.travelCurve, sequence.travelAxes);
+
         yield return new WaitForSeconds(sequence.holdDuration);
-        yield return Move(camT, viewPos, originPos, viewRot, originRot, returnDuration, sequence.returnCurve);
+
+        yield return CameraTravel.Move(camT, viewPos, viewRot,
+            () => originPos, () => originRot,
+            duration, sequence.returnCurve, TravelAxis.All);
 
         travelCinemachineCamera.Priority = 0;
         activeRoutine = null;
-    }
-
-    private IEnumerator Move(Transform camT, Vector3 fromPos, Vector3 toPos, Quaternion fromRot, Quaternion toRot, float duration, AnimationCurve curve)
-    {
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = curve.Evaluate(Mathf.Clamp01(elapsed / duration));
-            camT.position = Vector3.Lerp(fromPos, toPos, t);
-            camT.rotation = Quaternion.Slerp(fromRot, toRot, t);
-            yield return null;
-        }
-        camT.position = toPos;
-        camT.rotation = toRot;
     }
 }

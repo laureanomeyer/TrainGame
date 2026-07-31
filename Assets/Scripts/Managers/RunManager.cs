@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-
 [DefaultExecutionOrder(-99)]
 public class RunManager : MonoBehaviour
 {
     public static RunManager Instance;
+
+    public const string TailAnchorKey = "TrainTail";
 
     [SerializeField] private GameObject mapManagerPrefab;
     [SerializeField] private Transform mapStartLocation;
@@ -14,6 +15,7 @@ public class RunManager : MonoBehaviour
     private LocomotiveBrain locomotiveBrain;
     private StatSystem statSystem;
     private TrainData trainData;
+    private ICinematicActorRegistry cinematicRegistry;
 
     private List<IWagon> activeWagons = new();
     private Transform trainTail;
@@ -28,28 +30,40 @@ public class RunManager : MonoBehaviour
     private void Awake()
     {
         #region Singleton
-        if (Instance != null && Instance != this) 
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         #endregion
 
         statSystem = ServiceLocator.Get<StatSystem>();
         trainData = ServiceLocator.Get<TrainData>();
+        cinematicRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
+
         speed = statSystem.GetStat(StatType.Speed);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+
+        cinematicRegistry?.UnregisterDynamic(TailAnchorKey);
     }
 
     public void OnTrainReady(Transform tail, List<IWagon> wagons)
     {
-        trainTail = tail;
+        SetTrainTail(tail);
         activeWagons = wagons;
 
         GameObject obj = Instantiate(mapManagerPrefab, tail.position, tail.rotation);
         mapManager = obj.GetComponent<MapManager>();
         mapManager.Initialize(mapStartLocation);
     }
+
     public void SetLocoBrain(LocomotiveBrain brain)
     {
         locomotiveBrain = brain;
@@ -58,6 +72,11 @@ public class RunManager : MonoBehaviour
     public void SetTrainTail(Transform tail)
     {
         trainTail = tail;
+
+        if (tail != null)
+            cinematicRegistry?.RegisterDynamic(TailAnchorKey, tail);
+        else
+            cinematicRegistry?.UnregisterDynamic(TailAnchorKey);
     }
 
     public void SetTrainSpeed(float speed)
@@ -70,16 +89,9 @@ public class RunManager : MonoBehaviour
         trainData.RemoveWagonID(wagon);
         GameManager.Instance.Session.RebuildStatsSystem();
     }
+
     public void OnRunFinished()
     {
-        if (GameManager.Instance.IsFinalStation())
-        {
-            GameManager.Instance.Victory();
-        }
-        else
-        {
-            GameManager.Instance.GoToStore();
-        }
+        EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
     }
 }
-

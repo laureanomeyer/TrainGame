@@ -1,8 +1,10 @@
-﻿using UnityEngine;
-
+﻿using System;
+using UnityEngine;
 
 public class LocomotiveFuel
 {
+    public event Action OnDestroyed;
+
     private float maxShield;
     private float currentShield;
     private float currentFuel;
@@ -14,6 +16,7 @@ public class LocomotiveFuel
     private float defense;
     private float timer = 0;
     private bool canConsume = true;
+    private bool destroyed;
 
     private float fuelCapacity;
     private float fuelMaxCapacity;
@@ -24,10 +27,12 @@ public class LocomotiveFuel
     public float CurrentMaxFuel => currentMaxFuel;
 
     public float CurrentShield => currentShield;
-    public float MaxShield => maxShield;    
+    public float MaxShield => maxShield;
 
     public float FuelCapacity => fuelCapacity;
     public float FuelMaxCapaciy => fuelMaxCapacity;
+
+    public bool IsDestroyed => destroyed;
 
     public LocomotiveFuel(float shield, float maxFuel, float defense, float fuelOptimizer)
     {
@@ -54,10 +59,12 @@ public class LocomotiveFuel
     public void Destroy()
     {
         EventBus.Unsubscribe<OnSetCanConsumeEvent>(SetCanConsume);
+        OnDestroyed = null;
     }
 
     public void Move(float deltaTime)
     {
+        if (destroyed) return;
         if (!GameManager.Instance.IsGameplayState) return;
 
         if (!hasFuel)
@@ -71,13 +78,17 @@ public class LocomotiveFuel
 
     public void AddFuel()
     {
+        if (destroyed) return;
+
         currentFuel = currentMaxFuel;
         AudioManager.Instance.Play("VaultOpening");
         UpdateSharedSpeed();
     }
 
-    public void RemoveFuel(float amount) //llamar a esta funcion x si hay alguien o algo que te reste nafta 
+    public void RemoveFuel(float amount) //llamar a esta funcion x si hay alguien o algo que te reste nafta
     {
+        if (destroyed) return;
+
         currentFuel = Mathf.Clamp(currentFuel - amount, 0f, currentMaxFuel);
         UpdateSharedSpeed();
     }
@@ -100,27 +111,25 @@ public class LocomotiveFuel
         if (hasFuel)
         {
             trainDataRef.SetSpeed(actualSpeed);
+            return;
         }
-        else
-        {
-            trainDataRef.SetSpeed(0);
-            GameManager.Instance.Defeat();
-        }
+
+        trainDataRef.SetSpeed(0);
+        RaiseDestroyed();
     }
 
     public void TakeDamage(float amount)
     {
-        if(!GameManager.Instance.IsGameplayState) return;
+        if (destroyed) return;
+        if (!GameManager.Instance.IsGameplayState) return;
+
         if (currentShield <= 0)
         {
             currentMaxFuel -= amount / defense;
+            currentFuel = Mathf.Clamp(currentFuel, 0, Mathf.Max(currentMaxFuel, 0f));
 
             if (currentMaxFuel <= 0)
-            {
-                GameManager.Instance.Defeat();
-            }
-
-            currentFuel = Mathf.Clamp(currentFuel, 0, currentMaxFuel);
+                RaiseDestroyed();
         }
         else
         {
@@ -133,35 +142,35 @@ public class LocomotiveFuel
 
     public void UpdateShield(float deltaTime)
     {
-        if(!GameManager.Instance.IsGameplayState) return;
+        if (destroyed) return;
+        if (!GameManager.Instance.IsGameplayState) return;
 
-        if (!shieldTakenDamage) 
+        if (!shieldTakenDamage)
         {
-            currentShield += 5 * deltaTime;
-            Mathf.Clamp(currentShield, 0, maxShield);
-
-            if (currentShield >= maxShield)
-            {
-                currentShield = maxShield;
-            }
+            currentShield = Mathf.Clamp(currentShield + 5 * deltaTime, 0f, maxShield);
         }
-
         else
-        {           
+        {
             timer += deltaTime;
 
-            if (timer >= 3) 
-            { 
+            if (timer >= 3)
+            {
                 shieldTakenDamage = false;
                 timer = 0;
             }
         }
     }
 
+    private void RaiseDestroyed()
+    {
+        if (destroyed) return;
+
+        destroyed = true;
+        OnDestroyed?.Invoke();
+    }
+
     public void SetCanConsume(OnSetCanConsumeEvent canConsumeEvent)
     {
         this.canConsume = canConsumeEvent.Can;
     }
-
-    
 }

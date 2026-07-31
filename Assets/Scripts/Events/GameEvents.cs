@@ -264,3 +264,12 @@ public class OnSetTutorialVisibleEvent : IGameEvent
     }
 }
 
+public class OnRunEndedEvent : IGameEvent
+{
+    public RunResult Result;
+    public OnRunEndedEvent(RunResult result) 
+    {
+        Result = result;
+    }
+}
+

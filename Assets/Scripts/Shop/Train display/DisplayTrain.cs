@@ -16,6 +16,9 @@ public class DisplayTrain : MonoBehaviour
 
     private ICinematicActorRegistry cinematicActorRegistry;
 
+    private readonly List<string> registeredKeys = new();
+    private int wagonCounter;
+
     private void Awake()
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
@@ -58,18 +61,27 @@ public class DisplayTrain : MonoBehaviour
     public GameObject AddWagon(WagonInStockSO wagonID)
     {
         wagonList.Add(new WagonStore(wagonID.Wagon, wagonID.wagonName));
-
         GameObject newWagon = CreateWagon(wagonID.shopModel);
 
-        string key = $"shop_wagon_{wagonList.Count}";
+        string key = $"shop_wagon_{wagonCounter++}";
+        registeredKeys.Add(key);
+
         cinematicActorRegistry.RegisterDynamic(key, newWagon.transform);
         EventBus.Publish(new OnWagonAddedToDisplayEvent(key));
-        
+
         return newWagon;
     }
 
     public List<IWagonID> ChangeWagonIDList()
     {
         return wagonList;
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var key in registeredKeys)
+            cinematicActorRegistry?.UnregisterDynamic(key);
+
+        registeredKeys.Clear();
     }
 }

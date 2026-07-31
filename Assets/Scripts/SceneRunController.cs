@@ -2,12 +2,11 @@ using UnityEngine;
 
 public class SceneRunController : MonoBehaviour
 {
-    [Header("Scene duration")]
     private float sceneDuration;
-
     private float currentTime;
     private bool runFinished;
     private bool runStarted = true;
+    private RunResult pendingResult = RunResult.None;
 
     [Header("Cinematic")]
     [SerializeField] private CinematicSystem cinematicSystem;
@@ -22,13 +21,16 @@ public class SceneRunController : MonoBehaviour
         runFinished = false;
 
         EventBus.Subscribe<OnSetTimerStartedEvent>(CallSetRunStartedEvent);
+        EventBus.Subscribe<OnRunEndedEvent>(CallRunEndedEvent);
 
         if (cinematicSystem != null)
             cinematicSystem.OnCinematicFinished += FinishRun;
     }
+
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnSetTimerStartedEvent>(CallSetRunStartedEvent);
+        EventBus.Unsubscribe<OnRunEndedEvent>(CallRunEndedEvent);
 
         if (cinematicSystem != null)
             cinematicSystem.OnCinematicFinished -= FinishRun;
@@ -43,22 +45,48 @@ public class SceneRunController : MonoBehaviour
             currentTime -= Time.deltaTime;
 
         if (currentTime <= 0f)
+            EndRun(RunResult.Victory);
+    }
+
+    private void CallRunEndedEvent(OnRunEndedEvent runEndedEvent)
+    {
+        EndRun(runEndedEvent.Result);
+    }
+
+    private void EndRun(RunResult result)
+    {
+        if (runFinished) return;
+        if (result == RunResult.None) return;
+
+        runFinished = true;
+        pendingResult = result;
+        currentTime = 0f;
+
+        // Freno el timer y cualquier sistema suscripto antes de la cinemática.
+        EventBus.Publish(new OnSetTimerStartedEvent(false));
+
+        if (cinematicSystem == null)
         {
-            runFinished = true;
-
-            if (cinematicSystem == null)
-            {
-                Debug.LogError("CinematicSystem no está asignado.");
-                return;
-            }
-
-            cinematicSystem.CinematicPlay();
+            Debug.LogError("[SceneRunController] CinematicSystem no asignado. Resuelvo sin cinemática.");
+            FinishRun();
+            return;
         }
+
+        cinematicSystem.CinematicPlay(result);
     }
 
     private void FinishRun()
     {
-        GameManager.Instance.GoToStore();
+        if (pendingResult == RunResult.Defeat)
+        {
+            GameManager.Instance.Defeat();
+            return;
+        }
+
+        if (GameManager.Instance.IsFinalStation())
+            GameManager.Instance.Victory();
+        else
+            GameManager.Instance.GoToStore();
     }
 
     private void CallSetRunStartedEvent(OnSetTimerStartedEvent startTimerEvent)
@@ -70,5 +98,4 @@ public class SceneRunController : MonoBehaviour
     {
         this.runStarted = runStarted;
     }
-
 }
