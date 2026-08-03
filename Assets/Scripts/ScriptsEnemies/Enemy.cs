@@ -44,6 +44,8 @@ public class Enemy : MonoBehaviour
 
     public void Initialize(EnemyData data)
     {
+        StopAllCoroutines();
+
         moveRight = false;
 
         this.data = data;
