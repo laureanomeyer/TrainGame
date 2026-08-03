@@ -131,6 +131,7 @@ public class PlayerBrain : MonoBehaviour
     public void CallSetCanAttackEvent(OnActivateUiEvent activateUIEvent)
     {
         SetCanAttack(activateUIEvent.Activated);
+        SetCanMove(activateUIEvent.Activated);
     }
     public void CallSetCanAttackEvent(OnSetAttackEnabledEvent AttackEnableEvent)
     {
@@ -143,7 +144,7 @@ public class PlayerBrain : MonoBehaviour
         playerMovementController.SetCanRotate(canAttack);
     }
 
-    public void SetCanMove(bool canMove)
+    private void SetCanMove(bool canMove)
     {
         playerMovementController.SetCanMove(canMove);
     }

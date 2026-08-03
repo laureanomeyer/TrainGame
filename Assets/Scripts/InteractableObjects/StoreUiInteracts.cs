@@ -5,8 +5,6 @@ using UnityEngine.UI;
 public class StoreUiInteracts : MonoBehaviour
 {
     [SerializeField] private GameObject uiToShow;
-    [SerializeField] private GameObject uiContinueConfirmation;
-    [SerializeField] private GameObject uiUpgrades;
 
     [SerializeField] private Button closeButton;
 
@@ -47,8 +45,6 @@ public class StoreUiInteracts : MonoBehaviour
         playerInZone = false;
         playerBrain.SetCanAttack(true);
         uiToShow.SetActive(false);
-        uiContinueConfirmation.SetActive(false);
-        uiUpgrades.SetActive(false);
 
         EventBus.Publish(new OnHideInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
@@ -56,15 +52,12 @@ public class StoreUiInteracts : MonoBehaviour
 
     private void DeactivateUI()
     {
-        playerBrain.SetCanAttack(true);
-        playerBrain.SetCanMove(true);
 
         uiToShow.SetActive(false);
-        uiContinueConfirmation.SetActive(false);
-        uiUpgrades.SetActive(false);
 
         EventBus.Publish(new OnShowInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+        EventBus.Publish(new OnActivateUiEvent(true));
     }
 
     public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
@@ -82,10 +75,11 @@ public class StoreUiInteracts : MonoBehaviour
 
             uiToShow.SetActive(true);
 
-            playerBrain.SetCanAttack(false);
-            playerBrain.SetCanMove(false);
+         //   playerBrain.SetCanAttack(false);
+         //   playerBrain.SetCanMove(false);
 
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
+            EventBus.Publish(new OnActivateUiEvent(false));
         }
         else
         {

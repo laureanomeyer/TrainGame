@@ -65,9 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Continuar Viaje
-
-'
+  m_text: Continue
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 95ec943d4c4ac384d85fbbb24ee73ac9, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 95ec943d4c4ac384d85fbbb24ee73ac9, type: 2}
@@ -539,7 +537,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Mejoras
+  m_text: Reorder Train
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 95ec943d4c4ac384d85fbbb24ee73ac9, type: 2}
   m_sharedMaterial: {fileID: 6936132418541418842, guid: 95ec943d4c4ac384d85fbbb24ee73ac9, type: 2}
@@ -647,7 +645,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 914.3616, y: 522.7164}
+  m_SizeDelta: {x: 914.3616, y: 324.4155}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &7770505380696277879
 MonoBehaviour:
@@ -694,7 +692,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1318403012079994971
 RectTransform:
   m_ObjectHideFlags: 0
@@ -710,10 +708,10 @@ RectTransform:
   - {fileID: 9032743559600473488}
   m_Father: {fileID: 4649108046504463133}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 457.1808, y: -133.75708}
+  m_SizeDelta: {x: 914.3616, y: 227.51416}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7944349135785196109
 CanvasRenderer:
@@ -822,6 +820,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  size: 1.1
+  ease: 12
 --- !u!1 &8299854634235472155
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,3 +969,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFeedbackBrain
   animTime: 0.5
+  size: 1.072
+  ease: 12

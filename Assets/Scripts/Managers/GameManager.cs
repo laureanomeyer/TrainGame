@@ -222,7 +222,7 @@ public class GameManager : MonoBehaviour
         CurrentState = stateAfterTransition;
 
         if (IsTutorial) ShowCursor(CursorType.Gameplay);
-        else if (IsGameplayScene) ShowCursor(CursorType.Gameplay);
+        else if (IsGameplayScene && !IsInShop) ShowCursor(CursorType.Gameplay);
         else ShowCursor(CursorType.Real);
 
         if (IsInCombat) MusicManager.Instance.SetGameplayMusic();

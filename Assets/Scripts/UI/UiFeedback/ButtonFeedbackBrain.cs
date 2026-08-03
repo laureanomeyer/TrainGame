@@ -11,6 +11,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     private Button button;
     private bool isPressed;
     [SerializeField] private float animTime = 0.25f;
+    [SerializeField, Range (1f, 1.2f)] private float size = 1.1f;
     [SerializeField] private Ease ease = Ease.OutQuart;
 
     private void OnEnable()
@@ -60,7 +61,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void PlayHoverAnimation()
     {
-        button.transform.DOScale(1.1f, animTime).SetEase(ease);
+        button.transform.DOScale(size, animTime).SetEase(ease);
     }
     private void ReverseHoverAnimation(float animTime)
     {

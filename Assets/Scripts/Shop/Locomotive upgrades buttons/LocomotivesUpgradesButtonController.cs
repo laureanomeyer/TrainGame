@@ -27,8 +27,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     [Header("Self")]
     [SerializeField] private GameObject self;
 
-    [SerializeField] private GameObject uiRunSelector;
-
     [Header("Level Upgrades")]
     [SerializeField] private LevelLocomotivesUpgradesSO[] upgradesLevel;
     private Dictionary <int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary;
@@ -42,9 +40,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
     [Header("UI components")]
     [SerializeField] public TextMeshProUGUI descriptionUI;
-
-    private bool usedUpgrades;
-    public bool UsedUpgrade => usedUpgrades;
 
     void Start()
     {
@@ -64,13 +59,12 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
 
         locomotiveUpgrade = new TrainStats();
-        usedUpgrades = false;
 
+        //Line 67
         maxHPButton.ButtonManager = this;
         attackSpeedButton.ButtonManager = this;
         damageMultiplierButton.ButtonManager = this;
         defenseButton.ButtonManager = this;
-        //Line 67
         goldMultiplierButton.ButtonManager = this;
 
         if (currentLevelUpgrades)
@@ -142,18 +136,12 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         defenseButton.DeactivateButton();
         goldMultiplierButton.DeactivateButton();
 
-        usedUpgrades = true;
-
         DeactivateUpgradesUi();
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+        EventBus.Publish(new OnActivateUiEvent(true));
     }
     public void DeactivateUpgradesUi()
     {
         self.SetActive(false);
-        uiRunSelector.SetActive(true);
-    }
-
-    public void ChangeUsedUpgrades()
-    {
-        usedUpgrades = true;
     }
 }

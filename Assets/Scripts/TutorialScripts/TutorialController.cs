@@ -91,7 +91,6 @@ public class TutorialController : MonoBehaviour
 
     void StartRun(OnStartSpawningEnemiesEvent enemiesStartEvent)
     {
-        Debug.Log("me llame");
         if (runStarted == false)
         {
             RunUi.SetActive(enemiesStartEvent.Can);
