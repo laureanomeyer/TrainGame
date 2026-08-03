@@ -264,3 +264,14 @@ public class OnSetTutorialVisibleEvent : IGameEvent
     }
 }
 
+#region Weapons Events
+
+public class OnDetectedDeadEnemy : IGameEvent
+{
+    public OnDetectedDeadEnemy()
+    {
+    }
+}
+
+#endregion
+

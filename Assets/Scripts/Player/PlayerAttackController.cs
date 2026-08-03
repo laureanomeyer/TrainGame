@@ -71,7 +71,6 @@ public class PlayerAttackController
     {
         if (waitToFire > rateOfFire)
         {
-
             if (weapon.IsReloading) return;
 
             weapon.Shoot(spawnPoint);

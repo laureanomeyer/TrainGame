@@ -91,4 +91,29 @@ public class BulletScript : MonoBehaviour, IBullet
         bulletPool.Release(gameObject);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("deadWall"))
+        {
+            Deactivate();
+            return;
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
+
+            bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
+            /*
+            collisionEnemy.TakeDamage(Damage);
+
+            if (DestroyOnEnemy)
+            {
+                Deactivate();
+                return;
+            }
+            */
+        }
+    }
+
 }

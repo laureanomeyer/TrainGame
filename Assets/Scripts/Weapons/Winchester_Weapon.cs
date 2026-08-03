@@ -1,8 +1,6 @@
-
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class BaseWeapon : MonoBehaviour, IWeapons
+public class Winchester_Weapon : MonoBehaviour, IWeapons
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
@@ -17,7 +15,7 @@ public class BaseWeapon : MonoBehaviour, IWeapons
     private int currentAmmunition;
     public int CurrentAmmunition { get => currentAmmunition; set => currentAmmunition = value; }
 
-    private bool isReloading =false;
+    private bool isReloading = false;
     public bool IsReloading { get => isReloading; set => isReloading = value; }
 
     //Referencia a la pool de balas
@@ -26,7 +24,6 @@ public class BaseWeapon : MonoBehaviour, IWeapons
 
     public void Shoot(Transform spawnPoint)
     {
-        //weaponData.typeOfShootSO.Shoot(this, spawnPoint, playerAtkReference);
         if (IsReloading) return;
         if (spawnPoint == null) return;
 

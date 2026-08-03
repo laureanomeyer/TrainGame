@@ -18,6 +18,9 @@ public class BulletTypeScriptable : ScriptableObject
     [Header("Bullet duration")]
     [SerializeField] public float duration;
 
+    [Header("TypeOfCollsion")]
+    [SerializeField] public BulletCollsionTypeSO typeOfCollsion;
+
     [Header("DestroyOnCollsion")]
     [SerializeField] public bool destroyOnEnemy;
 }
