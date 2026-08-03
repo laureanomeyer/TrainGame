@@ -13,13 +13,13 @@ public class FinalScreenUI : MonoBehaviour
 
         if(result == RunResult.Victory)
         {
-            titleText.text = "Victoria";
-            descriptionText.text = "Llegaste a la mina";
+            titleText.text = "A job well done.";
+            descriptionText.text = "Bronco Buckle, you've proved once again why folks call you a legend.";
         }
         else if (result == RunResult.Defeat)
         {
-            titleText.text = "Es el fin de este viaje";
-            descriptionText.text = "Mejor suerte la proxima, Bronco Buckle";
+            titleText.text = "End of the line, Bronco Buckle";
+            descriptionText.text = "Better luck next time...";
         }
         else
         {
