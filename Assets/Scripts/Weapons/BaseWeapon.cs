@@ -43,14 +43,10 @@ public class BaseWeapon : MonoBehaviour, IWeapons
         }
     }
 
-    public void SetPool(BulletPool pool)
+    public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack)
     {
         bulletPool = pool;
-    }
-
-    public void SetPlayerAtkReference(PlayerAttackController playerAtk)
-    {
-        playerAtkReference = playerAtk;
+        playerAtkReference = playerAttack;
     }
 
     public void RestockBullets()

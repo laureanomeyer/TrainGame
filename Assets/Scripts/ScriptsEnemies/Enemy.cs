@@ -88,7 +88,8 @@ public class Enemy : MonoBehaviour
         this.target = Brain.SetTarget(this);
     }
 
-    public void TakeDamage(float damage)
+
+    public bool TakeDamage(float damage)
     {
         currentHealth -= damage;
         EventBus.Publish(new OnEnemyHitEvent(transform.position));
@@ -106,6 +107,8 @@ public class Enemy : MonoBehaviour
         }
         if (currentHealth <= 0)
             Dead();
+
+        return currentHealth <= 0;
     }
 
     private void Dead()

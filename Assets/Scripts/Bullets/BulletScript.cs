@@ -104,15 +104,6 @@ public class BulletScript : MonoBehaviour, IBullet
             Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
 
             bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
-            /*
-            collisionEnemy.TakeDamage(Damage);
-
-            if (DestroyOnEnemy)
-            {
-                Deactivate();
-                return;
-            }
-            */
         }
     }
 

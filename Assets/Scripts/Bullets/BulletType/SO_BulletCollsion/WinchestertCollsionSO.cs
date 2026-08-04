@@ -5,7 +5,12 @@ public class WinchestertCollsionSO : BulletCollsionTypeSO
 {
     public override void BulletCollision(Enemy enemy, BulletScript bulletInfo)
     {
-        enemy.TakeDamage(bulletInfo.Damage);
+        bool enemyDead = enemy.TakeDamage(bulletInfo.Damage);
+
+        if (enemyDead)
+        {
+            EventBus.Publish(new OnDetectedDeadEnemy());
+        }
 
         if (bulletInfo.DestroyOnEnemy)
         {

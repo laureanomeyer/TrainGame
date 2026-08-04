@@ -17,10 +17,7 @@ public interface IWeapons
     //Funcion de ataque, requiere un punto de spawneo de balas
     public void Shoot(Transform spawnPoint);
 
-    //Establece la pool
-    public void SetPool(BulletPool pool);
-
-    public void SetPlayerAtkReference(PlayerAttackController playerAtk);
+    public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack);
 
     public void RestockBullets();
 

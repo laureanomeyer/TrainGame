@@ -40,18 +40,29 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         }
     }
 
-    public void SetPool(BulletPool pool)
+    public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack)
     {
         bulletPool = pool;
-    }
+        playerAtkReference = playerAttack;
 
-    public void SetPlayerAtkReference(PlayerAttackController playerAtk)
-    {
-        playerAtkReference = playerAtk;
+        EventBus.Subscribe<OnDetectedDeadEnemy>(CallRestock);
     }
 
     public void RestockBullets()
     {
         currentAmmunition = weaponData.ammun;
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnDetectedDeadEnemy>(CallRestock);
+        Debug.Log("Desuscribi evento");
+    }
+
+    private void CallRestock(OnDetectedDeadEnemy enemyEvent)
+    {
+        EventBus.Publish(new OnReloadEvent(0.2f));
+        playerAtkReference.RestockWeapon();
+        playerAtkReference.ResetWaitToFire();
     }
 }

@@ -103,14 +103,26 @@ public class PlayerAttackController
 
             if(currentReloadTime > reloadTime)
             {
-                currentReloadTime = 0;
-                weapon.RestockBullets();
-                weapon.IsReloading = false;
-                AudioManager.Instance.Play($"RevolverMusketReload{1}");
-                EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
+                RestockWeapon();
             }
         }
         
+    }
+
+    public void ResetWaitToFire()
+    {
+        EventBus.Publish(new OnShootEvent(rateOfFire));
+        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
+        waitToFire = 0;
+    }
+
+    public void RestockWeapon()
+    {
+        currentReloadTime = 0;
+        weapon.RestockBullets();
+        weapon.IsReloading = false;
+        AudioManager.Instance.Play($"RevolverMusketReload{1}");
+        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 
     public void ReseatCadenceStats()
@@ -126,10 +138,9 @@ public class PlayerAttackController
         weaponItem = weaponObtein;
         playerDataRef.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
-        weapon.SetPlayerAtkReference(this);
+        weapon.InitializeWeapon(pool, this);
         ReseatCadenceStats();
         weapon.RestockBullets();
-        weapon.SetPool(pool);
         EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 }
