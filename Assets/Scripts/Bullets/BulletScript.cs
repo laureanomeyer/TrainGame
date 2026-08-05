@@ -62,6 +62,7 @@ public class BulletScript : MonoBehaviour, IBullet
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;
+        tr.material = bulletType.trailMaterial;
         tr.emitting = true;
         isActive = true;
     }

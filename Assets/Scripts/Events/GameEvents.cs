@@ -266,12 +266,32 @@ public class OnSetTutorialVisibleEvent : IGameEvent
 
 #region Weapons Events
 
+#region Wichester Events
+public class OnUpdateWinchesterLegadoLeftPoint : IGameEvent
+{
+    public int point;
+
+    public OnUpdateWinchesterLegadoLeftPoint(int point)
+    {
+        this.point = point;
+    }
+}
+
 public class OnDetectedDeadEnemy : IGameEvent
 {
     public OnDetectedDeadEnemy()
     {
     }
 }
+
+public class OnUnlockWinchesterLegado : IGameEvent
+{
+    public OnUnlockWinchesterLegado()
+    {
+    }
+}
+
+#endregion
 
 #endregion
 

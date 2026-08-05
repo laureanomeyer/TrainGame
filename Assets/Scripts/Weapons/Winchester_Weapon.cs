@@ -14,6 +14,12 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
 
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
+
+    [Header("Legado Bullet data")]
+    [SerializeField] private BulletTypeScriptable legadoBulletData;
+
+    private BulletTypeScriptable currentBulletUse;
+
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
 
     private int currentAmmunition;
@@ -41,11 +47,30 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         bulletPool = pool;
         playerAtkReference = playerAttack;
 
+        EventBus.Subscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Subscribe<OnDetectedDeadEnemy>(CallRestock);
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        PlayerData playerData = ServiceLocator.Get<PlayerData>();
+
+        if (playerData.unlockedLegado.UnlockedWinchester)
+        {
+            currentBulletUse = legadoBulletData;
+        }
+        else
+        {
+            currentBulletUse = bulletData;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
+        EventBus.Unsubscribe<OnDetectedDeadEnemy>(CallRestock);
+        Debug.Log("Desuscribi evento");
     }
 
     public void Tick(float deltaTime)
@@ -64,8 +89,8 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         if (spawnPoint == null) return;
 
         var data = WeaponData;
-        bulletData.Damage = data.damage;
-        BulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletData);
+        currentBulletUse.Damage = data.damage;
+        BulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, currentBulletUse);
 
         CurrentAmmunition -= 1;
 
@@ -127,16 +152,15 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
-    private void OnDestroy()
-    {
-        EventBus.Unsubscribe<OnDetectedDeadEnemy>(CallRestock);
-        Debug.Log("Desuscribi evento");
-    }
-
     private void CallRestock(OnDetectedDeadEnemy enemyEvent)
     {
         EventBus.Publish(new OnReloadEvent(0.2f));
         RestockWeapon();
         ResetWaitToFire();
+    }
+
+    private void UpdateCurrentBullet(OnUnlockWinchesterLegado unlockEvent)
+    {
+        currentBulletUse = legadoBulletData;
     }
 }
