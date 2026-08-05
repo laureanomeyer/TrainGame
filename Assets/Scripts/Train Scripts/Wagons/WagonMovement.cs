@@ -1,37 +1,38 @@
 using System.IO;
 using UnityEngine;
 
-public class WagonMovement : MonoBehaviour, IWagon
+public class WagonMovement
 {
     //Referencias a los transforms
-    [SerializeField] private Transform tail;
+    private Transform tail;
+    private Transform objectTransform;
     private Transform targetTail;
+    private GameObject wagonBack;
     public Transform Tail => tail;
 
-    public Transform Transform => transform;
 
+    public WagonMovement(GameObject wagonBack, Transform tail)
+    {
+        this.wagonBack = wagonBack;
+        this.tail = tail;
+        Debug.Log(wagonBack);
+    }
 
-    [SerializeField] public GameObject wagonBack;
-
-    public void Initialize(Transform target) //Setea la cabeza de los vagones
+    public void Initialize(Transform target, Transform objectTransform) //Setea la cabeza de los vagones
     {
         this.targetTail = target;
-        transform.position = target.position;
-        transform.rotation = target.rotation;
+        this.objectTransform = objectTransform;
+        this.objectTransform.position = target.position;
+        this.objectTransform.rotation = target.rotation;
         tail.rotation = target.rotation;
     }
-    
-    void LateUpdate()
-    {
-        Move();
-    }
 
-    void Move()
+    public void Move()
     {
-        if (targetTail == null) return;   
-        transform.position = targetTail.position; //Se pega a la cola del vagon de adelante
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetTail.rotation, 0.3f); //Copia la rotacion de la cola del vagon de adelante en menor escala
-        tail.rotation = transform.rotation; //Fija la rotación de su cola
+        if (targetTail == null) return;
+        objectTransform.position = targetTail.position; //Se pega a la cola del vagon de adelante
+        objectTransform.rotation = Quaternion.Lerp(objectTransform.rotation, targetTail.rotation, 0.3f); //Copia la rotacion de la cola del vagon de adelante en menor escala
+        tail.rotation = objectTransform.rotation; //Fija la rotación de su cola
     }
 
 }
