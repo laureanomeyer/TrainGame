@@ -4,6 +4,8 @@
 
 public class DynamiteSkill : EnemySkill
 {
+
+       
     public override void Play()
     {
         throw new NotImplementedException();

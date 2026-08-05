@@ -10,7 +10,6 @@ public class WagonMovement : MonoBehaviour, IWagon
 
     public Transform Transform => transform;
 
-    [SerializeField] private float speed;
 
     [SerializeField] public GameObject wagonBack;
 

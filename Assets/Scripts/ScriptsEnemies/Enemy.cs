@@ -62,6 +62,7 @@ public class Enemy : MonoBehaviour
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
 
         flash = GetComponent<DamageFlash>();
+        flash.StopCoroutine();
         flash.SetMaterialArray(0, data.material);
 
         trainRanges = new();

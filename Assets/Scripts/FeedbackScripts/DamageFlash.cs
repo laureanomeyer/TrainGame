@@ -36,9 +36,14 @@ public class DamageFlash : MonoBehaviour
 
     public void Flash()
     {
-        StopAllCoroutines();
+        StopCoroutine();
         StartCoroutine(DoFlash());
     }
+    public void StopCoroutine() 
+    {
+        StopAllCoroutines();
+    }
+
     public void SetMaterialSingle(Material material)
     {
         originalMaterials[0][0] = material;
