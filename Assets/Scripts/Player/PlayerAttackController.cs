@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerAttackController 
 {
-    private Transform spawnPoint;
+    public Transform spawnPoint;
 
     private GameObject weaponItem;
     private IWeapons weapon;
@@ -13,17 +13,8 @@ public class PlayerAttackController
     private PlayerBrain brain;
     private PlayerData playerDataRef;
 
-    private float waitToFire = 0;
-
     private bool isAttacking = false;
-
-    private float currentReloadTime = 0;
-
-    private float rateOfFire;
-    public float RateOfFire { get => rateOfFire; }
-
-    private float reloadTime;
-    public float ReloadTime { get => reloadTime; }
+    public bool IsAttacking { get => isAttacking; }
 
     public PlayerAttackController(Transform spawnPoint, GameObject weaponItem, BulletPool pool, PlayerBrain brain, LookObjectToMouse look)
     {
@@ -50,11 +41,10 @@ public class PlayerAttackController
     public void Update()
     {
         AidToMouseDirection();
-        ChargeTimers();
 
-        if (isAttacking)
+        if(weaponItem != null)
         {
-            Attack();
+            weapon.Tick(Time.deltaTime);
         }
     }
 
@@ -67,19 +57,6 @@ public class PlayerAttackController
         spawnPoint.forward = dir;
     }
 
-    void Attack()
-    {
-        if (waitToFire > rateOfFire)
-        {
-            if (weapon.IsReloading) return;
-
-            weapon.Shoot(spawnPoint);
-            EventBus.Publish(new OnShootEvent(rateOfFire));
-            EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
-            waitToFire = 0;
-        }
-    }
-
     public void ActiveAttack ()
     {
         isAttacking = true;
@@ -90,48 +67,6 @@ public class PlayerAttackController
         isAttacking = false;
     }
 
-    private void ChargeTimers()
-    {
-        if (waitToFire <= rateOfFire)
-        {
-            waitToFire += Time.deltaTime;
-        }
-
-        if (weapon.IsReloading)
-        {
-            currentReloadTime += Time.deltaTime;
-
-            if(currentReloadTime > reloadTime)
-            {
-                RestockWeapon();
-            }
-        }
-        
-    }
-
-    public void ResetWaitToFire()
-    {
-        EventBus.Publish(new OnShootEvent(rateOfFire));
-        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
-        waitToFire = 0;
-    }
-
-    public void RestockWeapon()
-    {
-        currentReloadTime = 0;
-        weapon.RestockBullets();
-        weapon.IsReloading = false;
-        AudioManager.Instance.Play($"RevolverMusketReload{1}");
-        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
-    }
-
-    public void ReseatCadenceStats()
-    {
-        var statsRef = ServiceLocator.Get<StatSystem>();
-        rateOfFire = weapon.WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
-        reloadTime = weapon.WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed); ;
-    }
-
     //Funcion para setear el arma equipada
     public void SetWeapon(GameObject weaponObtein)
     {
@@ -139,7 +74,6 @@ public class PlayerAttackController
         playerDataRef.ChangeWeaponData(weaponItem);
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.InitializeWeapon(pool, this);
-        ReseatCadenceStats();
         weapon.RestockBullets();
         EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }

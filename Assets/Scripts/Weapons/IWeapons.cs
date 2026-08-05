@@ -4,7 +4,7 @@ public enum WeaponType { Revolver, Rifle, Escopeta }
 
 public interface IWeapons
 {
-    //Nombre de identificacion de armas
+    #region Variables
     public string Id { get; }
 
     public WeaponDataSO WeaponData { get; set; }
@@ -14,11 +14,23 @@ public interface IWeapons
 
     public bool IsReloading { get; set; }
 
-    //Funcion de ataque, requiere un punto de spawneo de balas
-    public void Shoot(Transform spawnPoint);
+    public float RateOfFire { get; }
+
+    public float ReloadTime { get; }
+
+    #endregion
+
+    #region Funciones
 
     public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack);
-
+    public void Tick(float deltaTime);
+    public void Shoot(Transform spawnPoint);
     public void RestockBullets();
+    public void Attack();
+    public void ChargeTimers();
+    public void ResetWaitToFire();
+    public void RestockWeapon();
+
+    #endregion
 
 }

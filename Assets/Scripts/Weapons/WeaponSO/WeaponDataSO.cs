@@ -12,9 +12,6 @@ public class WeaponDataSO : ScriptableObject
     [Header("Damage")]
     [SerializeField] public float damage;
 
-    [Header("Bullet")]
-    [SerializeField] public BulletTypeScriptable bulletSO;
-
     [Header("Ammun")]
     [SerializeField] public int ammun;
 
