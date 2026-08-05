@@ -139,10 +139,19 @@ public class CinematicSystem : MonoBehaviour
 
         cinematicCinemachineCamera.Priority = cinematicPriority;
 
+        Action<float> fovTick = null;
+        if (sequence.useFOVZoom)
+        {
+            float actualStartFOV = gameplayCinemachineCamera.Lens.FieldOfView; // el FOV real actual
+            cinematicCinemachineCamera.Lens.FieldOfView = actualStartFOV;
+            fovTick = t => cinematicCinemachineCamera.Lens.FieldOfView =
+                Mathf.Lerp(actualStartFOV, sequence.endFov, t);
+        }
+
         yield return CameraTravel.Move(
             cinematicTransform, originPos, originRot,
             destinationProvider, rotationProvider,
-            travelDuration, sequence.travelCurve, sequence.travelAxes);
+            travelDuration, sequence.travelCurve, sequence.travelAxes, fovTick);
 
         if (sequence.holdDuration > 0f)
             yield return new WaitForSeconds(sequence.holdDuration);

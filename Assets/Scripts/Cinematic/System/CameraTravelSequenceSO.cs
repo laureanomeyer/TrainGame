@@ -14,6 +14,11 @@ public class CameraTravelSequenceSO : ScriptableObject
     public AnimationCurve travelCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     public AnimationCurve returnCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
+    [Header("Zoom (FOV)")]
+    public bool useFOVZoom = false;
+    public float startFov = 40f;
+    public float endFov = 18f;
+
     [Header("Framing")]
     [Tooltip("Offset en espacio del MUNDO, no relativo a la rotación del target.")]
     public Vector3 worldOffsetFromTarget = new Vector3(4f, 6f, -4f);

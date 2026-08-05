@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Seq_RunDefeat
   m_EditorClassIdentifier: Assembly-CSharp::CameraTravelSequenceSO
   travelSpeed: 20
-  minTravelDuration: 4
-  maxTravelDuration: 4
-  holdDuration: 0
+  minTravelDuration: 1.5
+  maxTravelDuration: 3.4
+  holdDuration: 1.5
   travelCurve:
     serializedVersion: 2
     m_Curve:
@@ -64,10 +64,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  worldOffsetFromTarget: {x: 80, y: 0, z: 0}
+  useFOVZoom: 1
+  startFov: 40
+  endFov: 38
+  worldOffsetFromTarget: {x: -19.64, y: 48.5, z: -22.86}
   lookAtTarget: 0
-  useFixedRotation: 1
-  fixedEulerRotation: {x: 20, y: -90, z: 0}
-  travelAxes: 1
+  useFixedRotation: 0
+  fixedEulerRotation: {x: 71, y: 0, z: 0}
+  travelAxes: 0
   trackTarget: 0
   returnToOrigin: 0
