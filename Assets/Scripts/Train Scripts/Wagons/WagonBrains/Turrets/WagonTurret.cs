@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -7,6 +8,9 @@ public class WagonTurret : MonoBehaviour
     [SerializeField] private Transform turretPivot;
     [SerializeField] private Transform firePoint;
     [SerializeField] private Transform playerUsePoint;
+
+    [Header("Aim Settings")]
+    [SerializeField] private float minAimRadius = 1.5f;
 
     [Header("Weapon Data")]
     [SerializeField] private BulletTypeScriptable bulletType;
@@ -24,6 +28,8 @@ public class WagonTurret : MonoBehaviour
     public bool IsOccupied => isOccupied;
     public Transform FirePoint => firePoint;
     public Transform PlayerUsePoint => playerUsePoint;
+    public Transform TurretPivot => turretPivot;
+
 
     private void Awake()
     {
@@ -66,7 +72,7 @@ public class WagonTurret : MonoBehaviour
 
         direction.y = 0f;
 
-        if (direction.sqrMagnitude <= 0.001f)
+        if (direction.magnitude < minAimRadius)
             return;
 
         turretPivot.rotation = Quaternion.LookRotation(direction, Vector3.up);
@@ -80,7 +86,7 @@ public class WagonTurret : MonoBehaviour
 
         direction.y = 0f;
 
-        if (direction.sqrMagnitude <= 0.001f)
+        if (direction.magnitude < minAimRadius)
             return;
 
         direction.Normalize();
