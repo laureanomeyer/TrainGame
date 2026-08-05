@@ -62,6 +62,7 @@ public class BulletScript : MonoBehaviour, IBullet
         Speed = speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;
+        tr.material = bulletType.trailMaterial;
         tr.emitting = true;
         isActive = true;
     }
@@ -89,6 +90,22 @@ public class BulletScript : MonoBehaviour, IBullet
         tr.Clear();
         isActive = false;
         bulletPool.Release(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("deadWall"))
+        {
+            Deactivate();
+            return;
+        }
+
+        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
+
+            bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
+        }
     }
 
 }
