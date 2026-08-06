@@ -305,7 +305,7 @@ public class OnUnlockWinchesterLegado : IGameEvent
 
 #endregion
 
-#region Spencer Event
+#region Spencer Events
 
 public class OnSpencerDetectedDeadEnemy : IGameEvent
 {
@@ -324,6 +324,33 @@ public class OnUpdatedSpencerLegado : IGameEvent
 public class OnUnlockSpencerLegado : IGameEvent
 {
     public OnUnlockSpencerLegado()
+    {
+    }
+}
+
+#endregion
+
+#region Coach Events
+
+public class OnCoachDetectedDeadEnemy : IGameEvent
+{
+    public int point;
+    public OnCoachDetectedDeadEnemy(int point)
+    {
+        this.point = point;
+    }
+}
+
+public class OnUpdatedCoachLegado : IGameEvent
+{
+    public OnUpdatedCoachLegado()
+    {
+    }
+}
+
+public class OnUnlockCoachLegado : IGameEvent
+{
+    public OnUnlockCoachLegado()
     {
     }
 }

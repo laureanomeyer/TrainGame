@@ -59,8 +59,6 @@ public class BaseWeapon : MonoBehaviour, IWeapons
 
     public void Shoot(Transform spawnPoint)
     {
-        //weaponData.typeOfShootSO.Shoot(this, spawnPoint, playerAtkReference);
-
         if (IsReloading) return;
         if (spawnPoint == null) return;
 

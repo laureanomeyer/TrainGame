@@ -47,7 +47,9 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     }
     public void SetWeapon()
     {
-        int value = UnityEngine.Random.Range(0, currentCollection.Length - 1);
+        int value = UnityEngine.Random.Range(0, currentCollection.Length);
+
+        Debug.Log(value);
 
         currentWeapon = currentCollection[value].Weapon;
         currentWeaponprice = currentCollection[value].Price;

@@ -59,11 +59,7 @@ public class WeaponShopButtonManager : MonoBehaviour
     {
         for (int i = 0; i < buttons.Count; i++)
         {
-            if (button == buttons[i])
-            {
-                buttons[i].DeactivateButton();
-            }
-            else
+            if (button != buttons[i])
             {
                 buttons[i].ActivateButton();
             }
