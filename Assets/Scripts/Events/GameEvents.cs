@@ -289,9 +289,9 @@ public class OnUpdateWinchesterLegadoLeftPoint : IGameEvent
     }
 }
 
-public class OnDetectedDeadEnemy : IGameEvent
+public class OnWinchesterDetectedDeadEnemy : IGameEvent
 {
-    public OnDetectedDeadEnemy()
+    public OnWinchesterDetectedDeadEnemy()
     {
     }
 }
@@ -299,6 +299,31 @@ public class OnDetectedDeadEnemy : IGameEvent
 public class OnUnlockWinchesterLegado : IGameEvent
 {
     public OnUnlockWinchesterLegado()
+    {
+    }
+}
+
+#endregion
+
+#region Spencer Event
+
+public class OnSpencerDetectedDeadEnemy : IGameEvent
+{
+    public OnSpencerDetectedDeadEnemy()
+    {
+    }
+}
+
+public class OnUpdatedSpencerLegado : IGameEvent
+{
+    public OnUpdatedSpencerLegado()
+    {
+    }
+}
+
+public class OnUnlockSpencerLegado : IGameEvent
+{
+    public OnUnlockSpencerLegado()
     {
     }
 }

@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-public class Winchester_Weapon : MonoBehaviour, IWeapons
+public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
@@ -17,6 +16,16 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
 
     [Header("Legado Bullet data")]
     [SerializeField] private BulletTypeScriptable legadoBulletData;
+
+    [Header("Enemies to defeat for legado")]
+    [SerializeField] private int EnemiesToDefeat = 3;
+
+    private int currentEnemiesDefetead;
+
+    [Header("Time to defeat enemies")]
+    [SerializeField] private float defeatEnemiesTime = 5f;
+
+    private float currentUnlockTime;
 
     private BulletTypeScriptable currentBulletUse;
 
@@ -42,13 +51,15 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     private BulletPool bulletPool;
     public BulletPool BulletPool => bulletPool;
 
+    private bool unlockedLegado = false;
+
     public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack)
     {
         bulletPool = pool;
         playerAtkReference = playerAttack;
 
-        EventBus.Subscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
-        EventBus.Subscribe<OnDetectedDeadEnemy>(CallRestock);
+        EventBus.Subscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
+        EventBus.Subscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
@@ -56,9 +67,12 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
-        if (playerData.unlockedLegado.UnlockedWinchester)
+        currentUnlockTime = 0;
+
+        if (playerData.unlockedLegado.UnlockedSpencer)
         {
             currentBulletUse = legadoBulletData;
+            unlockedLegado = true;
         }
         else
         {
@@ -68,13 +82,22 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
 
     private void OnDestroy()
     {
-        EventBus.Unsubscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
-        EventBus.Unsubscribe<OnDetectedDeadEnemy>(CallRestock);
+        EventBus.Unsubscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
+        EventBus.Unsubscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
         Debug.Log("Desuscribi evento");
     }
 
     public void Tick(float deltaTime)
     {
+        if (!unlockedLegado)
+        {
+            PlayerData playerData = ServiceLocator.Get<PlayerData>();
+            if (playerData.unlockedLegado.UnlockedSpencer == false)
+            {
+                CalculetUnlockLegado();
+            }
+        }
+        
         ChargeTimers();
 
         if (playerAtkReference.IsAttacking)
@@ -152,14 +175,31 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
-    private void CallRestock(OnDetectedDeadEnemy enemyEvent)
+    private void CheckEnemiesDefetead(OnSpencerDetectedDeadEnemy checkEnemies)
     {
-        EventBus.Publish(new OnReloadEvent(0.2f));
-        RestockWeapon();
-        ResetWaitToFire();
+        currentEnemiesDefetead += 1;
     }
 
-    private void UpdateCurrentBullet(OnUnlockWinchesterLegado unlockEvent)
+    private void CalculetUnlockLegado()
+    {
+        if(currentEnemiesDefetead > 0)
+        {
+            currentUnlockTime -= Time.deltaTime;
+
+            if (currentUnlockTime > defeatEnemiesTime)
+            {
+                currentUnlockTime = 0f;
+                currentEnemiesDefetead = 0;
+            }
+
+            if (currentEnemiesDefetead >= EnemiesToDefeat)
+            {
+                EventBus.Publish(new OnUpdatedSpencerLegado());
+            }
+        }
+    }
+
+    private void UpdateCurrentBullet(OnUnlockSpencerLegado unlockEvent)
     {
         currentBulletUse = legadoBulletData;
     }
