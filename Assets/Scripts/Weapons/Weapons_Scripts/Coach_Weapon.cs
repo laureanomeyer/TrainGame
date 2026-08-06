@@ -12,10 +12,10 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     [SerializeField] private WeaponDataSO weaponData;
 
     [Header("Pellet count")]
-    private int pelletCount;
+    [SerializeField] private int pelletCount = 8;
 
     [Header("Spreed Angle")]
-    private float spreadAngle;
+    [SerializeField] private float spreadAngle = 45f;
 
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
@@ -123,8 +123,8 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         var data = WeaponData;
         currentBulletUse.Damage = data.damage;
 
-        pelletCount = 8;
-        spreadAngle = 45f;
+        //pelletCount = 8;
+        //spreadAngle = 45f;
 
         RealeasedBullet(spawnPoint);
     }
