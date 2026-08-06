@@ -42,6 +42,8 @@ public class Enemy : MonoBehaviour
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
 
+    public EnemySkillSO Skill => data.skill;
+
     public void Initialize(EnemyData data)
     {
         StopAllCoroutines();
@@ -91,7 +93,8 @@ public class Enemy : MonoBehaviour
         this.target = Brain.SetTarget(this);
     }
 
-    public void TakeDamage(float damage)
+
+    public bool TakeDamage(float damage)
     {
         currentHealth -= damage;
         EventBus.Publish(new OnEnemyHitEvent(transform.position));
@@ -109,6 +112,8 @@ public class Enemy : MonoBehaviour
         }
         if (currentHealth <= 0)
             Dead();
+
+        return currentHealth <= 0;
     }
 
     private void Dead()

@@ -13,12 +13,12 @@ public class EnemySkillSO : ScriptableObject
     public virtual void Init(Enemy enemy) { }
     public void Play(Enemy enemy)
     {
-        skill.Play();
+        skill.Play(enemy);
     }
 
     public void Stop(Enemy enemy)
     {
-        skill.Stop();
+        skill.Stop(enemy);
     }
 
     protected void ResetCooldown() => timer = cooldown;

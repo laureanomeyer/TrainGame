@@ -33,6 +33,8 @@ public class EnemyData : ScriptableObject
     public EnemyBrainSO brain;       // logica targeteo
     public EnemyMovementSO movement; //logica movimiento
 
+    public EnemySkillSO skill;
+
     private void OnValidate()
     {
         ApplyRangePreset();

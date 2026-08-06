@@ -13,6 +13,7 @@ public class EnemyRangeAttack : EnemyAttackSO
         if (dist <= enemy.Range + 5)
         {
             enemy.Weapon.Execute(enemy.Target, enemy.Damage);
+            enemy.Skill.Play(enemy);
             enemy.ResetAttackCooldown(enemy.Cooldown);
         }
     }
