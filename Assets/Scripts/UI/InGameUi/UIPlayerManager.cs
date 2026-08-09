@@ -16,7 +16,10 @@ public class UIPlayerManager : MonoBehaviour
 
     [Header("Shields UI")]
     [SerializeField] private Image shieldImage;
-    [SerializeField] private GameObject shieldIndicator;
+    //[SerializeField] private GameObject shieldIndicator;
+
+    [Header("GoldWagon UI")]
+    [SerializeField] private Image goldenWagonHp;
 
     [Header("Inventory UI")]
     [SerializeField] private Image coalImage;
@@ -33,9 +36,11 @@ public class UIPlayerManager : MonoBehaviour
     [SerializeField] private TMP_Text currentLevel;
 
     private LocomotiveBrain locomotive;
+    private WagonHP goldenWagonHpController;
     private float lerpedShield = 1;
     private float lerpedFuel = 1f;
     private float lerpedCapacity = 1f;
+    private float lerpedGoldCapacity = 1f;
 
     private void Start()
     {
@@ -82,7 +87,7 @@ public class UIPlayerManager : MonoBehaviour
 
             var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
             lerpedShield = Mathf.MoveTowards(lerpedShield, currentShield, Time.deltaTime);
-            shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedShield));
+            //shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedShield));
             shieldImage.fillAmount = lerpedShield;
 
             var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
@@ -93,6 +98,17 @@ public class UIPlayerManager : MonoBehaviour
             lerpedCapacity = Mathf.MoveTowards(lerpedCapacity, currentCapacity, Time.deltaTime);
             fuelImage.fillAmount = lerpedCapacity;
             fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedCapacity));
+
+            if (goldenWagonHpController != null)
+            {
+                //if (goldenWagonHp == null) return;
+
+                var currentGoldenWagonHp = goldenWagonHpController.CurrentHp / goldenWagonHpController.MaxHp;
+                lerpedGoldCapacity = Mathf.MoveTowards(lerpedGoldCapacity, currentGoldenWagonHp, Time.deltaTime);
+
+                goldenWagonHp.fillAmount = lerpedGoldCapacity;
+            }
+            else ServiceLocator.TryGet<WagonHP>(out goldenWagonHpController);
         }
     }
 

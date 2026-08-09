@@ -37,6 +37,12 @@ public class GoldenWagonBrain : WagonBrain
         collector = new GoldCollector(hpController, currentGoldUI, storageCapacity, setGoldCoins);
     }
 
+    public override void StartWagon()
+    {
+        base.StartWagon();
+        ServiceLocator.Register<WagonHP>(HPController);
+    }
+
     public override void OnDestroy()
     {
         base.OnDestroy();
@@ -52,6 +58,7 @@ public class GoldenWagonBrain : WagonBrain
         }
 
         hpController.Repair(repairAmount, Time.deltaTime);
+
         if (GameManager.Instance.CurrentState == GameState.Tutorial)
             EventBus.Publish(new OnSetAttackEnabledEvent(true));
 
