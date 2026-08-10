@@ -67,6 +67,15 @@ public class GameManager : MonoBehaviour
         return Session._SessionConfig.CurrentLevel >= lastStation;
     }
 
+    public int GetCurrentLevel()
+    {
+        if (Session != null && Session._SessionConfig != null)
+        {
+            return Session._SessionConfig.CurrentLevel;
+        }
+        return 1;
+    }
+
     public string GetCurrentStationName() //STATIONNAMES
     {
         if (stationRoute == null)
