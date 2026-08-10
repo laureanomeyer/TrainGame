@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        PlayerPrefs.SetInt("TutorialCompleted", 0);
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
         #endregion
@@ -207,7 +209,8 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
         Session = new GameSession(baseStats, baseMultStats);
 
-        ChangeScene(ShopScene, SceneTransitionType.Generic, GameState.Gameplay);
+        if (PlayerPrefs.GetInt("TutorialCompleted") != 0) GoToRun();
+        else GoToTutorial();
     }
 
     public void EndSession()

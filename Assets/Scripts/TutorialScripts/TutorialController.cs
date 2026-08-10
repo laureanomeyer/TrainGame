@@ -97,6 +97,7 @@ public class TutorialController : MonoBehaviour
             EventBus.Publish(new OnSetCanConsumeEvent(true));
             EventBus.Publish(new OnSetTutorialVisibleEvent(true));
             EventBus.Publish(new OnSetTutorialTextEvent("Well, reckon that's all you need to know. <b>The road ahead is right here</b>. Good luck, Bronco Buckle!"));
+            PlayerPrefs.SetInt("TutorialCompleted", 1);
 
             StartCoroutine(HideTextCoroutine(5f));
             runStarted = true;

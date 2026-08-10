@@ -18,7 +18,7 @@ public class MainMenuButtons : MonoBehaviour
 
     private void Start()
     {
-        startButton.onClick.AddListener(GameManager.Instance.GoToTutorial);
+        startButton.onClick.AddListener(GameManager.Instance.StartNewSession);
         quitButton.onClick.AddListener(Quit);
 
         settingsButton.onClick.AddListener(OpenSettings);
