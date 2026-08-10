@@ -9,7 +9,7 @@ public class TrainManager : MonoBehaviour
     private List<IWagon> wagonsCreated = new();
     private List<WagonBrain> wagonBrains = new();
     private Transform tail;
-    private WagonMovement lastWagon;
+    private WagonBrain lastWagon;
 
     private StatSystem statSystemRef;
     private TrainData trainDataRef;
@@ -48,32 +48,30 @@ public class TrainManager : MonoBehaviour
     public void CreateWagon(GameObject wagonToCreate, IWagonID id)
     {
         GameObject wagonInstance = Instantiate(wagonToCreate, tail.position, tail.rotation);
-        WagonMovement wagon = wagonInstance.GetComponent<WagonMovement>();
         WagonBrain wagonBrain = wagonInstance.GetComponent<WagonBrain>();
 
-        wagonsCreated.Add(wagon);
+        wagonsCreated.Add(wagonBrain);
         wagonBrains.Add(wagonBrain);
         wagonBrain.SetWagonID(id);
 
-        AttachWagon(tail, wagon);
+        AttachWagon(tail, wagonBrain);
     }
 
     private void CreateGoldWagon()
     {
         GameObject instance = Instantiate(goldWagonPrefab, tail.position, tail.rotation);
-        WagonMovement wagon = instance.GetComponent<WagonMovement>();
         WagonBrain brain = instance.GetComponent<WagonBrain>();
-        wagonsCreated.Add(wagon);
+        wagonsCreated.Add(brain);
         wagonBrains.Add(brain);
-        AttachWagon(tail, wagon);
+        Debug.Log("tail: " + tail);
+        Debug.Log("brain: " + brain);
+        AttachWagon(tail, brain);
     }
 
-    private void AttachWagon(Transform head, WagonMovement wagon)
+    private void AttachWagon(Transform head, WagonBrain wagon)
     {
-        wagon.Initialize(head);
-        tail = wagon.Tail;
-        RunManager.Instance.SetTrainTail(tail);
 
+        RunManager.Instance.SetTrainTail(tail);
         if (lastWagon)
         {
             lastWagon.wagonBack.SetActive(false);
@@ -81,5 +79,7 @@ public class TrainManager : MonoBehaviour
 
         wagon.wagonBack.SetActive(true);
         lastWagon = wagon;
+        wagon.InitializeWagonMovement(head);
+        tail = wagon.WagonMovement.Tail;
     }
 }

@@ -42,8 +42,12 @@ public class Enemy : MonoBehaviour
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
 
+    public EnemySkillSO Skill => data.skill;
+
     public void Initialize(EnemyData data)
     {
+        StopAllCoroutines();
+
         moveRight = false;
 
         this.data = data;
@@ -60,6 +64,7 @@ public class Enemy : MonoBehaviour
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
 
         flash = GetComponent<DamageFlash>();
+        flash.StopCoroutine();
         flash.SetMaterialArray(0, data.material);
 
         trainRanges = new();

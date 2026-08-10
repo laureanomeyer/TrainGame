@@ -287,7 +287,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 257459406866160118}
-  - component: {fileID: 7226562531027052806}
   - component: {fileID: 5333138794343394051}
   - component: {fileID: 77435903165197984}
   - component: {fileID: 4738617757933681993}
@@ -319,21 +318,6 @@ Transform:
   - {fileID: 6770440199524928281}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &7226562531027052806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3221274974295192296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96f47f7cbf95ce0469f31864b1f4edb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WagonMovement
-  tail: {fileID: 3812085090369802928}
-  speed: 100
-  wagonBack: {fileID: 5775317610391304763}
 --- !u!65 &5333138794343394051
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -371,6 +355,8 @@ MonoBehaviour:
   canBreak: 1
   SM: 10
   RES: 2
+  tail: {fileID: 3812085090369802928}
+  wagonBack: {fileID: 5775317610391304763}
   hpImage: {fileID: 314790721957229845}
   hpBackgroundImage: {fileID: 3400165698468305836}
   particles: {fileID: 1421166018350292571}

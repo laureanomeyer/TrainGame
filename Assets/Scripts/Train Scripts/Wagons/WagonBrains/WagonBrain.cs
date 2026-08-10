@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WagonBrain : MonoBehaviour, IDamagable
+public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 {
     protected float hp;
     protected float defense;
@@ -14,10 +14,12 @@ public class WagonBrain : MonoBehaviour, IDamagable
     private DamageFlash Flash;
     private Animator animator;
     private bool canBeRepaired = false;
+    private WagonMovement wagonMovement;
 
     private StatSystem stats;
     private TrainData trainData;
 
+    public Transform Transform => transform;
     public bool CanBeRepaired => canBeRepaired;
     public WagonHP HPController => hpController;
 
@@ -26,6 +28,10 @@ public class WagonBrain : MonoBehaviour, IDamagable
     [SerializeField] protected bool canBreak;
     [SerializeField] protected float SM;
     [SerializeField] protected float RES;
+
+    [Header("Wagon MovementParams")]
+    [SerializeField] protected Transform tail;
+    [SerializeField] public GameObject wagonBack;
 
     [Header("UI")]
     [SerializeField] private Image hpImage;
@@ -53,22 +59,29 @@ public class WagonBrain : MonoBehaviour, IDamagable
     [SerializeField] public MeshFilter floorMeshFilterWagon;
     [SerializeField] public MeshFilter bodyMeshFilterWagon;
     [SerializeField] public MeshFilter topMeshFilterWagon;
+
+
     #endregion
 
     protected WagonHPWorldUI hpWorldUI;
 
     public float CurrentHp => currentHp;
     public float MaxHp => hp;
-
+    public WagonMovement WagonMovement => wagonMovement;
     public IWagonID WagonID => wagonID;
 
     public virtual void Start()
     {
-        stats.OnStatChanged += OnStatChanged;
+        if(stats != null) stats.OnStatChanged += OnStatChanged;
         animator = GetComponent<Animator>();
 
         Flash = GetComponent<DamageFlash>();
         trainData = ServiceLocator.Get<TrainData>();
+    }
+
+    public void FixedUpdate()
+    {
+        wagonMovement.Move();
     }
 
     public virtual void StartWagon()
@@ -80,6 +93,15 @@ public class WagonBrain : MonoBehaviour, IDamagable
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         renderController = new WagonRenderController(this);
+
+
+    }
+
+    public virtual void InitializeWagonMovement(Transform target)
+    {
+        wagonMovement = new WagonMovement(wagonBack, tail);
+
+        wagonMovement.Initialize(target, transform);
     }
 
     public virtual IEnumerable<StatModifier> GetModifiers()

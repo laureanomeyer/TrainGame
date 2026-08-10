@@ -367,7 +367,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3833622630315364123}
   - component: {fileID: 1327370764761034617}
-  - component: {fileID: 5193505474067675462}
   - component: {fileID: 2765749237097656151}
   - component: {fileID: 5211743071578810440}
   - component: {fileID: 3644062954500194812}
@@ -419,6 +418,8 @@ MonoBehaviour:
   canBreak: 1
   SM: 10
   RES: 2
+  tail: {fileID: 2589180025296872962}
+  wagonBack: {fileID: 7001133425233111481}
   hpImage: {fileID: 6592025168693875878}
   hpBackgroundImage: {fileID: 772328443343461271}
   particles: {fileID: 969917389270355343}
@@ -431,21 +432,6 @@ MonoBehaviour:
   floorMeshFilterWagon: {fileID: 6662833376564723142}
   bodyMeshFilterWagon: {fileID: 6385638626203489840}
   topMeshFilterWagon: {fileID: 29598941131999899}
---- !u!114 &5193505474067675462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4501369629086111137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96f47f7cbf95ce0469f31864b1f4edb3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WagonMovement
-  tail: {fileID: 2589180025296872962}
-  speed: 100
-  wagonBack: {fileID: 7001133425233111481}
 --- !u!114 &2765749237097656151
 MonoBehaviour:
   m_ObjectHideFlags: 0
