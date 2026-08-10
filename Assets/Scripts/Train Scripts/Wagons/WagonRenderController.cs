@@ -41,7 +41,7 @@ public class WagonRenderController
             fadeRoutine = null;
         }
 
-        if (wagonBrain.floorMeshFilterWagon != null)
+        /*if (wagonBrain.floorMeshFilterWagon != null)
         {
             wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
             wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
@@ -56,7 +56,9 @@ public class WagonRenderController
         if (wagonBrain.topMeshFilterWagon != null)
         {
             wagonBrain.topMeshFilterWagon.mesh = null;
-        }
+        }*/
+
+        wagonBrain.SetDestroyed(true);
 
         if (wagonBrain.particles != null)
         {
@@ -64,23 +66,23 @@ public class WagonRenderController
         }
     }
 
-    private void ChangeToDestroyWagonFloor()
-    {
-        if (wagonBrain.floorMeshFilterWagon != null)
-        {
-            wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
-            wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
-        }
-    }
+    /* private void ChangeToDestroyWagonFloor()
+     {
+         if (wagonBrain.floorMeshFilterWagon != null)
+         {
+             wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
+             wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
+         }
+     }
 
-    public void SetWagonMeshAndMaterial(Mesh floor, Mesh body)
-    {
-        wagonBrain.floorMeshFilterWagon.mesh = floor;
-        wagonBrain.bodyMeshFilterWagon.mesh = body;
+     public void SetWagonMeshAndMaterial(Mesh floor, Mesh body)
+     {
+         wagonBrain.floorMeshFilterWagon.mesh = floor;
+         wagonBrain.bodyMeshFilterWagon.mesh = body;
 
-        wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
-        wagonBrain.bodyRenderWagon.material = wagonBrain.destroyWagonMaterial;
-    }
+         wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
+         wagonBrain.bodyRenderWagon.material = wagonBrain.destroyWagonMaterial;
+     }*/
 
     public void ActivateWagonTop()
     {
