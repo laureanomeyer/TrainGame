@@ -6,7 +6,6 @@ public class DynamiteSkill : EnemySkill
 {
     public float damage = 20f;
     public float adjacentDamageMultiplier = 0.5f;
-    public float cooldown = 4f;
     public GameObject dynamitePrefab;
     private GameObject activeDynamite;
 
@@ -26,11 +25,7 @@ public class DynamiteSkill : EnemySkill
 
     public override void Stop(Enemy enemy)
     {
-        if (activeDynamite != null)
-        {
-            ObjectPoolManager.ReturnObjectToPool(activeDynamite);
-            activeDynamite = null;
-        }
+        return;
     }
 
     private IWagon FindWagonByTransform(Enemy enemy)

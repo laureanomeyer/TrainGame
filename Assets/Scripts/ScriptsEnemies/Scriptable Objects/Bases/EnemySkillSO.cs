@@ -1,26 +1,37 @@
-using Unity.VisualScripting;
 using UnityEngine;
+
+public enum SkillType
+{
+    None,
+    Dynamite,
+}
 
 [CreateAssetMenu(fileName = "EnemySkillSO", menuName = "Enemy/Skill")]
 public class EnemySkillSO : ScriptableObject
 {
-    public EnemySkill skill;
-    protected float cooldown;
-    protected float timer;
+    public SkillType skillType;
 
-    public bool CanUse => timer <= 0f;
+    [SerializeReference] private EnemySkill skill;
 
-    public virtual void Init(Enemy enemy) { }
-    public void Play(Enemy enemy)
+    public float Cooldown => skill.cooldown;
+
+    public void Play(Enemy enemy) => skill?.Play(enemy);
+    public void Stop(Enemy enemy) => skill?.Stop(enemy);
+
+#if UNITY_EDITOR
+    private void OnValidate()
     {
-        skill.Play(enemy);
+        switch (skillType)
+        {
+            case SkillType.Dynamite:
+                if (!(skill is DynamiteSkill))
+                    skill = new DynamiteSkill();
+                break;
+
+            case SkillType.None:
+                skill = null;
+                break;
+        }
     }
-
-    public void Stop(Enemy enemy)
-    {
-        skill.Stop(enemy);
-    }
-
-    protected void ResetCooldown() => timer = cooldown;
-
+#endif
 }

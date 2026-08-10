@@ -40,7 +40,9 @@ public class Enemy : MonoBehaviour
     public bool moveRight;
 
     public bool CanAttack => attackCooldownTimer <= 0f;
+    public bool CanSkill => skillCooldownTimer <=0f;
     float attackCooldownTimer;
+    float skillCooldownTimer;
 
     public EnemySkillSO Skill => data.skill;
 
@@ -76,11 +78,18 @@ public class Enemy : MonoBehaviour
         attackCooldownTimer = cooldown;
     }
 
-    void Update()
+        public void ResetSkillCooldown(float cooldown)
     {
-        attackCooldownTimer -= Time.deltaTime;
-        Attack?.Attack(this);
+        skillCooldownTimer = cooldown;
     }
+
+void Update()
+{
+    attackCooldownTimer -= Time.deltaTime;
+    skillCooldownTimer -= Time.deltaTime;
+    Attack?.Attack(this);
+    Attack?.Skill(this);
+}
 
     void FixedUpdate()
     {
