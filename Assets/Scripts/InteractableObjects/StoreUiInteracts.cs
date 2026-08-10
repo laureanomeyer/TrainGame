@@ -52,8 +52,9 @@ public class StoreUiInteracts : MonoBehaviour
 
     private void DeactivateUI()
     {
-
         uiToShow.SetActive(false);
+
+        playerBrain.SetCanAttack(true);
 
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
@@ -77,8 +78,7 @@ public class StoreUiInteracts : MonoBehaviour
 
             uiToShow.SetActive(true);
 
-         //   playerBrain.SetCanAttack(false);
-         //   playerBrain.SetCanMove(false);
+            playerBrain.SetCanAttack(false); // NUEVO: bloquea disparo mientras la tienda está abierta
 
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
             EventBus.Publish(new OnActivateUiEvent(false));
@@ -91,7 +91,5 @@ public class StoreUiInteracts : MonoBehaviour
 
             DeactivateUI();
         }
-
-        
     }
 }

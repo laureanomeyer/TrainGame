@@ -10697,7 +10697,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 70
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -10723,8 +10723,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 588764837}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.572366, y: 0.0041432157, z: -0.002892449, w: 0.8199827}
-  m_LocalPosition: {x: -0.1784668, y: 47.80429, z: -19.04}
+  m_LocalRotation: {x: -0.090187356, y: -0.0020768275, z: 0.00022149937, w: -0.9959226}
+  m_LocalPosition: {x: 614.1465, y: 497.81665, z: -1130.1208}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23587,7 +23587,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6367949780880204216, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8031979763515567626}
+    - targetCorrespondingSourceObject: {fileID: 6367949780880204216, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8031979763515567627}
   m_SourcePrefab: {fileID: 100100000, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
 --- !u!114 &8031979763515567621 stripped
 MonoBehaviour:
@@ -23633,6 +23639,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &8031979763515567625 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6367949780880204216, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+  m_PrefabInstance: {fileID: 8031979763515567620}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &8031979763515567626
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8031979763515567625}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &8031979763515567627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8031979763515567625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a159239276f755c4bb42e84372f5341c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonShopPanelCinematicHider
 --- !u!1001 &9053902308235256331
 PrefabInstance:
   m_ObjectHideFlags: 0

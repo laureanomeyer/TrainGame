@@ -19,6 +19,9 @@ public class DisplayTrain : MonoBehaviour
     private readonly List<string> registeredKeys = new();
     private int wagonCounter;
 
+    private Vector3 tailPos;
+    private Quaternion tailRot;
+
     private void Awake()
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
@@ -26,7 +29,6 @@ public class DisplayTrain : MonoBehaviour
 
     private void Start()
     {
-        
         wagonAssetsReference = new Dictionary<string, GameObject>();
 
         foreach (var asset in wagonAssets)
@@ -36,6 +38,9 @@ public class DisplayTrain : MonoBehaviour
 
         wagonList = StoreManager.Instance.wagonsInTrain;
 
+        tailPos = currentTail.position;
+        tailRot = currentTail.rotation;
+
         foreach (var wagon in wagonList)
         {
             CreateWagon(wagonAssetsReference[wagon.WagonName]);
@@ -44,16 +49,18 @@ public class DisplayTrain : MonoBehaviour
 
     private GameObject CreateWagon(GameObject wagonModel)
     {
-        Vector3 spawnPosition = currentTail.position - currentTail.forward * wagonGap;
+        Vector3 spawnPosition = tailPos - (tailRot * Vector3.forward) * wagonGap;
 
         GameObject currentWagon = Instantiate(
             wagonModel,
             spawnPosition,
-            currentTail.rotation
+            tailRot
         );
 
         Transform newTail = currentWagon.GetComponent<ShopWagonData>().tail;
-        currentTail = newTail;
+
+        tailPos = newTail.position;
+        tailRot = newTail.rotation;
 
         return currentWagon;
     }

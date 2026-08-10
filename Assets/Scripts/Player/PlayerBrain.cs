@@ -27,6 +27,8 @@ public class PlayerBrain : MonoBehaviour
     private PlayerAttackController playerAttackController;
     private InputAction attackAction;
 
+    private PlayerData playerDataRef;
+
     private bool IsRepairing = false;
     private bool canAttack = true;
 
@@ -43,6 +45,8 @@ public class PlayerBrain : MonoBehaviour
         playerMovementController = new PlayerMovementController(rb, faceMouse, transform, speed);
         playerInteractionsController = new PlayerInteractions(this, playerMovementController, faceMouse, interactionUIManager, repairCapacity);
         playerAttackController = new PlayerAttackController(spawnPoint, weaponItem, GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>(), this, faceMouse);
+
+        playerDataRef = ServiceLocator.Get<PlayerData>();
 
         attackAction = InputSystem.actions.FindAction("Attack");
         attackAction.performed += ActiveAttack;
@@ -76,7 +80,7 @@ public class PlayerBrain : MonoBehaviour
 
         if (Keyboard.current.f8Key.wasPressedThisFrame)
         {
-            Inventory.GoldAmount += 100;
+            playerDataRef.AddPlayerGold(100);
         }
     }
 
