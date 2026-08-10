@@ -60,7 +60,9 @@ public class InteractionZone : MonoBehaviour
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
 
-       // playerBrain.SetCanMove(true);
+        // playerBrain.SetCanMove(true);
+
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
         EventBus.Publish(new OnActivateUiEvent(true));
         EventBus.Publish(new OnShowInteractEvent());
@@ -101,6 +103,8 @@ public class InteractionZone : MonoBehaviour
             EventBus.Publish(new OnActivateUiEvent(false));
             EventBus.Publish(new OnHideInteractEvent());
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
+
+            GameManager.Instance.ChangeGameState(GameState.UI);
         }
         else
         {

@@ -140,6 +140,8 @@ public class PlayerBrain : MonoBehaviour
 
     public void SetCanAttack(bool canAttack)
     {
+
+
         this.canAttack = canAttack;
         playerMovementController.SetCanRotate(canAttack);
     }

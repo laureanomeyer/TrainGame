@@ -55,6 +55,8 @@ public class StoreUiInteracts : MonoBehaviour
 
         uiToShow.SetActive(false);
 
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
+
         EventBus.Publish(new OnShowInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
         EventBus.Publish(new OnActivateUiEvent(true));
@@ -80,6 +82,8 @@ public class StoreUiInteracts : MonoBehaviour
 
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
             EventBus.Publish(new OnActivateUiEvent(false));
+
+            GameManager.Instance.ChangeGameState(GameState.UI);
         }
         else
         {

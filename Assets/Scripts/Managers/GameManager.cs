@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -60,6 +61,11 @@ public class GameManager : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnShowCursorEvent>(ChangeCursorEvent);
+    }
+
+    public void ChangeGameState(GameState state)
+    {
+        CurrentState = state;
     }
 
     public bool IsFinalStation()
