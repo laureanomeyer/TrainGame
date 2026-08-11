@@ -8,6 +8,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     [SerializeField] private float EM;
     [SerializeField] private float RES;
 
+    [SerializeField] private Renderer shieldsRenderer;
+
     private bool destroyed;
     public LocomotiveFuel fuelController;
     private DamageFlash flash;
@@ -29,7 +31,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             EM * stats.GetStat(StatType.Defense),
             CM * stats.GetStat(StatType.MaxHp),
             RES * stats.GetStat(StatType.Defense),
-            stats.GetStat(StatType.FuelOptimizer)
+            stats.GetStat(StatType.FuelOptimizer),
+            shieldsRenderer
         );
 
         fuelController.OnDestroyed += Break;
