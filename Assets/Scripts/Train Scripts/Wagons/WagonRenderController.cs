@@ -41,23 +41,6 @@ public class WagonRenderController
             fadeRoutine = null;
         }
 
-        /*if (wagonBrain.floorMeshFilterWagon != null)
-        {
-            wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
-            wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
-        }
-
-        if (wagonBrain.bodyMeshFilterWagon != null)
-        {
-            wagonBrain.bodyMeshFilterWagon.mesh = wagonBrain.bodyMeshDestroyWagon;
-            wagonBrain.bodyRenderWagon.material = wagonBrain.destroyWagonMaterial;
-        }
-
-        if (wagonBrain.topMeshFilterWagon != null)
-        {
-            wagonBrain.topMeshFilterWagon.mesh = null;
-        }*/
-
         wagonBrain.SetDestroyed(true);
 
         if (wagonBrain.particles != null)
@@ -65,24 +48,6 @@ public class WagonRenderController
             wagonBrain.particles.Play();
         }
     }
-
-    /* private void ChangeToDestroyWagonFloor()
-     {
-         if (wagonBrain.floorMeshFilterWagon != null)
-         {
-             wagonBrain.floorMeshFilterWagon.mesh = wagonBrain.floorMeshDestroyWagon;
-             wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
-         }
-     }
-
-     public void SetWagonMeshAndMaterial(Mesh floor, Mesh body)
-     {
-         wagonBrain.floorMeshFilterWagon.mesh = floor;
-         wagonBrain.bodyMeshFilterWagon.mesh = body;
-
-         wagonBrain.floorRenderWagon.material = wagonBrain.destroyWagonMaterial;
-         wagonBrain.bodyRenderWagon.material = wagonBrain.destroyWagonMaterial;
-     }*/
 
     public void ActivateWagonTop()
     {

@@ -22,6 +22,8 @@ public class LocomotiveFuel
     private float fuelMaxCapacity;
     private TrainData trainDataRef;
 
+    private Renderer shieldsRenderer;
+
     private bool hasFuel => currentFuel > 0f;
     public float CurrentFuel => currentFuel;
     public float CurrentMaxFuel => currentMaxFuel;
@@ -34,7 +36,7 @@ public class LocomotiveFuel
 
     public bool IsDestroyed => destroyed;
 
-    public LocomotiveFuel(float shield, float maxFuel, float defense, float fuelOptimizer)
+    public LocomotiveFuel(float shield, float maxFuel, float defense, float fuelOptimizer, Renderer shieldsRend)
     {
         this.maxShield = shield;
         this.currentShield = shield;
@@ -42,6 +44,7 @@ public class LocomotiveFuel
         this.actualSpeed = 100f;
         this.fuelOptimizer = fuelOptimizer;
         this.defense = defense;
+        this.shieldsRenderer = shieldsRend;
 
         currentFuel = maxFuel;
         fuelUseXSecond = 1 / (2 * fuelOptimizer);
@@ -54,6 +57,7 @@ public class LocomotiveFuel
         trainDataRef.SetSpeed(actualSpeed);
 
         canConsume = !GameManager.Instance.IsTutorial;
+        shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
     }
 
     public void Destroy()
@@ -148,15 +152,19 @@ public class LocomotiveFuel
         if (!shieldTakenDamage)
         {
             currentShield = Mathf.Clamp(currentShield + 5 * deltaTime, 0f, maxShield);
+            //shieldsRenderer.material.SetFloat("_ShieldVisibility", 1);
         }
         else
         {
             timer += deltaTime;
 
+            shieldsRenderer.material.SetFloat("_ShieldVisibility", Mathf.Max( 1 - timer, 0));
+
             if (timer >= 3)
             {
                 shieldTakenDamage = false;
                 timer = 0;
+                shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
             }
         }
     }
