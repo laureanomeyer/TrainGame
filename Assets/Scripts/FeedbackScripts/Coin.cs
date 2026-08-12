@@ -23,8 +23,6 @@ public class Coin : MonoBehaviour
         }
 
         currentTime = 0;
-
-        Debug.Log(tr);
         ActiveTrail();
     }
 
@@ -40,7 +38,6 @@ public class Coin : MonoBehaviour
             }
             else
             {
-                Debug.Log("Vuelta la pool");
                 tr.emitting = false;
                 ObjectPoolManager.ReturnObjectToPool(gameObject);
             }
