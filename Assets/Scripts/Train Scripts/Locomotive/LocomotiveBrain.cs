@@ -10,6 +10,13 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     [SerializeField] private Renderer shieldsRenderer;
 
+
+    [Header("Top Locomotive Render")]
+    [SerializeField] public Renderer locomotiveTopRender;
+    [SerializeField] public MeshFilter locomotiveTopMeshFilter;
+
+    private LocomotiveRenderController renderController;
+
     private bool destroyed;
     public LocomotiveFuel fuelController;
     private DamageFlash flash;
@@ -34,6 +41,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             stats.GetStat(StatType.FuelOptimizer),
             shieldsRenderer
         );
+
+        renderController = new LocomotiveRenderController(this);
 
         fuelController.OnDestroyed += Break;
         stats.OnStatChanged += OnStatChanged;
@@ -105,4 +114,20 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     public void Repair(float repairAmount) { }
 
     private void OnStatChanged(StatType type, float newValue) { }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            renderController.DeactivateWagonTop();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            renderController.ActivateWagonTop();
+        }
+    }
 }

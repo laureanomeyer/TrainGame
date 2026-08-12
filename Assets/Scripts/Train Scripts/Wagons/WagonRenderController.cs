@@ -17,9 +17,9 @@ public class WagonRenderController
     {
         wagonBrain = brain;
 
-        if (wagonBrain.topMeshFilterWagon != null)
+        if (wagonBrain.wagonTopMeshFilter != null)
         {
-            wagonTopMesh = wagonBrain.topMeshFilterWagon.mesh;
+            wagonTopMesh = wagonBrain.wagonTopMeshFilter.mesh;
         }
 
         alphaPropertyID = Shader.PropertyToID("_Alpha");
@@ -51,21 +51,21 @@ public class WagonRenderController
 
     public void ActivateWagonTop()
     {
-        if (wagonBrain.topMeshFilterWagon == null) return;
+        if (wagonBrain.wagonTopMeshFilter == null) return;
         if (wagonBrain.HPController != null && wagonBrain.HPController.IsBroken) return;
 
-        wagonBrain.topMeshFilterWagon.mesh = wagonTopMesh;
+        wagonBrain.wagonTopMeshFilter.mesh = wagonTopMesh;
         StartFade(1f);
     }
 
     public void DeactivateWagonTop()
     {
-        if (wagonBrain.topMeshFilterWagon == null) return;
+        if (wagonBrain.wagonTopMeshFilter == null) return;
         if (wagonBrain.HPController != null && wagonBrain.HPController.IsBroken) return;
 
         StartFade(0f, () =>
         {
-            wagonBrain.topMeshFilterWagon.mesh = null;
+            wagonBrain.wagonTopMeshFilter.mesh = null;
         });
     }
 
@@ -81,7 +81,7 @@ public class WagonRenderController
 
     private IEnumerator FadeTopAlpha(float from, float to, Action onComplete)
     {
-        var rend = wagonBrain.topRenderWagon;
+        var rend = wagonBrain.wagonTopRender;
         float t = 0f;
 
         while (t < fadeDuration)
@@ -89,14 +89,14 @@ public class WagonRenderController
             t += Time.deltaTime;
             currentTopAlpha = Mathf.Lerp(from, to, t / fadeDuration);
 
-            wagonBrain.topRenderWagon.material.SetFloat(alphaPropertyID, currentTopAlpha);
-            wagonBrain.topRenderWagon.material.GetFloat(alphaPropertyID);
+            wagonBrain.wagonTopRender.material.SetFloat(alphaPropertyID, currentTopAlpha);
+            wagonBrain.wagonTopRender.material.GetFloat(alphaPropertyID);
 
             yield return null;
         }
 
         currentTopAlpha = to;
-        wagonBrain.topRenderWagon.material.SetFloat(alphaPropertyID, to);
+        wagonBrain.wagonTopRender.material.SetFloat(alphaPropertyID, to);
 
         fadeRoutine = null;
         onComplete?.Invoke();

@@ -52,9 +52,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     public GameObject WagonDestroyed;
 
     [Header("Wagon renderers")]
-    [SerializeField] public Renderer topRenderWagon;
+    [SerializeField] public Renderer wagonTopRender;
 
-    [SerializeField] public MeshFilter topMeshFilterWagon;
+    [SerializeField] public MeshFilter wagonTopMeshFilter;
 
 
     #endregion
