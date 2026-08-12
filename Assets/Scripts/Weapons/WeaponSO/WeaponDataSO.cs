@@ -12,13 +12,13 @@ public class WeaponDataSO : ScriptableObject
     [Header("Damage")]
     [SerializeField] public float damage;
 
-    [Header("Ammun")]
-    [SerializeField] public int ammun;
+    [Header("Rate of fire")]
+    [SerializeField] public float rateOfFire;
 
     [Header("Reload time")]
     [SerializeField] public float reloadTime;
 
-    [Header("Rate of fire")]
-    [SerializeField] public float rateOfFire;
+    [Header("Ammun")]
+    [SerializeField] public int ammun;
 
 }
