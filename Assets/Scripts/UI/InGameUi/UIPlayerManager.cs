@@ -144,7 +144,18 @@ public class UIPlayerManager : MonoBehaviour
             runProgressFill.fillAmount = progress;
         }
 
-        bellImage.SetActive(progress >= 0.75f);
+        if (progress >= 0.75f)
+        {
+            HandleBell();
+        }
+
+    }
+
+    private void HandleBell()
+    {
+        if (bellImage.activeSelf == true) return;
+        bellImage.SetActive(true);
+        AudioManager.Instance.Play("Arrival");
     }
 
     void SetLevelText()

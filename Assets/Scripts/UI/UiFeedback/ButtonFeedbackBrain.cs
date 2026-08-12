@@ -16,14 +16,23 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private Ease ease = Ease.OutQuart;
     private Vector3 initialScale;
 
+    private void Awake()
+    {
+        initialScale = transform.localScale; 
+    }
+
     private void OnEnable()
     {
         button = GetComponent<Button>();
         isPressed = false;
         button.onClick.AddListener(PlayPressSound);
-
-        initialScale = transform.localScale;
+        transform.localScale = initialScale;
     }
+    private void OnDisable()
+    {
+        transform.DOKill();
+    }
+
     private void OnDestroy()
     {
         button.onClick.RemoveListener(PlayPressSound);
@@ -71,18 +80,17 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void PlayHoverAnimation()
     {
+        transform.DOKill();
         button.transform.DOScale(transform.localScale * size, animTime).SetEase(ease);
     }
     private void ReverseHoverAnimation(float animTime)
     {
+        transform.DOKill();
         button.transform.DOScale(initialScale, animTime).SetEase(ease);
     }
     private void PlayPressedAnimation(float animTime)
     {
-        button.transform.DOScale(initialScale * 0.87f, animTime).SetEase(Ease.InOutBack);
-    }
-    private void ClearAnimations()
-    {
-        button.transform.DOScale(1f, 0f);
+        transform.DOKill();
+        button.transform.DOScale(initialScale * smallSize, animTime).SetEase(Ease.InOutBack);
     }
 }

@@ -113,7 +113,7 @@ public class BaseWeapon : MonoBehaviour, IWeapons
 
     public void ResetWaitToFire()
     {
-        EventBus.Publish(new OnShootEvent(rateOfFire));
+        //EventBus.Publish(new OnShootEvent(rateOfFire));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
         waitToFire = 0;
     }

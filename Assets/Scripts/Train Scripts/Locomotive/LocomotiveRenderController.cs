@@ -24,7 +24,7 @@ public class LocomotiveRenderController
 
         alphaPropertyID = Shader.PropertyToID("_Alpha");
 
-        currentTopAlpha = 1f;
+        currentTopAlpha = 0f;
     }
 
     public void ActivateWagonTop()
@@ -45,11 +45,17 @@ public class LocomotiveRenderController
         });
     }
 
+    public void ForceDeactivateTop()
+    {
+        if (locomotiveBrain.locomotiveTopMeshFilter == null) return;
+    }
+
     private void StartFade(float targetAlpha, Action onComplete = null)
     {
         if (fadeRoutine != null)
         {
             locomotiveBrain.StopCoroutine(fadeRoutine);
+            locomotiveBrain.locomotiveTopRender.material.SetFloat(alphaPropertyID, 0f);
         }
 
         fadeRoutine = locomotiveBrain.StartCoroutine(FadeTopAlpha(currentTopAlpha, targetAlpha, onComplete));

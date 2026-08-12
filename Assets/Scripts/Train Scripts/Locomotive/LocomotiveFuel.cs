@@ -140,7 +140,11 @@ public class LocomotiveFuel
             currentShield -= amount / defense;
             timer = 0;
             shieldTakenDamage = true;
-            if (currentShield <= 0) EventBus.Publish(new OnShieldsBrokenEvent());
+            if (currentShield <= 0) 
+            {
+                EventBus.Publish(new OnShieldsBrokenEvent());
+                AudioManager.Instance.Play("ShieldsBrokenSound");
+            } 
         }
     }
 
@@ -152,7 +156,6 @@ public class LocomotiveFuel
         if (!shieldTakenDamage)
         {
             currentShield = Mathf.Clamp(currentShield + 5 * deltaTime, 0f, maxShield);
-            //shieldsRenderer.material.SetFloat("_ShieldVisibility", 1);
         }
         else
         {

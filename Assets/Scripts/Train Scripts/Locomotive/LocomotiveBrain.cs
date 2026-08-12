@@ -47,6 +47,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         fuelController.OnDestroyed += Break;
         stats.OnStatChanged += OnStatChanged;
         EventBus.Subscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
+
+        renderController.ForceDeactivateTop();
     }
 
     private void OnDestroy()
