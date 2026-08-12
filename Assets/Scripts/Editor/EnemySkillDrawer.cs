@@ -15,7 +15,7 @@ public class EnemySkillDrawer : PropertyDrawer
         Rect dropdownRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
         string currentTypeName = property.managedReferenceFullTypename;
         string displayName = string.IsNullOrEmpty(currentTypeName)
-            ? "None (seleccionar skill)"
+            ? "None"
             : currentTypeName.Split('.', ' ').Last();
 
         if (EditorGUI.DropdownButton(dropdownRect, new GUIContent(displayName), FocusType.Keyboard))

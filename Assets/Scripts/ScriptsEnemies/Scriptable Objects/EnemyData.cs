@@ -6,7 +6,7 @@ public enum RangeType
 {
     Close = 15,
     Medium = 30,
-    Long = 45
+    Long = 40
 }
 public enum AttackType { Shoot, Explosion, None }
 
