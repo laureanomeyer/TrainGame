@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
 
+
+[Serializable]
 public class WagonStore : IWagonID
 {
     private string wagonName;

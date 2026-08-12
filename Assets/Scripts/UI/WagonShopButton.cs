@@ -271,11 +271,7 @@ public class WagonShopButton : MonoBehaviour
 
                 t = t * t * (3f - 2f * t);
 
-                newWagon.transform.position = Vector3.Lerp(
-                    startPosition,
-                    finalPosition,
-                    t
-                );
+                newWagon.transform.position = Vector3.Lerp(startPosition, finalPosition, t);
 
                 yield return null;
             }
