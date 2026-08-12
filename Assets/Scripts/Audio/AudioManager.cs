@@ -20,6 +20,8 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private int maxPoolSize = 100;
     [SerializeField] private int maxSoundInstances = 30;
 
+    public float SFXVolume { get; private set; } = 1f; 
+
     private void Awake()
     {
         //Singelton Pattern
@@ -30,10 +32,13 @@ public class AudioManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return; 
         }
 
         //consisten Sound through-out Scenes
         DontDestroyOnLoad(gameObject);
+
+        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f); 
 
         //setting sounds in AudioSources
         foreach (Sound s in sounds)
@@ -48,12 +53,19 @@ public class AudioManager : MonoBehaviour
         InitializePool();
     }
 
+    public void SetSFXVolume(float volume)
+    {
+        SFXVolume = volume;
+        PlayerPrefs.SetFloat("SFXVolume", volume);
+        PlayerPrefs.Save();
+    }
+
     public void Play(string name)
     {
         SoundPlayer emitter = soundPlayerPool.Get();
 
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s != null) emitter.Play(s);
+        if (s != null) emitter.Play(s, SFXVolume); 
     }
 
     public void Play(Sound sound)
@@ -94,7 +106,6 @@ public class AudioManager : MonoBehaviour
             return;
         s.source.UnPause();
     }
-    ///////Couroutines Function///////
     IEnumerator ChangeVolume_Coroutine(string name, float changed, float duration)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);

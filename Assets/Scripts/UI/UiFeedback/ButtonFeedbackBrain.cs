@@ -18,7 +18,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void Awake()
     {
-        initialScale = transform.localScale; 
+        initialScale = transform.localScale;
     }
 
     private void OnEnable()
@@ -26,8 +26,10 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
         button = GetComponent<Button>();
         isPressed = false;
         button.onClick.AddListener(PlayPressSound);
+
         transform.localScale = initialScale;
     }
+
     private void OnDisable()
     {
         transform.DOKill();
@@ -36,7 +38,9 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     private void OnDestroy()
     {
         button.onClick.RemoveListener(PlayPressSound);
+        transform.DOKill();
     }
+
     public void OnPointerEnter(PointerEventData data)
     {
         if (button.interactable == false) return;
@@ -44,53 +48,59 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
         PlayHoverSound();
         PlayHoverAnimation();
     }
+
     public void OnPointerExit(PointerEventData data)
     {
         if (button.interactable == false) return;
         ReverseHoverAnimation(animTime);
     }
-    public void OnPointerDown(PointerEventData data) 
+
+    public void OnPointerDown(PointerEventData data)
     {
         if (button.interactable == false) return;
         isPressed = true;
         PlayPressedAnimation(animTime);
     }
+
     public void OnPointerUp(PointerEventData data)
     {
-        if (button.interactable == false) return;
         isPressed = false;
     }
+
     private void PlayHoverSound()
-    {
-        if (button.interactable == false) return;
-        if (button != null) 
-        {
-            AudioManager.Instance.Play("ButtonHoverSound");
-        }
-    }
-    private void PlayPressSound()
     {
         if (button.interactable == false) return;
         if (button != null)
         {
+            AudioManager.Instance.Play("ButtonHoverSound");
+        }
+    }
+
+    private void PlayPressSound()
+    {
+        ReverseHoverAnimation(animTime);
+
+        if (button != null)
+        {
             AudioManager.Instance.Play("ButtonPressedSound");
-            ReverseHoverAnimation(animTime);
         }
     }
 
     private void PlayHoverAnimation()
     {
         transform.DOKill();
-        button.transform.DOScale(transform.localScale * size, animTime).SetEase(ease);
+        transform.DOScale(initialScale * size, animTime).SetEase(ease);
     }
+
     private void ReverseHoverAnimation(float animTime)
     {
         transform.DOKill();
-        button.transform.DOScale(initialScale, animTime).SetEase(ease);
+        transform.DOScale(initialScale, animTime).SetEase(ease);
     }
+
     private void PlayPressedAnimation(float animTime)
     {
         transform.DOKill();
-        button.transform.DOScale(initialScale * smallSize, animTime).SetEase(Ease.InOutBack);
+        transform.DOScale(initialScale * smallSize, animTime).SetEase(Ease.InOutBack);
     }
 }

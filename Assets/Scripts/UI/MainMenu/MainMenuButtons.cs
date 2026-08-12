@@ -15,6 +15,7 @@ public class MainMenuButtons : MonoBehaviour
     [Header("Audio Settings")]
     [SerializeField] private Slider masterVolumeSlider;
     [SerializeField] private Slider musicVolumeSlider;
+    [SerializeField] private Slider SFXVolumeSlider;
 
     private void Start()
     {
@@ -26,15 +27,21 @@ public class MainMenuButtons : MonoBehaviour
 
         float savedMasterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
         float savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        float savedSFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
         masterVolumeSlider.value = savedMasterVolume;
         musicVolumeSlider.value = savedMusicVolume;
+        SFXVolumeSlider.value = savedSFXVolume;
+
 
         SetMasterVolume(savedMasterVolume);
         SetMusicVolume(savedMusicVolume);
+        SetSFXVolume(savedSFXVolume);
 
         masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
         musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
+        SFXVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
+
 
         settingsPanel.SetActive(false);
     }
@@ -62,6 +69,14 @@ public class MainMenuButtons : MonoBehaviour
         if (MusicManager.Instance != null)
         {
             MusicManager.Instance.SetVolume(volume);
+        }
+    }
+
+    private void SetSFXVolume(float volume)
+    {
+        if (AudioManager.Instance != null)
+        {
+            AudioManager.Instance.SetSFXVolume(volume);
         }
     }
 
