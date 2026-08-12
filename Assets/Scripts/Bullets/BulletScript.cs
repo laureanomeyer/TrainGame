@@ -86,7 +86,7 @@ public class BulletScript : MonoBehaviour, IBullet
     {
         if (!isActive) return;
 
-        tr.emitting = true;
+        tr.emitting = false;
         tr.Clear();
         isActive = false;
         bulletPool.Release(gameObject);
