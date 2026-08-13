@@ -14,7 +14,7 @@ public class UnlockedLegado
         EventBus.Subscribe<OnUpdatedCoachLegado>(UpdateCoach);
     }
 
-    public int LeftPoints = 1;
+    public int LeftPoints = 100;
 
     public bool UnlockedWinchester = false;
 

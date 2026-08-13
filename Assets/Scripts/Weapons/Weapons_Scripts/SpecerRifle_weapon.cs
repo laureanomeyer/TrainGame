@@ -18,7 +18,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     [SerializeField] private BulletTypeScriptable legadoBulletData;
 
     [Header("Enemies to defeat for legado")]
-    [SerializeField] private int EnemiesToDefeat = 3;
+    [SerializeField] private int EnemiesToDefeat = 20;
 
     private int currentEnemiesDefetead;
 
