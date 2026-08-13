@@ -132,7 +132,7 @@ public class WagonShopButton : MonoBehaviour
         descriptionText = (currentWagonInStock.Description);
         descriptionTextUI.text = descriptionText;
 
-        priceTextUI.text = currentWagonInStock.Price.ToString() + "$";
+        priceTextUI.text = "$" + currentWagonInStock.Price.ToString() ;
 
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
@@ -154,7 +154,7 @@ public class WagonShopButton : MonoBehaviour
             descriptionText = (currentWagonInStock.Description);
             descriptionTextUI.text = descriptionText;
 
-            priceTextUI.text = currentWagonInStock.Price.ToString() + "$";
+            priceTextUI.text = "$" + currentWagonInStock.Price.ToString();
 
             storeManager.ActivateButtons();
             CheckReroll();

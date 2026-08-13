@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     [Header("Stations")]
     [SerializeField] private StationRouteSO stationRoute;
 
+    [Header("Cursor")]
+    [SerializeField] private Texture2D cursorTexture;
+    [SerializeField] private Vector2 hotSpot;
+
     public RunResult LastRunResult { get; private set; } = RunResult.None;
     public GameState CurrentState { get; private set; }
     public GameSession Session { get; private set; }
@@ -59,6 +63,8 @@ public class GameManager : MonoBehaviour
         Session = new GameSession(baseStats, baseMultStats);
 
         EventBus.Subscribe<OnShowCursorEvent>(ChangeCursorEvent);
+
+        Cursor.SetCursor( cursorTexture, hotSpot, CursorMode.ForceSoftware );
     }
     private void OnDestroy()
     {
