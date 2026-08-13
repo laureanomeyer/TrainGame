@@ -131,6 +131,7 @@ public class LocomotiveFuel
         {
             currentMaxFuel -= amount / defense;
             currentFuel = Mathf.Clamp(currentFuel, 0, Mathf.Max(currentMaxFuel, 0f));
+            timer = 0f;
 
             if (currentMaxFuel <= 0)
                 RaiseDestroyed();

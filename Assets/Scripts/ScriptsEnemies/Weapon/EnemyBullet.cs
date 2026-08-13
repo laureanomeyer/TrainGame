@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
+    [SerializeField] private TrailRenderer tr;
     public float speed = 10f;
     Vector3 direction;
     float damage;
@@ -23,6 +24,9 @@ public class EnemyBullet : MonoBehaviour
         if (component != null) 
         {
             component.TakeDamage(damage);
+            tr.emitting = false;
+            tr.Clear();
+            tr.emitting = true;
             ObjectPoolManager.ReturnObjectToPool(gameObject);
         }
     }

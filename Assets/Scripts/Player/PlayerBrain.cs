@@ -104,11 +104,10 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnJump()
     {
-        Debug.Log("Hola");
-
         if (ServiceLocator.TryGet<DisplayTrain>(out var displayRef))
         {
-            Debug.Log("Entre");
+            if (displayRef.InstantiatedWagonReferences[0] == null || displayRef.InstantiatedWagonReferences[1] == null) return;
+
             displayRef.ReorderWagons(displayRef.InstantiatedWagonReferences[0], displayRef.InstantiatedWagonReferences[1]);
         }
     }
