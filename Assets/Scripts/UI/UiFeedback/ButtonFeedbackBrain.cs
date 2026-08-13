@@ -72,7 +72,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
         if (button.interactable == false) return;
         if (button != null)
         {
-            AudioManager.Instance.Play("ButtonHoverSound");
+            AudioManager.Instance.Play("SFXButtonHover");
         }
     }
 
@@ -82,7 +82,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
 
         if (button != null)
         {
-            AudioManager.Instance.Play("ButtonPressedSound");
+            AudioManager.Instance.Play("SFXButtonPressed");
         }
     }
 

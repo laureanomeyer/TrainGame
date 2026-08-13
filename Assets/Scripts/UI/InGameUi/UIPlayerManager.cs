@@ -155,7 +155,7 @@ public class UIPlayerManager : MonoBehaviour
     {
         if (bellImage.activeSelf == true) return;
         bellImage.SetActive(true);
-        AudioManager.Instance.Play("Arrival");
+        AudioManager.Instance.Play("SFXArrival");
     }
 
     void SetLevelText()

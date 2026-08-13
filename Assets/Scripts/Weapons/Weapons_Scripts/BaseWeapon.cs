@@ -123,7 +123,7 @@ public class BaseWeapon : MonoBehaviour, IWeapons
         currentReloadTime = 0;
         RestockBullets();
         IsReloading = false;
-        AudioManager.Instance.Play($"RevolverMusketReload{1}");
+        AudioManager.Instance.Play($"SFXDefaultShot");
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 

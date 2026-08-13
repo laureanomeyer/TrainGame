@@ -29,7 +29,7 @@ public class OnShootEvent : IGameEvent
     public OnShootEvent(float rateOfFire)
     {
         RateOfFire = rateOfFire;
-        AudioManager.Instance.Play($"RevolverShot{UnityEngine.Random.Range(3, 4)}");
+        AudioManager.Instance.Play($"SFXDefaultShot");
     }
 }
 
@@ -40,7 +40,7 @@ public class OnReloadEvent : IGameEvent
     public OnReloadEvent(float reloadTime)
     {
         ReloadTimer = reloadTime;
-        AudioManager.Instance.Play($"RevolverMusket{2}");
+        AudioManager.Instance.Play($"SFXReloadMusket");
     }
 }
 
@@ -58,7 +58,7 @@ public class OnShieldsBrokenEvent : IGameEvent
 {
     public OnShieldsBrokenEvent()
     {
-        AudioManager.Instance.Play("Projectile");
+        
     }
 }
 

@@ -171,7 +171,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         currentReloadTime = 0;
         RestockBullets();
         IsReloading = false;
-        AudioManager.Instance.Play($"RevolverMusketReload{1}");
+        AudioManager.Instance.Play($"SFXMusketReloaded");
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 

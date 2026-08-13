@@ -85,7 +85,7 @@ public class LocomotiveFuel
         if (destroyed) return;
 
         currentFuel = currentMaxFuel;
-        AudioManager.Instance.Play("VaultOpening");
+        AudioManager.Instance.Play("SFXVaultOpening");
         UpdateSharedSpeed();
     }
 
@@ -144,7 +144,7 @@ public class LocomotiveFuel
             if (currentShield <= 0) 
             {
                 EventBus.Publish(new OnShieldsBrokenEvent());
-                AudioManager.Instance.Play("ShieldsBrokenSound");
+                AudioManager.Instance.Play("SFXShieldsBroken");
             } 
         }
     }
