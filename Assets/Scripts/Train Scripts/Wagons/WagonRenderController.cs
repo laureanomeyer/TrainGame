@@ -11,7 +11,7 @@ public class WagonRenderController
 
     private Coroutine fadeRoutine;
     private float currentTopAlpha = 1f;
-    private const float fadeDuration = 0.25f;
+    private const float fadeDuration = 0.1f;
 
     public WagonRenderController(WagonBrain brain)
     {
