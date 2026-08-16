@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(fileName = "WeaponInStock", menuName = "Store/Weapon")]
+[CreateAssetMenu(fileName = "WeaponInStock", menuName = "Store/Weapons Stock/Weapon")]
 public class WeaponInStocSO : ScriptableObject
 {
     [Header("Weapon")]

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ExitStorePanelCOntroller : MonoBehaviour
+public class ExitStorePanelController : MonoBehaviour
 {
     public void ContinueJourney()
     {
