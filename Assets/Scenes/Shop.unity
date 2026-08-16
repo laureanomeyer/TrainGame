@@ -6757,6 +6757,7 @@ GameObject:
   - component: {fileID: 898533623}
   - component: {fileID: 898533622}
   - component: {fileID: 898533625}
+  - component: {fileID: 898533626}
   m_Layer: 3
   m_Name: InteractLocomotiveUpdates
   m_TagString: Untagged
@@ -6833,6 +6834,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   closeButton: {fileID: 8031979763515567623}
+--- !u!114 &898533626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898533621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 896b5312822776b40b299c95e26366b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradesFlowController
 --- !u!1001 &917034658
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18783,7 +18796,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061981988717289187, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2228258575036799434, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
@@ -18952,6 +18965,18 @@ PrefabInstance:
     - target: {fileID: 2815426958549346890, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -54.20295
+      objectReference: {fileID: 0}
+    - target: {fileID: 2930316261350637639, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 898533626}
+    - target: {fileID: 2930316261350637639, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ContinueJourney
+      objectReference: {fileID: 0}
+    - target: {fileID: 2930316261350637639, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ExitStorePanelCOntroller, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2975755206931062280, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20135,7 +20160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798082007676591116, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 260.72186
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7798082007676591116, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -20143,7 +20168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7798082007676591116, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -130.36093
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7853167938204011722, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20175,7 +20200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8227901136827667549, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8235592858122833751, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20458,6 +20483,7 @@ SceneRoots:
   - {fileID: 588764840}
   - {fileID: 1385243853}
   - {fileID: 286238103}
+  - {fileID: 1393978942}
   - {fileID: 82213970}
   - {fileID: 1383411887}
   - {fileID: 505731351}
@@ -20467,7 +20493,6 @@ SceneRoots:
   - {fileID: 2921894974563880597}
   - {fileID: 738570436}
   - {fileID: 1665574032}
-  - {fileID: 1393978942}
   - {fileID: 3354345812615658692}
   - {fileID: 4423450949880809822}
   - {fileID: 8031979763515567620}
