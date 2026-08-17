@@ -17,6 +17,7 @@ public class CinematicSystem : MonoBehaviour
 
     [Header("Target")]
     [SerializeField] private string tailAnchorKey = "TrainTail";
+    [SerializeField] private string locomotiveAnchorKey = "Locomotive";
 
     [Header("Priorities")]
     [SerializeField] private int gameplayPriority = 10;
@@ -54,9 +55,11 @@ public class CinematicSystem : MonoBehaviour
         CameraTravelSequenceSO sequence =
             result == RunResult.Defeat ? defeatSequence : victorySequence;
 
-        if (!TryValidate(sequence, out Transform target))
+        string anchorKey = result == RunResult.Defeat ? locomotiveAnchorKey : tailAnchorKey;
+
+        if (!TryValidate(sequence, anchorKey, out Transform target))
         {
-            // Nunca dejamos la run colgada: si no se puede reproducir, resolvemos igual.
+
             OnCinematicFinished?.Invoke();
             return;
         }
@@ -64,7 +67,7 @@ public class CinematicSystem : MonoBehaviour
         activeRoutine = StartCoroutine(CinematicRoutine(sequence, target));
     }
 
-    private bool TryValidate(CameraTravelSequenceSO sequence, out Transform target)
+    private bool TryValidate(CameraTravelSequenceSO sequence, string anchorKey, out Transform target)
     {
         target = null;
 
@@ -80,17 +83,17 @@ public class CinematicSystem : MonoBehaviour
             return false;
         }
 
-        if (registry != null && registry.TryResolveDynamic(tailAnchorKey, out target))
+        if (registry != null && registry.TryResolveDynamic(anchorKey, out target))
             return true;
 
-        // Fallback mientras RunManager no registre el tail en el registry.
-        if (RunManager.Instance != null && RunManager.Instance.TrainTail != null)
+   
+        if (anchorKey == tailAnchorKey && RunManager.Instance != null && RunManager.Instance.TrainTail != null)
         {
             target = RunManager.Instance.TrainTail;
             return true;
         }
 
-        Debug.LogError($"[CinematicSystem] No se pudo resolver el target '{tailAnchorKey}'.");
+        Debug.LogError($"[CinematicSystem] No se pudo resolver el target '{anchorKey}'.");
         return false;
     }
 
@@ -142,7 +145,7 @@ public class CinematicSystem : MonoBehaviour
         Action<float> fovTick = null;
         if (sequence.useFOVZoom)
         {
-            float actualStartFOV = gameplayCinemachineCamera.Lens.FieldOfView; // el FOV real actual
+            float actualStartFOV = gameplayCinemachineCamera.Lens.FieldOfView; 
             cinematicCinemachineCamera.Lens.FieldOfView = actualStartFOV;
             fovTick = t => cinematicCinemachineCamera.Lens.FieldOfView =
                 Mathf.Lerp(actualStartFOV, sequence.endFov, t);

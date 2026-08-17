@@ -361,14 +361,10 @@ MonoBehaviour:
   hpBackgroundImage: {fileID: 3400165698468305836}
   particles: {fileID: 1421166018350292571}
   destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
-  floorMeshDestroyWagon: {fileID: -629719859055844128, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
-  bodyMeshDestroyWagon: {fileID: 2959467708922500008, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
-  floorRenderWagon: {fileID: 2884860367753433622}
-  bodyRenderWagon: {fileID: 0}
-  topRenderWagon: {fileID: 0}
-  floorMeshFilterWagon: {fileID: 3107999213902012463}
-  bodyMeshFilterWagon: {fileID: 0}
-  topMeshFilterWagon: {fileID: 0}
+  WagonNormal: {fileID: 4710809799844137450, guid: 9ac96b496b6630d47970f429b8489d6c, type: 3}
+  WagonDestroyed: {fileID: 919132149155446097, guid: 3f49c15cf0fd71649ae577a006cdc1b5, type: 3}
+  wagonTopRender: {fileID: 0}
+  wagonTopMeshFilter: {fileID: 0}
   turret: {fileID: 0}
 --- !u!114 &4738617757933681993
 MonoBehaviour:
@@ -5788,6 +5784,7 @@ MonoBehaviour:
   turretPivot: {fileID: 616747253176208090}
   firePoint: {fileID: 8609027585153321505}
   playerUsePoint: {fileID: 2075909729974447349}
+  minAimRadius: 1.5
   bulletType: {fileID: 11400000, guid: adfbda553c051ca4bbc5043d5628da4a, type: 2}
   bulletPrefab: {fileID: 751579678887233810, guid: 90d7062da2899f5429e873d87d4f048c, type: 3}
   fireCooldown: 0.3

@@ -14,12 +14,15 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     [SerializeField] private VisualEffect[] explosionParticles;
 
+    [Header("Cinematic")]
+    [SerializeField] private string locomotiveAnchorKey = "Locomotive";
 
     [Header("Top Locomotive Render")]
     [SerializeField] public Renderer locomotiveTopRender;
     [SerializeField] public MeshFilter locomotiveTopMeshFilter;
 
     private LocomotiveRenderController renderController;
+    private ICinematicActorRegistry cinematicRegistry;
 
     private bool destroyed;
     public LocomotiveFuel fuelController;
@@ -53,6 +56,9 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         EventBus.Subscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
 
         renderController.ForceDeactivateTop();
+
+        cinematicRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
+        cinematicRegistry?.RegisterDynamic(locomotiveAnchorKey, transform);
     }
 
     private void OnDestroy()
@@ -67,6 +73,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         }
 
         EventBus.Unsubscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
+
+        cinematicRegistry?.UnregisterDynamic(locomotiveAnchorKey);
     }
 
     void Update()

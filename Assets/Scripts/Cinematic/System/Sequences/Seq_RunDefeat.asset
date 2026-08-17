@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e5f975edbd45243a3e05ce00286738, type: 3}
   m_Name: Seq_RunDefeat
   m_EditorClassIdentifier: Assembly-CSharp::CameraTravelSequenceSO
-  travelSpeed: 20
+  travelSpeed: 60
   minTravelDuration: 1.5
   maxTravelDuration: 3.4
   holdDuration: 1.5
@@ -67,11 +67,11 @@ MonoBehaviour:
   useFOVZoom: 1
   startFov: 40
   endFov: 38
-  worldOffsetFromTarget: {x: -19.64, y: 60, z: -22.86}
-  lookAtTarget: 0
-  useFixedRotation: 0
+  worldOffsetFromTarget: {x: -19.64, y: 80, z: -22.86}
+  lookAtTarget: 1
+  useFixedRotation: 1
   fixedEulerRotation: {x: 71, y: 0, z: 0}
-  travelAxes: 0
+  travelAxes: -1
   trackTarget: 0
   returnToOrigin: 0
   wagonArrivalWorldOffset: {x: 0, y: 0, z: -8}
