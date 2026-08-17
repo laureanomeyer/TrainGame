@@ -62,7 +62,6 @@ public class SceneRunController : MonoBehaviour
         pendingResult = result;
         currentTime = 0f;
 
-        // Freno el timer y cualquier sistema suscripto antes de la cinemática.
         EventBus.Publish(new OnSetTimerStartedEvent(false));
 
         if (cinematicSystem == null)
