@@ -10,6 +10,7 @@ public class InteractionUIManager : MonoBehaviour
     [SerializeField] private TMP_Text infoText;
     [SerializeField] private TMP_Text spacialText;
     [SerializeField] private GameObject buttonsPanel;
+    [SerializeField] private GameObject UpgradesObject;
 
     [SerializeField] private StationRouteSO stationRoute;
 
@@ -21,6 +22,8 @@ public class InteractionUIManager : MonoBehaviour
         string stationName = stationRoute != null ? stationRoute.GetStationNameByLevel(sessionConfigRef.CurrentLevel) : "Unknown Station";
 
         spacialText.text = stationName;
+
+        UpgradesObject.SetActive(true);
     }
 
     public void ShowText(string message)

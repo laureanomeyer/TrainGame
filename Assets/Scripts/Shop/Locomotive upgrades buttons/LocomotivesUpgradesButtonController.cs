@@ -24,14 +24,14 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     
     #endregion
 
-    [Header("Self")]
-    [SerializeField] private GameObject self;
 
     [Header("Level Upgrades")]
     [SerializeField] private LevelLocomotivesUpgradesSO[] upgradesLevel;
     private Dictionary <int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary;
 
     private LevelLocomotivesUpgradesSO currentLevelUpgrades;
+    
+    private GameObject self;
 
     private int currentLevel = 1;
 
@@ -74,6 +74,9 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
             damageMultiplierButton.button.onClick.AddListener(DamageMultiplierUpgrade);
             defenseButton.button.onClick.AddListener(DefenseUpgrade);
             goldMultiplierButton.button.onClick.AddListener(GoldMultiplierUpgrade);
+
+            EventBus.Publish(new OnActivateUiEvent(false));
+            EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
         }
         else
         {

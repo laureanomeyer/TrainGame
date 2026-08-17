@@ -18698,6 +18698,10 @@ PrefabInstance:
       propertyPath: spacialText
       value: 
       objectReference: {fileID: 90727448}
+    - target: {fileID: 1289919834891609536, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: UpgradesObject
+      value: 
+      objectReference: {fileID: 8031979763515567625}
     - target: {fileID: 1351999745896857893, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -18796,7 +18800,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2061981988717289187, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2213878318963031838, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_fontSize
+      value: 98.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 2213878318963031838, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2228258575036799434, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
@@ -19373,6 +19385,14 @@ PrefabInstance:
     - target: {fileID: 4228176999813332615, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -480.69217
+      objectReference: {fileID: 0}
+    - target: {fileID: 4628833213770656816, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4628833213770656816, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: m_PreserveAspect
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4680613068971499956, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
@@ -20098,6 +20118,10 @@ PrefabInstance:
       propertyPath: GoldTextUI
       value: 
       objectReference: {fileID: 1275805587}
+    - target: {fileID: 7613345058361995601, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+      propertyPath: BuyDoneText
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7660263159955678491, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -20346,8 +20370,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedComponents:
+    - {fileID: 383813540461782701, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 132929524010548226, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
@@ -20395,6 +20421,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+--- !u!1 &8031979763515567625 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2061981988717289187, guid: 67becd241e99cd44fbac4ac6bb360298, type: 3}
+  m_PrefabInstance: {fileID: 8031979763515567620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9053902308235256331
 PrefabInstance:
   m_ObjectHideFlags: 0

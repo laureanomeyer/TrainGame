@@ -13,8 +13,6 @@ public class StoreUiInteracts : MonoBehaviour
 
     [SerializeField] private Button closeButton;
 
-    private PlayerBrain playerBrain;
-
     private bool playerInZone;
     private bool uiOpen = false;    
 
@@ -51,11 +49,6 @@ public class StoreUiInteracts : MonoBehaviour
             obj.layer = LayerMaskToLayer(interactLayer);
         }
 
-        if (playerBrain == null)
-        {
-            playerBrain = other.gameObject.GetComponent<PlayerBrain>();
-        }
-
         playerInZone = true;
 
         EventBus.Publish(new OnShowInteractEvent());
@@ -71,7 +64,6 @@ public class StoreUiInteracts : MonoBehaviour
         }
 
         playerInZone = false;
-        playerBrain.SetCanAttack(true);
         uiToShow.SetActive(false);
 
         EventBus.Publish(new OnHideInteractEvent());
@@ -81,8 +73,6 @@ public class StoreUiInteracts : MonoBehaviour
     private void DeactivateUI()
     {
         uiToShow.SetActive(false);
-
-        playerBrain.SetCanAttack(true);
 
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
@@ -105,8 +95,6 @@ public class StoreUiInteracts : MonoBehaviour
             uiOpen = true;
 
             uiToShow.SetActive(true);
-
-            playerBrain.SetCanAttack(false); // NUEVO: bloquea disparo mientras la tienda está abierta
 
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
             EventBus.Publish(new OnActivateUiEvent(false));
