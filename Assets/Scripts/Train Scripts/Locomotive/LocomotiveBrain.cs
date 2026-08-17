@@ -106,6 +106,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         AudioManager.Instance.Play("SFXExplosionBuildUp");
 
+        //Build up particles + Delay based on distance
+
         StartCoroutine(ExplotionDelay());
 
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
