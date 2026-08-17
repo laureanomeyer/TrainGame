@@ -61,8 +61,9 @@ public class BulletPool : MonoBehaviour
         GameObject bullet = bulletPool.Get();
 
         if (bullet == null) return;
-        bullet.GetComponent<IBullet>().ResetState(bulletType);
 
         bullet.transform.SetLocalPositionAndRotation(position, rotation);
+
+        bullet.GetComponent<IBullet>().ResetState(bulletType);
     }
 }
