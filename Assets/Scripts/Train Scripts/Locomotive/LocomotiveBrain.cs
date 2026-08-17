@@ -163,6 +163,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             {
                 vfx.gameObject.SetActive(true);
                 vfx.Play();
+                AudioManager.Instance.Play("SFXLocomotiveExplosion");
             }
 
             yield return new WaitForSecondsRealtime(0.1f);
