@@ -142,9 +142,10 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
 
         float cooldown = (stockInfo.WeaponData.rateOfFire + stockInfo.WeaponData.reloadTime) / 2;
         float damage = stockInfo.WeaponData.damage / cooldown;
-        damageText.text = damage.ToString();
-        ammunitionText.text = stockInfo.WeaponData.ammun.ToString();
-        rofText.text = cooldown.ToString();
+
+        damageText.text = FormatStat(damage);
+        ammunitionText.text = FormatStat (stockInfo.WeaponData.ammun);
+        rofText.text = FormatStat(cooldown);
 
         weaponImage.sprite = stockInfo.GunSprite;
 
@@ -176,5 +177,10 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         button.interactable = false;
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = false;
+    }
+
+    private string FormatStat(float value)
+    {
+        return (value % 1 == 0) ? value.ToString("F0") : value.ToString("F1");
     }
 }
