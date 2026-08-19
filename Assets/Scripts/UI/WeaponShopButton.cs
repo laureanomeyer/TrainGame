@@ -131,9 +131,11 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         weaponNameText.text = currentWeapon.name;
         priceText.text = currentWeaponprice.ToString() + "$";
 
-        damageText.text = stockInfo.WeaponData.damage.ToString();
+        float cooldown = (stockInfo.WeaponData.rateOfFire + stockInfo.WeaponData.reloadTime) / 2;
+        float damage = stockInfo.WeaponData.damage / cooldown;
+        damageText.text = damage.ToString();
         ammunitionText.text = stockInfo.WeaponData.ammun.ToString();
-        rofText.text = stockInfo.WeaponData.rateOfFire.ToString();
+        rofText.text = cooldown.ToString();
 
         weaponImage.sprite = stockInfo.GunSprite;
     }
