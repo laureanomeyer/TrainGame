@@ -8,11 +8,11 @@ public class PlayerData
     private float gold = 0;
     public float Gold => gold;
 
-    public UnlockedLegado unlockedLegado;
+    public UnlockedLegacy unlockedLegado;
 
     public PlayerData() 
     {
-        unlockedLegado = new UnlockedLegado();
+        unlockedLegado = new UnlockedLegacy();
     }
 
     public void ChangeWeaponData(GameObject weapon)
@@ -56,6 +56,6 @@ public class PlayerData
         playerWeapon = null;
         this.gold = 0;
         unlockedLegado.UnsuscribeEvents();
-        unlockedLegado = new UnlockedLegado();
+        unlockedLegado = new UnlockedLegacy();
     }
 }

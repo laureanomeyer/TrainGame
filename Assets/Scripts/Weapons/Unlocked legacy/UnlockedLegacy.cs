@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class UnlockedLegado
+public class UnlockedLegacy
 {
-    public UnlockedLegado() 
+    public UnlockedLegacy() 
     {
         //Winchester
         EventBus.Subscribe<OnUpdateWinchesterLegadoLeftPoint>(UpdateLeftPointWinchester);

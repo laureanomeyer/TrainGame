@@ -17,11 +17,20 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     [Header("Button UI")]
     [SerializeField] private TextMeshProUGUI weaponNameText;
     [SerializeField] private TextMeshProUGUI priceText;
+
+    [Header("Weapon stats UI")]
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI rofText;
     [SerializeField] private TextMeshProUGUI ammunitionText;
+
     [SerializeField] private CanvasGroup canvasGroup;
+
+    [Header("Weapon image UI")]
     [SerializeField] private Image weaponImage;
+
+    [Header("Legacy data UI")]
+    [SerializeField] private GameObject legacyStar;
+    [SerializeField] private TextMeshProUGUI legacyDescription;
 
     private Button button;
     public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
@@ -138,6 +147,21 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         rofText.text = cooldown.ToString();
 
         weaponImage.sprite = stockInfo.GunSprite;
+
+        if(stockInfo is WeaponWithLegacyInStockSO)
+        {
+            WeaponWithLegacyInStockSO legacyWeapon = stockInfo as WeaponWithLegacyInStockSO;
+
+            legacyDescription.text = "Legacy unlock codition: " + legacyWeapon.legacyUnlockDescription + "\n" + "Legacy effect: " + legacyWeapon.legacyDescription;
+
+            legacyStar.SetActive(legacyWeapon.CheckUnlockLegacy());
+        }
+        else
+        {
+            legacyDescription.text = "";
+
+            legacyStar.SetActive(false);
+        }
     }
 
     public void ActivateButton()
