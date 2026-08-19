@@ -70,7 +70,7 @@ public class TESTLocomotiveBrain : MonoBehaviour
     public void TakeDamage(float damageAmount)
     {
         if (destroyed) return;
-        if (!GameManager.Instance.IsGameplayState) return;
+
 
         fuelController.TakeDamage(damageAmount);
 
@@ -81,6 +81,7 @@ public class TESTLocomotiveBrain : MonoBehaviour
             animator.SetTrigger("Damage");
     }
 
+    [ContextMenu("Break the Locomotive")]
     public void Break()
     {
         if (destroyed) return;

@@ -52,7 +52,7 @@ public class TESTLocomotiveFuel
 
         EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
 
-        canConsume = !GameManager.Instance.IsTutorial;
+
         shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
     }
 
@@ -65,7 +65,7 @@ public class TESTLocomotiveFuel
     public void Move(float deltaTime)
     {
         if (destroyed) return;
-        if (!GameManager.Instance.IsGameplayState) return;
+
 
         if (!hasFuel)
         {
@@ -120,7 +120,7 @@ public class TESTLocomotiveFuel
     public void TakeDamage(float amount)
     {
         if (destroyed) return;
-        if (!GameManager.Instance.IsGameplayState) return;
+
 
         if (currentShield <= 0)
         {
@@ -147,7 +147,7 @@ public class TESTLocomotiveFuel
     public void UpdateShield(float deltaTime)
     {
         if (destroyed) return;
-        if (!GameManager.Instance.IsGameplayState) return;
+
 
         if (!shieldTakenDamage)
         {
