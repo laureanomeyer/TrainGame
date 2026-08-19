@@ -280,6 +280,16 @@ public class OnRunEndedEvent : IGameEvent
 #region Weapons Events
 
 #region Wichester Events
+public class OnUpdateEnemiesDamage : IGameEvent
+{
+    public List<Enemy> Enemies;
+
+    public OnUpdateEnemiesDamage (List<Enemy> enemies)
+    {
+        this.Enemies = enemies;
+    }
+}
+
 public class OnUpdateWinchesterLegadoLeftPoint : IGameEvent
 {
     public int point;
@@ -287,6 +297,12 @@ public class OnUpdateWinchesterLegadoLeftPoint : IGameEvent
     public OnUpdateWinchesterLegadoLeftPoint(int point)
     {
         this.point = point;
+    }
+}
+public class OnUnlockWinchesterLegado : IGameEvent
+{
+    public OnUnlockWinchesterLegado()
+    {
     }
 }
 
@@ -297,12 +313,6 @@ public class OnWinchesterDetectedDeadEnemy : IGameEvent
     }
 }
 
-public class OnUnlockWinchesterLegado : IGameEvent
-{
-    public OnUnlockWinchesterLegado()
-    {
-    }
-}
 
 #endregion
 

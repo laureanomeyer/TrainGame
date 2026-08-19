@@ -63,6 +63,8 @@ public class PlayerBrain : MonoBehaviour
     }
     private void OnDestroy()
     {
+        playerAttackController.DestroyWeapon();
+
         playerInteractionsController.Cleanup();
         attackAction.performed -= ActiveAttack;
         attackAction.canceled -= DeactiveAttack;

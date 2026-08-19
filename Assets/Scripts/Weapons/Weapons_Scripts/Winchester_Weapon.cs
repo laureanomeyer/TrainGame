@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Winchester_Weapon : MonoBehaviour, IWeapons
@@ -38,7 +39,8 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     private float reloadTime;
     public float ReloadTime { get => reloadTime; }
 
-    //Referencia a la pool de balas
+    private List<Enemy> enemiesDamage = new List<Enemy>();
+
     private BulletPool bulletPool;
     public BulletPool BulletPool => bulletPool;
 
@@ -47,6 +49,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         bulletPool = pool;
         playerAtkReference = playerAttack;
 
+        EventBus.Subscribe<OnUpdateEnemiesDamage>(UpdateEnemiesDamage);
         EventBus.Subscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Subscribe<OnWinchesterDetectedDeadEnemy>(CallRestock);
 
@@ -66,8 +69,9 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         }
     }
 
-    private void OnDestroy()
+    public void DestroyWeapon()
     {
+        EventBus.Unsubscribe<OnUpdateEnemiesDamage>(UpdateEnemiesDamage);
         EventBus.Unsubscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Unsubscribe<OnWinchesterDetectedDeadEnemy>(CallRestock);
         Debug.Log("Desuscribi evento");
@@ -82,11 +86,30 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
             Attack();
         }
     }
+    public void Attack()
+    {
+        if (waitToFire > rateOfFire)
+        {
+            if (IsReloading) return;
+
+            Shoot(playerAtkReference.spawnPoint);
+            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
+            waitToFire = 0;
+        }
+    }
 
     public void Shoot(Transform spawnPoint)
     {
         if (IsReloading) return;
         if (spawnPoint == null) return;
+
+        if(currentBulletUse.typeOfCollsion is CheckWinchesterCollsion winchesterCollsion)
+        {
+            winchesterCollsion = currentBulletUse.typeOfCollsion as CheckWinchesterCollsion;
+            winchesterCollsion.enemiesDamage = enemiesDamage;
+            currentBulletUse.typeOfCollsion = winchesterCollsion;
+        }
 
         var data = WeaponData;
         currentBulletUse.Damage = data.damage;
@@ -106,18 +129,6 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         currentAmmunition = weaponData.ammun;
     }
 
-    public void Attack()
-    {
-        if (waitToFire > rateOfFire)
-        {
-            if (IsReloading) return;
-
-            Shoot(playerAtkReference.spawnPoint);
-            EventBus.Publish(new OnShootEvent(rateOfFire));
-            EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
-            waitToFire = 0;
-        }
-    }
     public void ChargeTimers()
     {
         if (waitToFire <= rateOfFire)
@@ -150,6 +161,11 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         IsReloading = false;
         AudioManager.Instance.Play($"SFXMusketReloaded");
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
+    }
+
+    private void UpdateEnemiesDamage(OnUpdateEnemiesDamage eventEnemiesDamage)
+    {
+        enemiesDamage = eventEnemiesDamage.Enemies;
     }
 
     private void CallRestock(OnWinchesterDetectedDeadEnemy enemyEvent)

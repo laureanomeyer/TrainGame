@@ -85,7 +85,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         }
     }
 
-    private void OnDestroy()
+    public void DestroyWeapon()
     {
         EventBus.Unsubscribe<OnCoachDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Unsubscribe<OnUnlockCoachLegado>(UpdateCurrentBullet);

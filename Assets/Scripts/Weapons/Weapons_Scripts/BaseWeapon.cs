@@ -47,6 +47,11 @@ public class BaseWeapon : MonoBehaviour, IWeapons
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
     }
 
+    public void DestroyWeapon()
+    {
+        Debug.Log("Arma destruida");
+    }
+
     public void Tick(float deltaTime)
     {
         ChargeTimers();

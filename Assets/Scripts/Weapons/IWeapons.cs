@@ -23,6 +23,7 @@ public interface IWeapons
     #region Funciones
 
     public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack);
+    public void DestroyWeapon();
     public void Tick(float deltaTime);
     public void Shoot(Transform spawnPoint);
     public void RestockBullets();

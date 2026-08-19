@@ -80,7 +80,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         }
     }
 
-    private void OnDestroy()
+    public void DestroyWeapon()
     {
         EventBus.Unsubscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Unsubscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
