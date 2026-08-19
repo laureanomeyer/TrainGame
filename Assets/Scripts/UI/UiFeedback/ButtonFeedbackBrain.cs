@@ -89,18 +89,18 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     private void PlayHoverAnimation()
     {
         transform.DOKill();
-        transform.DOScale(initialScale * size, animTime).SetEase(ease);
+        transform.DOScale(initialScale * size, animTime).SetEase(ease).SetUpdate(true);
     }
 
     private void ReverseHoverAnimation(float animTime)
     {
         transform.DOKill();
-        transform.DOScale(initialScale, animTime).SetEase(ease);
+        transform.DOScale(initialScale, animTime).SetEase(ease).SetUpdate(true);
     }
 
     private void PlayPressedAnimation(float animTime)
     {
         transform.DOKill();
-        transform.DOScale(initialScale * smallSize, animTime).SetEase(Ease.InOutBack);
+        transform.DOScale(initialScale * smallSize, animTime).SetEase(Ease.InOutBack).SetUpdate(true);
     }
 }

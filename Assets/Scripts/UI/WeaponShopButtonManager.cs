@@ -21,7 +21,6 @@ public class WeaponShopButtonManager : MonoBehaviour
     [SerializeField] private Button closeButton;
     [SerializeField] private InteractionZone interacZone;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
        PlayerBrain playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBrain>();
@@ -32,7 +31,9 @@ public class WeaponShopButtonManager : MonoBehaviour
             buttons.Add(shopButtons[i].GetComponent<WeaponShopButton>()); 
        }
 
-       buttons[0].WeaponInStock = firtsSlotWeapons;
+
+
+        buttons[0].WeaponInStock = firtsSlotWeapons;
        buttons[1].WeaponInStock = secondSlotWeapons;
        buttons[2].WeaponInStock = thirdSlotWeapons;
 

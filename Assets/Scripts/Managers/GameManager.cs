@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     public void ChangeGameState(GameState state)
     {
         CurrentState = state;
+        Debug.Log(CurrentState);
     }
 
     public bool IsFinalStation()
@@ -130,7 +131,7 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.UI);
         ShowCursor(CursorType.Gameplay);
     }
     public void SkipRun()
@@ -138,7 +139,7 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.UI);
     }
 
     public void GoToRun()

@@ -74,9 +74,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
             damageMultiplierButton.button.onClick.AddListener(DamageMultiplierUpgrade);
             defenseButton.button.onClick.AddListener(DefenseUpgrade);
             goldMultiplierButton.button.onClick.AddListener(GoldMultiplierUpgrade);
-
-            EventBus.Publish(new OnActivateUiEvent(false));
-            EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
         }
         else
         {
@@ -140,8 +137,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         goldMultiplierButton.DeactivateButton();
 
         DeactivateUpgradesUi();
+
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
         EventBus.Publish(new OnActivateUiEvent(true));
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
     }
     public void DeactivateUpgradesUi()
     {

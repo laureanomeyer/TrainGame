@@ -63,8 +63,6 @@ public class TrainManager : MonoBehaviour
         WagonBrain brain = instance.GetComponent<WagonBrain>();
         wagonsCreated.Add(brain);
         wagonBrains.Add(brain);
-        Debug.Log("tail: " + tail);
-        Debug.Log("brain: " + brain);
         AttachWagon(tail, brain);
     }
 

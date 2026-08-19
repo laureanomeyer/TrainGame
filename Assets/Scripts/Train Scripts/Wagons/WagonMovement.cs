@@ -15,7 +15,6 @@ public class WagonMovement
     {
         this.wagonBack = wagonBack;
         this.tail = tail;
-        Debug.Log(wagonBack);
     }
 
     public void Initialize(Transform target, Transform objectTransform) //Setea la cabeza de los vagones

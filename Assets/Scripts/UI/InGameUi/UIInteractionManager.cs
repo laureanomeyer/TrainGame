@@ -24,6 +24,10 @@ public class InteractionUIManager : MonoBehaviour
         spacialText.text = stationName;
 
         UpgradesObject.SetActive(true);
+
+        EventBus.Publish(new OnActivateUiEvent(false));
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
+        GameManager.Instance.ChangeGameState(GameState.UI);
     }
 
     public void ShowText(string message)
