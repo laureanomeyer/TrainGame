@@ -64,6 +64,8 @@ public class SceneRunController : MonoBehaviour
 
         EventBus.Publish(new OnSetTimerStartedEvent(false));
 
+        GameManager.Instance.EnterTransitionState();
+
         if (cinematicSystem == null)
         {
             Debug.LogError("[SceneRunController] CinematicSystem no asignado. Resuelvo sin cinemática.");
