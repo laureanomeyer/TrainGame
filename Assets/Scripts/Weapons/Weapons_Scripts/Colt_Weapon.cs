@@ -1,8 +1,6 @@
-
 using UnityEngine;
-using UnityEngine.Rendering;
 
-public class BaseWeapon : MonoBehaviour, IWeapons
+public class Colt_Weapon : MonoBehaviour, IWeapons
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
@@ -20,7 +18,7 @@ public class BaseWeapon : MonoBehaviour, IWeapons
     private int currentAmmunition;
     public int CurrentAmmunition { get => currentAmmunition; set => currentAmmunition = value; }
 
-    private bool isReloading =false;
+    private bool isReloading = false;
     public bool IsReloading { get => isReloading; set => isReloading = value; }
 
     private float waitToFire = 0;
@@ -61,6 +59,19 @@ public class BaseWeapon : MonoBehaviour, IWeapons
             Attack();
         }
     }
+    public void Attack()
+    {
+        if (waitToFire > rateOfFire)
+        {
+            if (IsReloading) return;
+
+            Shoot(playerAtkReference.spawnPoint);
+            Shoot(playerAtkReference.spawnPoint);
+            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
+            waitToFire = 0;
+        }
+    }
 
     public void Shoot(Transform spawnPoint)
     {
@@ -85,18 +96,6 @@ public class BaseWeapon : MonoBehaviour, IWeapons
         currentAmmunition = weaponData.ammun;
     }
 
-    public void Attack()
-    {
-        if (waitToFire > rateOfFire)
-        {
-            if (IsReloading) return;
-
-            Shoot(playerAtkReference.spawnPoint);
-            EventBus.Publish(new OnShootEvent(rateOfFire));
-            EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
-            waitToFire = 0;
-        }
-    }
     public void ChargeTimers()
     {
         if (waitToFire <= rateOfFire)
@@ -118,7 +117,6 @@ public class BaseWeapon : MonoBehaviour, IWeapons
 
     public void ResetWaitToFire()
     {
-        //EventBus.Publish(new OnShootEvent(rateOfFire));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
         waitToFire = 0;
     }
@@ -131,5 +129,4 @@ public class BaseWeapon : MonoBehaviour, IWeapons
         AudioManager.Instance.Play($"SFXDefaultShot");
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
-
 }

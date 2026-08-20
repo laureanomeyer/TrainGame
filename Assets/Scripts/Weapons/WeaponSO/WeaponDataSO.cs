@@ -6,9 +6,6 @@ public class WeaponDataSO : ScriptableObject
     [Header("Type of weapon")]
     [SerializeField] public WeaponType type;
 
-    [Header("Type of shoot")]
-    [SerializeField] public TypeOfShoot typeOfShootSO;
-
     [Header("Damage")]
     [SerializeField] public float damage;
 

@@ -49,13 +49,15 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     [Header("Wagon destroy mesh")]
 
     public GameObject WagonNormal;
-    public GameObject WagonDestroyed;
+    public GameObject[] WagonsDestroyed;
+
+    private GameObject wagonDestroyReference;
+
 
     [Header("Wagon renderers")]
     [SerializeField] public Renderer wagonTopRender;
 
     [SerializeField] public MeshFilter wagonTopMeshFilter;
-
 
     #endregion
 
@@ -74,10 +76,12 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         Flash = GetComponent<DamageFlash>();
         trainData = ServiceLocator.Get<TrainData>();
 
-        if (WagonDestroyed != null)
+        if (WagonsDestroyed.Count() > 0)
         {
             WagonNormal.SetActive(true);
-            WagonDestroyed.SetActive(false);
+            int selectedWagon = Random.Range(0, WagonsDestroyed.Length);
+            wagonDestroyReference = Instantiate(WagonsDestroyed[selectedWagon], transform);
+            wagonDestroyReference.SetActive(false);
         }
     }
 
@@ -200,9 +204,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public virtual void SetDestroyed(bool destroyed)
     {
-        if (WagonDestroyed != null)
+        if (WagonsDestroyed.Count() > 0)
         {
-            WagonDestroyed.SetActive(destroyed);
+            wagonDestroyReference.SetActive(destroyed);
             WagonNormal.SetActive(!destroyed);
         }
     }
