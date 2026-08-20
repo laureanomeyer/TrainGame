@@ -31,6 +31,7 @@ public class Enemy : MonoBehaviour
     public float MaxHealth => data.health;
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
+    public DropType Drop => data.drop;
 
     public List<IWagon> TargetList => targetList;
     public Transform Target => target;
@@ -130,8 +131,15 @@ void Update()
         if (healthBar != null)
         { healthBar.Hide(); }
         flash.ResetMaterials();
-        EventBus.Publish(new OnGoldEarnedEvent(data.gold));
-        EventBus.Publish(new OnEnemyDeathEvent(transform.position));
+        if (Drop == DropType.Coal)
+        {
+            EventBus.Publish(new OnCoalEarnedEvent(data.dropAmount));
+        }
+        else if (Drop == DropType.Gold)
+        {
+            EventBus.Publish(new OnGoldEarnedEvent(data.dropAmount));
+        }
+        EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop));
         EventBus.Publish(new OnEnemyKilledEvent());
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }

@@ -4,6 +4,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 {
     [SerializeField] public Transform TailRef;
 
+    [SerializeField] private Transform coalBox;
+
     [SerializeField] private float CM;
     [SerializeField] private float EM;
     [SerializeField] private float RES;
@@ -21,10 +23,11 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     void Start()
     {
+        var dataRef = ServiceLocator.Get<TrainData>();
+        dataRef.SetCoalBox(coalBox);
         stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
         animator = GetComponent<Animator>();
-
         fuelController = new LocomotiveFuel(
             EM * stats.GetStat(StatType.Defense),
             CM * stats.GetStat(StatType.MaxHp),

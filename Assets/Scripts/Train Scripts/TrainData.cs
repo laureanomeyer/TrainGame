@@ -13,12 +13,15 @@ public class TrainData
 
     private Transform tailPosition;
     private Transform goldBoxPosition;
+    private Transform coalBoxPosition;
+
     private List<IWagonID> wagonsIDList;
 
     public TrainStats LocomotiveStatsMultiplicator => locomotiveStatsMultiplicator;
     public List<IWagonID> WagonsIDList => wagonsIDList; 
     public Transform TailPosition => tailPosition;
     public Transform GoldBoxPosition => goldBoxPosition;
+    public Transform CoalBoxPosition => coalBoxPosition;
     public float Speed => speed;
 
     public TrainData(LocomotiveStatsSO baseStats, LocomotiveStatsSO baseMultStats)
@@ -54,6 +57,12 @@ public class TrainData
     {
         goldBoxPosition = position;
     }
+
+    public void SetCoalBox(Transform position)
+    {
+        coalBoxPosition = position;
+    }
+
     public void ResetValuesToDefault()
     {
         wagonsIDList = new List<IWagonID>();

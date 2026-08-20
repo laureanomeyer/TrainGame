@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class SpawnManager : MonoBehaviour
 {
     //se setean con el level spawn data
@@ -21,6 +22,10 @@ public class SpawnManager : MonoBehaviour
     [Header("Coins")]
     [SerializeField] GameObject coin;
     private Transform goldBox;
+
+    [Header("Coal")]
+    [SerializeField] GameObject coal;
+    private Transform coalBox;
 
     [Header("Particle Systems")]
     [SerializeField] ParticleSystem enemyHitPS;
@@ -184,10 +189,24 @@ public class SpawnManager : MonoBehaviour
         coinScript.SetTarget(goTo);
     }
 
+    void SpawCoal(Vector3 position, Transform goTo)
+    {
+        GameObject coalGO = ObjectPoolManager.SpawnObject(coal, position, Quaternion.identity);
+        Coal coalScript = coalGO.GetComponent<Coal>();
+        coalScript.SetTarget(goTo);
+    }
+
 
     void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
     {
-        SpawCoin(enemyDeathEvent.Position, goldBox);
+        if (enemyDeathEvent.DropType == DropType.Gold)
+        {
+            SpawCoin(enemyDeathEvent.Position, goldBox);
+        }
+        else if (enemyDeathEvent.DropType == DropType.Coal)
+        {
+            SpawCoal(enemyDeathEvent.Position, coalBox);
+        }
         aliveEnemies--;
     }
 

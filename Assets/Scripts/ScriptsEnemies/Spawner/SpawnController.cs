@@ -23,6 +23,10 @@ public class SpawnController : MonoBehaviour
     [Header("Coins")]
     [SerializeField] GameObject coin;
     private Transform goldBox;
+    
+    [Header("Coal")]
+    [SerializeField] GameObject coal;
+    private Transform coalBox;
 
     [Header("Particle Systems")]
     [SerializeField] ParticleSystem enemyHitPS;
@@ -180,11 +184,28 @@ public class SpawnController : MonoBehaviour
         coinScript.SetTarget(goTo);
     }
 
+        void SpawCoal(Vector3 position, Transform goTo)
+    {
+        if (goTo == null ) Debug.Log("coal box nulla");
+        GameObject coalGO = ObjectPoolManager.SpawnObject(coal, position, Quaternion.identity);
+        Coal coalScript = coalGO.GetComponent<Coal>();
+        coalScript.SetTarget(goTo);
+    }
+
+
     void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
     {
-        SpawCoin(enemyDeathEvent.Position, goldBox);
+        if (enemyDeathEvent.DropType == DropType.Gold)
+        {
+            SpawCoin(enemyDeathEvent.Position, goldBox);
+        }
+        else if (enemyDeathEvent.DropType == DropType.Coal)
+        {
+            SpawCoal(enemyDeathEvent.Position, coalBox);
+        }
         aliveEnemies--;
     }
+
 
     void SpawnParticles(Vector3 position)
     {

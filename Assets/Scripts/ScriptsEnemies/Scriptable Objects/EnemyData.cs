@@ -8,7 +8,8 @@ public enum RangeType
     Medium = 30,
     Long = 40
 }
-public enum AttackType { Shoot, Explosion, None }
+
+public enum DropType {Gold, Coal}
 
 [CreateAssetMenu(menuName = "Enemy/Data")]
 public class EnemyData : ScriptableObject
@@ -22,7 +23,8 @@ public class EnemyData : ScriptableObject
     public RangeType rangeType;
     public TargetType[] target;
 
-    public float gold;
+    public DropType drop;
+    public float dropAmount;
 
     public SkinnedMeshRenderer enemyMesh;
     public SkinnedMeshRenderer horseMesh;
@@ -34,6 +36,7 @@ public class EnemyData : ScriptableObject
     public EnemyMovementSO movement; //logica movimiento
 
     public EnemySkillSO skill;
+
 
     private void OnValidate()
     {
