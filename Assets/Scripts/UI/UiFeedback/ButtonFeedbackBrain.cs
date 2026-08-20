@@ -53,6 +53,7 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         if (button.interactable == false) return;
         ReverseHoverAnimation(animTime);
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void OnPointerDown(PointerEventData data)
