@@ -162,7 +162,10 @@ public class LocomotiveFuel
         {
             timer += deltaTime;
 
-            shieldsRenderer.material.SetFloat("_ShieldVisibility", Mathf.Max( 1 - timer, 0));
+            if (currentShield > 0)
+                shieldsRenderer.material.SetFloat("_ShieldVisibility", Mathf.Max( 1 - timer, 0));
+
+            else shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
 
             if (timer >= 3)
             {
