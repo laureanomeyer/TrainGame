@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
 {
-    [SerializeField] private float bulletDistance;
     [SerializeField] private GameObject bulletType;
     Transform bulletSpawn;
 

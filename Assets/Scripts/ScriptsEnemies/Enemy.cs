@@ -1,8 +1,4 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -49,6 +45,9 @@ public class Enemy : MonoBehaviour
     
     public EnemySkillSO Skill => data.skill;
 
+    private float spawnTime;
+    public float TimeAlive => Time.time - spawnTime;
+
     public void Initialize(EnemyData data)
     {
         StopAllCoroutines();
@@ -57,6 +56,7 @@ public class Enemy : MonoBehaviour
 
         this.data = data;
         currentHealth = MaxHealth;
+        spawnTime = Time.time;
         weaponPosition = GetComponentInChildren<Transform>();
         var WeaponGO = Instantiate(weapon, weaponPosition);
         Weapon = WeaponGO.GetComponent<EnemyWeapon>();
