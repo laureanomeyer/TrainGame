@@ -19,7 +19,9 @@ public class Coal : MonoBehaviour
         transform.position = mover.Tick(Time.deltaTime);
 
         if (mover.IsFinished)
-            Debug.Log("mover: " + mover.IsFinished);
+        {
             ObjectPoolManager.ReturnObjectToPool(gameObject);
+        }
+        
     }
 }

@@ -21,7 +21,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     public float MaxShield => fuelController.MaxShield;
     public Transform Transform => transform;
 
-    void Start()
+    void Awake()
     {
         var dataRef = ServiceLocator.Get<TrainData>();
         dataRef.SetCoalBox(coalBox);

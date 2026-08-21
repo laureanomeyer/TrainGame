@@ -73,6 +73,7 @@ public class SpawnController : MonoBehaviour
         BuildPool();
         TrySpawn();
         goldBox = trainDataRef.GoldBoxPosition;
+        coalBox = trainDataRef.CoalBoxPosition;
 
     }
 

@@ -29,7 +29,8 @@ public class EnemySkillSO : ScriptableObject
                 break;
 
             case SkillType.None:
-                skill = null;
+                if (!(skill is NoneSkill))
+                    skill = new NoneSkill();
                 break;
         }
     }
