@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9120466388019172079
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 2033400079394760915}
   - component: {fileID: 3429356608108453517}
   - component: {fileID: 4512888872558207603}
+  - component: {fileID: 5812990478187820982}
   m_Layer: 5
   m_Name: AmmoCanvas
   m_TagString: Untagged
@@ -200,6 +201,18 @@ MonoBehaviour:
   expandedScale: 1.5
   shotCooldownDuration: 0.25
   scaleSmoothSpeed: 12
+--- !u!225 &5812990478187820982
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5538424874332405473}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6111940153748431790
 GameObject:
   m_ObjectHideFlags: 0
@@ -234,7 +247,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076294, y: 0.000005722}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 58.106, y: 58.1055}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3699591076933554668
@@ -265,7 +278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1767427810, guid: 9cd509aa81099ba4487f7a65f60b472e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 816f8f9321a21284eb1ec536f73d9d6c, type: 3}
   m_Type: 3
   m_PreserveAspect: 1
   m_FillCenter: 1

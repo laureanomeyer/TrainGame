@@ -36,6 +36,7 @@ public class DamageFlash : MonoBehaviour
 
     public void Flash()
     {
+        if (gameObject.activeSelf == false) return;
         StopCoroutine();
         StartCoroutine(DoFlash());
     }

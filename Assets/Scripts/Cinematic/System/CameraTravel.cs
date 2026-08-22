@@ -21,7 +21,8 @@ public static class CameraTravel
         Func<Quaternion> rotationProvider,
         float duration,
         AnimationCurve curve,
-        TravelAxis axes)
+        TravelAxis axes,
+        Action<float> onTick = null)
     {
         Vector3 destination = ApplyAxes(fromPos, destinationProvider(), axes);
         Quaternion destinationRot = rotationProvider();
@@ -42,9 +43,12 @@ public static class CameraTravel
                 Quaternion.Slerp(fromRot, destinationRot, t)
             );
 
+            onTick?.Invoke(t);
+
             yield return null;
         }
 
         camT.SetPositionAndRotation(destination, destinationRot);
+        onTick?.Invoke(1f);
     }
 }

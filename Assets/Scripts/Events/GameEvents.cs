@@ -40,7 +40,7 @@ public class OnShootEvent : IGameEvent
     public OnShootEvent(float rateOfFire)
     {
         RateOfFire = rateOfFire;
-        AudioManager.Instance.Play($"RevolverShot{UnityEngine.Random.Range(3, 4)}");
+        AudioManager.Instance.Play($"SFXDefaultShot");
     }
 }
 
@@ -51,7 +51,7 @@ public class OnReloadEvent : IGameEvent
     public OnReloadEvent(float reloadTime)
     {
         ReloadTimer = reloadTime;
-        AudioManager.Instance.Play($"RevolverMusket{2}");
+        AudioManager.Instance.Play($"SFXReloadMusket");
     }
 }
 
@@ -69,7 +69,7 @@ public class OnShieldsBrokenEvent : IGameEvent
 {
     public OnShieldsBrokenEvent()
     {
-        AudioManager.Instance.Play("Projectile");
+        
     }
 }
 
@@ -110,6 +110,9 @@ public class OnActivateUiEvent : IGameEvent
 {
     public bool Activated;
 
+    /// <summary>
+    /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
+    /// </summary>
     public OnActivateUiEvent(bool activated)
     {
         Activated = activated;
@@ -287,3 +290,96 @@ public class OnRunEndedEvent : IGameEvent
     }
 }
 
+
+#region Weapons Events
+
+#region Wichester Events
+public class OnUpdateEnemiesDamage : IGameEvent
+{
+    public List<Enemy> Enemies;
+
+    public OnUpdateEnemiesDamage (List<Enemy> enemies)
+    {
+        this.Enemies = enemies;
+    }
+}
+
+public class OnUpdateWinchesterLegadoLeftPoint : IGameEvent
+{
+    public int point;
+
+    public OnUpdateWinchesterLegadoLeftPoint(int point)
+    {
+        this.point = point;
+    }
+}
+public class OnUnlockWinchesterLegado : IGameEvent
+{
+    public OnUnlockWinchesterLegado()
+    {
+    }
+}
+
+public class OnWinchesterDetectedDeadEnemy : IGameEvent
+{
+    public OnWinchesterDetectedDeadEnemy()
+    {
+    }
+}
+
+
+#endregion
+
+#region Spencer Events
+
+public class OnSpencerDetectedDeadEnemy : IGameEvent
+{
+    public OnSpencerDetectedDeadEnemy()
+    {
+    }
+}
+
+public class OnUpdatedSpencerLegado : IGameEvent
+{
+    public OnUpdatedSpencerLegado()
+    {
+    }
+}
+
+public class OnUnlockSpencerLegado : IGameEvent
+{
+    public OnUnlockSpencerLegado()
+    {
+    }
+}
+
+#endregion
+
+#region Coach Events
+
+public class OnCoachDetectedDeadEnemy : IGameEvent
+{
+    public int point;
+    public OnCoachDetectedDeadEnemy(int point)
+    {
+        this.point = point;
+    }
+}
+
+public class OnUpdatedCoachLegado : IGameEvent
+{
+    public OnUpdatedCoachLegado()
+    {
+    }
+}
+
+public class OnUnlockCoachLegado : IGameEvent
+{
+    public OnUnlockCoachLegado()
+    {
+    }
+}
+
+#endregion
+
+#endregion

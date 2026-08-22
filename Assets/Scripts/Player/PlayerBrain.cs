@@ -27,6 +27,8 @@ public class PlayerBrain : MonoBehaviour
     private PlayerAttackController playerAttackController;
     private InputAction attackAction;
 
+    private PlayerData playerDataRef;
+
     private bool IsRepairing = false;
     private bool canAttack = true;
 
@@ -44,6 +46,8 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController = new PlayerInteractions(this, playerMovementController, faceMouse, interactionUIManager, repairCapacity);
         playerAttackController = new PlayerAttackController(spawnPoint, weaponItem, GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>(), this, faceMouse);
 
+        playerDataRef = ServiceLocator.Get<PlayerData>();
+
         attackAction = InputSystem.actions.FindAction("Attack");
         attackAction.performed += ActiveAttack;
         attackAction.canceled += DeactiveAttack;
@@ -59,6 +63,8 @@ public class PlayerBrain : MonoBehaviour
     }
     private void OnDestroy()
     {
+        playerAttackController.DestroyWeapon();
+
         playerInteractionsController.Cleanup();
         attackAction.performed -= ActiveAttack;
         attackAction.canceled -= DeactiveAttack;
@@ -76,7 +82,7 @@ public class PlayerBrain : MonoBehaviour
 
         if (Keyboard.current.f8Key.wasPressedThisFrame)
         {
-            Inventory.GoldAmount += 100;
+            playerDataRef.AddPlayerGold(100);
         }
     }
 
@@ -96,6 +102,16 @@ public class PlayerBrain : MonoBehaviour
         EventBus.Publish(new OnInteractPressedEvent());
 
         playerInteractionsController.OnInteract();
+    }
+
+    private void OnJump()
+    {
+        if (ServiceLocator.TryGet<DisplayTrain>(out var displayRef))
+        {
+            if (displayRef.InstantiatedWagonReferences[0] == null || displayRef.InstantiatedWagonReferences[1] == null) return;
+
+            displayRef.ReorderWagons(displayRef.InstantiatedWagonReferences[0], displayRef.InstantiatedWagonReferences[1]);
+        }
     }
 
     private void OnSkipScene()
@@ -131,6 +147,7 @@ public class PlayerBrain : MonoBehaviour
     public void CallSetCanAttackEvent(OnActivateUiEvent activateUIEvent)
     {
         SetCanAttack(activateUIEvent.Activated);
+        SetCanMove(activateUIEvent.Activated);
     }
     public void CallSetCanAttackEvent(OnSetAttackEnabledEvent AttackEnableEvent)
     {
@@ -139,11 +156,13 @@ public class PlayerBrain : MonoBehaviour
 
     public void SetCanAttack(bool canAttack)
     {
+
+
         this.canAttack = canAttack;
         playerMovementController.SetCanRotate(canAttack);
     }
 
-    public void SetCanMove(bool canMove)
+    private void SetCanMove(bool canMove)
     {
         playerMovementController.SetCanMove(canMove);
     }

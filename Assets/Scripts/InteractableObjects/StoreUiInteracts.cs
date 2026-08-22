@@ -5,12 +5,13 @@ using UnityEngine.UI;
 public class StoreUiInteracts : MonoBehaviour
 {
     [SerializeField] private GameObject uiToShow;
-    [SerializeField] private GameObject uiContinueConfirmation;
-    [SerializeField] private GameObject uiUpgrades;
+
+    [SerializeField] private GameObject[] interactObjects;
+
+    [SerializeField] private LayerMask noInteractLayer;
+    [SerializeField] private LayerMask interactLayer;
 
     [SerializeField] private Button closeButton;
-
-    private PlayerBrain playerBrain;
 
     private bool playerInZone;
     private bool uiOpen = false;    
@@ -27,13 +28,25 @@ public class StoreUiInteracts : MonoBehaviour
         closeButton.onClick.RemoveListener(DeactivateUI);
     }
 
+    private int LayerMaskToLayer(LayerMask mask)
+    {
+        int layerNumber = 0;
+        int layer = mask.value;
+        while (layer > 1)
+        {
+            layer >>= 1;
+            layerNumber++;
+        }
+        return layerNumber;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        
-        if (playerBrain == null)
+
+        foreach (GameObject obj in interactObjects)
         {
-            playerBrain = other.gameObject.GetComponent<PlayerBrain>();
+            obj.layer = LayerMaskToLayer(interactLayer);
         }
 
         playerInZone = true;
@@ -44,11 +57,14 @@ public class StoreUiInteracts : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+
+        foreach (GameObject obj in interactObjects)
+        {
+            obj.layer = LayerMaskToLayer(noInteractLayer);
+        }
+
         playerInZone = false;
-        playerBrain.SetCanAttack(true);
         uiToShow.SetActive(false);
-        uiContinueConfirmation.SetActive(false);
-        uiUpgrades.SetActive(false);
 
         EventBus.Publish(new OnHideInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
@@ -56,15 +72,13 @@ public class StoreUiInteracts : MonoBehaviour
 
     private void DeactivateUI()
     {
-        playerBrain.SetCanAttack(true);
-        playerBrain.SetCanMove(true);
-
         uiToShow.SetActive(false);
-        uiContinueConfirmation.SetActive(false);
-        uiUpgrades.SetActive(false);
+
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
         EventBus.Publish(new OnShowInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+        EventBus.Publish(new OnActivateUiEvent(true));
     }
 
     public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
@@ -82,10 +96,10 @@ public class StoreUiInteracts : MonoBehaviour
 
             uiToShow.SetActive(true);
 
-            playerBrain.SetCanAttack(false);
-            playerBrain.SetCanMove(false);
-
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
+            EventBus.Publish(new OnActivateUiEvent(false));
+
+            GameManager.Instance.ChangeGameState(GameState.UI);
         }
         else
         {
@@ -93,7 +107,5 @@ public class StoreUiInteracts : MonoBehaviour
 
             DeactivateUI();
         }
-
-        
     }
 }

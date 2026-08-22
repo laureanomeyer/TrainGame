@@ -5,7 +5,6 @@ using UnityEngine;
 public class GoldUIDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI GoldTextUI;
-    [SerializeField] private TextMeshProUGUI BuyDoneText;
 
     [SerializeField] public float speed = 1f;
     public float minAlpha = 0f;
@@ -13,10 +12,6 @@ public class GoldUIDisplay : MonoBehaviour
 
     private UnityEngine.Color colorText;
 
-    private void Start()
-    {
-        colorText = BuyDoneText.color;
-    }
 
     public void UpdatedGold(float gold)
     {
@@ -40,14 +35,12 @@ public class GoldUIDisplay : MonoBehaviour
     {
         
         colorText.a = minAlpha;
-        BuyDoneText.color = colorText;
 
   
         while (colorText.a < maxAlpha)
         {
             colorText.a += speed * Time.deltaTime;
             colorText.a = Mathf.Min(colorText.a, maxAlpha);
-            BuyDoneText.color = colorText;
             yield return null;
         }
 
@@ -56,7 +49,6 @@ public class GoldUIDisplay : MonoBehaviour
         {
             colorText.a -= speed * Time.deltaTime;
             colorText.a = Mathf.Max(colorText.a, minAlpha);
-            BuyDoneText.color = colorText;
             yield return null;
         }
     }

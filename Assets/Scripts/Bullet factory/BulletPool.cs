@@ -60,9 +60,10 @@ public class BulletPool : MonoBehaviour
     {
         GameObject bullet = bulletPool.Get();
 
-        if (bullet == null) return; //ThrowException (?) Sino, por qué tiraría null? No es posible sobrecargar los cohetes en el juego actual.
-        bullet.GetComponent<IBullet>().ResetState(bulletType);
+        if (bullet == null) return;
 
         bullet.transform.SetLocalPositionAndRotation(position, rotation);
+
+        bullet.GetComponent<IBullet>().ResetState(bulletType);
     }
 }

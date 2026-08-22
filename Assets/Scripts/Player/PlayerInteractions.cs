@@ -217,8 +217,9 @@ public class PlayerInteractions
         if (usingTurret == null) return;
         if (lookObjectToMouse == null) return;
 
-        Transform aimOrigin = usingTurret.FirePoint != null
-            ? usingTurret.FirePoint
+        // Usar el pivot (centro de rotación), NO el firePoint (que orbita al rotar)
+        Transform aimOrigin = usingTurret.TurretPivot != null
+            ? usingTurret.TurretPivot
             : usingTurret.transform;
 
         Vector3 direction = lookObjectToMouse.GetMouseDirection(aimOrigin);
@@ -227,10 +228,8 @@ public class PlayerInteractions
         if (direction.sqrMagnitude <= 0.001f)
             return;
 
-        // La torreta rota siempre hacia el mouse.
         usingTurret.Aim(direction);
 
-        // Solo dispara mientras mantenés click.
         if (Mouse.current.leftButton.isPressed)
         {
             usingTurret.TryShoot(direction);

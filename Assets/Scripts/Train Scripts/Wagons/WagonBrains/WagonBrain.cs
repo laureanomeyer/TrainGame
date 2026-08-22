@@ -47,19 +47,17 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     [SerializeField] public Material destroyWagonMaterial;
 
     [Header("Wagon destroy mesh")]
-    [SerializeField] public Mesh floorMeshDestroyWagon;
-    [SerializeField] public Mesh bodyMeshDestroyWagon;
+
+    public GameObject WagonNormal;
+    public GameObject[] WagonsDestroyed;
+
+    private GameObject wagonDestroyReference;
+
 
     [Header("Wagon renderers")]
-    [SerializeField] public Renderer floorRenderWagon;
-    [SerializeField] public Renderer bodyRenderWagon;
-    [SerializeField] public Renderer topRenderWagon;
+    [SerializeField] public Renderer wagonTopRender;
 
-    [Header("Wagon mesh filter")]
-    [SerializeField] public MeshFilter floorMeshFilterWagon;
-    [SerializeField] public MeshFilter bodyMeshFilterWagon;
-    [SerializeField] public MeshFilter topMeshFilterWagon;
-
+    [SerializeField] public MeshFilter wagonTopMeshFilter;
 
     #endregion
 
@@ -77,6 +75,14 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
         Flash = GetComponent<DamageFlash>();
         trainData = ServiceLocator.Get<TrainData>();
+
+        if (WagonsDestroyed.Count() > 0)
+        {
+            WagonNormal.SetActive(true);
+            int selectedWagon = Random.Range(0, WagonsDestroyed.Length);
+            wagonDestroyReference = Instantiate(WagonsDestroyed[selectedWagon], transform);
+            wagonDestroyReference.SetActive(false);
+        }
     }
 
     public void FixedUpdate()
@@ -93,8 +99,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         renderController = new WagonRenderController(this);
-
-
     }
 
     public virtual void InitializeWagonMovement(Transform target)
@@ -197,6 +201,16 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
             trainData.RemoveWagonID(wagonID);
         }
     }
+
+    public virtual void SetDestroyed(bool destroyed)
+    {
+        if (WagonsDestroyed.Count() > 0)
+        {
+            wagonDestroyReference.SetActive(destroyed);
+            WagonNormal.SetActive(!destroyed);
+        }
+    }
+
     public virtual void OnDestroy()
     {
         stats.OnStatChanged -= OnStatChanged;

@@ -20,7 +20,6 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float textStayDuration = 1f;
 
     private bool isTransitioning;
-    private SessionConfig sessionConfig;
 
     private void Awake()
     {
@@ -36,7 +35,6 @@ public class SceneTransitionManager : MonoBehaviour
         #endregion
 
         HideTransitionInstantly();
-        sessionConfig = ServiceLocator.Get<SessionConfig>();
     }
 
     public void TransitionToScene(string sceneName, SceneTransitionType transitionType)
@@ -156,30 +154,28 @@ public class SceneTransitionManager : MonoBehaviour
     private string GetTransitionText(SceneTransitionType transitionType)
     {
         int currentLevel = 1;
-        string currentStationName = "Unknown station";
 
-        if (GameManager.Instance != null &&
-            GameManager.Instance.Session != null &&
-            sessionConfig != null)
+        if (GameManager.Instance != null && GameManager.Instance.Session != null)
         {
-            currentLevel = sessionConfig.CurrentLevel;
-            currentStationName = GameManager.Instance.GetCurrentStationName();
+            currentLevel = GameManager.Instance.GetCurrentLevel();
         }
 
         switch (transitionType)
         {
             case SceneTransitionType.StartingRun:
-                return $"Trail {currentLevel}, bound for {currentStationName}...";
+                {
+                    string nextStationName = GameManager.Instance != null
+                        ? GameManager.Instance.GetStationNameByLevel(currentLevel + 1)
+                        : "Unknown station";
+
+                    return $"Trail {currentLevel}, bound for {nextStationName}...";
+                }
 
             case SceneTransitionType.EndingRun:
                 {
-                    int arrivedLevel = Mathf.Max(currentLevel - 1, 1);
-                    string arrivedStationName = "Unknown station";
-
-                    if (GameManager.Instance != null)
-                    {
-                        arrivedStationName = GameManager.Instance.GetStationNameByLevel(arrivedLevel);
-                    }
+                    string arrivedStationName = GameManager.Instance != null
+                        ? GameManager.Instance.GetStationNameByLevel(currentLevel)
+                        : "Unknown station";
 
                     return $"Route completed! Arriving at {arrivedStationName}...";
                 }

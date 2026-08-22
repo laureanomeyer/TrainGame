@@ -17,10 +17,18 @@ public class CinematicSystem : MonoBehaviour
 
     [Header("Target")]
     [SerializeField] private string tailAnchorKey = "TrainTail";
+    [SerializeField] private string locomotiveAnchorKey = "Locomotive";
 
     [Header("Priorities")]
     [SerializeField] private int gameplayPriority = 10;
     [SerializeField] private int cinematicPriority = 20;
+
+    [Header("Victory Threshold")]
+    [SerializeField] private Transform victoryThreshold;
+    [SerializeField] private float thresholdTargetX = -100f;
+    [SerializeField] private float thresholdRetreatDuration = 2f;
+
+
 
     private ICinematicActorRegistry registry;
     private Transform cinematicTransform;
@@ -54,17 +62,19 @@ public class CinematicSystem : MonoBehaviour
         CameraTravelSequenceSO sequence =
             result == RunResult.Defeat ? defeatSequence : victorySequence;
 
-        if (!TryValidate(sequence, out Transform target))
+        string anchorKey = result == RunResult.Defeat ? locomotiveAnchorKey : tailAnchorKey;
+
+        if (!TryValidate(sequence, anchorKey, out Transform target))
         {
-            // Nunca dejamos la run colgada: si no se puede reproducir, resolvemos igual.
+
             OnCinematicFinished?.Invoke();
             return;
         }
 
-        activeRoutine = StartCoroutine(CinematicRoutine(sequence, target));
+        activeRoutine = StartCoroutine(CinematicRoutine(sequence, target, result));
     }
 
-    private bool TryValidate(CameraTravelSequenceSO sequence, out Transform target)
+    private bool TryValidate(CameraTravelSequenceSO sequence, string anchorKey, out Transform target)
     {
         target = null;
 
@@ -80,23 +90,28 @@ public class CinematicSystem : MonoBehaviour
             return false;
         }
 
-        if (registry != null && registry.TryResolveDynamic(tailAnchorKey, out target))
+        if (registry != null && registry.TryResolveDynamic(anchorKey, out target))
             return true;
 
-        // Fallback mientras RunManager no registre el tail en el registry.
-        if (RunManager.Instance != null && RunManager.Instance.TrainTail != null)
+   
+        if (anchorKey == tailAnchorKey && RunManager.Instance != null && RunManager.Instance.TrainTail != null)
         {
             target = RunManager.Instance.TrainTail;
             return true;
         }
 
-        Debug.LogError($"[CinematicSystem] No se pudo resolver el target '{tailAnchorKey}'.");
+        Debug.LogError($"[CinematicSystem] No se pudo resolver el target '{anchorKey}'.");
         return false;
     }
 
-    private IEnumerator CinematicRoutine(CameraTravelSequenceSO sequence, Transform target)
+    private IEnumerator CinematicRoutine(CameraTravelSequenceSO sequence, Transform target, RunResult result)
     {
         isPlaying = true;
+
+        if (result == RunResult.Victory && victoryThreshold != null)
+        {
+            StartCoroutine(ThresholdRetreat());
+        }
 
         Transform mainCameraTransform = Camera.main.transform;
         cinematicTransform.SetPositionAndRotation(
@@ -139,10 +154,21 @@ public class CinematicSystem : MonoBehaviour
 
         cinematicCinemachineCamera.Priority = cinematicPriority;
 
+        Action<float> fovTick = null;
+        if (sequence.useFOVZoom)
+        {
+            float actualStartFOV = gameplayCinemachineCamera.Lens.FieldOfView; 
+            cinematicCinemachineCamera.Lens.FieldOfView = actualStartFOV;
+            fovTick = t => cinematicCinemachineCamera.Lens.FieldOfView =
+                Mathf.Lerp(actualStartFOV, sequence.endFov, t);
+        }
+
         yield return CameraTravel.Move(
             cinematicTransform, originPos, originRot,
             destinationProvider, rotationProvider,
-            travelDuration, sequence.travelCurve, sequence.travelAxes);
+            travelDuration, sequence.travelCurve, sequence.travelAxes, fovTick);
+
+        
 
         if (sequence.holdDuration > 0f)
             yield return new WaitForSeconds(sequence.holdDuration);
@@ -164,5 +190,24 @@ public class CinematicSystem : MonoBehaviour
         activeRoutine = null;
 
         OnCinematicFinished?.Invoke();
+    }
+
+    private IEnumerator ThresholdRetreat()
+    {
+        Vector3 startPos = victoryThreshold.position;
+        Vector3 targetPos = new Vector3(thresholdTargetX, startPos.y, startPos.z);
+
+        float timer = 0f;
+        while (timer < thresholdRetreatDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / thresholdRetreatDuration;
+
+            victoryThreshold.position = Vector3.Lerp(startPos, targetPos, t);
+
+            yield return null;
+        }
+
+        victoryThreshold.position = targetPos;
     }
 }

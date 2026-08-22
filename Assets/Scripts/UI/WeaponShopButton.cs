@@ -17,11 +17,20 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     [Header("Button UI")]
     [SerializeField] private TextMeshProUGUI weaponNameText;
     [SerializeField] private TextMeshProUGUI priceText;
+
+    [Header("Weapon stats UI")]
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI rofText;
     [SerializeField] private TextMeshProUGUI ammunitionText;
+
     [SerializeField] private CanvasGroup canvasGroup;
+
+    [Header("Weapon image UI")]
     [SerializeField] private Image weaponImage;
+
+    [Header("Legacy data UI")]
+    [SerializeField] private GameObject legacyStar;
+    [SerializeField] private TextMeshProUGUI legacyDescription;
 
     private Button button;
     public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
@@ -47,7 +56,9 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     }
     public void SetWeapon()
     {
-        int value = UnityEngine.Random.Range(0, currentCollection.Length - 1);
+        int value = UnityEngine.Random.Range(0, currentCollection.Length);
+
+        Debug.Log(value);
 
         currentWeapon = currentCollection[value].Weapon;
         currentWeaponprice = currentCollection[value].Price;
@@ -129,11 +140,29 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         weaponNameText.text = currentWeapon.name;
         priceText.text = currentWeaponprice.ToString() + "$";
 
-        damageText.text = stockInfo.WeaponData.damage.ToString();
-        ammunitionText.text = stockInfo.WeaponData.ammun.ToString();
-        rofText.text = stockInfo.WeaponData.rateOfFire.ToString();
+        float cooldown = (stockInfo.WeaponData.rateOfFire + stockInfo.WeaponData.reloadTime) / 2;
+        float damage = stockInfo.WeaponData.damage / cooldown;
+
+        damageText.text = FormatStat(damage);
+        ammunitionText.text = FormatStat (stockInfo.WeaponData.ammun);
+        rofText.text = FormatStat(cooldown);
 
         weaponImage.sprite = stockInfo.GunSprite;
+
+        if(stockInfo is WeaponWithLegacyInStockSO)
+        {
+            WeaponWithLegacyInStockSO legacyWeapon = stockInfo as WeaponWithLegacyInStockSO;
+
+            legacyDescription.text = "Legacy effect: " + legacyWeapon.legacyDescription + "\n" + "Legacy unlock codition: " + legacyWeapon.legacyUnlockDescription;
+
+            legacyStar.SetActive(legacyWeapon.CheckUnlockLegacy());
+        }
+        else
+        {
+            legacyDescription.text = "";
+
+            legacyStar.SetActive(false);
+        }
     }
 
     public void ActivateButton()
@@ -148,5 +177,10 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
         button.interactable = false;
         canvasGroup.alpha = 1f;
         canvasGroup.interactable = false;
+    }
+
+    private string FormatStat(float value)
+    {
+        return (value % 1 == 0) ? value.ToString("F0") : value.ToString("F1");
     }
 }

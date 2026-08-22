@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,6 +15,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Stations")]
     [SerializeField] private StationRouteSO stationRoute;
+
+    [Header("Cursor")]
+    [SerializeField] private Texture2D cursorTexture;
+    [SerializeField] private Vector2 hotSpot;
 
     public RunResult LastRunResult { get; private set; } = RunResult.None;
     public GameState CurrentState { get; private set; }
@@ -46,6 +51,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        PlayerPrefs.SetInt("TutorialCompleted", 0);
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
         #endregion
@@ -56,15 +63,32 @@ public class GameManager : MonoBehaviour
         Session = new GameSession(baseStats, baseMultStats);
 
         EventBus.Subscribe<OnShowCursorEvent>(ChangeCursorEvent);
+
+        Cursor.SetCursor( cursorTexture, hotSpot, CursorMode.ForceSoftware );
     }
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnShowCursorEvent>(ChangeCursorEvent);
     }
 
+    public void ChangeGameState(GameState state)
+    {
+        CurrentState = state;
+        Debug.Log(CurrentState);
+    }
+
     public bool IsFinalStation()
     {
         return Session._SessionConfig.CurrentLevel >= lastStation;
+    }
+
+    public int GetCurrentLevel()
+    {
+        if (Session != null && Session._SessionConfig != null)
+        {
+            return Session._SessionConfig.CurrentLevel;
+        }
+        return 1;
     }
 
     public string GetCurrentStationName() //STATIONNAMES
@@ -107,7 +131,7 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.UI);
         ShowCursor(CursorType.Gameplay);
     }
     public void SkipRun()
@@ -115,7 +139,7 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.Gameplay);
+        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.UI);
     }
 
     public void GoToRun()
@@ -192,7 +216,8 @@ public class GameManager : MonoBehaviour
         Session.RebuildStatsSystem();
         Session = new GameSession(baseStats, baseMultStats);
 
-        ChangeScene(ShopScene, SceneTransitionType.Generic, GameState.Gameplay);
+        if (PlayerPrefs.GetInt("TutorialCompleted") != 0) GoToRun();
+        else GoToTutorial();
     }
 
     public void EndSession()
@@ -222,7 +247,7 @@ public class GameManager : MonoBehaviour
         CurrentState = stateAfterTransition;
 
         if (IsTutorial) ShowCursor(CursorType.Gameplay);
-        else if (IsGameplayScene) ShowCursor(CursorType.Gameplay);
+        else if (IsGameplayScene && !IsInShop) ShowCursor(CursorType.Gameplay);
         else ShowCursor(CursorType.Real);
 
         if (IsInCombat) MusicManager.Instance.SetGameplayMusic();

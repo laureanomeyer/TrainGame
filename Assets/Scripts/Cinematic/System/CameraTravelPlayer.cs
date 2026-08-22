@@ -59,27 +59,42 @@ public class CameraTravelPlayer : MonoBehaviour
         Vector3 originPos = camT.position;
         Quaternion originRot = camT.rotation;
 
-        Vector3 viewPos = target.position + sequence.worldOffsetFromTarget;
+        Vector3 wagonFinalPos = target.position;
+        Quaternion wagonRot = target.rotation;
+        Vector3 wagonStartPos = wagonFinalPos + sequence.wagonArrivalWorldOffset;
+
+        Vector3 viewPos = wagonFinalPos + sequence.worldOffsetFromTarget;
         Quaternion viewRot = sequence.lookAtTarget
-            ? Quaternion.LookRotation(target.position - viewPos)
+            ? Quaternion.LookRotation(wagonFinalPos - viewPos)
             : originRot;
 
-        float duration = Mathf.Clamp(
+        float cameraDuration = Mathf.Clamp(
             Vector3.Distance(originPos, viewPos) / sequence.travelSpeed,
             sequence.minTravelDuration,
             sequence.maxTravelDuration);
 
+        float wagonDuration = Mathf.Clamp(
+            Vector3.Distance(wagonStartPos, wagonFinalPos) / sequence.wagonTravelSpeed,
+            sequence.wagonMinTravelDuration,
+            sequence.wagonMaxTravelDuration);
+
+        target.SetPositionAndRotation(wagonStartPos, wagonRot);
+
         travelCinemachineCamera.Priority = travelPriority;
+
+        StartCoroutine(CameraTravel.Move(target, wagonStartPos, wagonRot,
+            () => wagonFinalPos, () => wagonRot,
+            wagonDuration, sequence.travelCurve, TravelAxis.All));
 
         yield return CameraTravel.Move(camT, originPos, originRot,
             () => viewPos, () => viewRot,
-            duration, sequence.travelCurve, sequence.travelAxes);
+            cameraDuration, sequence.travelCurve, sequence.travelAxes);
 
         yield return new WaitForSeconds(sequence.holdDuration);
 
         yield return CameraTravel.Move(camT, viewPos, viewRot,
             () => originPos, () => originRot,
-            duration, sequence.returnCurve, TravelAxis.All);
+            cameraDuration, sequence.returnCurve, TravelAxis.All);
 
         travelCinemachineCamera.Priority = 0;
         activeRoutine = null;

@@ -8,6 +8,11 @@ public class InteractionZone : MonoBehaviour
     [SerializeField] public string message;
     [SerializeField] private GameObject optionalPanel = null;
 
+    [SerializeField] private GameObject[] interactObjects;
+
+    [SerializeField] private LayerMask noInteractLayer;
+    [SerializeField] private LayerMask interactLayer;
+
     private bool playerInZone;
     private InteractionUIManager ui;
     private PlayerBrain playerBrain;
@@ -23,10 +28,27 @@ public class InteractionZone : MonoBehaviour
         EventBus.Unsubscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
     }
 
+    private int LayerMaskToLayer(LayerMask mask)
+    {
+        int layerNumber = 0;
+        int layer = mask.value;
+        while (layer > 1)
+        {
+            layer >>= 1;
+            layerNumber++;
+        }
+        return layerNumber;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
         if (!other.TryGetComponent(out PlayerBrain playerBrain)) return;
+
+        foreach (GameObject obj in interactObjects)
+        {
+            obj.layer = LayerMaskToLayer(interactLayer);
+        }
 
         this.playerBrain = playerBrain;
         ui = playerBrain.InteractionUIManager;
@@ -37,13 +59,19 @@ public class InteractionZone : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+
+        foreach (GameObject obj in interactObjects)
+        {
+            obj.layer = LayerMaskToLayer(noInteractLayer);
+        }
+
         playerInZone = false;
         isOpen = false; 
         ui?.HideAll();
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
 
-        playerBrain.SetCanMove(true);
+        //playerBrain.SetCanMove(true);
 
         playerBrain = null;
         ui = null;
@@ -60,7 +88,9 @@ public class InteractionZone : MonoBehaviour
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
 
-        playerBrain.SetCanMove(true);
+        // playerBrain.SetCanMove(true);
+
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
         EventBus.Publish(new OnActivateUiEvent(true));
         EventBus.Publish(new OnShowInteractEvent());
@@ -96,11 +126,13 @@ public class InteractionZone : MonoBehaviour
             if (optionalPanel != null)
                 optionalPanel.SetActive(true);
 
-            playerBrain.SetCanMove(false);
+            //playerBrain.SetCanMove(false);
 
             EventBus.Publish(new OnActivateUiEvent(false));
             EventBus.Publish(new OnHideInteractEvent());
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
+
+            GameManager.Instance.ChangeGameState(GameState.UI);
         }
         else
         {

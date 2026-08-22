@@ -126,7 +126,17 @@ public class PauseMenuManager : MonoBehaviour
 
         Time.timeScale = 1f;
         isPaused = false;
-        EventBus.Publish(new OnActivateUiEvent(true));
+
+        if (GameManager.Instance.CurrentState == GameState.UI)
+        {
+            EventBus.Publish(new OnActivateUiEvent(false));
+            Debug.Log("Chau");
+        }
+        else if (GameManager.Instance.CurrentState == GameState.Gameplay || GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
+            EventBus.Publish(new OnActivateUiEvent(true));
+            Debug.Log("Hola=?");
+        }
     }
 
     public void QuitToMainMenu()
