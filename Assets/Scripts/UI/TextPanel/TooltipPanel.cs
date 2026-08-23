@@ -12,6 +12,7 @@ public class TooltipPanel : MonoBehaviour
     {
         ServiceLocator.Register(this);
         gameObject.SetActive(false);
+        EventBus.Subscribe<OnActivateUiEvent>(ForceHide);
     }
     public void Show(string text, Vector2 screenPosition)
     {
@@ -27,6 +28,11 @@ public class TooltipPanel : MonoBehaviour
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    public void ForceHide(OnActivateUiEvent slop)
+    {
+        Hide();
     }
 
     private Vector2 ClampToScreen(Vector2 desiredPosition)

@@ -169,6 +169,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     {
         button.interactable = true;
         canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = true;
     }
 
@@ -176,6 +177,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     {
         button.interactable = false;
         canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = false;
     }
 
