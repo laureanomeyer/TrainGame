@@ -31,16 +31,16 @@ public class GameManager : MonoBehaviour
     private GameState stateAfterTransition;
     public bool IsGameplayState => CurrentState == GameState.Gameplay || CurrentState == GameState.Tutorial;
     public bool IsTransitioning => CurrentState == GameState.Transition;
-    public bool IsTutorial => SceneManager.GetActiveScene().name == "TutorialScene";
-    public bool IsGameplayScene => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene" || SceneManager.GetActiveScene().name == "Shop";
-    public bool IsInShop => SceneManager.GetActiveScene().name == "Shop";
-    public bool IsInCombat => SceneManager.GetActiveScene().name == "TutorialScene" || SceneManager.GetActiveScene().name == "LauScene";
+    public bool IsTutorial => SceneManager.GetActiveScene().name == "SceneTutorial";
+    public bool IsGameplayScene => SceneManager.GetActiveScene().name == "SceneTutorial" || SceneManager.GetActiveScene().name == "SceneLau" || SceneManager.GetActiveScene().name == "SceneShop";
+    public bool IsInShop => SceneManager.GetActiveScene().name == "SceneShop";
+    public bool IsInCombat => SceneManager.GetActiveScene().name == "SceneTutorial" || SceneManager.GetActiveScene().name == "SceneLau";
 
-    private const string MainMenuScene = "MainMenu";
-    private const string ShopScene = "Shop";
-    private const string RunScene = "LauScene";
-    private const string FinalScene = "FinalScene";
-    private const string TutorialScene = "TutorialScene";
+    private const string SceneMainMenu = "SceneMainMenu";
+    private const string SceneShop = "SceneShop";
+    private const string SceneRun = "SceneLau";
+    private const string SceneFinal = "SceneFinal";
+    private const string SceneTutorial = "SceneTutorial";
 
     private void Awake()
     {
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.UI);
+        ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI);
         ShowCursor(CursorType.Gameplay);
     }
     public void SkipRun()
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(ShopScene, SceneTransitionType.EndingRun, GameState.UI);
+        ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI);
     }
 
     public void GoToRun()
@@ -148,7 +148,7 @@ public class GameManager : MonoBehaviour
 
         Session.RebuildStatsSystem();
 
-        ChangeScene(RunScene, SceneTransitionType.StartingRun, GameState.Gameplay);
+        ChangeScene(SceneRun, SceneTransitionType.StartingRun, GameState.Gameplay);
         ShowCursor(CursorType.Gameplay);
     }
 
@@ -160,7 +160,7 @@ public class GameManager : MonoBehaviour
         LastRunResult = RunResult.None;
 
 
-        ChangeScene(MainMenuScene, SceneTransitionType.MainMenu, GameState.Menu);
+        ChangeScene(SceneMainMenu, SceneTransitionType.MainMenu, GameState.Menu);
         ShowCursor(CursorType.Real);
 
         EndSession();
@@ -174,7 +174,7 @@ public class GameManager : MonoBehaviour
 
         Session.RebuildStatsSystem();
 
-        ChangeScene(TutorialScene, SceneTransitionType.Generic, GameState.Tutorial);
+        ChangeScene(SceneTutorial, SceneTransitionType.Generic, GameState.Tutorial);
         ShowCursor(CursorType.Gameplay);
     }
 
@@ -187,7 +187,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        SceneManager.LoadScene(FinalScene);
+        SceneManager.LoadScene(SceneFinal);
         ShowCursor(CursorType.Real);
     }
 
@@ -201,7 +201,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        ChangeScene(FinalScene, SceneTransitionType.Final, GameState.Menu);
+        ChangeScene(SceneFinal, SceneTransitionType.Final, GameState.Menu);
         ShowCursor(CursorType.Real);
     }
 

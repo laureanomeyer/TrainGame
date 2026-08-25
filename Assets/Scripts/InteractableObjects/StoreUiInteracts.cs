@@ -20,6 +20,7 @@ public class StoreUiInteracts : MonoBehaviour
     {
         EventBus.Subscribe<OnInteractPressedEvent>(OnPlayerInteractEvent);
         closeButton.onClick.AddListener(DeactivateUI);
+        ServiceLocator.Register(this);
     }
 
     private void OnDisable()
@@ -70,7 +71,7 @@ public class StoreUiInteracts : MonoBehaviour
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
 
-    private void DeactivateUI()
+    public void DeactivateUI()
     {
         uiToShow.SetActive(false);
 

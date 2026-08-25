@@ -116,6 +116,7 @@ public class OnActivateUiEvent : IGameEvent
     public OnActivateUiEvent(bool activated)
     {
         Activated = activated;
+        Debug.Log(activated);
     }
 }
 

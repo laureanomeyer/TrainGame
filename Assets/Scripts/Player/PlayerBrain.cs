@@ -104,16 +104,6 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController.OnInteract();
     }
 
-    private void OnJump()
-    {
-        if (ServiceLocator.TryGet<DisplayTrain>(out var displayRef))
-        {
-            if (displayRef.InstantiatedWagonReferences[0] == null || displayRef.InstantiatedWagonReferences[1] == null) return;
-
-            displayRef.ReorderWagons(displayRef.InstantiatedWagonReferences[0], displayRef.InstantiatedWagonReferences[1]);
-        }
-    }
-
     private void OnSkipScene()
     {
         GameManager.Instance.SkipRun();

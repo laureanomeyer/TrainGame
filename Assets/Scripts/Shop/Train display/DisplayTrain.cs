@@ -28,10 +28,7 @@ public class DisplayTrain : MonoBehaviour
     private void Awake()
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
-    }
 
-    private void Start()
-    {
         wagonAssetsReference = new Dictionary<string, GameObject>();
         instantiatedWagonReferences = new Dictionary<int, ShopWagonData>();
 
@@ -60,7 +57,15 @@ public class DisplayTrain : MonoBehaviour
 
         ServiceLocator.Register(this);
     }
+    private void OnDestroy()
+    {
+        foreach (var key in registeredKeys)
+            cinematicActorRegistry?.UnregisterDynamic(key);
 
+        registeredKeys.Clear();
+    }
+
+    #region create and add wagons
     private (GameObject, ShopWagonData) CreateWagon(GameObject wagonModel, IWagonID data)
     {
         Vector3 spawnPosition = tailPos - (tailRot * Vector3.forward) * wagonGap;
@@ -97,13 +102,17 @@ public class DisplayTrain : MonoBehaviour
         return newWagon;
     }
 
+    #endregion
+
     public void ReorderWagons(ShopWagonData selected, ShopWagonData objective)
     {
         Vector3 reference = selected.transform.position;
 
         selected.transform.position = objective.transform.position;
+        SetLayerRecursively(selected.gameObject, LayerMask.NameToLayer("Outline"));
 
         objective.transform.position = reference;
+        SetLayerRecursively(objective.gameObject, LayerMask.NameToLayer("Outline"));
 
         var wagonA = wagonList.Find(selected.IDReference);
         var wagonB = wagonList.Find(objective.IDReference);
@@ -129,12 +138,11 @@ public class DisplayTrain : MonoBehaviour
     {
         return wagonList.ToList();
     }
-
-    private void OnDestroy()
+    private void SetLayerRecursively(GameObject obj, int layer)
     {
-        foreach (var key in registeredKeys)
-            cinematicActorRegistry?.UnregisterDynamic(key);
-
-        registeredKeys.Clear();
+        foreach (Transform t in obj.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = layer;
+        }
     }
 }
