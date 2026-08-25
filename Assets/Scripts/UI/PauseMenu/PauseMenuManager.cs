@@ -14,8 +14,8 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private Button menuButton;
 
     [Header("Scenes")]
-    [SerializeField] private string[] pausableScenes = { "LauScene", "Shop", "TutorialScene" };
-    [SerializeField] private string mainMenuSceneName = "MainMenu";
+    [SerializeField] private string[] pausableScenes = { "SceneLau", "SceneShop", "SceneTutorial" };
+    [SerializeField] private string mainMenuSceneName = "SceneMainMenu";
 
     private InputAction pauseAction;
     private bool isPaused;
