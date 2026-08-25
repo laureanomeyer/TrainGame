@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WagonStoreManager : MonoBehaviour
+public class WagonShopManager : MonoBehaviour
 {
     [Header("Wagon shop sections")]
     [SerializeField] private WagonShopButton[] shopButtons;

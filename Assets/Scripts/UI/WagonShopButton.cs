@@ -31,7 +31,7 @@ public class WagonShopButton : MonoBehaviour
 
     public string DescriptionText => descriptionText;
 
-    [SerializeField] private WagonStoreManager storeManager;
+    [SerializeField] private WagonShopManager storeManager;
 
     private TextMeshProUGUI nameTextUI;
     private TextMeshProUGUI descriptionTextUI;
