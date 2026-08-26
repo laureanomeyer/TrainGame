@@ -19,6 +19,7 @@ public class PauseMenuManager : MonoBehaviour
 
     private InputAction pauseAction;
     private bool isPaused;
+    private bool canPause = true;
     private CursorType currentCursor;
 
     public bool IsPaused => isPaused;
@@ -40,6 +41,8 @@ public class PauseMenuManager : MonoBehaviour
         }
 
         pauseAction = InputSystem.actions.FindAction("Pause");
+
+        EventBus.Subscribe<OnActivateUiEvent>(SetCanPause);
     }
 
     private void OnEnable()
@@ -87,6 +90,8 @@ public class PauseMenuManager : MonoBehaviour
         {
             return;
         }
+
+        if (!canPause) return;
 
         if (isPaused)
         {
@@ -179,5 +184,11 @@ public class PauseMenuManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void SetCanPause(OnActivateUiEvent activateUIEvent)
+    {
+        this.canPause = activateUIEvent.Activated;
+        Debug.Log(canPause + "canpasuse");
     }
 }
