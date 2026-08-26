@@ -816,6 +816,8 @@ GameObject:
   - component: {fileID: 1038731131388850925}
   - component: {fileID: 7727724930647348602}
   - component: {fileID: 4659215539045768355}
+  - component: {fileID: 6788604000293400546}
+  - component: {fileID: 1874721540821230550}
   m_Layer: 3
   m_Name: LocomotivePrefab
   m_TagString: Train
@@ -868,11 +870,6 @@ MonoBehaviour:
   EM: 10
   RES: 2
   shieldsRenderer: {fileID: 5117457321793284686}
-  explosionParticles:
-  - {fileID: 3674089710792516414}
-  - {fileID: 1056658057525529935}
-  - {fileID: 3394175694019614807}
-  - {fileID: 8748844566553112883}
   locomotiveAnchorKey: Locomotive
   locomotiveTopRender: {fileID: 7354901611553329974}
   locomotiveTopMeshFilter: {fileID: 7304059693240130678}
@@ -941,6 +938,126 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6788604000293400546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e737a52e461896d42ad18f05c3f50d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticleSequenceController
+  particles:
+  - id: explosion1
+    group: explosion
+    particle: {fileID: 0}
+    visualEffect: {fileID: 3674089710792516414}
+    delay: 1.5
+    useUnscaledTime: 1
+    activateObjectOnPlay: 1
+    clearOnStop: 0
+    onPlayed:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1874721540821230550}
+          m_TargetAssemblyTypeName: AudioEventRelay, Assembly-CSharp
+          m_MethodName: PlaySfx
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: SFXExplosionBoom
+            m_BoolArgument: 0
+          m_CallState: 2
+  - id: explosion2
+    group: explosion
+    particle: {fileID: 0}
+    visualEffect: {fileID: 1056658057525529935}
+    delay: 1.5
+    useUnscaledTime: 1
+    activateObjectOnPlay: 1
+    clearOnStop: 0
+    onPlayed:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1874721540821230550}
+          m_TargetAssemblyTypeName: AudioEventRelay, Assembly-CSharp
+          m_MethodName: PlaySfx
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: SFXExplosionBoom
+            m_BoolArgument: 0
+          m_CallState: 2
+  - id: explosion3
+    group: explosion
+    particle: {fileID: 0}
+    visualEffect: {fileID: 3394175694019614807}
+    delay: 1.5
+    useUnscaledTime: 1
+    activateObjectOnPlay: 1
+    clearOnStop: 0
+    onPlayed:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1874721540821230550}
+          m_TargetAssemblyTypeName: AudioEventRelay, Assembly-CSharp
+          m_MethodName: PlaySfx
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: SFXExplosionBoom
+            m_BoolArgument: 0
+          m_CallState: 2
+  - id: explosion4
+    group: explosion
+    particle: {fileID: 0}
+    visualEffect: {fileID: 8748844566553112883}
+    delay: 1.5
+    useUnscaledTime: 1
+    activateObjectOnPlay: 1
+    clearOnStop: 0
+    onPlayed:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1874721540821230550}
+          m_TargetAssemblyTypeName: AudioEventRelay, Assembly-CSharp
+          m_MethodName: PlaySfx
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: SFXExplosionBoom
+            m_BoolArgument: 0
+          m_CallState: 2
+  groups:
+  - group: explosion
+    staggerInterval: 0.1
+--- !u!114 &1874721540821230550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750482621701771139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc8204c31c0b034283d2af385b51295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioEventRelay
 --- !u!1 &8348556016466140807
 GameObject:
   m_ObjectHideFlags: 0
