@@ -10,6 +10,7 @@ public class ReorderManager : MonoBehaviour
     private StoreUiInteracts UIRef;
     private ShopWagonData selected;
     private ShopWagonData objective;
+    private ShopWagonData cacheRef;
     private int counter;
     private bool isInReorderMode;
 
@@ -40,12 +41,16 @@ public class ReorderManager : MonoBehaviour
     {
         if (!isInReorderMode) return;
 
+        if (cacheRef != null && cacheRef != selected) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+
         int current = Mathf.RoundToInt(value.ReadValue<Vector2>().x);
 
-        counter += current;
+        counter -= current;
         if (counter > trainDisplayRef.InstantiatedWagonReferences.Count - 1) counter = 0; 
-        if (counter < 0) counter = trainDisplayRef.InstantiatedWagonReferences.Count - 1; 
+        if (counter < 0) counter = trainDisplayRef.InstantiatedWagonReferences.Count - 1;
 
+        cacheRef = trainDisplayRef.InstantiatedWagonReferences[counter];
+        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
 
     }
 
@@ -63,6 +68,8 @@ public class ReorderManager : MonoBehaviour
 
     public void ToggleReorderMode(bool toggled)
     {
+        if (cacheRef != null && cacheRef != selected) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+
         if (trainDisplayRef == null) ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
 
         if (UIRef == null) ServiceLocator.TryGet<StoreUiInteracts>(out UIRef);
