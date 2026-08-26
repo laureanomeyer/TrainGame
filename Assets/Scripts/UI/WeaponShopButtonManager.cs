@@ -8,15 +8,10 @@ public class WeaponShopButtonManager : MonoBehaviour
 {
     [Header("Button from HUD")]
     [SerializeField] public GameObject[] shopButtons;
-    private List<IShopButton> buttons = new List<IShopButton>();
+    private List<IWeaponShopButton> buttons = new List<IWeaponShopButton>();
 
     [Header("Level of progress")]
     [SerializeField] private int level;
-
-    [Header("List of weapons in Stock")]
-    [SerializeField] public WeaponInStocSO[] firtsSlotWeapons;
-    [SerializeField] public WeaponInStocSO[] secondSlotWeapons;
-    [SerializeField] public WeaponInStocSO[] thirdSlotWeapons;
 
     [SerializeField] private Button closeButton;
     [SerializeField] private InteractionZone interacZone;
@@ -26,18 +21,15 @@ public class WeaponShopButtonManager : MonoBehaviour
        PlayerBrain playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBrain>();
        closeButton.onClick.AddListener(CloseButton);
 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        level = sessionConfigRef.CurrentLevel;
+
        for (int i = 0; i < shopButtons.Length; i++)
        {
             buttons.Add(shopButtons[i].GetComponent<WeaponShopButton>()); 
        }
 
-
-
-        buttons[0].WeaponInStock = firtsSlotWeapons;
-       buttons[1].WeaponInStock = secondSlotWeapons;
-       buttons[2].WeaponInStock = thirdSlotWeapons;
-
-       foreach (IShopButton button in buttons)
+       foreach (IWeaponShopButton button in buttons)
        {
             button.PlayerReference = playerAtk;
             button.ButtonManager = this;
@@ -56,7 +48,7 @@ public class WeaponShopButtonManager : MonoBehaviour
         interacZone.DeactivateUI();
     }
 
-    public void UpdateButtons(IShopButton button)
+    public void UpdateButtons(IWeaponShopButton button)
     {
         for (int i = 0; i < buttons.Count; i++)
         {

@@ -49,6 +49,7 @@ public class StatPanelController : MonoBehaviour
                 stats.alpha = 1;
             }
         }
+        else Debug.Log("No stats");
     }
 
     private void CallSetUpTextEvent(OnStatChangedEvent statsChagedEvent)

@@ -12,10 +12,10 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     [SerializeField] private WeaponDataSO weaponData;
 
     [Header("Pellet count")]
-    [SerializeField] private int pelletCount = 8;
+    [SerializeField] private int pelletCount;
 
     [Header("Spreed Angle")]
-    [SerializeField] private float spreadAngle = 45f;
+    [SerializeField] private float spreadAngle;
 
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;

@@ -64,8 +64,17 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  worldOffsetFromTarget: {x: -60, y: 0, z: 0}
+  useFOVZoom: 0
+  startFov: 40
+  endFov: 18
+  worldOffsetFromTarget: {x: -100, y: 0, z: 0}
   lookAtTarget: 0
+  useFixedRotation: 0
+  fixedEulerRotation: {x: 20, y: -90, z: 0}
   travelAxes: 1
   trackTarget: 1
   returnToOrigin: 0
+  wagonArrivalWorldOffset: {x: 0, y: 0, z: -8}
+  wagonTravelSpeed: 6
+  wagonMinTravelDuration: 0.5
+  wagonMaxTravelDuration: 3

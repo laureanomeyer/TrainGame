@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class WeaponShopButton : MonoBehaviour, IShopButton
+public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 {
     private PlayerBrain playerReference;
     private int level;
@@ -37,9 +37,6 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
     private WeaponShopButtonManager buttonManager;
     public int Level { get => level; set => level = value; }
-
-    public WeaponInStocSO[] WeaponInStock { get => weaponInStock; set => weaponInStock = value; }
-    public WeaponInStocSO[] weaponInStock;
 
     [Header("Weapon collection")]
     public WeaponCollectionInStockSO[] collections;
@@ -73,6 +70,8 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
 
     public void SetValues(int level)
     {
+        Debug.Log($"{level}");
+
         if (collections.Count() > 0 && level > 0)
         {
             foreach (WeaponCollectionInStockSO collection in collections)
@@ -169,6 +168,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     {
         button.interactable = true;
         canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = false;
         canvasGroup.interactable = true;
     }
 
@@ -176,6 +176,7 @@ public class WeaponShopButton : MonoBehaviour, IShopButton
     {
         button.interactable = false;
         canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
         canvasGroup.interactable = false;
     }
 

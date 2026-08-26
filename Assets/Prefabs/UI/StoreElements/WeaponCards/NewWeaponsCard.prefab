@@ -356,6 +356,7 @@ GameObject:
   - component: {fileID: 2093046992615476679}
   - component: {fileID: 7390748296786846409}
   - component: {fileID: 4971305388469733124}
+  - component: {fileID: 6905317052265816548}
   m_Layer: 5
   m_Name: Charger
   m_TagString: Untagged
@@ -448,6 +449,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &6905317052265816548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1130638338985466193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377e137c597fac740a1c9f867921df57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HovereableItem
+  description: Ammount of bullets per charger
+  showDelay: 0.2
+  verticalOffset: 10
 --- !u!1 &1166245639628168702
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,7 +1334,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.15
+  m_fontSize: 56.1
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1375,6 +1391,7 @@ GameObject:
   - component: {fileID: 2182491024072632399}
   - component: {fileID: 3795006070599261628}
   - component: {fileID: 5202251540118061439}
+  - component: {fileID: 724876630696794105}
   m_Layer: 5
   m_Name: Damage
   m_TagString: Untagged
@@ -1467,6 +1484,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &724876630696794105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4477685344992605263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377e137c597fac740a1c9f867921df57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HovereableItem
+  description: Damage dealt when hitting an enemy
+  showDelay: 0.2
+  verticalOffset: 10
 --- !u!1 &5885773881578469853
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,6 +1511,7 @@ GameObject:
   - component: {fileID: 2505435847755055733}
   - component: {fileID: 2278504341350999797}
   - component: {fileID: 6297015145912235674}
+  - component: {fileID: 7433257060063701965}
   m_Layer: 5
   m_Name: AttackSpeed
   m_TagString: Untagged
@@ -1571,6 +1604,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &7433257060063701965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5885773881578469853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377e137c597fac740a1c9f867921df57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HovereableItem
+  description: Time between each shot
+  showDelay: 0.2
+  verticalOffset: 10
 --- !u!1 &5948001540926933230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1971,7 +2019,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56.1
+  m_fontSize: 82.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -23,6 +23,13 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private int gameplayPriority = 10;
     [SerializeField] private int cinematicPriority = 20;
 
+    [Header("Victory Threshold")]
+    [SerializeField] private Transform victoryThreshold;
+    [SerializeField] private float thresholdTargetX = -100f;
+    [SerializeField] private float thresholdRetreatDuration = 2f;
+
+
+
     private ICinematicActorRegistry registry;
     private Transform cinematicTransform;
     private Coroutine activeRoutine;
@@ -64,7 +71,7 @@ public class CinematicSystem : MonoBehaviour
             return;
         }
 
-        activeRoutine = StartCoroutine(CinematicRoutine(sequence, target));
+        activeRoutine = StartCoroutine(CinematicRoutine(sequence, target, result));
     }
 
     private bool TryValidate(CameraTravelSequenceSO sequence, string anchorKey, out Transform target)
@@ -97,9 +104,14 @@ public class CinematicSystem : MonoBehaviour
         return false;
     }
 
-    private IEnumerator CinematicRoutine(CameraTravelSequenceSO sequence, Transform target)
+    private IEnumerator CinematicRoutine(CameraTravelSequenceSO sequence, Transform target, RunResult result)
     {
         isPlaying = true;
+
+        if (result == RunResult.Victory && victoryThreshold != null)
+        {
+            StartCoroutine(ThresholdRetreat());
+        }
 
         Transform mainCameraTransform = Camera.main.transform;
         cinematicTransform.SetPositionAndRotation(
@@ -156,6 +168,8 @@ public class CinematicSystem : MonoBehaviour
             destinationProvider, rotationProvider,
             travelDuration, sequence.travelCurve, sequence.travelAxes, fovTick);
 
+        
+
         if (sequence.holdDuration > 0f)
             yield return new WaitForSeconds(sequence.holdDuration);
 
@@ -176,5 +190,24 @@ public class CinematicSystem : MonoBehaviour
         activeRoutine = null;
 
         OnCinematicFinished?.Invoke();
+    }
+
+    private IEnumerator ThresholdRetreat()
+    {
+        Vector3 startPos = victoryThreshold.position;
+        Vector3 targetPos = new Vector3(thresholdTargetX, startPos.y, startPos.z);
+
+        float timer = 0f;
+        while (timer < thresholdRetreatDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / thresholdRetreatDuration;
+
+            victoryThreshold.position = Vector3.Lerp(startPos, targetPos, t);
+
+            yield return null;
+        }
+
+        victoryThreshold.position = targetPos;
     }
 }

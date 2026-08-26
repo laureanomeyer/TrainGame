@@ -447,7 +447,6 @@ Transform:
   - {fileID: 7969817385539490437}
   - {fileID: 3408422029194364535}
   - {fileID: 1626377754428072864}
-  - {fileID: 2796822418312207174}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8783682575282614284
@@ -473,7 +472,10 @@ MonoBehaviour:
   particles: {fileID: 3230749072489517343}
   destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
   WagonNormal: {fileID: 1802792305151619361}
-  WagonDestroyed: {fileID: 3286395756573442556}
+  WagonsDestroyed:
+  - {fileID: 1126321291451483988, guid: 17df06b3335a5fd49a05c0906151d603, type: 3}
+  - {fileID: 1610937923735272, guid: a81e39cc7c60a08438c4265ea0617ff2, type: 3}
+  - {fileID: 6426947880810949910, guid: 0cfee1d9f30c99a498865b6d09f56b11, type: 3}
   wagonTopRender: {fileID: 8665525426111825057}
   wagonTopMeshFilter: {fileID: 1906481723035024286}
   hpBonus: 0.1
@@ -5949,102 +5951,3 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1001 &2403504203233524909
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 2330823702144864097}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6188833195720775937, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: -3735167275887410581, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_Name
-      value: WagonDestroyed 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8473487952011284802, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-      propertyPath: m_Layer
-      value: 3
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
---- !u!4 &2796822418312207174 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-  m_PrefabInstance: {fileID: 2403504203233524909}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &3286395756573442556 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cc901a94973d98e40be76e3be976ccf1, type: 3}
-  m_PrefabInstance: {fileID: 2403504203233524909}
-  m_PrefabAsset: {fileID: 0}
