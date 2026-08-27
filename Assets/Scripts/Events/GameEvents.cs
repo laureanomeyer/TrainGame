@@ -160,6 +160,11 @@ public class OnTakeGoldEvent : IGameEvent
     public OnTakeGoldEvent() { }
 }
 
+public class OnTakeCoalEvent : IGameEvent
+{
+    public OnTakeCoalEvent() { }
+}
+
 public class OnDropFuelEvent : IGameEvent
 {
     public OnDropFuelEvent() { }

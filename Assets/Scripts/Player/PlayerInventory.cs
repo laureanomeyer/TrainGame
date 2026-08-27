@@ -23,8 +23,8 @@ public class PlayerInventory : IInventory
     }
 
     
-     public void DepositCoal()
-     {
+    public void DepositCoal()
+    {
         hasCoal = false;
     }
 

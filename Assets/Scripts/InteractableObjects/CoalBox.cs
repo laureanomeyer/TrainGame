@@ -6,14 +6,17 @@ public class CoalBox: IInteractableWithInventory
     private bool canInteract = true;
     private BoxCollider collider;
 
+
+
     private float charges;
     private bool hasCoal;
+
     public bool HasCoal => hasCoal;
     public float Charges => charges;
 
     public CoalBox(BoxCollider collider)
     {
-        charges = 1f;
+        charges = 0;
         hasCoal = true;
         this.collider = collider;
         EventBus.Subscribe<OnEnableCoalBoxEvent>(SetCanInteract);

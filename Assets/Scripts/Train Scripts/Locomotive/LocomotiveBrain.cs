@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -15,6 +16,10 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     [SerializeField] private Renderer shieldsRenderer;
 
     [SerializeField] private VisualEffect[] explosionParticles;
+
+    [Header("UI")]
+
+    [SerializeField] private TextMeshProUGUI currentCoalUI;
 
     [Header("Cinematic")]
     [SerializeField] private string locomotiveAnchorKey = "Locomotive";
@@ -33,6 +38,9 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     private StatSystem stats;
     private bool started = false;
 
+    private CoalCollector coalCollector;
+    public CoalCollector CoalCollector => coalCollector;
+
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
     public Transform Transform => transform;
@@ -40,6 +48,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     void Awake()
     {
         var dataRef = ServiceLocator.Get<TrainData>();
+        coalCollector = new CoalCollector(currentCoalUI);
         dataRef.SetCoalBox(coalBox);
         stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
@@ -51,6 +60,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
             stats.GetStat(StatType.FuelOptimizer),
             shieldsRenderer
         );
+
 
         renderController = new LocomotiveRenderController(this);
 
@@ -160,7 +170,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         if (explosionParticles == null || explosionParticles.Length == 0)
         {
-            Debug.LogWarning("explosionParticles vacío o sin asignar en " + gameObject.name);
+            Debug.LogWarning("explosionParticles vacï¿½o o sin asignar en " + gameObject.name);
             yield break;
         }
 

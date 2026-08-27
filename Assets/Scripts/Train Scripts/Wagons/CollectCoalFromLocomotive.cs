@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CollectGoldFromWagon : MonoBehaviour
+public class CollectCoalFromLocomotive : MonoBehaviour
 {
     PlayerBrain playerRef;
     [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private GoldenWagonBrain goldBrain;
+    [SerializeField] private LocomotiveBrain coalBrain;
     [SerializeField] private BoxCollider boxCollider;
     InteractInputHandler inputHandler;
 
@@ -13,7 +13,7 @@ public class CollectGoldFromWagon : MonoBehaviour
 
     private void Awake()
     {
-        EventBus.Subscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
+        EventBus.Subscribe<OnEnemyKilledEvent>(CallCollectCoalEvent);
     }
     void Start()
     {
@@ -21,25 +21,21 @@ public class CollectGoldFromWagon : MonoBehaviour
 
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
-        inputHandler = new InteractInputHandler(interactAction, SetGoldInPlayerInventory);
+        inputHandler = new InteractInputHandler(interactAction, SetCoalInPlayerInventory);
 
         if (!GameManager.Instance.IsTutorial) Activate();
     }
 
     private void OnDestroy()
     {
-        EventBus.Unsubscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
+        EventBus.Unsubscribe<OnEnemyKilledEvent>(CallCollectCoalEvent);
         inputHandler.Dispose();
     }
 
-    private void SetGoldInPlayerInventory()
+    private void SetCoalInPlayerInventory()
     {
         if (!canInteract) return;
-
-        if (playerRef != null)
-        {
-            playerRef.Inventory.GoldAmount += goldBrain.Collector.GiveGold();
-        }
+        coalBrain.CoalCollector.GiveCoal();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -57,7 +53,7 @@ public class CollectGoldFromWagon : MonoBehaviour
         }
     }
 
-    private void CallCollectGoldEvent(OnEnemyKilledEvent enemyKillEvent)
+    private void CallCollectCoalEvent(OnEnemyKilledEvent enemyKillEvent)
     {
         Activate();
     }
