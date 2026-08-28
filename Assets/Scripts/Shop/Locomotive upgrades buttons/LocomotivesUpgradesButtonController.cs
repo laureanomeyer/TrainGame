@@ -60,9 +60,9 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
         locomotiveUpgrade = new TrainStats();
 
-        //Line 67
         maxHPButton.ButtonManager = this;
         attackSpeedButton.ButtonManager = this;
+        //Line 67
         damageMultiplierButton.ButtonManager = this;
         defenseButton.ButtonManager = this;
         goldMultiplierButton.ButtonManager = this;
@@ -79,6 +79,9 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         {
             DeactivateAllButtons();
         }
+
+        EventBus.Publish(new OnActivateNonPausableUI(false));
+        EventBus.Publish(new OnActivateUiEvent(false));
     }
 
     public void MaxHPUpgrade()
@@ -140,6 +143,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
         EventBus.Publish(new OnActivateUiEvent(true));
+        EventBus.Publish(new OnActivateNonPausableUI(true));
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
     }
     public void DeactivateUpgradesUi()

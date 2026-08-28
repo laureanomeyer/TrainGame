@@ -55,6 +55,7 @@ public class StoreManager : MonoBehaviour
     public void ExitStore()
     {
         ChangeWagonList();
+        EventBus.Publish(new OnActivateNonPausableUI(true));
         GameManager.Instance.GoToRun();
     }
 }

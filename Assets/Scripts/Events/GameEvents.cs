@@ -102,7 +102,19 @@ public class OnActivateUiEvent : IGameEvent
     public OnActivateUiEvent(bool activated)
     {
         Activated = activated;
-        Debug.Log(activated);
+    }
+}
+
+public class OnActivateNonPausableUI : IGameEvent
+{
+    public bool Activated;
+
+    /// <summary>
+    /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
+    /// </summary>
+    public OnActivateNonPausableUI(bool activated)
+    {
+        Activated = activated;
     }
 }
 

@@ -47,7 +47,8 @@ public class HovereableItem : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             showRoutine = null;
         }
 
-        tooltipPanelRef.Hide();
+        if (tooltipPanelRef != null)
+            tooltipPanelRef.Hide();
     }
     private System.Collections.IEnumerator ShowAfterDelay()
     {

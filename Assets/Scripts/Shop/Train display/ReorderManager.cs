@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,7 +10,9 @@ public class ReorderManager : MonoBehaviour
     private ShopWagonData selected;
     private ShopWagonData objective;
     private ShopWagonData cacheRef;
-    private int counter;
+    private int selectedWagonKey;
+    private int objectiveWagonKey;
+    private int currentHoveredWagonKey;
     private bool isInReorderMode;
 
 
@@ -20,7 +21,7 @@ public class ReorderManager : MonoBehaviour
         ServiceLocator.Register(this);
         ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
         ServiceLocator.TryGet<StoreUiInteracts>(out UIRef);
-        counter = 0;
+        currentHoveredWagonKey = -1;
     }
 
     private void OnEnable()
@@ -45,11 +46,11 @@ public class ReorderManager : MonoBehaviour
 
         int current = Mathf.RoundToInt(value.ReadValue<Vector2>().x);
 
-        counter -= current;
-        if (counter > trainDisplayRef.InstantiatedWagonReferences.Count - 1) counter = 0; 
-        if (counter < 0) counter = trainDisplayRef.InstantiatedWagonReferences.Count - 1;
+        currentHoveredWagonKey -= current;
+        if (currentHoveredWagonKey > trainDisplayRef.InstantiatedWagonReferences.Count - 1) currentHoveredWagonKey = 0; 
+        if (currentHoveredWagonKey < 0) currentHoveredWagonKey = trainDisplayRef.InstantiatedWagonReferences.Count - 1;
 
-        cacheRef = trainDisplayRef.InstantiatedWagonReferences[counter];
+        cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
         SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
 
     }
@@ -57,7 +58,7 @@ public class ReorderManager : MonoBehaviour
     private void OnJumpPerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
-        SelectWagons(counter);
+        SelectWagons(currentHoveredWagonKey);
     }
 
     private void OnPausePerformed(InputAction.CallbackContext value)
@@ -90,7 +91,7 @@ public class ReorderManager : MonoBehaviour
 
         if (selected == null || objective == null) return;
 
-        trainDisplayRef.ReorderWagons(selected, objective);
+        trainDisplayRef.ReorderWagons(selected, objective, selectedWagonKey, objectiveWagonKey);
 
         selected = null;
         objective = null;
@@ -98,10 +99,15 @@ public class ReorderManager : MonoBehaviour
 
     private void SelectWagons(int selectedID)
     {
-        if (selected == null) selected = SelectSingleWagon(selectedID);
-        else if (objective == null)
+        if (selected == null)
         { 
-            objective = SelectSingleWagon(selectedID); 
+            selected = SelectSingleWagon(selectedID);
+            this.selectedWagonKey = selectedID;
+        }
+        else if (objective == null)
+        {
+            objective = SelectSingleWagon(selectedID);
+            objectiveWagonKey = selectedID;
             ConfirmSwap();
         }
     }

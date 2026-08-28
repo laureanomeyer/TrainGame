@@ -48,7 +48,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons
 
     public void DestroyWeapon()
     {
-        Debug.Log("Arma destruida");
+        return;
     }
 
     public void Tick(float deltaTime)
