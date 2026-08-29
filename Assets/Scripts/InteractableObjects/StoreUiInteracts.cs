@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -14,19 +15,33 @@ public class StoreUiInteracts : MonoBehaviour
     [SerializeField] private Button closeButton;
 
     private bool playerInZone;
-    private bool uiOpen = false;    
+    private bool uiOpen = false;
+    private InputAction pauseAction;
 
     private void OnEnable()
     {
         EventBus.Subscribe<OnInteractPressedEvent>(OnPlayerInteractEvent);
         closeButton.onClick.AddListener(DeactivateUI);
         ServiceLocator.Register(this);
+
+        pauseAction = InputSystem.actions.FindAction("Pause");
+
+
+        if (pauseAction != null)
+        {
+            pauseAction.performed += OnPausePressed;
+        }
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<OnInteractPressedEvent>(OnPlayerInteractEvent);
         closeButton.onClick.RemoveListener(DeactivateUI);
+
+        if (pauseAction != null)
+        {
+            pauseAction.performed -= OnPausePressed;
+        }
     }
 
     private int LayerMaskToLayer(LayerMask mask)
@@ -74,12 +89,14 @@ public class StoreUiInteracts : MonoBehaviour
     public void DeactivateUI()
     {
         uiToShow.SetActive(false);
+        uiOpen = false;
 
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
         EventBus.Publish(new OnShowInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
         EventBus.Publish(new OnActivateUiEvent(true));
+        EventBus.Publish(new OnActivateNonPausableUI(true));
     }
 
     public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
@@ -99,13 +116,16 @@ public class StoreUiInteracts : MonoBehaviour
 
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
             EventBus.Publish(new OnActivateUiEvent(false));
+            EventBus.Publish(new OnActivateNonPausableUI(false));
 
             GameManager.Instance.ChangeGameState(GameState.UI);
         }
-        else
-        {
-            uiOpen = false;
+    }
 
+    private void OnPausePressed(InputAction.CallbackContext context)
+    {
+        if (uiOpen)
+        {
             DeactivateUI();
         }
     }

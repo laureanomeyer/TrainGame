@@ -13,9 +13,7 @@ public class PauseMenuManager : MonoBehaviour
     [SerializeField] private Button resumeButton;
     [SerializeField] private Button menuButton;
 
-    [Header("Scenes")]
-    [SerializeField] private string[] pausableScenes = { "SceneLau", "SceneShop", "SceneTutorial" };
-    [SerializeField] private string mainMenuSceneName = "SceneMainMenu";
+    private string[] pausableScenes = { "SceneLau", "SceneShop", "SceneTutorial" };
 
     private InputAction pauseAction;
     private bool isPaused;
@@ -42,7 +40,7 @@ public class PauseMenuManager : MonoBehaviour
 
         pauseAction = InputSystem.actions.FindAction("Pause");
 
-        EventBus.Subscribe<OnActivateUiEvent>(SetCanPause);
+        EventBus.Subscribe<OnActivateNonPausableUI>(SetCanPause);
     }
 
     private void OnEnable()
@@ -88,10 +86,16 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (!IsInPausableScene())
         {
+            Debug.Log("No pausable scene");
             return;
         }
 
-        if (!canPause) return;
+        if (!canPause)
+        {
+            Debug.Log("No pausable bb");
+            return;
+        }
+
 
         if (isPaused)
         {
@@ -174,6 +178,7 @@ public class PauseMenuManager : MonoBehaviour
     private bool IsInPausableScene()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
+        Debug.Log(currentSceneName);
 
         foreach (string sceneName in pausableScenes)
         {
@@ -186,7 +191,7 @@ public class PauseMenuManager : MonoBehaviour
         return false;
     }
 
-    private void SetCanPause(OnActivateUiEvent activateUIEvent)
+    private void SetCanPause(OnActivateNonPausableUI activateUIEvent)
     {
         this.canPause = activateUIEvent.Activated;
         Debug.Log(canPause + "canpasuse");

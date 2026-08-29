@@ -9,11 +9,16 @@ public class DisplayTrain : MonoBehaviour
     [Header("Wagon Spacing")]
     private float wagonGap = -0.6f;
 
-    private LinkedList<IWagonID> wagonList;
 
     [SerializeField] private List<WagonInStockSO> wagonAssets;
 
     private Dictionary<string, GameObject> wagonAssetsReference;
+
+    //Reorder related
+    /// <summary>
+    /// List of Identifiers (ID) for the instantiatedWagonReferences Dictionary
+    /// </summary>
+    private LinkedList<IWagonID> wagonList;
     private Dictionary<int, ShopWagonData> instantiatedWagonReferences;
 
     private ICinematicActorRegistry cinematicActorRegistry;
@@ -104,7 +109,7 @@ public class DisplayTrain : MonoBehaviour
 
     #endregion
 
-    public void ReorderWagons(ShopWagonData selected, ShopWagonData objective)
+    public void ReorderWagons(ShopWagonData selected, ShopWagonData objective, int selectedKey, int objectiveKey)
     {
         Vector3 reference = selected.transform.position;
 
@@ -116,6 +121,9 @@ public class DisplayTrain : MonoBehaviour
 
         var wagonA = wagonList.Find(selected.IDReference);
         var wagonB = wagonList.Find(objective.IDReference);
+
+        instantiatedWagonReferences[selectedKey] = objective;
+        instantiatedWagonReferences[objectiveKey] = selected;
 
         if (wagonA != null && wagonB != null)
         {

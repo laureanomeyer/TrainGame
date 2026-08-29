@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEngine.Timeline.DirectorControlPlayable;
 
 public class InteractionZone : MonoBehaviour
 {
@@ -16,13 +18,27 @@ public class InteractionZone : MonoBehaviour
     private bool playerInZone;
     private InteractionUIManager ui;
     private PlayerBrain playerBrain;
+    private InputAction pauseAction;
+
     private bool isOpen = false;
 
     private void OnEnable()
     {
         EventBus.Subscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
-    }
+        pauseAction = InputSystem.actions.FindAction("Pause");
 
+        if (pauseAction != null)
+        {
+            pauseAction.performed += OnPausePressed;
+        }
+    }
+    private void OnDisable()
+    {
+        if (pauseAction != null)
+        {
+            pauseAction.performed -= OnPausePressed;
+        }
+    }
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
@@ -43,14 +59,13 @@ public class InteractionZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
-        if (!other.TryGetComponent(out PlayerBrain playerBrain)) return;
+        if (!other.TryGetComponent(out playerBrain)) return;
 
         foreach (GameObject obj in interactObjects)
         {
             obj.layer = LayerMaskToLayer(interactLayer);
         }
 
-        this.playerBrain = playerBrain;
         ui = playerBrain.InteractionUIManager;
         playerInZone = true;
         EventBus.Publish(new OnShowInteractEvent());
@@ -77,6 +92,7 @@ public class InteractionZone : MonoBehaviour
         ui = null;
 
         EventBus.Publish(new OnActivateUiEvent(true));
+        EventBus.Publish(new OnActivateNonPausableUI(true));
         EventBus.Publish(new OnHideInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
@@ -93,6 +109,7 @@ public class InteractionZone : MonoBehaviour
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
         EventBus.Publish(new OnActivateUiEvent(true));
+        EventBus.Publish(new OnActivateNonPausableUI(true));
         EventBus.Publish(new OnShowInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
@@ -129,12 +146,17 @@ public class InteractionZone : MonoBehaviour
             //playerBrain.SetCanMove(false);
 
             EventBus.Publish(new OnActivateUiEvent(false));
+            EventBus.Publish(new OnActivateNonPausableUI(false));
             EventBus.Publish(new OnHideInteractEvent());
             EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
 
             GameManager.Instance.ChangeGameState(GameState.UI);
         }
-        else
+    }
+
+    private void OnPausePressed(InputAction.CallbackContext context)
+    {
+        if (isOpen)
         {
             DeactivateUI();
         }

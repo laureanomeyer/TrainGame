@@ -1,7 +1,5 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 {
@@ -14,8 +12,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     [SerializeField] private float RES;
 
     [SerializeField] private Renderer shieldsRenderer;
-
-    [SerializeField] private VisualEffect[] explosionParticles;
 
     [Header("UI")]
 
@@ -30,6 +26,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     private LocomotiveRenderController renderController;
     private ICinematicActorRegistry cinematicRegistry;
+    private ParticleSequenceController particleSequence;
 
     private bool destroyed;
     public LocomotiveFuel fuelController;
@@ -53,6 +50,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
         animator = GetComponent<Animator>();
+        particleSequence = GetComponent<ParticleSequenceController>();
         fuelController = new LocomotiveFuel(
             EM * stats.GetStat(StatType.Defense),
             CM * stats.GetStat(StatType.MaxHp),
@@ -119,9 +117,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         AudioManager.Instance.Play("SFXExplosionBuildUp");
 
-        //Build up particles + Delay based on distance
-
-        StartCoroutine(ExplotionDelay());
+        particleSequence?.PlayGroup("explosion");
 
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
@@ -161,29 +157,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (other.gameObject.CompareTag("Player"))
         {
             renderController.ActivateWagonTop();
-        }
-    }
-
-    private IEnumerator ExplotionDelay()
-    {
-        yield return new WaitForSecondsRealtime(1.5f);
-
-        if (explosionParticles == null || explosionParticles.Length == 0)
-        {
-            Debug.LogWarning("explosionParticles vac�o o sin asignar en " + gameObject.name);
-            yield break;
-        }
-
-        foreach (var vfx in explosionParticles)
-        {
-            if (vfx != null)
-            {
-                vfx.gameObject.SetActive(true);
-                vfx.Play();
-                AudioManager.Instance.Play("SFXExplosionBoom");
-            }
-
-            yield return new WaitForSecondsRealtime(0.1f);
         }
     }
 }

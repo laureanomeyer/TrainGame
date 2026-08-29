@@ -74,7 +74,6 @@ public class GameManager : MonoBehaviour
     public void ChangeGameState(GameState state)
     {
         CurrentState = state;
-        Debug.Log(CurrentState);
     }
 
     public bool IsFinalStation()

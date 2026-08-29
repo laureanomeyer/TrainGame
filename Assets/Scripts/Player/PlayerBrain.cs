@@ -13,7 +13,7 @@ public class PlayerBrain : MonoBehaviour
     [Header("Interactions")]
     [SerializeField] private float repairCapacity;
     [SerializeField] private InteractionUIManager interactionUIManager;
-    [SerializeField] private GameObject Interactimage;
+    [SerializeField] private GameObject interactImage;
 
     [Header("Bullets")]
     [SerializeField] private Transform spawnPoint;
@@ -169,7 +169,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void ShowInteract(OnShowInteractEvent showInteractEvent)
     {
-        Interactimage.SetActive(true);
+        interactImage.SetActive(true);
     }
 
     public void CallHideInteractEvent(OnHideInteractEvent hideInteractEvent)
@@ -179,7 +179,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void HideInteract()
     {
-        Interactimage.SetActive(false);
+        interactImage.SetActive(false);
     }
 
 
