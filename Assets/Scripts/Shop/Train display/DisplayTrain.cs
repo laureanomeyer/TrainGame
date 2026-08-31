@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 public class DisplayTrain : MonoBehaviour
@@ -9,15 +10,19 @@ public class DisplayTrain : MonoBehaviour
     [Header("Wagon Spacing")]
     private float wagonGap = -0.6f;
 
+    [Header("New Wagon Pop-In Animation")]
+    [SerializeField] private float popInDelay = 0.5f;
+    [SerializeField] private float popInDuration = 0.4f;
+    [SerializeField] private Ease popInEase = Ease.OutBack;
+
+    [Header("Existing Wagons Shift Animation")]
+    [SerializeField] private float shiftDuration = 0.4f;
+    [SerializeField] private Ease shiftEase = Ease.OutQuad;
 
     [SerializeField] private List<WagonInStockSO> wagonAssets;
 
     private Dictionary<string, GameObject> wagonAssetsReference;
 
-    //Reorder related
-    /// <summary>
-    /// List of Identifiers (ID) for the instantiatedWagonReferences Dictionary
-    /// </summary>
     private LinkedList<IWagonID> wagonList;
     private Dictionary<int, ShopWagonData> instantiatedWagonReferences;
 
@@ -28,6 +33,11 @@ public class DisplayTrain : MonoBehaviour
 
     private Vector3 tailPos;
     private Quaternion tailRot;
+
+    // Ancla fija del frente del display: acá spawnea siempre el próximo wagon comprado
+    private Vector3 headPos;
+    private Quaternion headRot;
+
     public Dictionary<int, ShopWagonData> InstantiatedWagonReferences => instantiatedWagonReferences;
 
     private void Awake()
@@ -52,6 +62,9 @@ public class DisplayTrain : MonoBehaviour
         tailPos = currentTail.position;
         tailRot = currentTail.rotation;
 
+        headPos = tailPos;
+        headRot = tailRot;
+
         int counter = 0;
         foreach (var wagon in wagonList)
         {
@@ -62,6 +75,7 @@ public class DisplayTrain : MonoBehaviour
 
         ServiceLocator.Register(this);
     }
+
     private void OnDestroy()
     {
         foreach (var key in registeredKeys)
@@ -90,13 +104,37 @@ public class DisplayTrain : MonoBehaviour
     public GameObject AddWagon(WagonInStockSO wagonID)
     {
         var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName);
-        wagonList.AddLast(newWag);
-        var newVisualWagon = CreateWagon(wagonID.shopModel, newWag);
-        GameObject newWagon = newVisualWagon.Item1;
 
+        GameObject newWagon = Instantiate(wagonID.shopModel, headPos, headRot);
+        ShopWagonData newWagonData = newWagon.GetComponent<ShopWagonData>();
+        newWagonData.SetID(newWag);
 
-        if (instantiatedWagonReferences.Count == 0) instantiatedWagonReferences.Add(0, newVisualWagon.Item2);
-        else instantiatedWagonReferences.Add(instantiatedWagonReferences.Count, newVisualWagon.Item2);
+        // Cuánto espacio ocupa el wagon nuevo (mismo criterio que CreateWagon: hasta su propio socket "tail")
+        Transform newWagonTail = newWagonData.tail;
+        Vector3 shiftOffset = newWagonTail.position - headPos;
+
+        // Corre para atrás todos los wagons ya instanciados, para hacerle lugar al nuevo adelante
+        foreach (var wagon in instantiatedWagonReferences.Values)
+        {
+            Vector3 targetPos = wagon.transform.position + shiftOffset;
+            wagon.transform.DOMove(targetPos, shiftDuration).SetEase(shiftEase);
+        }
+
+        // Reindexa: todo lo existente corre +1, el nuevo ocupa el slot 0 (el frente)
+        var reindexed = new Dictionary<int, ShopWagonData> { [0] = newWagonData };
+        foreach (var kvp in instantiatedWagonReferences)
+            reindexed[kvp.Key + 1] = kvp.Value;
+        instantiatedWagonReferences = reindexed;
+
+        wagonList.AddFirst(newWag);
+
+        // El fondo del tren también se corre para atrás
+        tailPos += shiftOffset;
+
+        // Pop-in: arranca en 0 y escala hasta su tamaño real
+        Vector3 finalScale = newWagon.transform.localScale;
+        newWagon.transform.localScale = Vector3.zero;
+        newWagon.transform.DOScale(finalScale, popInDuration).SetEase(popInEase).SetDelay(popInDelay);
 
         string key = $"shop_wagon_{wagonCounter++}";
         registeredKeys.Add(key);

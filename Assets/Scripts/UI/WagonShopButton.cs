@@ -43,11 +43,12 @@ public class WagonShopButton : MonoBehaviour
     private bool usedReroll = false;
 
 
-    [Header("Wagon Arrival Animation")]
+    /*[Header("Wagon Arrival Animation")]
     [SerializeField] private float wagonArrivalDuration = 1.5f;
 
     [Tooltip("Distancia desde la izquierda donde aparece antes de entrar.")]
     [SerializeField] private float wagonStartOffsetX = -35f;
+    */
 
     [SerializeField] private float waitTimeToBuy;
 
@@ -241,43 +242,10 @@ public class WagonShopButton : MonoBehaviour
     {
         isBuyingWagon = true;
 
-
         storeManager.buyButton.interactable = false;
         storeManager.rerollButton.interactable = false;
 
-
-        GameObject newWagon = displayTrain.AddWagon(currentWagonInStock);
-
-        if (newWagon != null)
-        {
-            Vector3 finalPosition = newWagon.transform.position;
-            Quaternion finalRotation = newWagon.transform.rotation;
-
-
-            Vector3 startPosition = finalPosition;
-            startPosition.x += wagonStartOffsetX;
-
-            newWagon.transform.position = startPosition;
-            newWagon.transform.rotation = finalRotation;
-
-            float timer = 0f;
-
-            while (timer < wagonArrivalDuration)
-            {
-                timer += Time.deltaTime;
-
-                float t = Mathf.Clamp01(timer / wagonArrivalDuration);
-
-
-                t = t * t * (3f - 2f * t);
-
-                newWagon.transform.position = Vector3.Lerp(startPosition, finalPosition, t);
-
-                yield return null;
-            }
-
-            newWagon.transform.position = finalPosition;
-        }
+        displayTrain.AddWagon(currentWagonInStock);
 
         GameManager.Instance.Session.RebuildStatsSystem();
 

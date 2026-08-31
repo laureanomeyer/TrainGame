@@ -59,13 +59,10 @@ public class CameraTravelPlayer : MonoBehaviour
         Vector3 originPos = camT.position;
         Quaternion originRot = camT.rotation;
 
-        Vector3 wagonFinalPos = target.position;
-        Quaternion wagonRot = target.rotation;
-        Vector3 wagonStartPos = wagonFinalPos + sequence.wagonArrivalWorldOffset;
-
-        Vector3 viewPos = wagonFinalPos + sequence.worldOffsetFromTarget;
+        // target.position ya es la posición donde se agregó el wagon nuevo (headPos)
+        Vector3 viewPos = target.position + sequence.worldOffsetFromTarget;
         Quaternion viewRot = sequence.lookAtTarget
-            ? Quaternion.LookRotation(wagonFinalPos - viewPos)
+            ? Quaternion.LookRotation(target.position - viewPos)
             : originRot;
 
         float cameraDuration = Mathf.Clamp(
@@ -73,18 +70,7 @@ public class CameraTravelPlayer : MonoBehaviour
             sequence.minTravelDuration,
             sequence.maxTravelDuration);
 
-        float wagonDuration = Mathf.Clamp(
-            Vector3.Distance(wagonStartPos, wagonFinalPos) / sequence.wagonTravelSpeed,
-            sequence.wagonMinTravelDuration,
-            sequence.wagonMaxTravelDuration);
-
-        target.SetPositionAndRotation(wagonStartPos, wagonRot);
-
         travelCinemachineCamera.Priority = travelPriority;
-
-        StartCoroutine(CameraTravel.Move(target, wagonStartPos, wagonRot,
-            () => wagonFinalPos, () => wagonRot,
-            wagonDuration, sequence.travelCurve, TravelAxis.All));
 
         yield return CameraTravel.Move(camT, originPos, originRot,
             () => viewPos, () => viewRot,
