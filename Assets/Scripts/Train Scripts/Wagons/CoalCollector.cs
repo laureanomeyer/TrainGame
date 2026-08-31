@@ -6,10 +6,9 @@ using UnityEngine;
 
 public class CoalCollector
 {
-    private float coal;
+    private float coal = 1;
     public float Coal => coal;
 
-    private float storageCapacity;
 
     private TextMeshProUGUI coalDisplayUI;
 
@@ -20,46 +19,46 @@ public class CoalCollector
 
     private CancellationTokenSource cts;
 
-    private Action<float, float> setCoalModels;
 
     public CoalCollector(TextMeshProUGUI CurrentCoalUI)
     {
+        
         coalDisplayUI = CurrentCoalUI;
         originalFontSize = coalDisplayUI.fontSize;
-        EventBus.Subscribe<OnCoalEarnedEvent>(CollectCoal);
+        EventBus.Subscribe<OnCoalEarnedEvent>(GainCoal);
 
-        setCoalModels(coal,storageCapacity);
     }
 
     public void ActivateOnDestroy()
     {
-        EventBus.Unsubscribe<OnCoalEarnedEvent>(CollectCoal);
+        EventBus.Unsubscribe<OnCoalEarnedEvent>(GainCoal);
         cts?.Cancel();
         cts?.Dispose();
     }
 
-    public void CollectCoal(OnCoalEarnedEvent coalEvent)
+    public void GainCoal(OnCoalEarnedEvent coalEvent)
     {
         coal +=1;
 
-        setCoalModels(coal, storageCapacity);
-        coalDisplayUI.text = "$" + coal;
+        coalDisplayUI.text = coal.ToString();
         PlayScaleEffect();
-        EmptyCoal();
 
     }
 
     public void GiveCoal()
     {
+        Debug.Log("sdhadygasid");
         EmptyCoal();
         EventBus.Publish(new OnTakeCoalEvent());
     }
 
     public void EmptyCoal()
     {
-        coal = -1;
-        setCoalModels(coal, storageCapacity);
-        coalDisplayUI.text = string.Empty;
+        if (coal > 0)
+        {
+            coal -=1;
+        }
+        coalDisplayUI.text = coal.ToString();
     }
 
     private async void PlayScaleEffect()

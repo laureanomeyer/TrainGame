@@ -17,8 +17,6 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     }
     void Start()
     {
-        boxCollider.enabled = false;
-
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
         inputHandler = new InteractInputHandler(interactAction, SetCoalInPlayerInventory);
@@ -35,7 +33,11 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     private void SetCoalInPlayerInventory()
     {
         if (!canInteract) return;
-        coalBrain.CoalCollector.GiveCoal();
+        if (!playerRef.Inventory.HasCoal)
+        {
+            //playerRef.Inventory.CollectCoal();
+            coalBrain.CoalCollector.GiveCoal();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,6 +63,5 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     void Activate()
     {
         canInteract = true;
-        boxCollider.enabled = true;
     }
 }

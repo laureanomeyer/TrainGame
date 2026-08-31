@@ -16,7 +16,7 @@ public class CoalBox: IInteractableWithInventory
 
     public CoalBox(BoxCollider collider)
     {
-        charges = 0;
+        charges = 2;
         hasCoal = true;
         this.collider = collider;
         EventBus.Subscribe<OnEnableCoalBoxEvent>(SetCanInteract);
@@ -41,13 +41,18 @@ public class CoalBox: IInteractableWithInventory
         {
             hasCoal = true;
             playerRef.DepositCoal();
-            EventBus.Publish(new OnTakeFuelEvent());
+            EventBus.Publish(new OnTakeCoalEvent());
         }
         else if (hasCoal && !playerRef.HasCoal)
         {
             hasCoal = true;
             playerRef.CollectCoal();
-            EventBus.Publish(new OnTakeFuelEvent());
+            EventBus.Publish(new OnTakeCoalEvent());
+        }
+        else if (hasCoal && playerRef.HasCoal)
+        {
+            Debug.Log("hjsbadkldgb lwuy");
+            return;
         }
     }
 
