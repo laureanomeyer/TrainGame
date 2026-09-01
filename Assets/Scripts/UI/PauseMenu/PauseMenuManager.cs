@@ -194,6 +194,5 @@ public class PauseMenuManager : MonoBehaviour
     private void SetCanPause(OnActivateNonPausableUI activateUIEvent)
     {
         this.canPause = activateUIEvent.Activated;
-        Debug.Log(canPause + "canpasuse");
     }
 }
