@@ -49,6 +49,12 @@ public class StoreManager : MonoBehaviour
     public void ChangeWagonList()
     {
         trainDataRef.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+
+        foreach (var w in trainDataRef.WagonsIDList)
+        {
+            Debug.Log(w.WagonName);
+        }
+
         GameManager.Instance.Session.RebuildStatsSystem();
     }
 

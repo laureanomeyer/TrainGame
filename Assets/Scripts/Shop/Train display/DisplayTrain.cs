@@ -69,6 +69,7 @@ public class DisplayTrain : MonoBehaviour
         foreach (var wagon in wagonList)
         {
             instantiatedWagonReferences.Add(counter, CreateWagon(wagonAssetsReference[wagon.WagonName], wagon).Item2);
+            Debug.Log(wagonAssetsReference[wagon.WagonName]);
 
             counter++;
         }
