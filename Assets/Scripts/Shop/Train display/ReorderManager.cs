@@ -7,6 +7,7 @@ public class ReorderManager : MonoBehaviour
 
     private DisplayTrain trainDisplayRef;
     private StoreUiInteracts UIRef;
+    private ReorderCameraController reorderCameraRef;
     private ShopWagonData selected;
     private ShopWagonData objective;
     private ShopWagonData cacheRef;
@@ -21,6 +22,7 @@ public class ReorderManager : MonoBehaviour
         ServiceLocator.Register(this);
         ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
         ServiceLocator.TryGet<StoreUiInteracts>(out UIRef);
+        ServiceLocator.TryGet<ReorderCameraController>(out reorderCameraRef);
         currentHoveredWagonKey = -1;
     }
 
@@ -30,6 +32,7 @@ public class ReorderManager : MonoBehaviour
         inputRef.actions["Jump"].performed += OnJumpPerformed;
         inputRef.actions["Pause"].performed += OnPausePerformed;
     }
+
     private void OnDisable()
     {
         if (inputRef == null) return;
@@ -47,12 +50,13 @@ public class ReorderManager : MonoBehaviour
         int current = Mathf.RoundToInt(value.ReadValue<Vector2>().x);
 
         currentHoveredWagonKey -= current;
-        if (currentHoveredWagonKey > trainDisplayRef.InstantiatedWagonReferences.Count - 1) currentHoveredWagonKey = 0; 
+        if (currentHoveredWagonKey > trainDisplayRef.InstantiatedWagonReferences.Count - 1) currentHoveredWagonKey = 0;
         if (currentHoveredWagonKey < 0) currentHoveredWagonKey = trainDisplayRef.InstantiatedWagonReferences.Count - 1;
 
         cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
         SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
 
+        reorderCameraRef?.SetTarget(cacheRef.transform);
     }
 
     private void OnJumpPerformed(InputAction.CallbackContext value)
@@ -75,9 +79,23 @@ public class ReorderManager : MonoBehaviour
 
         if (UIRef == null) ServiceLocator.TryGet<StoreUiInteracts>(out UIRef);
 
+        if (reorderCameraRef == null) ServiceLocator.TryGet<ReorderCameraController>(out reorderCameraRef);
+
         if (trainDisplayRef == null) return;
 
         UIRef.DeactivateUI();
+
+        if (toggled)
+        {
+            if (currentHoveredWagonKey < 0) currentHoveredWagonKey = 0;
+            cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
+            SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
+            reorderCameraRef?.Activate(cacheRef.transform);
+        }
+        else
+        {
+            reorderCameraRef?.Deactivate();
+        }
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));
         isInReorderMode = toggled;
@@ -100,7 +118,7 @@ public class ReorderManager : MonoBehaviour
     private void SelectWagons(int selectedID)
     {
         if (selected == null)
-        { 
+        {
             selected = SelectSingleWagon(selectedID);
             this.selectedWagonKey = selectedID;
         }
