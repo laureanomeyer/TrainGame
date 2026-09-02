@@ -123,6 +123,15 @@ public class Enemy : MonoBehaviour
 
     private void Dead()
     {
+        isOnScreen = CameraView.IsInsideCamera(transform.position, Cam);
+        if (UnityEngine.Random.Range(1, 1001) < 999)
+        {
+            AudioManager.Instance.PlayOnScreen($"SFXDeathScream{UnityEngine.Random.Range(1,3)}", IsOnScreen);
+        }
+        else
+        {
+            AudioManager.Instance.PlayOnScreen("SFXDeathScream4", IsOnScreen);
+        }
         if (healthBar != null)
         { healthBar.Hide(); }
         flash.ResetMaterials();
