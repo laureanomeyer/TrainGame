@@ -20,7 +20,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private int maxPoolSize = 100;
     [SerializeField] private int maxSoundInstances = 30;
 
-    public float SFXVolume { get; private set; } = 1f; 
+    public float SFXVolume { get; private set; } = 1f;
 
     private void Awake()
     {
@@ -32,13 +32,13 @@ public class AudioManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
-            return; 
+            return;
         }
 
         //consisten Sound through-out Scenes
         DontDestroyOnLoad(gameObject);
 
-        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f); 
+        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
 
         //setting sounds in AudioSources
         foreach (Sound s in sounds)
@@ -65,13 +65,25 @@ public class AudioManager : MonoBehaviour
         SoundPlayer emitter = soundPlayerPool.Get();
 
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s != null) emitter.Play(s, SFXVolume); 
+        if (s != null) emitter.Play(s, SFXVolume);
     }
 
     public void Play(Sound sound)
     {
         if (sound != null)
             StartCoroutine(Play_Coroutine(sound));
+    }
+
+    public void PlayOnScreen(string name, bool isOnScreen)
+    {
+        if (isOnScreen)
+        {
+            SoundPlayer emitter = soundPlayerPool.Get();
+
+            Sound s = Array.Find(sounds, sound => sound.name == name);
+            if (s != null) emitter.Play(s, SFXVolume);
+        }
+
     }
 
     public void ChangeVolume(string name, float changed, float duration = 0)
@@ -162,7 +174,7 @@ public class AudioManager : MonoBehaviour
 
     public void InitializeSound(Sound s)
     {
-        if(s.source != null) return;
+        if (s.source != null) return;
 
         s.source = gameObject.AddComponent<AudioSource>();
         s.source.clip = s.clip;
@@ -183,10 +195,10 @@ public class AudioManager : MonoBehaviour
             defaultCapacity,
             maxPoolSize);
 
-        for (int i = 0; i <= defaultCapacity; i++) 
+        for (int i = 0; i <= defaultCapacity; i++)
         {
             soundPlayerPool.Release(CreateSoundPlayer());
-        } 
+        }
     }
 
     public SoundPlayer Get()

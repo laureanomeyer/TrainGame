@@ -42,7 +42,12 @@ public class Enemy : MonoBehaviour
     public bool CanAttack => attackCooldownTimer <= 0f;
     float attackCooldownTimer;
 
+    private bool isOnScreen;
+    public bool IsOnScreen => isOnScreen;
+
     public EnemySkillSO Skill => data.skill;
+
+    public Camera Cam => Camera.main;
 
     public void Initialize(EnemyData data)
     {

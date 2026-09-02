@@ -132,15 +132,19 @@ public class LocomotiveFuel
             currentMaxFuel -= amount / defense;
             currentFuel = Mathf.Clamp(currentFuel, 0, Mathf.Max(currentMaxFuel, 0f));
             timer = 0f;
+            AudioManager.Instance.Play("SFXLocomotiveHit");
+
 
             if (currentMaxFuel <= 0)
                 RaiseDestroyed();
         }
         else
         {
+            AudioManager.Instance.Play("SFXShieldHit");
             currentShield -= amount / defense;
             timer = 0;
             shieldTakenDamage = true;
+
             if (currentShield <= 0) 
             {
                 EventBus.Publish(new OnShieldsBrokenEvent());

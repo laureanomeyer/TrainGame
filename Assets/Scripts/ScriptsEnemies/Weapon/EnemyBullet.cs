@@ -27,7 +27,8 @@ public class EnemyBullet : MonoBehaviour
             tr.emitting = false;
             tr.Clear();
             tr.emitting = true;
-            ObjectPoolManager.ReturnObjectToPool(gameObject);
+            //ObjectPoolManager.ReturnObjectToPool(gameObject);
+            Destroy(gameObject);
         }
     }
 }

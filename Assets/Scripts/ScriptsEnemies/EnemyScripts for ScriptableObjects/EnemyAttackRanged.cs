@@ -12,8 +12,12 @@ public class EnemyAttackRanged : EnemyAttackSO
 
         if (dist <= enemy.Range + 5)
         {
+            bool isOnScreen = CameraView.IsInsideCamera(enemy.transform.position, enemy.Cam);
             enemy.Weapon.Execute(enemy.Target, enemy.Damage);
             enemy.ResetAttackCooldown(enemy.Cooldown);
+
+            AudioManager.Instance.PlayOnScreen("SFXEnemyShot", isOnScreen);
+
         }
     }
 }

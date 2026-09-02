@@ -135,6 +135,7 @@ public class SpawnController : MonoBehaviour
 
         aliveEnemies++;
     }
+    
     void SpawnSingle(Vector3 pos, List<IWagon> target)
     {
         if (spawnPool.Count == 0) return;
