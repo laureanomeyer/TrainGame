@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[DefaultExecutionOrder(-100)]
 public class StoreManager : MonoBehaviour
 {
     public static StoreManager Instance;
@@ -29,12 +28,22 @@ public class StoreManager : MonoBehaviour
         trainDataRef = ServiceLocator.Get<TrainData>();
         playerDataRef = ServiceLocator.Get<PlayerData>();
         wagonsInTrain = trainDataRef.WagonsIDList;
+
+        foreach (var w in wagonsInTrain)
+        {
+            Debug.Log(w.WagonName);
+        }
+
+        displayTrain.Initialize();
     }
 
     private void Start()
     {
         goldDisplay.UpdatedGold(playerDataRef.Gold);
+
+ 
     }
+
 
     public bool TrySpendGold(float ammount)
     {

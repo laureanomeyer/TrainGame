@@ -40,7 +40,7 @@ public class DisplayTrain : MonoBehaviour
 
     public Dictionary<int, ShopWagonData> InstantiatedWagonReferences => instantiatedWagonReferences;
 
-    private void Awake()
+    public void Initialize()
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
 
