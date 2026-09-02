@@ -106,7 +106,10 @@ public class DisplayTrain : MonoBehaviour
     {
         var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName);
 
-        GameObject newWagon = Instantiate(wagonID.shopModel, headPos, headRot);
+        //agregar HeadRot en la instanciasion en vez de la varible rotation
+        Quaternion rotation = new Quaternion(0.00000f, -0.70711f, 0.00000f, 0.70711f);
+
+        GameObject newWagon = Instantiate(wagonID.shopModel, headPos, rotation);
         ShopWagonData newWagonData = newWagon.GetComponent<ShopWagonData>();
         newWagonData.SetID(newWag);
 
