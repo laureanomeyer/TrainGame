@@ -25,6 +25,8 @@ public class InteractionZone : MonoBehaviour
     private void OnEnable()
     {
         EventBus.Subscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
+        EventBus.Subscribe<OnForceCloseAllUI>(ForceCloseUI);
+
         pauseAction = InputSystem.actions.FindAction("Pause");
 
         if (pauseAction != null)
@@ -96,7 +98,10 @@ public class InteractionZone : MonoBehaviour
         EventBus.Publish(new OnHideInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
-
+    private void ForceCloseUI(OnForceCloseAllUI ev)
+    {
+        DeactivateUI();
+    }
     public void DeactivateUI()
     {
         isOpen = false;

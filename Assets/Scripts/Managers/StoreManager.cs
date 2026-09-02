@@ -40,8 +40,6 @@ public class StoreManager : MonoBehaviour
     private void Start()
     {
         goldDisplay.UpdatedGold(playerDataRef.Gold);
-
- 
     }
 
 
@@ -72,6 +70,7 @@ public class StoreManager : MonoBehaviour
     {
         ChangeWagonList();
         EventBus.Publish(new OnActivateNonPausableUI(true));
+        EventBus.Publish(new OnForceCloseAllUI());
         GameManager.Instance.GoToRun();
     }
 }

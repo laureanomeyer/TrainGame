@@ -73,6 +73,8 @@ public class ReorderManager : MonoBehaviour
 
     public void ToggleReorderMode(bool toggled)
     {
+        if (trainDisplayRef.InstantiatedWagonReferences.Count <= 0) return;
+
         if (cacheRef != null && cacheRef != selected) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
 
         if (trainDisplayRef == null) ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
@@ -83,14 +85,13 @@ public class ReorderManager : MonoBehaviour
 
         if (trainDisplayRef == null) return;
 
-        UIRef.HideUI();
-
         if (toggled)
         {
             if (currentHoveredWagonKey < 0) currentHoveredWagonKey = 0;
             cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
             SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
             reorderCameraRef?.Activate(cacheRef.transform);
+            UIRef.HideUI();
         }
         else
         {

@@ -16,12 +16,16 @@ public class StoreUiInteracts : MonoBehaviour
 
     private bool playerInZone;
     private bool uiOpen = false;
+    private bool isHidden = false;
     private InputAction pauseAction;
 
     private void OnEnable()
     {
         EventBus.Subscribe<OnInteractPressedEvent>(OnPlayerInteractEvent);
         closeButton.onClick.AddListener(DeactivateUI);
+
+        EventBus.Subscribe<OnForceCloseAllUI>(ForceCloseUI);
+
         ServiceLocator.Register(this);
 
         pauseAction = InputSystem.actions.FindAction("Pause");
@@ -85,9 +89,14 @@ public class StoreUiInteracts : MonoBehaviour
         EventBus.Publish(new OnHideInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
     }
+    private void ForceCloseUI(OnForceCloseAllUI ev)
+    {
+        DeactivateUI();
+    }
 
     public void DeactivateUI()
     {
+        isHidden = false;
         uiToShow.SetActive(false);
         uiOpen = false;
 
@@ -97,17 +106,23 @@ public class StoreUiInteracts : MonoBehaviour
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
         EventBus.Publish(new OnActivateUiEvent(true));
         EventBus.Publish(new OnActivateNonPausableUI(true));
+
+        Debug.Log("Is open: " + uiOpen);
+        Debug.Log("Is hidden: " + isHidden);
     }
 
     public void HideUI()
     {
+        Debug.Log("Hid UI");
         uiToShow.SetActive(false);
-        uiOpen = false;
+        isHidden = true;
 
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
-        EventBus.Publish(new OnShowInteractEvent());
-        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Hidden));
+
+        Debug.Log("Is open: " + uiOpen);
+        Debug.Log("Is hidden: " + isHidden);
     }
 
     public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
@@ -121,6 +136,10 @@ public class StoreUiInteracts : MonoBehaviour
 
         if (!uiOpen)
         {
+            Debug.Log("Interact");
+
+            if (isHidden) return;
+
             uiOpen = true;
 
             uiToShow.SetActive(true);
@@ -130,6 +149,9 @@ public class StoreUiInteracts : MonoBehaviour
             EventBus.Publish(new OnActivateNonPausableUI(false));
 
             GameManager.Instance.ChangeGameState(GameState.UI);
+
+            Debug.Log("Is open: " + uiOpen);
+            Debug.Log("Is hidden: " + isHidden);
         }
     }
 
@@ -137,6 +159,7 @@ public class StoreUiInteracts : MonoBehaviour
     {
         if (uiOpen)
         {
+            Debug.Log("PuaseButton");
             DeactivateUI();
         }
     }

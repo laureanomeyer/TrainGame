@@ -118,6 +118,18 @@ public class OnActivateNonPausableUI : IGameEvent
     }
 }
 
+public class OnForceCloseAllUI : IGameEvent
+{
+    ///<summary>
+    ///fuerza cerrar todas las Ui correctamente
+    ///</summary>
+
+    public OnForceCloseAllUI()
+    {
+
+    }
+}
+
 public class OnShowCursorEvent : IGameEvent
 {
     public CursorType Cursor;
