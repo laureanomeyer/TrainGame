@@ -86,13 +86,11 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (!IsInPausableScene())
         {
-            Debug.Log("No pausable scene");
             return;
         }
 
         if (!canPause)
         {
-            Debug.Log("No pausable bb");
             return;
         }
 
@@ -139,12 +137,10 @@ public class PauseMenuManager : MonoBehaviour
         if (GameManager.Instance.CurrentState == GameState.UI)
         {
             EventBus.Publish(new OnActivateUiEvent(false));
-            Debug.Log("Chau");
         }
         else if (GameManager.Instance.CurrentState == GameState.Gameplay || GameManager.Instance.CurrentState == GameState.Tutorial)
         {
             EventBus.Publish(new OnActivateUiEvent(true));
-            Debug.Log("Hola=?");
         }
     }
 
@@ -178,7 +174,6 @@ public class PauseMenuManager : MonoBehaviour
     private bool IsInPausableScene()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
-        Debug.Log(currentSceneName);
 
         foreach (string sceneName in pausableScenes)
         {

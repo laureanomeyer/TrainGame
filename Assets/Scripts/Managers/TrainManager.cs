@@ -34,7 +34,7 @@ public class TrainManager : MonoBehaviour
 
         foreach (var w in trainDataRef.WagonsIDList)
         {
-            Debug.Log(w.WagonName);
+            Debug.Log("Train manager: " + w.WagonName);
         }
     }
 

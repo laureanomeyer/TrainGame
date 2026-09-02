@@ -83,7 +83,7 @@ public class ReorderManager : MonoBehaviour
 
         if (trainDisplayRef == null) return;
 
-        UIRef.DeactivateUI();
+        UIRef.HideUI();
 
         if (toggled)
         {

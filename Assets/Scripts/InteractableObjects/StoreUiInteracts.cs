@@ -99,6 +99,17 @@ public class StoreUiInteracts : MonoBehaviour
         EventBus.Publish(new OnActivateNonPausableUI(true));
     }
 
+    public void HideUI()
+    {
+        uiToShow.SetActive(false);
+        uiOpen = false;
+
+        GameManager.Instance.ChangeGameState(GameState.Gameplay);
+
+        EventBus.Publish(new OnShowInteractEvent());
+        EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+    }
+
     public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
     {
         OnPlayerInteract();

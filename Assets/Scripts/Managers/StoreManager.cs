@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[DefaultExecutionOrder(-100)]
 public class StoreManager : MonoBehaviour
 {
     public static StoreManager Instance;
@@ -52,7 +53,7 @@ public class StoreManager : MonoBehaviour
 
         foreach (var w in trainDataRef.WagonsIDList)
         {
-            Debug.Log(w.WagonName);
+            Debug.Log("Store Manager: " + w.WagonName);
         }
 
         GameManager.Instance.Session.RebuildStatsSystem();
