@@ -3,10 +3,15 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Cinematic/System/Camera Travel Sequence")]
 public class CameraTravelSequenceSO : ScriptableObject
 {
-    [Header("Travel Speed")]
+    [Header("Travel Speed (ida)")]
     public float travelSpeed = 15f;
     public float minTravelDuration = 0.3f;
     public float maxTravelDuration = 1.2f;
+
+    [Header("Return Speed (vuelta)")]
+    public float returnSpeed = 15f;
+    public float minReturnDuration = 0.3f;
+    public float maxReturnDuration = 1.2f;
 
     [Header("Timing")]
     public float holdDuration = 1f;
@@ -41,13 +46,4 @@ public class CameraTravelSequenceSO : ScriptableObject
     [Tooltip("Al terminar, vuelve a la posición inicial y devuelve la prioridad. Off para cinemáticas de fin de run.")]
     public bool returnToOrigin = true;
 
-    [Header("Wagon Arrival (visual)")]
-    [Tooltip("Offset en espacio del MUNDO desde el que aparece el vagón comprado antes de deslizarse a su posición final.")]
-    public Vector3 wagonArrivalWorldOffset = new Vector3(0f, 0f, -8f);
-
-    [Tooltip("Velocidad de desplazamiento del vagón (unidades/seg). Bajala para que se vea más lento independientemente de qué tan lejos aparezca.")]
-    public float wagonTravelSpeed = 6f;
-
-    public float wagonMinTravelDuration = 0.5f;
-    public float wagonMaxTravelDuration = 3f;
 }
