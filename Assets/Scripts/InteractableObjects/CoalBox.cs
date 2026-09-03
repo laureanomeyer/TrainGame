@@ -1,13 +1,10 @@
-﻿
+
 using UnityEngine;
 
 public class CoalBox: IInteractableWithInventory
 {
     private bool canInteract = true;
     private BoxCollider collider;
-
-
-
     private float charges;
     private bool hasCoal;
 
@@ -35,23 +32,28 @@ public class CoalBox: IInteractableWithInventory
 
     public void HandleCoal(IInventory playerRef)
     {
-        if ((!hasCoal && !playerRef.HasCoal) || (hasCoal && playerRef.HasCoal)) return;
-
+        Debug.Log("pipers");
+        if ((!hasCoal && !playerRef.HasCoal) || (hasCoal && playerRef.HasCoal))
+        {
+            Debug.Log("piper2");
+            return;
+        } 
         else if(!hasCoal && playerRef.HasCoal)
         {
+            Debug.Log("piper3");
             hasCoal = true;
-            playerRef.DepositCoal();
             EventBus.Publish(new OnTakeCoalEvent());
         }
         else if (hasCoal && !playerRef.HasCoal)
         {
+            Debug.Log("piper4");
+
             hasCoal = true;
-            playerRef.CollectCoal();
             EventBus.Publish(new OnTakeCoalEvent());
         }
         else if (hasCoal && playerRef.HasCoal)
         {
-            Debug.Log("hjsbadkldgb lwuy");
+            Debug.Log("piper5");
             return;
         }
     }

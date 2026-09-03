@@ -1,6 +1,4 @@
-﻿
-using System.Diagnostics;
-
+﻿using UnityEngine;
 public class PlayerInventory : IInventory
 {
     private float goldAmount;
@@ -26,10 +24,12 @@ public class PlayerInventory : IInventory
     public void DepositCoal()
     {
         hasCoal = false;
+                            Debug.Log("Has coal: " + hasCoal);
     }
 
     public void CollectCoal()
     {
         hasCoal = true;
+                    Debug.Log("Has coal: " + hasCoal);
     }
 }

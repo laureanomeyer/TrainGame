@@ -9,6 +9,7 @@ public class CoalCollector
     private float coal = 1;
     public float Coal => coal;
 
+    public bool HasCoal => coal > 0;
 
     private TextMeshProUGUI coalDisplayUI;
 
