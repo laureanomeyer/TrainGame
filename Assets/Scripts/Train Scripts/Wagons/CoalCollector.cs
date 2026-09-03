@@ -26,12 +26,16 @@ public class CoalCollector
         coalDisplayUI = CurrentCoalUI;
         originalFontSize = coalDisplayUI.fontSize;
         EventBus.Subscribe<OnCoalEarnedEvent>(GainCoal);
+        EventBus.Subscribe<OnTakeCoalEvent>(GiveCoal);
+
 
     }
 
     public void ActivateOnDestroy()
     {
         EventBus.Unsubscribe<OnCoalEarnedEvent>(GainCoal);
+        EventBus.Unsubscribe<OnTakeCoalEvent>(GiveCoal);
+
         cts?.Cancel();
         cts?.Dispose();
     }
@@ -45,11 +49,10 @@ public class CoalCollector
 
     }
 
-    public void GiveCoal()
+    public void GiveCoal(OnTakeCoalEvent coalGivenEvent)
     {
-        Debug.Log("sdhadygasid");
+        Debug.Log("coal given");
         EmptyCoal();
-        EventBus.Publish(new OnTakeCoalEvent());
     }
 
     public void EmptyCoal()

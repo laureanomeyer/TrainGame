@@ -33,10 +33,15 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     private void SetCoalInPlayerInventory()
     {
         if (!canInteract) return;
+        if (playerRef == null) return;
+        Debug.Log("SetCoalBefore has coal check");
         if (!playerRef.Inventory.HasCoal)
         {
-            //playerRef.Inventory.CollectCoal();
-            coalBrain.CoalCollector.GiveCoal();
+            Debug.Log("Has coal should be false: " + playerRef.Inventory.HasCoal);
+        }
+        else
+        {
+            Debug.Log("Has coal should be true: " + playerRef.Inventory.HasCoal);
         }
     }
 

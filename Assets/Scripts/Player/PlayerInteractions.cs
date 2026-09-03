@@ -217,7 +217,7 @@ public class PlayerInteractions
         if (usingTurret == null) return;
         if (lookObjectToMouse == null) return;
 
-        // Usar el pivot (centro de rotación), NO el firePoint (que orbita al rotar)
+        // Usar el pivot (centro de rotaciï¿½n), NO el firePoint (que orbita al rotar)
         Transform aimOrigin = usingTurret.TurretPivot != null
             ? usingTurret.TurretPivot
             : usingTurret.transform;
