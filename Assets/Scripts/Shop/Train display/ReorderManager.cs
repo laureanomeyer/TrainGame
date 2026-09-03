@@ -8,14 +8,11 @@ public class ReorderManager : MonoBehaviour
     private DisplayTrain trainDisplayRef;
     private StoreUiInteracts UIRef;
     private ReorderCameraController reorderCameraRef;
-    private ShopWagonData selected;
-    private ShopWagonData objective;
+
     private ShopWagonData cacheRef;
-    private int selectedWagonKey;
-    private int objectiveWagonKey;
     private int currentHoveredWagonKey;
     private bool isInReorderMode;
-
+    private bool isDragging;
 
     private void Awake()
     {
@@ -45,11 +42,23 @@ public class ReorderManager : MonoBehaviour
     {
         if (!isInReorderMode) return;
 
-        if (cacheRef != null && cacheRef != selected) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+        int direction = Mathf.RoundToInt(value.ReadValue<Vector2>().x);
+        if (direction == 0) return;
 
-        int current = Mathf.RoundToInt(value.ReadValue<Vector2>().x);
+        if (isDragging)
+        {
+            if (trainDisplayRef.StepDrag(direction))
+            {
+                currentHoveredWagonKey = trainDisplayRef.DraggedSlot;
+                reorderCameraRef?.SetTarget(trainDisplayRef.DraggedWagon.transform);
+            }
+            return;
+        }
 
-        currentHoveredWagonKey -= current;
+        // Navegaci?n de hover (sin agarrar wagon todav?a)
+        if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+
+        currentHoveredWagonKey -= direction;
         if (currentHoveredWagonKey > trainDisplayRef.InstantiatedWagonReferences.Count - 1) currentHoveredWagonKey = 0;
         if (currentHoveredWagonKey < 0) currentHoveredWagonKey = trainDisplayRef.InstantiatedWagonReferences.Count - 1;
 
@@ -62,12 +71,31 @@ public class ReorderManager : MonoBehaviour
     private void OnJumpPerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
-        SelectWagons(currentHoveredWagonKey);
+
+        if (!isDragging)
+        {
+            trainDisplayRef.CacheSlotLayout();
+            trainDisplayRef.BeginDrag(currentHoveredWagonKey);
+            isDragging = true;
+        }
+        else
+        {
+            trainDisplayRef.EndDrag();
+            isDragging = false;
+        }
     }
 
     private void OnPausePerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
+
+        // Si sueltan pausa en medio de un drag, lo confirmamos en su lugar actual
+        if (isDragging)
+        {
+            trainDisplayRef.EndDrag();
+            isDragging = false;
+        }
+
         ToggleReorderMode(false);
     }
 
@@ -75,12 +103,10 @@ public class ReorderManager : MonoBehaviour
     {
         if (trainDisplayRef.InstantiatedWagonReferences.Count <= 0) return;
 
-        if (cacheRef != null && cacheRef != selected) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+        if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
 
         if (trainDisplayRef == null) ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
-
         if (UIRef == null) ServiceLocator.TryGet<StoreUiInteracts>(out UIRef);
-
         if (reorderCameraRef == null) ServiceLocator.TryGet<ReorderCameraController>(out reorderCameraRef);
 
         if (trainDisplayRef == null) return;
@@ -88,6 +114,9 @@ public class ReorderManager : MonoBehaviour
         if (toggled)
         {
             if (currentHoveredWagonKey < 0) currentHoveredWagonKey = 0;
+
+            trainDisplayRef.CacheSlotLayout();
+
             cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
             SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
             reorderCameraRef?.Activate(cacheRef.transform);
@@ -100,47 +129,6 @@ public class ReorderManager : MonoBehaviour
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));
         isInReorderMode = toggled;
-    }
-
-    private void ConfirmSwap()
-    {
-        if (trainDisplayRef == null) ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
-
-        if (trainDisplayRef == null) return;
-
-        if (selected == null || objective == null) return;
-
-        trainDisplayRef.ReorderWagons(selected, objective, selectedWagonKey, objectiveWagonKey);
-
-        selected = null;
-        objective = null;
-    }
-
-    private void SelectWagons(int selectedID)
-    {
-        if (selected == null)
-        {
-            selected = SelectSingleWagon(selectedID);
-            this.selectedWagonKey = selectedID;
-        }
-        else if (objective == null)
-        {
-            objective = SelectSingleWagon(selectedID);
-            objectiveWagonKey = selectedID;
-            ConfirmSwap();
-        }
-    }
-
-    private ShopWagonData SelectSingleWagon(int selectedID)
-    {
-        if (trainDisplayRef == null) ServiceLocator.TryGet<DisplayTrain>(out trainDisplayRef);
-
-        if (trainDisplayRef == null) return null;
-
-        var selected = trainDisplayRef.InstantiatedWagonReferences[selectedID];
-        SetLayerRecursively(selected.gameObject, LayerMask.NameToLayer("WhiteOutline"));
-
-        return selected;
     }
 
     private void SetLayerRecursively(GameObject obj, int layer)

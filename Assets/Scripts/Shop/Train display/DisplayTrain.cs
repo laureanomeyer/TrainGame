@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UnityEngine;
@@ -34,7 +34,7 @@ public class DisplayTrain : MonoBehaviour
     private Vector3 tailPos;
     private Quaternion tailRot;
 
-    // Ancla fija del frente del display: acá spawnea siempre el próximo wagon comprado
+    // Ancla fija del frente del display: acÃ¡ spawnea siempre el prÃ³ximo wagon comprado
     private Vector3 headPos;
     private Quaternion headRot;
 
@@ -113,11 +113,11 @@ public class DisplayTrain : MonoBehaviour
         ShopWagonData newWagonData = newWagon.GetComponent<ShopWagonData>();
         newWagonData.SetID(newWag);
 
-        // Cuánto espacio ocupa el wagon nuevo (mismo criterio que CreateWagon: hasta su propio socket "tail")
+        // CuÃ¡nto espacio ocupa el wagon nuevo (mismo criterio que CreateWagon: hasta su propio socket "tail")
         Transform newWagonTail = newWagonData.tail;
         Vector3 shiftOffset = newWagonTail.position - headPos;
 
-        // Corre para atrás todos los wagons ya instanciados, para hacerle lugar al nuevo adelante
+        // Corre para atrÃ¡s todos los wagons ya instanciados, para hacerle lugar al nuevo adelante
         foreach (var wagon in instantiatedWagonReferences.Values)
         {
             Vector3 targetPos = wagon.transform.position + shiftOffset;
@@ -132,10 +132,10 @@ public class DisplayTrain : MonoBehaviour
 
         wagonList.AddFirst(newWag);
 
-        // El fondo del tren también se corre para atrás
+        // El fondo del tren tambiÃ©n se corre para atrÃ¡s
         tailPos += shiftOffset;
 
-        // Pop-in: arranca en 0 y escala hasta su tamaño real
+        // Pop-in: arranca en 0 y escala hasta su tamaÃ±o real
         Vector3 finalScale = newWagon.transform.localScale;
         newWagon.transform.localScale = Vector3.zero;
         newWagon.transform.DOScale(finalScale, popInDuration).SetEase(popInEase).SetDelay(popInDelay);
@@ -151,38 +151,89 @@ public class DisplayTrain : MonoBehaviour
 
     #endregion
 
-    public void ReorderWagons(ShopWagonData selected, ShopWagonData objective, int selectedKey, int objectiveKey)
+    #region drag reorder
+
+    [Header("Drag Reorder")]
+    [SerializeField] private float dragLiftHeight = 5f;
+    [SerializeField] private float dragMoveDuration = 0.3f;
+    [SerializeField] private Ease dragMoveEase = Ease.OutQuad;
+
+    private Dictionary<int, (Vector3 pos, Quaternion rot)> slotLayout;
+    private int draggedSlot = -1;
+    private ShopWagonData draggedWagon;
+
+    public int DraggedSlot => draggedSlot;
+    public ShopWagonData DraggedWagon => draggedWagon;
+
+    // Guarda la posiciï¿½n/rotaciï¿½n "de origen" de cada slot antes de empezar a arrastrar.
+    // Estas posiciones quedan fijas durante toda la sesiï¿½n de reorder.
+    public void CacheSlotLayout()
     {
-        Vector3 reference = selected.transform.position;
-
-        selected.transform.position = objective.transform.position;
-        SetLayerRecursively(selected.gameObject, LayerMask.NameToLayer("Outline"));
-
-        objective.transform.position = reference;
-        SetLayerRecursively(objective.gameObject, LayerMask.NameToLayer("Outline"));
-
-        var wagonA = wagonList.Find(selected.IDReference);
-        var wagonB = wagonList.Find(objective.IDReference);
-
-        instantiatedWagonReferences[selectedKey] = objective;
-        instantiatedWagonReferences[objectiveKey] = selected;
-
-        if (wagonA != null && wagonB != null)
-        {
-            (wagonA.Value, wagonB.Value) = (wagonB.Value, wagonA.Value);
-        }
-        if (wagonList.Last == wagonA)
-        {
-            tailPos = objective.tail.position;
-            tailRot = objective.tail.rotation;
-        }
-        else if (wagonList.Last == wagonB)
-        {
-            tailPos = selected.tail.position;
-            tailRot = selected.tail.rotation;
-        }
-        else return;
+        slotLayout = new Dictionary<int, (Vector3, Quaternion)>();
+        foreach (var kvp in instantiatedWagonReferences)
+            slotLayout[kvp.Key] = (kvp.Value.transform.position, kvp.Value.transform.rotation);
     }
+
+    public void BeginDrag(int slotIndex)
+    {
+        if (slotLayout == null || !instantiatedWagonReferences.TryGetValue(slotIndex, out var wagon)) return;
+
+        draggedSlot = slotIndex;
+        draggedWagon = wagon;
+
+        Vector3 liftedPos = slotLayout[slotIndex].pos + Vector3.up * dragLiftHeight;
+        wagon.transform.DOMove(liftedPos, dragMoveDuration).SetEase(dragMoveEase);
+    }
+
+    // direction: mismo signo que usa el hover (-1 => avanza hacia atrï¿½s en la lista, +1 => hacia adelante)
+    public bool StepDrag(int direction)
+    {
+        if (draggedWagon == null) return false;
+
+        int targetSlot = draggedSlot - direction;
+        if (targetSlot < 0 || targetSlot >= instantiatedWagonReferences.Count) return false;
+
+        var otherWagon = instantiatedWagonReferences[targetSlot];
+
+        // El wagon que estaba en el slot destino cae y ocupa el hueco que dejamos
+        Vector3 fillPos = slotLayout[draggedSlot].pos;
+        otherWagon.transform.DOMove(fillPos, dragMoveDuration).SetEase(dragMoveEase);
+        otherWagon.transform.DORotateQuaternion(slotLayout[draggedSlot].rot, dragMoveDuration);
+
+        // El wagon arrastrado salta (elevado) al slot destino
+        Vector3 targetLiftedPos = slotLayout[targetSlot].pos + Vector3.up * dragLiftHeight;
+        draggedWagon.transform.DOMove(targetLiftedPos, dragMoveDuration).SetEase(dragMoveEase);
+
+        instantiatedWagonReferences[draggedSlot] = otherWagon;
+        instantiatedWagonReferences[targetSlot] = draggedWagon;
+
+        draggedSlot = targetSlot;
+        return true;
+    }
+
+    public void EndDrag()
+    {
+        if (draggedWagon == null) return;
+
+        Vector3 finalPos = slotLayout[draggedSlot].pos;
+        draggedWagon.transform.DOMove(finalPos, dragMoveDuration).SetEase(dragMoveEase);
+        draggedWagon.transform.DORotateQuaternion(slotLayout[draggedSlot].rot, dragMoveDuration);
+
+        SyncWagonListFromSlots();
+
+        draggedWagon = null;
+        draggedSlot = -1;
+    }
+
+    // Reconstruye el orden lï¿½gico (wagonList) segï¿½n el orden fï¿½sico final de los slots
+    private void SyncWagonListFromSlots()
+    {
+        wagonList.Clear();
+        foreach (var kvp in instantiatedWagonReferences.OrderBy(k => k.Key))
+            wagonList.AddLast(kvp.Value.IDReference);
+    }
+
+    #endregion
 
     public List<IWagonID> ChangeWagonIDList()
     {
