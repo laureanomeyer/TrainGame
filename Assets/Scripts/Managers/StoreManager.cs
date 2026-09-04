@@ -28,12 +28,20 @@ public class StoreManager : MonoBehaviour
         trainDataRef = ServiceLocator.Get<TrainData>();
         playerDataRef = ServiceLocator.Get<PlayerData>();
         wagonsInTrain = trainDataRef.WagonsIDList;
+
+        foreach (var w in wagonsInTrain)
+        {
+            Debug.Log(w.WagonName);
+        }
+
+        displayTrain.Initialize();
     }
 
     private void Start()
     {
         goldDisplay.UpdatedGold(playerDataRef.Gold);
     }
+
 
     public bool TrySpendGold(float ammount)
     {
@@ -49,6 +57,12 @@ public class StoreManager : MonoBehaviour
     public void ChangeWagonList()
     {
         trainDataRef.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
+
+        foreach (var w in trainDataRef.WagonsIDList)
+        {
+            Debug.Log("Store Manager: " + w.WagonName);
+        }
+
         GameManager.Instance.Session.RebuildStatsSystem();
     }
 
@@ -56,6 +70,7 @@ public class StoreManager : MonoBehaviour
     {
         ChangeWagonList();
         EventBus.Publish(new OnActivateNonPausableUI(true));
+        EventBus.Publish(new OnForceCloseAllUI());
         GameManager.Instance.GoToRun();
     }
 }

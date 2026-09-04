@@ -25,7 +25,7 @@ public class CinematicSystem : MonoBehaviour
 
     [Header("Victory Threshold")]
     [SerializeField] private Transform victoryThreshold;
-    [SerializeField] private float thresholdTargetX = -100f;
+    [SerializeField] private float thresholdTailOffset = 200f;
     [SerializeField] private float thresholdRetreatDuration = 2f;
 
 
@@ -110,7 +110,7 @@ public class CinematicSystem : MonoBehaviour
 
         if (result == RunResult.Victory && victoryThreshold != null)
         {
-            StartCoroutine(ThresholdRetreat());
+            StartCoroutine(ThresholdRetreat(target));
         }
 
         Transform mainCameraTransform = Camera.main.transform;
@@ -192,10 +192,9 @@ public class CinematicSystem : MonoBehaviour
         OnCinematicFinished?.Invoke();
     }
 
-    private IEnumerator ThresholdRetreat()
+    private IEnumerator ThresholdRetreat(Transform tailTarget)
     {
         Vector3 startPos = victoryThreshold.position;
-        Vector3 targetPos = new Vector3(thresholdTargetX, startPos.y, startPos.z);
 
         float timer = 0f;
         while (timer < thresholdRetreatDuration)
@@ -203,11 +202,21 @@ public class CinematicSystem : MonoBehaviour
             timer += Time.deltaTime;
             float t = timer / thresholdRetreatDuration;
 
-            victoryThreshold.position = Vector3.Lerp(startPos, targetPos, t);
+            Vector3 currentTargetPos = new Vector3(
+                tailTarget.position.x - thresholdTailOffset,
+                startPos.y,
+                startPos.z);
+
+            victoryThreshold.position = Vector3.Lerp(startPos, currentTargetPos, t);
 
             yield return null;
         }
 
-        victoryThreshold.position = targetPos;
+        Vector3 finalTargetPos = new Vector3(
+            tailTarget.position.x - thresholdTailOffset,
+            startPos.y,
+            startPos.z);
+
+        victoryThreshold.position = finalTargetPos;
     }
 }

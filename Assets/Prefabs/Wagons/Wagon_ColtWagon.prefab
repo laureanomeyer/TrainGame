@@ -613,9 +613,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3833622630315364123}
+  - component: {fileID: 5211743071578810440}
   - component: {fileID: 1327370764761034617}
   - component: {fileID: 2765749237097656151}
-  - component: {fileID: 5211743071578810440}
   - component: {fileID: 3644062954500194812}
   - component: {fileID: 8707225630396016752}
   - component: {fileID: 1714325756519525256}
@@ -649,6 +649,27 @@ Transform:
   - {fileID: 3989287038092487930}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5211743071578810440
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4501369629086111137}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.7487223, y: 4.380185, z: 8.91723}
+  m_Center: {x: 0.05571711, y: 1.0400567, z: 4.373937}
 --- !u!114 &1327370764761034617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,27 +720,6 @@ MonoBehaviour:
   shootAngle: 50
   defaultCapacity: 10
   maxSize: 30
---- !u!65 &5211743071578810440
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4501369629086111137}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3.7487223, y: 4.380185, z: 8.91723}
-  m_Center: {x: 0.05571711, y: 1.0400567, z: 4.373937}
 --- !u!114 &3644062954500194812
 MonoBehaviour:
   m_ObjectHideFlags: 0

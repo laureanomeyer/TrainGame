@@ -68,8 +68,13 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     public WagonMovement WagonMovement => wagonMovement;
     public IWagonID WagonID => wagonID;
 
+    public Camera Cam => Camera.main;
+
+    bool isOnScreen; 
+
     public virtual void Start()
     {
+
         if(stats != null) stats.OnStatChanged += OnStatChanged;
         animator = GetComponent<Animator>();
 
@@ -129,6 +134,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         if (animator != null) animator.SetTrigger("Damage");
 
         hpController.TakeDamage(damageAmount);
+        isOnScreen = CameraView.IsInsideCamera(transform.position, Cam);
+        AudioManager.Instance.PlayOnScreen($"SFXWagonHit{UnityEngine.Random.Range(1,4)}", isOnScreen);
+
 
         currentHp = hpController.CurrentHp;
         canBeRepaired = (hpController.CurrentHp != hpController.MaxHp);
@@ -149,6 +157,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         {
             Break();
         }
+
+
     }
 
     public void SetUpWagonHP() 
@@ -247,4 +257,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
             renderController.ActivateWagonTop();
         }
     }
+
+
 }

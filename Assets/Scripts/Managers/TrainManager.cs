@@ -30,6 +30,12 @@ public class TrainManager : MonoBehaviour
         foreach (var brain in wagonBrains) brain.RegisterModifiers(statSystemRef);
         foreach (var brain in wagonBrains) brain.StartWagon();
         RunManager.Instance.OnTrainReady(tail, wagonsCreated);
+
+
+        foreach (var w in trainDataRef.WagonsIDList)
+        {
+            Debug.Log("Train manager: " + w.WagonName);
+        }
     }
 
     private void CreateLocomotive()

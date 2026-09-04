@@ -72,13 +72,14 @@ MonoBehaviour:
   zoneType: 0
   message: Press F to buy Wagon,  press O to Restart
   optionalPanel: {fileID: 0}
-  interactObjects: []
+  interactObjects:
+  - {fileID: 0}
   noInteractLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   interactLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
 --- !u!114 &4268736138887028017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,9 +98,7 @@ MonoBehaviour:
   spawnWagonPoint: {fileID: 2661907403367792995}
   wagonShopParticleSystem: {fileID: 3537436607480919013}
   storeManager: {fileID: 0}
-  wagonArrivalDuration: 0.5
-  wagonStartOffsetX: -50
-  waitTimeToBuy: 0
+  waitTimeToBuy: 1.5
 --- !u!1 &5503555763906026569
 GameObject:
   m_ObjectHideFlags: 0

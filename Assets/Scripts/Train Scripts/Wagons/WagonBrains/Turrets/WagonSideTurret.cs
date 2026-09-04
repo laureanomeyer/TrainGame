@@ -21,6 +21,9 @@ public class WagonFixedTurret : MonoBehaviour
     private float cooldownTimer;
     private IObjectPool<GameObject> bulletPool;
 
+    Camera Cam => Camera.main;
+    bool isOnScreen;
+
     void Awake()
     {
         bulletPool = new ObjectPool<GameObject>(
@@ -108,6 +111,8 @@ public class WagonFixedTurret : MonoBehaviour
             bullet.ResetState(bulletType);
         }
 
+        isOnScreen = CameraView.IsInsideCamera(transform.position, Cam);
+        AudioManager.Instance.PlayOnScreen("SFXTico&TacoShoot", isOnScreen);
 
     }
 

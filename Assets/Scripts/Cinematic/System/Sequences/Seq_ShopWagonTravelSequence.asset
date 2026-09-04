@@ -12,22 +12,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e5f975edbd45243a3e05ce00286738, type: 3}
   m_Name: Seq_ShopWagonTravelSequence
   m_EditorClassIdentifier: Assembly-CSharp::CameraTravelSequenceSO
-  travelSpeed: 15
-  minTravelDuration: 0.3
-  maxTravelDuration: 1.2
-  holdDuration: 1.2
+  travelSpeed: 1
+  minTravelDuration: 1
+  maxTravelDuration: 1
+  returnSpeed: 1000000
+  minReturnDuration: 2
+  maxReturnDuration: 4
+  holdDuration: 0.5
   travelCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.2901504
+      value: 0.7582954
+      inSlope: 0.903209
+      outSlope: 0.903209
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
@@ -46,12 +58,21 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.23161191
+      value: 0.78100926
+      inSlope: 0.7576245
+      outSlope: 0.7576245
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.15478282
     - serializedVersion: 3
       time: 1
       value: 1
@@ -67,14 +88,10 @@ MonoBehaviour:
   useFOVZoom: 0
   startFov: 40
   endFov: 18
-  worldOffsetFromTarget: {x: 5, y: 25, z: -10}
-  lookAtTarget: 1
-  useFixedRotation: 0
-  fixedEulerRotation: {x: 20, y: -90, z: 0}
+  worldOffsetFromTarget: {x: -10, y: 20, z: -20}
+  lookAtTarget: 0
+  useFixedRotation: 1
+  fixedEulerRotation: {x: 45, y: 0, z: 0}
   travelAxes: -1
   trackTarget: 0
   returnToOrigin: 1
-  wagonArrivalWorldOffset: {x: -100, y: 0, z: 0}
-  wagonTravelSpeed: 6
-  wagonMinTravelDuration: 0.5
-  wagonMaxTravelDuration: 2

@@ -152,7 +152,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         {
             WeaponWithLegacyInStockSO legacyWeapon = stockInfo as WeaponWithLegacyInStockSO;
 
-            legacyDescription.text = legacyWeapon.legacyDescription + "\n" + legacyWeapon.legacyUnlockDescription;
+            legacyDescription.text = legacyWeapon.legacyDescription + "\n \n" + legacyWeapon.legacyUnlockDescription;
 
             legacyStar.SetActive(legacyWeapon.CheckUnlockLegacy());
         }

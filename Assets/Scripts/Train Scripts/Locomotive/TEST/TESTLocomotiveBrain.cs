@@ -13,14 +13,14 @@ public class TESTLocomotiveBrain : MonoBehaviour
 
     [SerializeField] private Renderer shieldsRenderer;
 
-    [SerializeField] private VisualEffect[] explosionParticles;
-
     [Header("Top Locomotive Render")]
     [SerializeField] public Renderer locomotiveTopRender;
     [SerializeField] public MeshFilter locomotiveTopMeshFilter;
 
     private TESTRenderController renderController;
     private ICinematicActorRegistry cinematicRegistry;
+
+    private ParticleSequenceController particleSequenceController;
 
     private bool destroyed;
     public TESTLocomotiveFuel fuelController;
@@ -32,10 +32,12 @@ public class TESTLocomotiveBrain : MonoBehaviour
     public float MaxShield => fuelController.MaxShield;
     public Transform Transform => transform;
 
+
     void Start()
     {
         flash = GetComponent<DamageFlash>();
         animator = GetComponent<Animator>();
+        particleSequenceController = GetComponent<ParticleSequenceController>();
 
         fuelController = new TESTLocomotiveFuel(
             EM ,
@@ -84,16 +86,17 @@ public class TESTLocomotiveBrain : MonoBehaviour
     [ContextMenu("Break the Locomotive")]
     public void Break()
     {
-        if (destroyed) return;
-        destroyed = true;
+        //if (destroyed) return;
+        //destroyed = true;
 
-        AudioManager.Instance.Play("SFXExplosionBuildUp");
+        //AudioManager.Instance.Play("SFXExplosionBuildUp");
+        particleSequenceController.PlayGroup("Vapor");
 
         //Build up particles + Delay based on distance
 
         StartCoroutine(ExplotionDelay());
 
-        EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
+        //EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
 
     void RemoveFuel()
@@ -136,24 +139,12 @@ public class TESTLocomotiveBrain : MonoBehaviour
 
     private IEnumerator ExplotionDelay()
     {
-        yield return new WaitForSecondsRealtime(1.5f);
-
-        if (explosionParticles == null || explosionParticles.Length == 0)
+        if (particleSequenceController == null)
         {
             Debug.LogWarning("explosionParticles vacío o sin asignar en " + gameObject.name);
             yield break;
         }
 
-        foreach (var vfx in explosionParticles)
-        {
-            if (vfx != null)
-            {
-                vfx.gameObject.SetActive(true);
-                vfx.Play();
-                AudioManager.Instance.Play("SFXExplosionBoom");
-            }
-
-            yield return new WaitForSecondsRealtime(0.1f);
-        }
+        particleSequenceController.PlayGroup("Explosion");
     }
 }
