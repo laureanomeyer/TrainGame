@@ -83,7 +83,7 @@ public class InteractionZone : MonoBehaviour
         }
 
         playerInZone = false;
-        isOpen = false; 
+        isOpen = false;
         ui?.HideAll();
         if (optionalPanel != null)
             optionalPanel.SetActive(false);
@@ -117,6 +117,35 @@ public class InteractionZone : MonoBehaviour
         EventBus.Publish(new OnActivateNonPausableUI(true));
         EventBus.Publish(new OnShowInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+    }
+
+    public void HideUI()
+    {
+        ui?.HideAll();
+        if (optionalPanel != null) optionalPanel.SetActive(false);
+    }
+
+    public void ShowUi()
+    {
+        if (!playerInZone || ui == null) return;
+        if (isOpen)
+        {
+            string textToShow = null;
+
+            if (TryGetComponent<WagonShopButton>(out WagonShopButton shopButton))
+            {
+                shopButton.UpdateUI();
+                textToShow = shopButton.DescriptionText;
+            }
+
+            if (zoneType == ZoneType.Text)
+                ui.ShowText(textToShow);
+            else if (zoneType == ZoneType.Buttons)
+                ui.ShowButtons();
+
+            if (optionalPanel != null)
+                optionalPanel.SetActive(true);
+        }
     }
 
     private void CallOnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)

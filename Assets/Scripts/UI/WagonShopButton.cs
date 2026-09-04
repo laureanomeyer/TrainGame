@@ -241,6 +241,7 @@ public class WagonShopButton : MonoBehaviour
     private IEnumerator BuyWagonCoroutine()
     {
         isBuyingWagon = true;
+        interacZone.HideUI();
 
         storeManager.buyButton.interactable = false;
         storeManager.rerollButton.interactable = false;
@@ -259,6 +260,7 @@ public class WagonShopButton : MonoBehaviour
         yield return new WaitForSeconds(waitTimeToBuy);
 
         isBuyingWagon = false;
+        interacZone.ShowUi();
 
         storeManager.buyButton.interactable = true;
 
