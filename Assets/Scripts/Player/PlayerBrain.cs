@@ -61,7 +61,6 @@ public class PlayerBrain : MonoBehaviour
         IsRepairing = false;
         HideInteract();
 
-        Debug.Log("[Player] has coal on awake: " + inventory.HasCoal);
     }
     private void OnDestroy()
     {
