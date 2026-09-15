@@ -29,7 +29,6 @@ public class DamageFlash : MonoBehaviour
         }
         yield return new WaitForSeconds(flashDuration);
 
-       
         ResetMaterials();
     
     }

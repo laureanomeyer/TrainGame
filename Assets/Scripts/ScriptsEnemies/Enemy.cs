@@ -2,11 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
-{
+{   
+    [Header("Weapon")]
     [SerializeField] GameObject weapon;
+    [Header("Meshes")]
     [SerializeField] SkinnedMeshRenderer enemyRend;
     [SerializeField] SkinnedMeshRenderer horseRend;
+    [Header("UI")]
     [SerializeField] private EnemyUIHpBar healthBar;
+    [Header("Animators")]
+    [SerializeField] Animator cowboyAnimator;
+    [SerializeField] Animator horseAnimator; 
 
     private EnemyData data;
     private List<IWagon> targetList;
@@ -42,13 +48,17 @@ public class Enemy : MonoBehaviour
     public bool CanAttack => attackCooldownTimer <= 0f;
     public bool CanSkill => skillCooldownTimer <= 0f;
 
-    
     public EnemySkillSO Skill => data.skill;
 
     private float spawnTime;
     public float TimeAlive => Time.time - spawnTime;
 
     public Camera Cam => Camera.main;
+
+    void Awake()
+    {
+        Weapon = GetComponentInChildren<EnemyWeapon>();
+    }
 
     public void Initialize(EnemyData data)
     {
@@ -59,9 +69,6 @@ public class Enemy : MonoBehaviour
         this.data = data;
         currentHealth = MaxHealth;
         spawnTime = Time.time;
-        weaponPosition = GetComponentInChildren<Transform>();
-        var WeaponGO = Instantiate(weapon, weaponPosition);
-        Weapon = WeaponGO.GetComponent<EnemyWeapon>();
         rb = GetComponent<Rigidbody>();
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
