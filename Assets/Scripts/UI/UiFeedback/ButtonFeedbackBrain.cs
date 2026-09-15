@@ -1,6 +1,4 @@
 using DG.Tweening;
-using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;

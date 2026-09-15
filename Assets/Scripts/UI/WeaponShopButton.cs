@@ -19,20 +19,18 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     [SerializeField] private TextMeshProUGUI priceText;
 
     [Header("Weapon stats UI")]
-    [SerializeField] private TextMeshProUGUI damageText;
-    [SerializeField] private TextMeshProUGUI rofText;
-    [SerializeField] private TextMeshProUGUI ammunitionText;
-
-    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private TextMeshProUGUI[] damageText;
+    [SerializeField] private TextMeshProUGUI[] rofText;
+    [SerializeField] private TextMeshProUGUI[] ammunitionText;
 
     [Header("Weapon image UI")]
-    [SerializeField] private Image weaponImage;
+    [SerializeField] private Image[] weaponImage;
 
     [Header("Legacy data UI")]
     [SerializeField] private GameObject legacyStar;
     [SerializeField] private TextMeshProUGUI legacyDescription;
 
-    private Button button;
+    [SerializeField] private Button buyButton;
     public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
     public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
     private WeaponShopButtonManager buttonManager;
@@ -47,9 +45,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     private void Awake()
     {
         playerDataRef = ServiceLocator.Get<PlayerData>();
-
-        button = GetComponent<Button>();
-        button.onClick.AddListener(BuyWeapon);
+        buyButton.onClick.AddListener(BuyWeapon);
     }
     public void SetWeapon()
     {
@@ -76,7 +72,16 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         {
             foreach (WeaponCollectionInStockSO collection in collections)
             {
-                weaponCollections.Add(collection.Level, collection.weaponCollection);
+                if (collection == null)
+                {
+                    Debug.LogWarning($"Slot null en 'collections' del objeto {name}, revisar el Inspector.", this);
+                    continue;
+                }
+
+                if (!weaponCollections.ContainsKey(collection.Level))
+                {
+                    weaponCollections.Add(collection.Level, collection.weaponCollection);
+                }
             }
 
             if (weaponCollections.ContainsKey(level))
@@ -137,16 +142,22 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         currentWeaponprice = stockInfo.Price;
 
         weaponNameText.text = currentWeapon.name;
-        priceText.text = currentWeaponprice.ToString() + "$";
+        priceText.text = ("Buy for $" + currentWeaponprice.ToString());
 
         float cooldown = (stockInfo.WeaponData.rateOfFire + stockInfo.WeaponData.reloadTime) / 2;
         float damage = stockInfo.WeaponData.damage / cooldown;
 
-        damageText.text = FormatStat(damage);
-        ammunitionText.text = FormatStat (stockInfo.WeaponData.ammun);
-        rofText.text = FormatStat(cooldown);
+        foreach (var t in damageText)
+            t.text = FormatStat(damage);
 
-        weaponImage.sprite = stockInfo.WeaponSprite;
+        foreach (var t in ammunitionText)
+            t.text = FormatStat (stockInfo.WeaponData.ammun);
+
+        foreach (var t in rofText)
+            t.text = FormatStat(cooldown);
+
+        foreach (var t in weaponImage)
+            t.sprite = stockInfo.WeaponSprite;
 
         if(stockInfo is WeaponWithLegacyInStockSO)
         {
@@ -166,18 +177,13 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
     public void ActivateButton()
     {
-        button.interactable = true;
-        canvasGroup.alpha = 0f;
-        canvasGroup.blocksRaycasts = false;
-        canvasGroup.interactable = true;
+        buyButton.interactable = true;
     }
 
     public void DeactivateButton()
     {
-        button.interactable = false;
-        canvasGroup.alpha = 1f;
-        canvasGroup.blocksRaycasts = true;
-        canvasGroup.interactable = false;
+        buyButton.interactable = false;
+        priceText.text = "Owned";
     }
 
     private string FormatStat(float value)
