@@ -51,8 +51,6 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     {
         int value = UnityEngine.Random.Range(0, currentCollection.Length);
 
-        Debug.Log(value);
-
         currentWeapon = currentCollection[value].Weapon;
         currentWeaponprice = currentCollection[value].Price;
 
@@ -66,8 +64,6 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
     public void SetValues(int level)
     {
-        Debug.Log($"{level}");
-
         if (collections.Count() > 0 && level > 0)
         {
             foreach (WeaponCollectionInStockSO collection in collections)
@@ -97,6 +93,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
                 Debug.Log("Llave no encontrada");
                 DeactivateButton();
                 this.gameObject.SetActive(false);
+                return;
             }
             
 

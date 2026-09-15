@@ -24,21 +24,17 @@ public class WeaponShopButtonManager : MonoBehaviour
         var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
         level = sessionConfigRef.CurrentLevel;
 
-        Debug.Log("Start del shop button manager");
-
        for (int i = 0; i < shopButtons.Length; i++)
        {
-            buttons.Add(shopButtons[i].GetComponent<WeaponShopButton>());
-            Debug.Log("i es igual a " + i);
+            buttons.Add(shopButtons[i].GetComponent<IWeaponShopButton>());
        }
 
-       foreach (WeaponShopButton button in buttons)
+       for(int i = 0; i < buttons.Count; i++)
        {
-            button.PlayerReference = playerAtk;
-            button.ButtonManager = this;
-            Debug.Log("Recorri la lista");
+            buttons[i].PlayerReference = playerAtk;
+            buttons[i].ButtonManager = this;
 
-            button.SetValues(level);
+            buttons[i].SetValues(level);
        }
     }
 

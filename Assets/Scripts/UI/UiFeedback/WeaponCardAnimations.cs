@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class WeaponCardAnimations : MonoBehaviour, IPointerUpHandler
+public class WeaponCardAnimations : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] private GameObject card;
 
@@ -12,11 +12,12 @@ public class WeaponCardAnimations : MonoBehaviour, IPointerUpHandler
     [SerializeField] private float animHalfTime;
 
     private bool isFrontShowing = false;
-    private bool canInteract;
+    private bool canInteract =true;
 
-    public void OnPointerUp(PointerEventData data)
+    public void OnPointerDown(PointerEventData data)
     {
         HandleRotation();
+        Debug.Log("Holaaaaaaaaa entreeeeeeeeeeeeeeeeeeee");
     }
 
     private void HandleRotation()
@@ -26,14 +27,14 @@ public class WeaponCardAnimations : MonoBehaviour, IPointerUpHandler
         canInteract = false;
         bool goingBack = isFrontShowing;
 
-        float midY = goingBack ? 90f : -90f;
-        float endY = goingBack ? 180f : 0f;
+        float midY = goingBack ? 90f : 90f;
+        float endY = goingBack ? 0f : 0f;
 
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(card.transform.DORotate(new Vector3(0f, midY, 0f), animHalfTime));
+        seq.Append(card.transform.DORotate(new Vector3(midY, 0f, 0f), animHalfTime));
         seq.AppendCallback(() => SetSide(!isFrontShowing));
-        seq.Append(card.transform.DORotate(new Vector3(0f, endY, 0f), animHalfTime));
+        seq.Append(card.transform.DORotate(new Vector3(endY, 0f, 0f), animHalfTime));
         seq.OnComplete(() => canInteract = true);
     }
 
