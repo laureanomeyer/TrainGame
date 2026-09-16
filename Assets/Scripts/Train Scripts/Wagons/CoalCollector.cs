@@ -52,7 +52,6 @@ public class CoalCollector
 
     public void GiveCoal(OnTakeCoalEvent coalGivenEvent)
     {
-        Debug.Log("coal given");
         EmptyCoal();
     }
 
