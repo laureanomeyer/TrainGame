@@ -196,6 +196,7 @@ public class ReorderManager : MonoBehaviour
         {
             panelRef?.Hide();
             reorderCameraRef?.Deactivate();
+            UIRef?.DeactivateUI(); 
         }
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));
