@@ -27,6 +27,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     [SerializeField] private Image[] weaponImage;
 
     [Header("Legacy data UI")]
+    [SerializeField] private TextMeshProUGUI legacyName;
     [SerializeField] private GameObject legacyStar;
     [SerializeField] private TextMeshProUGUI legacyDescription;
 
@@ -160,12 +161,14 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         {
             WeaponWithLegacyInStockSO legacyWeapon = stockInfo as WeaponWithLegacyInStockSO;
 
+            legacyName.text = legacyWeapon.legacyName;
             legacyDescription.text = legacyWeapon.legacyDescription + "\n \n" + legacyWeapon.legacyUnlockDescription;
 
             legacyStar.SetActive(legacyWeapon.CheckUnlockLegacy());
         }
         else
         {
+            legacyName.text = "";
             legacyDescription.text = "";
 
             legacyStar.SetActive(false);
