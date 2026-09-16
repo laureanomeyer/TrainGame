@@ -17,5 +17,5 @@ public class LevelSpawnsData : ScriptableObject
 public class SpawnEntry
 {
     public EnemyData enemyData;
-    public int quantity;
+    public int weight;
 }

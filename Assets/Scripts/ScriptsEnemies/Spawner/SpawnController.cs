@@ -23,7 +23,7 @@ public class SpawnController : MonoBehaviour
     [Header("Coins")]
     [SerializeField] GameObject coin;
     private Transform goldBox;
-    
+
     [Header("Coal")]
     [SerializeField] GameObject coal;
     private Transform coalBox;
@@ -89,6 +89,34 @@ public class SpawnController : MonoBehaviour
         }
     }
 
+    private Dictionary<EnemyData, int> actualSpawnCounts = new();
+
+    void Spawn(Vector3 pos)
+    {
+        if (spawnPool.Count == 0) return;
+
+        int index = Random.Range(0, spawnPool.Count);
+        EnemyData enemyToSpawn = spawnPool[index];
+
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
+        Enemy enemy = enemyGO.GetComponent<Enemy>();
+        enemy.Initialize(enemyToSpawn);
+        enemy.SetTargetList(trainList);
+
+        aliveEnemies++;
+        TrackSpawn(enemyToSpawn);
+    }
+
+    void TrackSpawn(EnemyData data)
+    {
+        if (!actualSpawnCounts.ContainsKey(data))
+            actualSpawnCounts[data] = 0;
+        actualSpawnCounts[data]++;
+
+        var counts = actualSpawnCounts.Select(kvp => $"{kvp.Key.name}: {kvp.Value}");
+        Debug.Log($"ActualSpawns: {string.Join(", ", counts)}");
+    }
+
 
     void TrySpawn()
     {
@@ -111,6 +139,7 @@ public class SpawnController : MonoBehaviour
     void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
     {
         SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List);
+        
     }
 
     void BuildPool()
@@ -119,28 +148,25 @@ public class SpawnController : MonoBehaviour
 
         foreach (var entry in currentlevelData.spawneables)
         {
-            for (int i = 0; i < entry.quantity; i++)
+            for (int i = 0; i < entry.weight; i++)
             {
                 spawnPool.Add(entry.enemyData);
             }
         }
+
+        LogSpawnPool();
     }
 
-    void Spawn(Vector3 pos)
+    void LogSpawnPool()
     {
-        if (spawnPool.Count == 0) return;
+        var counts = spawnPool
+            .GroupBy(e => e.name) // EnemyData is a ScriptableObject, so .name is its asset name
+            .Select(g => $"{g.Key}: {g.Count()}");
 
-        int index = Random.Range(0, spawnPool.Count);
-
-        EnemyData enemyToSpawn = spawnPool[index];
-        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
-        Enemy enemy = enemyGO.GetComponent<Enemy>();
-        enemy.Initialize(enemyToSpawn);
-        enemy.SetTargetList(trainList);
-
-        aliveEnemies++;
+        Debug.Log($"EnemyPool: {string.Join(", ", counts)}");
     }
-    
+
+
     void SpawnSingle(Vector3 pos, List<IWagon> target)
     {
         if (spawnPool.Count == 0) return;
@@ -154,6 +180,7 @@ public class SpawnController : MonoBehaviour
         enemy.SetTargetList(target);
 
         aliveEnemies++;
+        TrackSpawn(enemyToSpawn);
     }
 
     void SetLevelData()
@@ -186,9 +213,9 @@ public class SpawnController : MonoBehaviour
         coinScript.SetTarget(goTo);
     }
 
-        void SpawCoal(Vector3 position, Transform goTo)
+    void SpawCoal(Vector3 position, Transform goTo)
     {
-        if (goTo == null ) Debug.Log("coal box nulla");
+        if (goTo == null) Debug.Log("coal box nulla");
         GameObject coalGO = ObjectPoolManager.SpawnObject(coal, position, Quaternion.identity);
         Coal coalScript = coalGO.GetComponent<Coal>();
         coalScript.SetTarget(goTo);
