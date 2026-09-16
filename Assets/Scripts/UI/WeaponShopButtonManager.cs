@@ -26,15 +26,15 @@ public class WeaponShopButtonManager : MonoBehaviour
 
        for (int i = 0; i < shopButtons.Length; i++)
        {
-            buttons.Add(shopButtons[i].GetComponent<WeaponShopButton>()); 
+            buttons.Add(shopButtons[i].GetComponent<IWeaponShopButton>());
        }
 
-       foreach (IWeaponShopButton button in buttons)
+       for(int i = 0; i < buttons.Count; i++)
        {
-            button.PlayerReference = playerAtk;
-            button.ButtonManager = this;
+            buttons[i].PlayerReference = playerAtk;
+            buttons[i].ButtonManager = this;
 
-            button.SetValues(level);
+            buttons[i].SetValues(level);
        }
     }
 
