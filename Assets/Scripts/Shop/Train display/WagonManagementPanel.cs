@@ -49,7 +49,6 @@ public class WagonManagementPanel : MonoBehaviour
 
     private void OnMoveClicked()
     {
-        Debug.Log($"[Panel] Move clicked, reorderManagerRef={(reorderManagerRef == null ? "NULL" : "OK")}");
         if (reorderManagerRef == null) ServiceLocator.TryGet(out reorderManagerRef);
         reorderManagerRef?.ConfirmMoveSelected();
     }
