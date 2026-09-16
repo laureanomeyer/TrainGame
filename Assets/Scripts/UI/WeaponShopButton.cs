@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +10,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     private int level;
     private PlayerData playerDataRef;
 
+    private int selectedWeapon;
     private GameObject currentWeapon;
     private float currentWeaponprice = 0;
 
@@ -51,11 +51,12 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     public void SetWeapon()
     {
         int value = UnityEngine.Random.Range(0, currentCollection.Length);
+        selectedWeapon = value;
 
-        currentWeapon = currentCollection[value].Weapon;
-        currentWeaponprice = currentCollection[value].Price;
+        currentWeapon = currentCollection[selectedWeapon].Weapon;
+        currentWeaponprice = currentCollection[selectedWeapon].Price;
 
-        UpdateInfo(currentCollection[value]);
+        UpdateInfo(currentCollection[selectedWeapon]);
 
         if (playerDataRef.PlayerWeapon == currentWeapon)
         {
@@ -130,7 +131,8 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
 
-            SetWeapon();
+            DeactivateButton();
+            //SetWeapon();
         }
     }
 
@@ -141,6 +143,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
         weaponNameText.text = currentWeapon.name;
         priceText.text = ("Buy for $" + currentWeaponprice.ToString());
+
 
         float cooldown = (stockInfo.WeaponData.rateOfFire + stockInfo.WeaponData.reloadTime) / 2;
         float damage = stockInfo.WeaponData.damage / cooldown;
@@ -156,6 +159,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
         foreach (var t in weaponImage)
             t.sprite = stockInfo.WeaponSprite;
+
 
         if(stockInfo is WeaponWithLegacyInStockSO)
         {
@@ -177,7 +181,14 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
     public void ActivateButton()
     {
-        buyButton.interactable = true;
+        if (currentCollection == null || currentCollection.Length == 0) return;
+
+        UpdateInfo(currentCollection[selectedWeapon]);
+
+        if (playerDataRef.PlayerWeapon == currentWeapon)
+            DeactivateButton();
+        else
+            buyButton.interactable = true;
     }
 
     public void DeactivateButton()
