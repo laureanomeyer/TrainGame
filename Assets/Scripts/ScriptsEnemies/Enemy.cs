@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
-{   
+{
     [Header("Weapon")]
     [SerializeField] GameObject weapon;
     [Header("Meshes")]
@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EnemyUIHpBar healthBar;
     [Header("Animators")]
     [SerializeField] Animator cowboyAnimator;
-    [SerializeField] Animator horseAnimator; 
+    [SerializeField] Animator horseAnimator;
 
     private EnemyData data;
     private List<IWagon> targetList;
@@ -20,6 +20,9 @@ public class Enemy : MonoBehaviour
     private Transform weaponPosition;
     private float currentHealth;
     private DamageFlash flash;
+    private bool isDead;
+    private int activeCowboyLayer;
+    private Coroutine attackRoutine;
 
     private TrainRanges trainRanges;
     private (float, float) limits;
@@ -40,7 +43,6 @@ public class Enemy : MonoBehaviour
     public float Range => data.range;
 
     public (float, float) Limits => limits;
-    public bool moveRight;
 
     float attackCooldownTimer;
     float skillCooldownTimer;
@@ -52,20 +54,30 @@ public class Enemy : MonoBehaviour
 
     private float spawnTime;
     public float TimeAlive => Time.time - spawnTime;
+    public bool IsOnPositiveZSide => rb != null && rb.position.z >= 0f;
+    public bool IsOnNegativeZSide =>
+        rb != null && rb.position.z < 0f;
 
     public Camera Cam => Camera.main;
+
+    int rightLayerIndex;
+    int leftLayerIndex;
+
+    
 
     void Awake()
     {
         Weapon = GetComponentInChildren<EnemyWeapon>();
+
+        rightLayerIndex = cowboyAnimator.GetLayerIndex("Right Layer");
+        leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
     }
 
     public void Initialize(EnemyData data)
     {
         StopAllCoroutines();
 
-        moveRight = false;
-
+        isDead = false;
         this.data = data;
         currentHealth = MaxHealth;
         spawnTime = Time.time;
@@ -78,6 +90,8 @@ public class Enemy : MonoBehaviour
         if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
+
+        PlayIdleAnimation();
 
         flash = GetComponent<DamageFlash>();
         flash.StopCoroutine();
@@ -97,16 +111,20 @@ public class Enemy : MonoBehaviour
         skillCooldownTimer = cooldown;
     }
 
-void Update()
-{
-    attackCooldownTimer -= Time.deltaTime;
-    skillCooldownTimer -= Time.deltaTime;
-    Attack?.Attack(this);
-    Attack?.Skill(this);
-}
+    void Update()
+    {
+        if (isDead) return;
+
+        attackCooldownTimer -= Time.deltaTime;
+        skillCooldownTimer -= Time.deltaTime;
+        Attack?.Attack(this);
+        Attack?.Skill(this);
+    }
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         Movement?.Move(this);
     }
 
@@ -116,6 +134,61 @@ void Update()
         this.target = Brain.SetTarget(this);
     }
 
+    public void PlayIdleAnimation()
+    {
+        PlayCowboyAnimation(GetAnimationName(
+            IsOnPositiveZSide ? "Cowboy_1|L_Idle" : "Cowboy_1|R_Idle",
+            IsOnPositiveZSide
+                ? data.animation?.positiveZIdle
+                : data.animation?.negativeZIdle));
+
+        PlayHorseAnimation(data.animation?.horseIdle ?? "Horse|Idle");
+    }
+
+    public void PlayAttackAnimation()
+    {
+        PlayCowboyAnimation(GetAnimationName(
+            IsOnPositiveZSide ? "Cowboy_1|L_Aim" : "Cowboy_1|R_Aim 0",
+            IsOnPositiveZSide
+                ? data.animation?.positiveZAttack
+                : data.animation?.negativeZAttack));
+
+        if (attackRoutine != null) StopCoroutine(attackRoutine);
+        attackRoutine = StartCoroutine(ReturnToIdleAfterAttack());
+    }
+
+    private string GetAnimationName(string defaultName, string configuredName)
+    {
+        return string.IsNullOrEmpty(configuredName) ? defaultName : configuredName;
+    }
+
+    private System.Collections.IEnumerator ReturnToIdleAfterAttack()
+    {
+        yield return new WaitForSeconds(data.animation?.attackDuration ?? 0.8f);
+
+        if (!isDead) PlayIdleAnimation();
+        attackRoutine = null;
+    }
+
+    private void PlayCowboyAnimation(string stateName)
+    {
+        if (string.IsNullOrEmpty(stateName) || cowboyAnimator == null) return;
+
+        activeCowboyLayer = cowboyAnimator.GetLayerIndex(
+            IsOnPositiveZSide ? "Left Layer" : "Right Layer");
+
+        if (activeCowboyLayer < 0) return;
+
+        cowboyAnimator.SetLayerWeight(activeCowboyLayer, 1f);
+        cowboyAnimator.Play(stateName, activeCowboyLayer, 0f);
+    }
+
+    private void PlayHorseAnimation(string stateName)
+    {
+        if (string.IsNullOrEmpty(stateName) || horseAnimator == null) return;
+
+        horseAnimator.Play(stateName, 0, 0f);
+    }
 
     public bool TakeDamage(float damage)
     {
@@ -141,6 +214,15 @@ void Update()
 
     private void Dead()
     {
+        if (isDead) return;
+
+        isDead = true;
+        PlayCowboyAnimation(GetAnimationName(
+            IsOnPositiveZSide ? "Cowboy_1|L_Death" : "Cowboy_1|R_Death",
+            IsOnPositiveZSide
+                ? data.animation?.positiveZDeath
+                : data.animation?.negativeZDeath));
+
         if (healthBar != null)
         { healthBar.Hide(); }
         flash.ResetMaterials();
@@ -154,11 +236,18 @@ void Update()
         }
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop));
         EventBus.Publish(new OnEnemyKilledEvent());
+        StartCoroutine(ReturnAfterDeathAnimation());
+    }
+
+    private System.Collections.IEnumerator ReturnAfterDeathAnimation()
+    {
+        yield return new WaitForSeconds(data.animation?.deathDuration ?? 1f);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
     private void DeadWallDeath()
     {
+        isDead = true;
         if (healthBar != null)
         { healthBar.Hide(); }
         ObjectPoolManager.ReturnObjectToPool(gameObject);
