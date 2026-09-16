@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class ShopWagonData : MonoBehaviour
@@ -6,7 +7,9 @@ public class ShopWagonData : MonoBehaviour
     public IWagonID IDReference;
     public string CinematicKey;
 
-    public void SetID (IWagonID id)
+    public Vector3 FootprintOffset => tail.position - transform.position;
+
+    public void SetID(IWagonID id)
     {
         IDReference = id;
     }

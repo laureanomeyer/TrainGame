@@ -193,7 +193,10 @@ public class DisplayTrain : MonoBehaviour
     [SerializeField] private float dragMoveDuration = 0.3f;
     [SerializeField] private Ease dragMoveEase = Ease.OutQuad;
 
-    private Dictionary<int, (Vector3 pos, Quaternion rot)> slotLayout;
+
+    private Vector3 reflowAnchorPos;
+    private Quaternion reflowRot;
+
     private int draggedSlot = -1;
     private ShopWagonData draggedWagon;
 
@@ -202,21 +205,40 @@ public class DisplayTrain : MonoBehaviour
 
     public void CacheSlotLayout()
     {
-        slotLayout = new Dictionary<int, (Vector3, Quaternion)>();
-        foreach (var kvp in instantiatedWagonReferences)
-            slotLayout[kvp.Key] = (kvp.Value.transform.position, kvp.Value.transform.rotation);
+        var frontWagon = instantiatedWagonReferences[0];
+        reflowAnchorPos = frontWagon.transform.position;
+        reflowRot = frontWagon.transform.rotation;
+    }
+
+
+    private Dictionary<int, Vector3> ComputeReflowPositions()
+    {
+        var positions = new Dictionary<int, Vector3>();
+        Vector3 cursor = reflowAnchorPos;
+
+        for (int i = 0; i < instantiatedWagonReferences.Count; i++)
+        {
+            positions[i] = cursor;
+
+            Vector3 footprint = instantiatedWagonReferences[i].FootprintOffset;
+            cursor += footprint - (reflowRot * Vector3.forward) * wagonGap;
+        }
+
+        return positions;
     }
 
     public void BeginDrag(int slotIndex)
     {
-        if (slotLayout == null || !instantiatedWagonReferences.TryGetValue(slotIndex, out var wagon)) return;
+        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagon)) return;
 
         draggedSlot = slotIndex;
         draggedWagon = wagon;
 
-        Vector3 liftedPos = slotLayout[slotIndex].pos + Vector3.up * dragLiftHeight;
+        var positions = ComputeReflowPositions();
+        Vector3 liftedPos = positions[slotIndex] + Vector3.up * dragLiftHeight;
         wagon.transform.DOMove(liftedPos, dragMoveDuration).SetEase(dragMoveEase);
     }
+
 
     public bool StepDrag(int direction)
     {
@@ -227,17 +249,23 @@ public class DisplayTrain : MonoBehaviour
 
         var otherWagon = instantiatedWagonReferences[targetSlot];
 
-        Vector3 fillPos = slotLayout[draggedSlot].pos;
-        otherWagon.transform.DOMove(fillPos, dragMoveDuration).SetEase(dragMoveEase);
-        otherWagon.transform.DORotateQuaternion(slotLayout[draggedSlot].rot, dragMoveDuration);
-
-        Vector3 targetLiftedPos = slotLayout[targetSlot].pos + Vector3.up * dragLiftHeight;
-        draggedWagon.transform.DOMove(targetLiftedPos, dragMoveDuration).SetEase(dragMoveEase);
-
         instantiatedWagonReferences[draggedSlot] = otherWagon;
         instantiatedWagonReferences[targetSlot] = draggedWagon;
 
         draggedSlot = targetSlot;
+
+
+        var positions = ComputeReflowPositions();
+
+        foreach (var kvp in instantiatedWagonReferences)
+        {
+            bool isDragged = kvp.Key == draggedSlot;
+            Vector3 targetPos = positions[kvp.Key] + (isDragged ? Vector3.up * dragLiftHeight : Vector3.zero);
+
+            kvp.Value.transform.DOMove(targetPos, dragMoveDuration).SetEase(dragMoveEase);
+            if (!isDragged) kvp.Value.transform.DORotateQuaternion(reflowRot, dragMoveDuration);
+        }
+
         return true;
     }
 
@@ -245,9 +273,11 @@ public class DisplayTrain : MonoBehaviour
     {
         if (draggedWagon == null) return;
 
-        Vector3 finalPos = slotLayout[draggedSlot].pos;
+        var positions = ComputeReflowPositions();
+        Vector3 finalPos = positions[draggedSlot];
+
         draggedWagon.transform.DOMove(finalPos, dragMoveDuration).SetEase(dragMoveEase);
-        draggedWagon.transform.DORotateQuaternion(slotLayout[draggedSlot].rot, dragMoveDuration);
+        draggedWagon.transform.DORotateQuaternion(reflowRot, dragMoveDuration);
 
         SyncWagonListFromSlots();
 
