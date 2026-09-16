@@ -39,6 +39,8 @@ public class EnemyData : ScriptableObject
 
     public EnemySkillSO skill;
 
+    public EnemyAnimationSO animation;
+
 
     private void OnValidate()
     {
