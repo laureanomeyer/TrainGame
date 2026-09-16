@@ -461,51 +461,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &307774260
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 307774262}
-  - component: {fileID: 307774261}
-  m_Layer: 0
-  m_Name: CinematicOrchestrator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &307774261
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307774260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c12bbae3362f6944bd8124c0029c2de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RunResultOrchestrator
-  cinematicSystem: {fileID: 995500813}
---- !u!4 &307774262
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 307774260}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 46.83562, y: -0.00001, z: 640.66095}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &334049145
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4188,7 +4143,6 @@ SceneRoots:
   - {fileID: 5243086359024003853}
   - {fileID: 3277774727963297769}
   - {fileID: 995500814}
-  - {fileID: 307774262}
   - {fileID: 1062379978}
   - {fileID: 1017328027}
   - {fileID: 149905226}

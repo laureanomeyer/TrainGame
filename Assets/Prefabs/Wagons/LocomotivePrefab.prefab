@@ -1087,6 +1087,8 @@ Transform:
   - {fileID: 6291511700200493345}
   - {fileID: 1536622291401016873}
   - {fileID: 2539208739590695498}
+  - {fileID: 6253184874768353644}
+  - {fileID: 7290689987414351129}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!114 &2900975310691610324
@@ -1170,7 +1172,7 @@ MonoBehaviour:
   - id: explosion1
     group: explosion
     particle: {fileID: 0}
-    visualEffect: {fileID: 0}
+    visualEffect: {fileID: 1903686590310196877}
     delay: 1.5
     useUnscaledTime: 1
     activateObjectOnPlay: 1
@@ -1193,53 +1195,7 @@ MonoBehaviour:
   - id: explosion2
     group: explosion
     particle: {fileID: 0}
-    visualEffect: {fileID: 0}
-    delay: 1.5
-    useUnscaledTime: 1
-    activateObjectOnPlay: 1
-    clearOnStop: 0
-    onPlayed:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1874721540821230550}
-          m_TargetAssemblyTypeName: AudioEventRelay, Assembly-CSharp
-          m_MethodName: PlaySfx
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: SFXExplosionBoom
-            m_BoolArgument: 0
-          m_CallState: 2
-  - id: explosion3
-    group: explosion
-    particle: {fileID: 0}
-    visualEffect: {fileID: 0}
-    delay: 1.5
-    useUnscaledTime: 1
-    activateObjectOnPlay: 1
-    clearOnStop: 0
-    onPlayed:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 1874721540821230550}
-          m_TargetAssemblyTypeName: AudioEventRelay, Assembly-CSharp
-          m_MethodName: PlaySfx
-          m_Mode: 5
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: SFXExplosionBoom
-            m_BoolArgument: 0
-          m_CallState: 2
-  - id: explosion4
-    group: explosion
-    particle: {fileID: 0}
-    visualEffect: {fileID: 0}
+    visualEffect: {fileID: 2990739484127048440}
     delay: 1.5
     useUnscaledTime: 1
     activateObjectOnPlay: 1
@@ -1651,4 +1607,154 @@ MeshRenderer:
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -1482344446472122085, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
   m_PrefabInstance: {fileID: 1358280213353128386}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1392380638541106249
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1432992804342217495}
+    m_Modifications:
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.4294086
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.2647402
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 23.328333
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7670365444237808414, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791723237012402089, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_Name
+      value: ParticlesExplosionBoom
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791723237012402089, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+--- !u!2083052967 &1903686590310196877 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 664837359849892548, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+  m_PrefabInstance: {fileID: 1392380638541106249}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6253184874768353644 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+  m_PrefabInstance: {fileID: 1392380638541106249}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2357854004398151740
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1432992804342217495}
+    m_Modifications:
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.2647402
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7670365444237808414, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791723237012402089, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_Name
+      value: ParticlesExplosionBoom (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8791723237012402089, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+--- !u!2083052967 &2990739484127048440 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 664837359849892548, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+  m_PrefabInstance: {fileID: 2357854004398151740}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7290689987414351129 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5014050456326243621, guid: 2a9b97631f07c344fb8ada41b2c2adf1, type: 3}
+  m_PrefabInstance: {fileID: 2357854004398151740}
   m_PrefabAsset: {fileID: 0}
