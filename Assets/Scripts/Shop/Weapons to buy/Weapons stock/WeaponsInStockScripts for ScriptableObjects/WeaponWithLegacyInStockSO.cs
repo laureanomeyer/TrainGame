@@ -4,6 +4,7 @@ using UnityEngine;
 public class WeaponWithLegacyInStockSO : WeaponInStocSO
 {
     [Header("Legado")]
+    public string legacyName;
     public string legacyUnlockDescription;
     public string legacyDescription;
 
