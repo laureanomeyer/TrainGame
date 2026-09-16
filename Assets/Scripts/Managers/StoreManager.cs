@@ -54,6 +54,12 @@ public class StoreManager : MonoBehaviour
 
     public float GetGold() => playerDataRef.Gold;
 
+    public void AddGold(float ammount)
+    {
+        playerDataRef.AddPlayerGold(ammount);
+        goldDisplay.UpdatedGold(playerDataRef.Gold);
+    }
+
     public void ChangeWagonList()
     {
         trainDataRef.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
