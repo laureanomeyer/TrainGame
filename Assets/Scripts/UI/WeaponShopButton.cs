@@ -130,7 +130,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
 
-            SetWeapon();
+            //SetWeapon();
         }
     }
 
