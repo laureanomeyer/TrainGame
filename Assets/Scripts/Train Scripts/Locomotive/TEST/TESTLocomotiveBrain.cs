@@ -17,6 +17,9 @@ public class TESTLocomotiveBrain : MonoBehaviour
     [SerializeField] public Renderer locomotiveTopRender;
     [SerializeField] public MeshFilter locomotiveTopMeshFilter;
 
+
+    [SerializeField] private float explosionDelayPerUnit = 0.1f;
+
     private TESTRenderController renderController;
     private ICinematicActorRegistry cinematicRegistry;
 
@@ -86,17 +89,14 @@ public class TESTLocomotiveBrain : MonoBehaviour
     [ContextMenu("Break the Locomotive")]
     public void Break()
     {
-        //if (destroyed) return;
-        //destroyed = true;
+        if (particleSequenceController == null)
+        {
+            Debug.LogWarning($"[TESTLocomotiveBrain] particleSequenceController no asignado en {gameObject.name}.", this);
+            return;
+        }
 
-        //AudioManager.Instance.Play("SFXExplosionBuildUp");
         particleSequenceController.PlayGroup("Vapor");
-
-        //Build up particles + Delay based on distance
-
         StartCoroutine(ExplotionDelay());
-
-        //EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
 
     void RemoveFuel()
@@ -139,11 +139,11 @@ public class TESTLocomotiveBrain : MonoBehaviour
 
     private IEnumerator ExplotionDelay()
     {
-        if (particleSequenceController == null)
-        {
-            Debug.LogWarning("explosionParticles vacío o sin asignar en " + gameObject.name);
-            yield break;
-        }
+        float distance = TailRef != null ? Vector3.Distance(transform.position, TailRef.position) : 0f;
+        float delay = distance * explosionDelayPerUnit;
+
+        if (delay > 0f)
+            yield return new WaitForSeconds(delay);
 
         particleSequenceController.PlayGroup("Explosion");
     }
