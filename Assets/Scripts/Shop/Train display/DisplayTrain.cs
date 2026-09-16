@@ -144,17 +144,12 @@ public class DisplayTrain : MonoBehaviour
     #endregion
 
     #region sell wagon
-
-    // Saca el wagon del slot indicado, cierra el hueco reacomodando el resto,
-    // y devuelve el IWagonID vendido para que el caller calcule el reembolso.
-    public IWagonID SellWagon(int slotIndex)
+    public ShopWagonData SellWagon(int slotIndex)
     {
         if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagonData)) return null;
 
-        IWagonID removedID = wagonData.IDReference;
-        wagonList.Remove(removedID);
+        wagonList.Remove(wagonData.IDReference);
 
-        // Espacio que ocupaba este wagon (mismo vector usado al insertarlo)
         Vector3 span = wagonData.tail.position - wagonData.transform.position;
 
         if (!string.IsNullOrEmpty(wagonData.CinematicKey))
@@ -163,9 +158,7 @@ public class DisplayTrain : MonoBehaviour
             registeredKeys.Remove(wagonData.CinematicKey);
         }
 
-        Destroy(wagonData.gameObject);
 
-        // Todo lo que estaba "detrás" (índice mayor) avanza para cerrar el hueco
         var reindexed = new Dictionary<int, ShopWagonData>();
         foreach (var kvp in instantiatedWagonReferences)
         {
@@ -186,7 +179,9 @@ public class DisplayTrain : MonoBehaviour
 
         tailPos -= span;
 
-        return removedID;
+        Destroy(wagonData.gameObject);
+
+        return wagonData;
     }
 
     #endregion

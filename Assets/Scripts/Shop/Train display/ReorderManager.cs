@@ -142,12 +142,12 @@ public class ReorderManager : MonoBehaviour
     {
         if (currentHoveredWagonKey < 0) return;
 
-        IWagonID sold = trainDisplayRef.SellWagon(currentHoveredWagonKey);
+        ShopWagonData sold = trainDisplayRef.SellWagon(currentHoveredWagonKey);
         managementState = WagonManagementState.Hovering;
 
         if (sold == null) return;
 
-        StoreManager.Instance.AddGold(sold.Price * sellRefundFraction);
+        StoreManager.Instance.AddGold(sold.IDReference.Price * sellRefundFraction);
 
         int count = trainDisplayRef.InstantiatedWagonReferences.Count;
         if (count == 0)
@@ -196,6 +196,7 @@ public class ReorderManager : MonoBehaviour
         {
             panelRef?.Hide();
             reorderCameraRef?.Deactivate();
+            UIRef?.DeactivateUI(); 
         }
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));
