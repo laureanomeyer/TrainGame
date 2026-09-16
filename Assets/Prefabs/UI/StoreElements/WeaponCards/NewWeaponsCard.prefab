@@ -1644,7 +1644,7 @@ MonoBehaviour:
   weaponImage:
   - {fileID: 8483232552809022247}
   - {fileID: 4746621562566256467}
-  legacyStar: {fileID: 5426613272332650329}
+  legacyStar: {fileID: 7199101182684988857}
   legacyDescription: {fileID: 5846739107726665579}
   buyButton: {fileID: 4652477176927587625}
   collections: []
@@ -1878,7 +1878,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2479891660600053268}
   m_Father: {fileID: 2283642047759277034}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2427,7 +2428,6 @@ RectTransform:
   - {fileID: 1474586765320477107}
   - {fileID: 8536190238755966298}
   - {fileID: 7535542907397388877}
-  - {fileID: 7295934020747690002}
   m_Father: {fileID: 5724226080622951474}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2688,81 +2688,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &5426613272332650329
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7295934020747690002}
-  - component: {fileID: 2956455241526779414}
-  - component: {fileID: 3947057202402135878}
-  m_Layer: 5
-  m_Name: LegacyStar
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &7295934020747690002
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5426613272332650329}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7604727263247368585}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -65.567, y: -0.00002861}
-  m_SizeDelta: {x: 72.0523, y: 46.033}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &2956455241526779414
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5426613272332650329}
-  m_CullTransparentMesh: 1
---- !u!114 &3947057202402135878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5426613272332650329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.21176472, g: 0.07450981, b: 0.03529412, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7bb7b9ba8d713844ebc4bbd25593513b, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6984339416034832866
 GameObject:
   m_ObjectHideFlags: 0
@@ -2774,6 +2699,7 @@ GameObject:
   - component: {fileID: 3245951792294030446}
   - component: {fileID: 1981739123792700232}
   - component: {fileID: 5561460788573871048}
+  - component: {fileID: 3705166518142150178}
   m_Layer: 5
   m_Name: Sprite
   m_TagString: Untagged
@@ -2838,6 +2764,96 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3705166518142150178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6984339416034832866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377e137c597fac740a1c9f867921df57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HovereableItem
+  description: Damage dealt per hit
+  showDelay: 0.4
+  verticalOffset: 20
+--- !u!1 &7199101182684988857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2479891660600053268}
+  - component: {fileID: 2742549023863214587}
+  - component: {fileID: 733653695517179097}
+  m_Layer: 5
+  m_Name: LegacyStar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2479891660600053268
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7199101182684988857}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2331639629156896236}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 116, y: -45}
+  m_SizeDelta: {x: 64.5031, y: 64.503}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &2742549023863214587
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7199101182684988857}
+  m_CullTransparentMesh: 1
+--- !u!114 &733653695517179097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7199101182684988857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.69803923, g: 0.6627451, b: 0.6, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 7bb7b9ba8d713844ebc4bbd25593513b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7285615768124498722
 GameObject:
   m_ObjectHideFlags: 0
@@ -2849,6 +2865,7 @@ GameObject:
   - component: {fileID: 1501835299314642274}
   - component: {fileID: 6795414516251525927}
   - component: {fileID: 2193979388463188912}
+  - component: {fileID: 2963360564692923081}
   m_Layer: 5
   m_Name: Sprite
   m_TagString: Untagged
@@ -2913,6 +2930,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2963360564692923081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7285615768124498722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377e137c597fac740a1c9f867921df57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HovereableItem
+  description: Amount of bullets per charger
+  showDelay: 0.4
+  verticalOffset: 20
 --- !u!1 &7342676362680342986
 GameObject:
   m_ObjectHideFlags: 0
@@ -2924,6 +2956,7 @@ GameObject:
   - component: {fileID: 8782189489316708830}
   - component: {fileID: 3043682279665823276}
   - component: {fileID: 4461433448306732743}
+  - component: {fileID: 7106756671493525802}
   m_Layer: 5
   m_Name: Sprite
   m_TagString: Untagged
@@ -2988,6 +3021,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7106756671493525802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7342676362680342986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 377e137c597fac740a1c9f867921df57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HovereableItem
+  description: Amount of shots per second
+  showDelay: 0.4
+  verticalOffset: 20
 --- !u!1 &7858846023600335429
 GameObject:
   m_ObjectHideFlags: 0
@@ -3042,6 +3090,7 @@ MonoBehaviour:
   frontGroup: {fileID: 9024420476785745719}
   backGroup: {fileID: 6316169157140493728}
   animHalfTime: 0.15
+  hoverScale: 1.03
 --- !u!1 &8601000863344088382
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private GameObject transitionRootCanvas;
     [SerializeField] private TMP_Text stationText;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Image transitionImage;
 
     [Header("Settings")]
     [SerializeField] private float fadeDuration = 1f;
@@ -130,9 +131,10 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void SetFadeAlpha(float alpha)
     {
-        if (canvasGroup == null) return;
+        if (transitionImage == null) return;
 
-        canvasGroup.alpha = alpha;
+        //canvasGroup.alpha = alpha;
+        transitionImage.material.SetFloat("_Alpha", alpha);
     }
 
     private void SetTextAlpha(float alpha)

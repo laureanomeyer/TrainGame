@@ -2,22 +2,40 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using DG.Tweening;
 
-public class WeaponCardAnimations : MonoBehaviour, IPointerDownHandler
+public class WeaponCardAnimations : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private GameObject card;
 
     [SerializeField] private CanvasGroup frontGroup;
     [SerializeField] private CanvasGroup backGroup;
-
     [SerializeField] private float animHalfTime;
+    [SerializeField, Range(1f, 1.1f)] private float hoverScale;
 
+    private Vector3 initialScale;
     private bool isFrontShowing = false;
     private bool canInteract =true;
+
+    void Awake()
+    {
+        SetSide(isFrontShowing);
+        initialScale = transform.localScale;
+    }
 
     public void OnPointerDown(PointerEventData data)
     {
         HandleRotation();
-        Debug.Log("Holaaaaaaaaa entreeeeeeeeeeeeeeeeeeee");
+    }
+
+    public void OnPointerEnter(PointerEventData data)
+    {
+        transform.DOKill();
+        card.transform.DOScale(initialScale * hoverScale, 0.1f);
+    }
+
+    public void OnPointerExit(PointerEventData data)
+    {
+        transform.DOKill();
+        card.transform.DOScale(initialScale, 0.1f);
     }
 
     private void HandleRotation()
