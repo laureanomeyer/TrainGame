@@ -57,6 +57,7 @@ public class PlayerBrain : MonoBehaviour
         EventBus.Subscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
         EventBus.Subscribe<OnActivateUiEvent>(CallSetCanAttackEvent);
+        EventBus.Subscribe<OnFreezePlayerEvent>(CallSetCanAttackEvent);
 
         IsRepairing = false;
         HideInteract();
@@ -136,6 +137,11 @@ public class PlayerBrain : MonoBehaviour
     }
 
     public void CallSetCanAttackEvent(OnActivateUiEvent activateUIEvent)
+    {
+        SetCanAttack(activateUIEvent.Activated);
+        SetCanMove(activateUIEvent.Activated);
+    }
+    public void CallSetCanAttackEvent(OnFreezePlayerEvent activateUIEvent)
     {
         SetCanAttack(activateUIEvent.Activated);
         SetCanMove(activateUIEvent.Activated);

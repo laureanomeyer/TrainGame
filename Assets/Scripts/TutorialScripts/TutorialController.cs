@@ -1,7 +1,7 @@
 using UnityEngine;
-using static TrainStats;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class TutorialController : MonoBehaviour
 {
@@ -118,5 +118,126 @@ public class TutorialController : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         EventBus.Publish(new OnSetTutorialVisibleEvent(false));
+    }
+}
+
+public class TutorialCOntroller : MonoBehaviour
+{
+    [SerializeField] private string[] texts;
+    private int currentStep = 0;
+
+    [SerializeField] private CanvasGroup darkerFilter;
+    [SerializeField] private TextMeshProUGUI tutorialText;
+
+    [SerializeField] private CanvasGroup fuelUi;
+    [SerializeField] private CanvasGroup shieldsUi;
+    [SerializeField] protected CanvasGroup goldHpUi;
+
+    [SerializeField] private float holdDuration = 1f;
+
+
+    private void Awake()
+    {
+        tutorialText.text = texts[currentStep];
+
+        fuelUi.alpha = 0f;
+        shieldsUi.alpha = 0f;
+        goldHpUi.alpha = 0f;
+
+        EventBus.Subscribe<OnStartFuelUseEvent>(StartFuelConsumption);
+    }
+
+    private void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnStartFuelUseEvent>(StartFuelConsumption);
+    }
+
+    private void Start()
+    {
+        EventBus.Publish(new OnFreezePlayerEvent(false));
+    }
+    void StartFuelConsumption(OnStartFuelUseEvent startFuelEvent)
+    {
+        fuelUi.alpha = 1f;
+        EventBus.Publish(new OnEnableCoalBoxEvent(true));
+    }
+
+    private void AdvanceStep()
+    {
+        currentStep += 1;
+        tutorialText.text = texts[currentStep];
+        HandleSteps(currentStep);
+    }
+    private void HandleSteps(int step)
+    {
+        switch (step)
+        {
+            case 0: 
+                break;
+            case 1:
+                EventBus.Publish(new OnStartFuelUseEvent());
+                break;
+            case 2:
+                break;
+            case 3:
+                EventBus.Publish(new OnShowCoalWaypointEvent());
+                break;
+            case 4:
+                break;
+            case 5:
+                //Spawnear un carbonero
+                break;
+            case 6:
+                //Congelar al jugador de nuevo y poner texto
+                break;
+            case 7:
+                //Spawnear enemigo comun y descongelar al player
+                break;
+            case 8:
+                //Congelar al player y poner texto, el enemigo dispara unas veces y baja la barra de maximo
+                break;
+            case 9:
+                //Aparece el escudo, el enemigo dispara y recibe daño el escudo, RECIBIR DAÑO AVANZA INSTANTANEAMENTE AL 10
+                shieldsUi.alpha = 1f;
+                break;
+            case 10:
+                //El enemigo deja de disparar, el escudo se regenera, una vez al maximo AVANZA DIRECTAMENTE AL 11
+                break;
+            case 11:
+                //Aparece la vida del vagon de oro baja, el enemigo dispara de nuevo y lo rompe
+                goldHpUi.alpha = 1f;
+                break;
+            case 12:
+                //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
+                break;
+            case 13:
+                //Se congela al player
+                break;
+            case 14: 
+                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
+                break;
+            case 15:
+                //Se prende la Ui de oro total
+                break;
+            case 16:
+                //Texto sobre la tienda
+                break;
+            case 17:
+                //Texto final, Empezar la run
+                break;
+            default:
+                break;
+
+
+
+
+
+        }
+    }
+    private IEnumerator HoldCoroutine(float holdTime)
+    {
+        yield return new WaitForSeconds(holdTime);
+        currentStep += 1;
+        tutorialText.text = texts[currentStep];
     }
 }

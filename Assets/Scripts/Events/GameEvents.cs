@@ -118,6 +118,18 @@ public class OnActivateUiEvent : IGameEvent
         Activated = activated;
     }
 }
+public class OnFreezePlayerEvent : IGameEvent
+{
+    public bool Activated;
+
+    /// <summary>
+    /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
+    /// </summary>
+    public OnFreezePlayerEvent(bool activated)
+    {
+        Activated = activated;
+    }
+}
 
 public class OnActivateNonPausableUI : IGameEvent
 {
@@ -320,6 +332,16 @@ public class OnRunEndedEvent : IGameEvent
     }
 }
 
+#region Tutorial Events
+
+public class OnShowCoalWaypointEvent: IGameEvent
+{
+    public OnShowCoalWaypointEvent() { }
+}
+
+
+
+#endregion
 
 #region Weapons Events
 
