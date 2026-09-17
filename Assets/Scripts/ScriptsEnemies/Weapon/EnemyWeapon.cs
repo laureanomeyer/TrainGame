@@ -2,7 +2,7 @@ using UnityEngine;
 
 //capaz sirve mas que sea un SO..... ver a futuro
 
-public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
+public class EnemyWeapon : MonoBehaviour
 {
     [SerializeField] private GameObject bulletType;
     Transform bulletSpawn;

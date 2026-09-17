@@ -138,8 +138,7 @@ public class SpawnController : MonoBehaviour
 
     void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
     {
-        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List);
-        
+        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List, spawnEnemyEvent.Enemy);
     }
 
     void BuildPool()
@@ -157,17 +156,14 @@ public class SpawnController : MonoBehaviour
     }
 
 
-    void SpawnSingle(Vector3 pos, List<IWagon> target)
+    void SpawnSingle(Vector3 pos, List<IWagon> target, EnemyData enemyToSpawn)
     {
         if (spawnPool.Count == 0) return;
 
-        int index = Random.Range(0, spawnPool.Count);
-
-        EnemyData enemyToSpawn = spawnPool[index];
         GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
         enemy.Initialize(enemyToSpawn);
-        enemy.SetTargetList(target);
+        EventBus.Publish(new OnSetTutorialEnemyTarget(0, target));
 
         aliveEnemies++;
         TrackSpawn(enemyToSpawn);

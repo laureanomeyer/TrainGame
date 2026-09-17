@@ -213,11 +213,13 @@ public class OnSpawnEnemyEvent : IGameEvent
 {
     public Vector3 Position;
     public List<IWagon> List;
+    public EnemyData Enemy;
 
-    public OnSpawnEnemyEvent(Vector3 position, List<IWagon> list) 
+    public OnSpawnEnemyEvent(Vector3 position, List<IWagon> list, EnemyData enemy) 
     {
         Position = position;
         List = list;
+        Enemy = enemy;
     }
 }
 
@@ -320,7 +322,17 @@ public class OnRunEndedEvent : IGameEvent
     }
 }
 
+public class OnSetTutorialEnemyTarget : IGameEvent
+{
+    public  int index;
+    public List<IWagon> targetList;
 
+    public OnSetTutorialEnemyTarget(int index, List<IWagon> targetList)
+    {
+        this.index = index;
+        this.targetList = targetList;
+    }
+}
 #region Weapons Events
 
 #region Wichester Events

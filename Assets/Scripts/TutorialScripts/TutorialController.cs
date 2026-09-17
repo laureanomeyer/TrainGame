@@ -53,7 +53,7 @@ public class TutorialController : MonoBehaviour
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
 
-            EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, wagons));
+            //EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, wagons));
 
             if (!firstRepair)
             {
