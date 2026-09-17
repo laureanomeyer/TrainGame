@@ -215,10 +215,9 @@ public class OnSpawnEnemyEvent : IGameEvent
     public List<IWagon> List;
     public EnemyData Enemy;
 
-    public OnSpawnEnemyEvent(Vector3 position, List<IWagon> list, EnemyData enemy) 
+    public OnSpawnEnemyEvent(Vector3 position, EnemyData enemy) 
     {
         Position = position;
-        List = list;
         Enemy = enemy;
     }
 }
@@ -325,12 +324,11 @@ public class OnRunEndedEvent : IGameEvent
 public class OnSetTutorialEnemyTarget : IGameEvent
 {
     public  int index;
-    public List<IWagon> targetList;
 
-    public OnSetTutorialEnemyTarget(int index, List<IWagon> targetList)
+    public OnSetTutorialEnemyTarget(int index)
     {
+        Debug.Log("Me llame a spawnear");
         this.index = index;
-        this.targetList = targetList;
     }
 }
 #region Weapons Events

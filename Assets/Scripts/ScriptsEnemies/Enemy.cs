@@ -108,6 +108,14 @@ public class Enemy : MonoBehaviour
 
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
+
+        targetList = RunManager.Instance.ActiveWagons;
+
+        if (!IsTutorialEnemy)
+        { 
+            targetWagon = Brain.SetRandomTarget(this);
+            target = targetWagon.Head;
+        }
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -137,9 +145,9 @@ public class Enemy : MonoBehaviour
         Movement?.Move(this);
     }
 
-    public void SetTargetList(List<IWagon> targetList)
-    {
-        this.targetList = targetList;
+/*   public void SetTargetList(List<IWagon> targetList)
+   {
+       this.targetList = targetList;
         this.target = Brain.SetTarget(this);
         targetWagon = null;
         for (int i = 0; i < targetList.Count; i++)
@@ -151,23 +159,27 @@ public class Enemy : MonoBehaviour
                 break;
             }
         }
+    }*/
+
+    public void SetSingleTargetByEvent(int index)
+    {
+        Debug.Log("Me llame?");
+        targetWagon = null;
+
+        targetWagon = targetList[index];
+        target = targetWagon.Head;
     }
 
-    public void SetSingleTargetByEvent(OnSetTutorialEnemyTarget ev)
+        public void SetSingleTargetByEvent(OnSetTutorialEnemyTarget ev)
     {
-        this.targetList = ev.targetList;
-        this.target = Brain.SetSpecificTarget(ev.index, this);
         targetWagon = null;
-        for (int i = 0; i < targetList.Count; i++)
-        {
-            IWagon wagon = targetList[i];
-            if (wagon.Head == target || wagon.Tail == target)
-            {
-                targetWagon = wagon;
-                break;
-            }
-        }
+
+        targetWagon = targetList[ev.index];
+        target = targetWagon.Head;
     }
+
+
+    #region Animations
 
     public void PlayIdleAnimation()
     {
@@ -216,7 +228,7 @@ public class Enemy : MonoBehaviour
 
         horseAnimator.Play(stateName, 0, 0f);
     }
-
+    #endregion
     public bool TakeDamage(float damage)
     {
         if (isDead) return false;

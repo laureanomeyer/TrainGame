@@ -100,8 +100,22 @@ public class SpawnController : MonoBehaviour
 
         GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
+
         enemy.Initialize(enemyToSpawn);
-        enemy.SetTargetList(trainList);
+
+        aliveEnemies++;
+        TrackSpawn(enemyToSpawn);
+    }
+    
+    void SpawnSingle(Vector3 pos, EnemyData enemyToSpawn)
+    {
+        if (spawnPool.Count == 0) return;
+
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
+        Enemy enemy = enemyGO.GetComponent<Enemy>();
+
+        enemy.Initialize(enemyToSpawn);
+        EventBus.Publish(new OnSetTutorialEnemyTarget(1));
 
         aliveEnemies++;
         TrackSpawn(enemyToSpawn);
@@ -138,7 +152,7 @@ public class SpawnController : MonoBehaviour
 
     void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
     {
-        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List, spawnEnemyEvent.Enemy);
+        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.Enemy);
     }
 
     void BuildPool()
@@ -153,20 +167,6 @@ public class SpawnController : MonoBehaviour
             }
         }
 
-    }
-
-
-    void SpawnSingle(Vector3 pos, List<IWagon> target, EnemyData enemyToSpawn)
-    {
-        if (spawnPool.Count == 0) return;
-
-        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
-        Enemy enemy = enemyGO.GetComponent<Enemy>();
-        enemy.Initialize(enemyToSpawn);
-        EventBus.Publish(new OnSetTutorialEnemyTarget(0, target));
-
-        aliveEnemies++;
-        TrackSpawn(enemyToSpawn);
     }
 
     void SetLevelData()
