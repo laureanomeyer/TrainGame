@@ -95,8 +95,7 @@ public class TESTLocomotiveBrain : MonoBehaviour
             return;
         }
 
-        particleSequenceController.PlayGroup("Vapor");
-        StartCoroutine(ExplotionDelay());
+        particleSequenceController.PlayGroup("locomotiveDestroy");
     }
 
     void RemoveFuel()
@@ -135,16 +134,5 @@ public class TESTLocomotiveBrain : MonoBehaviour
         {
             renderController.ActivateWagonTop();
         }
-    }
-
-    private IEnumerator ExplotionDelay()
-    {
-        float distance = TailRef != null ? Vector3.Distance(transform.position, TailRef.position) : 0f;
-        float delay = distance * explosionDelayPerUnit;
-
-        if (delay > 0f)
-            yield return new WaitForSeconds(delay);
-
-        particleSequenceController.PlayGroup("Explosion");
     }
 }

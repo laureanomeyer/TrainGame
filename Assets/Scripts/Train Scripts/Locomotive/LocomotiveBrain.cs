@@ -115,9 +115,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (destroyed) return;
         destroyed = true;
 
-        AudioManager.Instance.Play("SFXExplosionBuildUp");
-
-        particleSequence?.PlayGroup("explosion");
+        particleSequence?.PlayGroup("locomotiveDestroy");
 
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
