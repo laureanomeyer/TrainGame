@@ -40,7 +40,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
-    public Transform Transform => transform;
+    public Transform Head => transform;
+    public Transform Tail => TailRef;
 
     void Awake()
     {

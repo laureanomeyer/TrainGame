@@ -13,16 +13,17 @@ public class EnemyWeapon : MonoBehaviour, IEnemyWeapon
         bulletSpawn = GetComponentInChildren<Transform>();
     }
 
-    public void Execute(Transform target, float damage)
+    public void Execute(IWagon target, float damage)
     {
         Shoot(target, damage);
     }
 
-    public void Shoot(Transform target, float damage)
+    public void Shoot(IWagon target, float damage)
     {
-        if (target == null) return;
+        if (target == null || target.Head == null || target.Tail == null) return;
 
-        Vector3 dir = (target.transform.position - bulletSpawn.position).normalized;
+        Vector3 targetPosition = (target.Head.position + target.Tail.position) * 0.5f;
+        Vector3 dir = (targetPosition - bulletSpawn.position).normalized;
 
         //GameObject bulletGO = ObjectPoolManager.SpawnObject(bulletType, bulletSpawn.position, Quaternion.LookRotation(dir));
         GameObject bulletGO = Instantiate(bulletType, bulletSpawn.position, Quaternion.LookRotation(dir));

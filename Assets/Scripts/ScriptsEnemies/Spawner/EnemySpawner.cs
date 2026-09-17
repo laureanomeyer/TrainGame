@@ -25,7 +25,7 @@ public class EnemySpawner : MonoBehaviour
     {
         if (trainList == null || trainList.Count == 0) return;
 
-        float distance = Vector3.Distance(transform.position, trainList[0].Transform.position);
+        float distance = Vector3.Distance(transform.position, trainList[0].Head.position);
 
         if (distance > activationDistance)
         {
@@ -37,7 +37,6 @@ public class EnemySpawner : MonoBehaviour
                 timer = 0f;
             }
         } 
-             
 
 
     }

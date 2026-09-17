@@ -2,6 +2,6 @@ using UnityEngine;
 
 public interface IEnemyWeapon 
 {    
-    void Execute(Transform target, float damage);
+    void Execute(IWagon target, float damage);
 
 }

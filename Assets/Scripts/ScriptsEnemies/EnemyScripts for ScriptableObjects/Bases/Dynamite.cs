@@ -20,7 +20,7 @@ public class Dynamite : MonoBehaviour
         damage = dmg;
         adjacentDamageMultiplier = adjacentMult;
 
-        mover = new ArcMover(transform.position, target.Transform, speed, arcHeight);
+        mover = new ArcMover(transform.position, target.Head, speed, arcHeight);
     }
 
     void Update()
@@ -30,7 +30,7 @@ public class Dynamite : MonoBehaviour
 
     private void Move()
     {
-        if (targetWagon == null || targetWagon.Transform == null)
+        if (targetWagon == null || targetWagon.Head == null)
         {
             ObjectPoolManager.ReturnObjectToPool(gameObject);
             return;
@@ -61,9 +61,9 @@ public class Dynamite : MonoBehaviour
 
     private void ApplyDamage(IWagon wagon, float amount)
     {
-        if (wagon == null || wagon.Transform == null) return;
+        if (wagon == null || wagon.Head == null) return;
 
-        var damagable = wagon.Transform.GetComponent<IDamagable>();
+        var damagable = wagon.Head.GetComponent<IDamagable>();
         damagable?.TakeDamage(amount);
     }
 }

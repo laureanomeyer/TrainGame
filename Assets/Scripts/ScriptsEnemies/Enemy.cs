@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     private EnemyData data;
     private List<IWagon> targetList;
+    private IWagon targetWagon;
     private Transform target;
     private Transform weaponPosition;
     private float currentHealth;
@@ -37,9 +38,9 @@ public class Enemy : MonoBehaviour
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
     public DropType Drop => data.drop;
-
     public List<IWagon> TargetList => targetList;
     public Transform Target => target;
+    public IWagon TargetWagon => targetWagon;
     public float Range => data.range;
 
     public (float, float) Limits => limits;
@@ -54,16 +55,16 @@ public class Enemy : MonoBehaviour
 
     private float spawnTime;
     public float TimeAlive => Time.time - spawnTime;
-    public bool IsOnPositiveZSide => rb != null && rb.position.z >= 0f;
+    public bool IsOnPositiveZSide => 
+        rb != null && rb.position.z >= 0f;
     public bool IsOnNegativeZSide =>
         rb != null && rb.position.z < 0f;
-
     public Camera Cam => Camera.main;
 
     int rightLayerIndex;
     int leftLayerIndex;
 
-    
+
 
     void Awake()
     {
@@ -131,16 +132,22 @@ public class Enemy : MonoBehaviour
     public void SetTargetList(List<IWagon> targetList)
     {
         this.targetList = targetList;
-        this.target = Brain.SetTarget(this);
+        Brain.Retarget(this);
+    }
+
+    public void SetTarget(IWagon targetWagon)
+    {
+        if (targetWagon == null || targetWagon.Head == null) return;
+
+        this.targetWagon = targetWagon;
+        target = targetWagon.Head;
     }
 
     public void PlayIdleAnimation()
     {
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Idle" : "Cowboy_1|R_Idle",
-            IsOnPositiveZSide
-                ? data.animation?.positiveZIdle
-                : data.animation?.negativeZIdle));
+            IsOnPositiveZSide ? data.animation?.positiveZIdle : data.animation?.negativeZIdle));
 
         PlayHorseAnimation(data.animation?.horseIdle ?? "Horse|Idle");
     }
@@ -149,12 +156,7 @@ public class Enemy : MonoBehaviour
     {
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Aim" : "Cowboy_1|R_Aim 0",
-            IsOnPositiveZSide
-                ? data.animation?.positiveZAttack
-                : data.animation?.negativeZAttack));
-
-        if (attackRoutine != null) StopCoroutine(attackRoutine);
-        attackRoutine = StartCoroutine(ReturnToIdleAfterAttack());
+            IsOnPositiveZSide ? data.animation?.positiveZAttack : data.animation?.negativeZAttack));
     }
 
     private string GetAnimationName(string defaultName, string configuredName)
@@ -174,8 +176,7 @@ public class Enemy : MonoBehaviour
     {
         if (string.IsNullOrEmpty(stateName) || cowboyAnimator == null) return;
 
-        activeCowboyLayer = cowboyAnimator.GetLayerIndex(
-            IsOnPositiveZSide ? "Left Layer" : "Right Layer");
+        activeCowboyLayer = cowboyAnimator.GetLayerIndex(IsOnPositiveZSide ? "Left Layer" : "Right Layer");
 
         if (activeCowboyLayer < 0) return;
 
@@ -192,16 +193,14 @@ public class Enemy : MonoBehaviour
 
     public bool TakeDamage(float damage)
     {
+        if (isDead) return false;
+        
         currentHealth -= damage;
         EventBus.Publish(new OnEnemyHitEvent(transform.position));
+        
+        
         flash.Flash();
-
-        DamagePopupManager.Instance?.ShowDamage(
-        damage,
-        transform.position
-    );
-
-
+        DamagePopupManager.Instance?.ShowDamage(damage,transform.position);
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
@@ -211,7 +210,13 @@ public class Enemy : MonoBehaviour
 
         return currentHealth <= 0;
     }
+    public void OnAttackAnimationFinished()
+    {
+        if (isDead) return;
 
+        PlayIdleAnimation();
+        attackRoutine = null;
+    }
     private void Dead()
     {
         if (isDead) return;

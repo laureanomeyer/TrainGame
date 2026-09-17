@@ -32,7 +32,7 @@ public class DynamiteSkill : EnemySkill
     {
         for (int i = 0; i < enemy.TargetList.Count; i++)
         {
-            if (enemy.TargetList[i].Transform == enemy.Target)
+            if (enemy.TargetList[i].Head == enemy.Target)
                 return enemy.TargetList[i];
         }
         return null;

@@ -154,16 +154,6 @@ public class SpawnController : MonoBehaviour
             }
         }
 
-        LogSpawnPool();
-    }
-
-    void LogSpawnPool()
-    {
-        var counts = spawnPool
-            .GroupBy(e => e.name) // EnemyData is a ScriptableObject, so .name is its asset name
-            .Select(g => $"{g.Key}: {g.Count()}");
-
-        Debug.Log($"EnemyPool: {string.Join(", ", counts)}");
     }
 
 

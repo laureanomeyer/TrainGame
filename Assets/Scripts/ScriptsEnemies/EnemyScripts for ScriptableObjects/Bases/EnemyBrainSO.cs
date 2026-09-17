@@ -11,7 +11,7 @@ public  class EnemyBrainSO : ScriptableObject
 
     public Transform SetTarget(Enemy enemy)
     {
-        return enemy.TargetList[Random.Range(0 , enemy.TargetList.Count)].Transform;
+        return enemy.TargetList[Random.Range(0 , enemy.TargetList.Count)].Head;
     }
 
     public void Tick(Enemy enemy)

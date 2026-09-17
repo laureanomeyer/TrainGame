@@ -19,7 +19,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     private StatSystem stats;
     private TrainData trainData;
 
-    public Transform Transform => transform;
+    public Transform Head => transform;
+    public Transform Tail => tail;
     public bool CanBeRepaired => canBeRepaired;
     public WagonHP HPController => hpController;
 
