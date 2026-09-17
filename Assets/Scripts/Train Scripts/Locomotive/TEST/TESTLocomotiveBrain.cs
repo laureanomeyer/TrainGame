@@ -95,7 +95,9 @@ public class TESTLocomotiveBrain : MonoBehaviour
             return;
         }
 
-        particleSequenceController.PlayGroup("locomotiveDestroy");
+        particleSequenceController.PlayGroup(ParticleGroups.LocomotiveDestroy);
+        particleSequenceController.PlayGroup(ParticleGroups.LocomotiveDestroySmoke);
+
     }
 
     void RemoveFuel()
