@@ -132,15 +132,18 @@ public class Enemy : MonoBehaviour
     public void SetTargetList(List<IWagon> targetList)
     {
         this.targetList = targetList;
-        Brain.Retarget(this);
-    }
+        this.target = Brain.SetTarget(this);
 
-    public void SetTarget(IWagon targetWagon)
-    {
-        if (targetWagon == null || targetWagon.Head == null) return;
-
-        this.targetWagon = targetWagon;
-        target = targetWagon.Head;
+        targetWagon = null;
+        for (int i = 0; i < targetList.Count; i++)
+        {
+            IWagon wagon = targetList[i];
+            if (wagon.Head == target || wagon.Tail == target)
+            {
+                targetWagon = wagon;
+                break;
+            }
+        }
     }
 
     public void PlayIdleAnimation()
