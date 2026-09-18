@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
     private EnemyData data;
     private List<IWagon> targetList;
+    private IWagon targetWagon;
     private Transform target;
     private Transform weaponPosition;
     private float currentHealth;
@@ -27,7 +28,7 @@ public class Enemy : MonoBehaviour
     private TrainRanges trainRanges;
     private (float, float) limits;
 
-    public IEnemyWeapon Weapon;
+    public EnemyWeapon Weapon;
     public EnemyMovementSO Movement => data.movement;
     public EnemyAttackSO Attack => data.attack;
     public EnemyBrainSO Brain => data.brain;
@@ -37,11 +38,10 @@ public class Enemy : MonoBehaviour
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
     public DropType Drop => data.drop;
-
     public List<IWagon> TargetList => targetList;
     public Transform Target => target;
+    public IWagon TargetWagon => targetWagon;
     public float Range => data.range;
-
     public (float, float) Limits => limits;
 
     float attackCooldownTimer;
@@ -54,16 +54,18 @@ public class Enemy : MonoBehaviour
 
     private float spawnTime;
     public float TimeAlive => Time.time - spawnTime;
-    public bool IsOnPositiveZSide => rb != null && rb.position.z >= 0f;
+    public bool IsOnPositiveZSide =>
+        rb != null && rb.position.z >= 0f;
     public bool IsOnNegativeZSide =>
         rb != null && rb.position.z < 0f;
-
     public Camera Cam => Camera.main;
+
+    public bool IsTutorialEnemy { get; private set; }
 
     int rightLayerIndex;
     int leftLayerIndex;
 
-    
+
 
     void Awake()
     {
@@ -71,6 +73,13 @@ public class Enemy : MonoBehaviour
 
         rightLayerIndex = cowboyAnimator.GetLayerIndex("Right Layer");
         leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
+
+        EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
+    }
+
+    void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
     }
 
     public void Initialize(EnemyData data)
@@ -99,6 +108,14 @@ public class Enemy : MonoBehaviour
 
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
+
+        targetList = RunManager.Instance.ActiveWagons;
+
+        if (!IsTutorialEnemy)
+        { 
+            targetWagon = Brain.SetRandomTarget(this);
+            target = targetWagon.Head;
+        }
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -128,19 +145,47 @@ public class Enemy : MonoBehaviour
         Movement?.Move(this);
     }
 
-    public void SetTargetList(List<IWagon> targetList)
-    {
-        this.targetList = targetList;
+/*   public void SetTargetList(List<IWagon> targetList)
+   {
+       this.targetList = targetList;
         this.target = Brain.SetTarget(this);
+        targetWagon = null;
+        for (int i = 0; i < targetList.Count; i++)
+        {
+            IWagon wagon = targetList[i];
+            if (wagon.Head == target || wagon.Tail == target)
+            {
+                targetWagon = wagon;
+                break;
+            }
+        }
+    }*/
+
+    public void SetSingleTargetByEvent(int index)
+    {
+        Debug.Log("Me llame?");
+        targetWagon = null;
+
+        targetWagon = targetList[index];
+        target = targetWagon.Head;
     }
+
+        public void SetSingleTargetByEvent(OnSetTutorialEnemyTarget ev)
+    {
+        targetWagon = null;
+
+        targetWagon = targetList[ev.index];
+        target = targetWagon.Head;
+    }
+
+
+    #region Animations
 
     public void PlayIdleAnimation()
     {
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Idle" : "Cowboy_1|R_Idle",
-            IsOnPositiveZSide
-                ? data.animation?.positiveZIdle
-                : data.animation?.negativeZIdle));
+            IsOnPositiveZSide ? data.animation?.positiveZIdle : data.animation?.negativeZIdle));
 
         PlayHorseAnimation(data.animation?.horseIdle ?? "Horse|Idle");
     }
@@ -149,12 +194,7 @@ public class Enemy : MonoBehaviour
     {
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Aim" : "Cowboy_1|R_Aim 0",
-            IsOnPositiveZSide
-                ? data.animation?.positiveZAttack
-                : data.animation?.negativeZAttack));
-
-        if (attackRoutine != null) StopCoroutine(attackRoutine);
-        attackRoutine = StartCoroutine(ReturnToIdleAfterAttack());
+            IsOnPositiveZSide ? data.animation?.positiveZAttack : data.animation?.negativeZAttack));
     }
 
     private string GetAnimationName(string defaultName, string configuredName)
@@ -174,8 +214,7 @@ public class Enemy : MonoBehaviour
     {
         if (string.IsNullOrEmpty(stateName) || cowboyAnimator == null) return;
 
-        activeCowboyLayer = cowboyAnimator.GetLayerIndex(
-            IsOnPositiveZSide ? "Left Layer" : "Right Layer");
+        activeCowboyLayer = cowboyAnimator.GetLayerIndex(IsOnPositiveZSide ? "Left Layer" : "Right Layer");
 
         if (activeCowboyLayer < 0) return;
 
@@ -189,19 +228,17 @@ public class Enemy : MonoBehaviour
 
         horseAnimator.Play(stateName, 0, 0f);
     }
-
+    #endregion
     public bool TakeDamage(float damage)
     {
+        if (isDead) return false;
+
         currentHealth -= damage;
         EventBus.Publish(new OnEnemyHitEvent(transform.position));
+
+
         flash.Flash();
-
-        DamagePopupManager.Instance?.ShowDamage(
-        damage,
-        transform.position
-    );
-
-
+        DamagePopupManager.Instance?.ShowDamage(damage, transform.position);
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
@@ -211,7 +248,13 @@ public class Enemy : MonoBehaviour
 
         return currentHealth <= 0;
     }
+    public void OnAttackAnimationFinished()
+    {
+        if (isDead) return;
 
+        PlayIdleAnimation();
+        attackRoutine = null;
+    }
     private void Dead()
     {
         if (isDead) return;
@@ -252,6 +295,11 @@ public class Enemy : MonoBehaviour
         { healthBar.Hide(); }
         ObjectPoolManager.ReturnObjectToPool(gameObject);
         flash.ResetMaterials();
+    }
+
+    public void SetTutorialEnemy()
+    {
+        IsTutorialEnemy = true;
     }
 
     //---------------------GIZMOS-------------------------

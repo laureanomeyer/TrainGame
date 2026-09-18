@@ -9,6 +9,7 @@ public class TutorialController : MonoBehaviour
     [SerializeField] GameObject RunUi;
     [SerializeField] GameObject attackCursor;
     [SerializeField] Transform EnemySpawn;
+    [SerializeField] private EnemyData data;
 
     private bool fuelConsumptionStarted = false;
     private bool runStarted = true;
@@ -16,7 +17,7 @@ public class TutorialController : MonoBehaviour
     private bool firstRepair = false;
     private bool firstkilled = false;
     private List<IWagon> wagons = new();
-    private float timer = 6;
+    private float timer = 1;
 
     private void Start()
     {
@@ -53,7 +54,7 @@ public class TutorialController : MonoBehaviour
         {
             wagons.Add(RunManager.Instance.ActiveWagons[1]);
 
-            EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, wagons));
+            EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, data));
 
             if (!firstRepair)
             {

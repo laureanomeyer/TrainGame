@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 public interface IWagon
 {
-    Transform Transform { get;}
+    Transform Head { get;}
+    Transform Tail { get;}
+
     void Move() { }
 }
 

@@ -100,8 +100,22 @@ public class SpawnController : MonoBehaviour
 
         GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
+
         enemy.Initialize(enemyToSpawn);
-        enemy.SetTargetList(trainList);
+
+        aliveEnemies++;
+        TrackSpawn(enemyToSpawn);
+    }
+    
+    void SpawnSingle(Vector3 pos, EnemyData enemyToSpawn)
+    {
+        if (spawnPool.Count == 0) return;
+
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
+        Enemy enemy = enemyGO.GetComponent<Enemy>();
+
+        enemy.Initialize(enemyToSpawn);
+        EventBus.Publish(new OnSetTutorialEnemyTarget(1));
 
         aliveEnemies++;
         TrackSpawn(enemyToSpawn);
@@ -138,8 +152,7 @@ public class SpawnController : MonoBehaviour
 
     void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
     {
-        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.List);
-        
+        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.Enemy);
     }
 
     void BuildPool()
@@ -154,33 +167,6 @@ public class SpawnController : MonoBehaviour
             }
         }
 
-        LogSpawnPool();
-    }
-
-    void LogSpawnPool()
-    {
-        var counts = spawnPool
-            .GroupBy(e => e.name) // EnemyData is a ScriptableObject, so .name is its asset name
-            .Select(g => $"{g.Key}: {g.Count()}");
-
-        Debug.Log($"EnemyPool: {string.Join(", ", counts)}");
-    }
-
-
-    void SpawnSingle(Vector3 pos, List<IWagon> target)
-    {
-        if (spawnPool.Count == 0) return;
-
-        int index = Random.Range(0, spawnPool.Count);
-
-        EnemyData enemyToSpawn = spawnPool[index];
-        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
-        Enemy enemy = enemyGO.GetComponent<Enemy>();
-        enemy.Initialize(enemyToSpawn);
-        enemy.SetTargetList(target);
-
-        aliveEnemies++;
-        TrackSpawn(enemyToSpawn);
     }
 
     void SetLevelData()

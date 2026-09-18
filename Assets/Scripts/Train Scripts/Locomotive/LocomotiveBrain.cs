@@ -40,7 +40,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
-    public Transform Transform => transform;
+    public Transform Head => transform;
+    public Transform Tail => TailRef;
 
     void Awake()
     {
@@ -115,9 +116,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (destroyed) return;
         destroyed = true;
 
-        AudioManager.Instance.Play("SFXExplosionBuildUp");
-
-        particleSequence?.PlayGroup("explosion");
+        particleSequence?.PlayGroup("locomotiveDestroy");
 
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }

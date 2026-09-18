@@ -225,11 +225,12 @@ public class OnSpawnEnemyEvent : IGameEvent
 {
     public Vector3 Position;
     public List<IWagon> List;
+    public EnemyData Enemy;
 
-    public OnSpawnEnemyEvent(Vector3 position, List<IWagon> list) 
+    public OnSpawnEnemyEvent(Vector3 position, EnemyData enemy) 
     {
         Position = position;
-        List = list;
+        Enemy = enemy;
     }
 }
 
@@ -342,7 +343,16 @@ public class OnShowCoalWaypointEvent: IGameEvent
 
 
 #endregion
+public class OnSetTutorialEnemyTarget : IGameEvent
+{
+    public  int index;
 
+    public OnSetTutorialEnemyTarget(int index)
+    {
+        Debug.Log("Me llame a spawnear");
+        this.index = index;
+    }
+}
 #region Weapons Events
 
 #region Wichester Events

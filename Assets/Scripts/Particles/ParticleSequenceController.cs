@@ -22,6 +22,7 @@ public class ParticleSequenceController : MonoBehaviour
         public string id;
 
         [Tooltip("Grupo opcional. Permite reproducir varias entradas juntas con PlayGroup(), con stagger automático según su orden en la lista.")]
+        [GroupName]                    
         public string group;
 
         [Header("Partícula (asignar solo una de las dos)")]
@@ -53,10 +54,14 @@ public class ParticleSequenceController : MonoBehaviour
     public class GroupSettings
     {
         [Tooltip("Nombre del grupo (debe matchear el campo 'group' de las entradas).")]
+        [GroupNameSuggest]
         public string group;
 
         [Min(0f), Tooltip("Segundos que se suman de delay entre cada entrada consecutiva del grupo, según su orden en la lista.")]
         public float staggerInterval = 0f;
+
+        [Min(0f), Tooltip("Delay adicional antes de que arranque este grupo entero. Útil para escalonar un grupo respecto a otro cuando ambos se llaman en el mismo frame (ej. 'humo' arranca 1.5s después que 'explosion').")]
+        public float delayBeforeGroup = 0f;
     }
 
     [SerializeField] private List<ParticleEntry> particles = new();
@@ -65,6 +70,7 @@ public class ParticleSequenceController : MonoBehaviour
     private Dictionary<string, ParticleEntry> _lookup;
     private Dictionary<string, float> _groupStagger;
     private Dictionary<string, Coroutine> _activeRoutines;
+    private Dictionary<string, GroupSettings> _groupSettings;
     private readonly Dictionary<float, WaitForSeconds> _waitCache = new();
     private readonly Dictionary<float, WaitForSecondsRealtime> _waitRealtimeCache = new();
 
@@ -73,11 +79,12 @@ public class ParticleSequenceController : MonoBehaviour
         _lookup = new Dictionary<string, ParticleEntry>(particles.Count);
         _activeRoutines = new Dictionary<string, Coroutine>(particles.Count);
         _groupStagger = new Dictionary<string, float>(groups.Count);
+        _groupSettings = new Dictionary<string, GroupSettings>(groups.Count);
 
         foreach (var g in groups)
         {
             if (string.IsNullOrEmpty(g.group)) continue;
-            _groupStagger[g.group] = g.staggerInterval;
+            _groupSettings[g.group] = g;
         }
 
         foreach (var entry in particles)
@@ -99,9 +106,6 @@ public class ParticleSequenceController : MonoBehaviour
         }
     }
 
-    // ---------- API pública ----------
-
-    /// <summary>Reproduce una entrada por id, respetando su delay configurado.</summary>
     public void Play(string id)
     {
         if (!_lookup.TryGetValue(id, out var entry))
@@ -128,14 +132,22 @@ public class ParticleSequenceController : MonoBehaviour
     {
         if (string.IsNullOrEmpty(group)) return;
 
-        float stagger = _groupStagger.TryGetValue(group, out var interval) ? interval : 0f;
+        float stagger = 0f;
+        float groupDelay = 0f;  
+
+        if(_groupSettings.TryGetValue(group, out var settings))
+        {
+            stagger = settings.staggerInterval;
+            groupDelay = settings.delayBeforeGroup;
+        }
+
         int index = 0;
 
         foreach (var entry in particles)
         {
             if (entry.group != group) continue;
 
-            float effectiveDelay = entry.delay + index * stagger;
+            float effectiveDelay = groupDelay + entry.delay + index * stagger;
             PlayEntry(entry, effectiveDelay);
             index++;
         }

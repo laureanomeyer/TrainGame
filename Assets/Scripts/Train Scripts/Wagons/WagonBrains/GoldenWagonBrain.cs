@@ -54,7 +54,10 @@ public class GoldenWagonBrain : WagonBrain
 
         hpController.Repair(repairAmount, Time.deltaTime);
         if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        {
             EventBus.Publish(new OnSetAttackEnabledEvent(true));
+            EventBus.Publish(new OnSetTutorialEnemyTarget(0));    
+        }
 
         if (hpWorldUI != null)
         {

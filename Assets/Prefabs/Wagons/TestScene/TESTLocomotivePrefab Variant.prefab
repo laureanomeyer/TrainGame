@@ -48,6 +48,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3614904144631400449, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+      propertyPath: coalBrain
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
       propertyPath: m_Name
       value: TESTLocomotivePrefab Variant
@@ -59,7 +63,10 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2900975310691610324, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
     - {fileID: 7727724930647348602, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 8426430648945959898, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+    - {fileID: 1464401652875814331, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+    - {fileID: 3290545796818616260, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7750482621701771139, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
@@ -83,11 +90,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b7f686586a5b964094cb1a6ccc0f1f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TESTLocomotiveBrain
-  TailRef: {fileID: 0}
+  TailRef: {fileID: 1593924595505975730}
   CM: 0
   EM: 0
   RES: 0
-  shieldsRenderer: {fileID: 0}
-  explosionParticles: []
-  locomotiveTopRender: {fileID: 0}
-  locomotiveTopMeshFilter: {fileID: 0}
+  shieldsRenderer: {fileID: 3013024138663523348}
+  locomotiveTopRender: {fileID: 632026924655775084}
+  locomotiveTopMeshFilter: {fileID: 831352528222356012}
+  explosionDelayPerUnit: 0.1
+--- !u!23 &632026924655775084 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7354901611553329974, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  m_PrefabInstance: {fileID: 7986207255219576410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &831352528222356012 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 7304059693240130678, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  m_PrefabInstance: {fileID: 7986207255219576410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1593924595505975730 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8703897692719730664, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  m_PrefabInstance: {fileID: 7986207255219576410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3013024138663523348 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5117457321793284686, guid: a68a4c1bc3e3a154cb92e2feb158a3ad, type: 3}
+  m_PrefabInstance: {fileID: 7986207255219576410}
+  m_PrefabAsset: {fileID: 0}
