@@ -136,6 +136,10 @@ public class TutorialCOntroller : MonoBehaviour
 
     [SerializeField] private float holdDuration = 1f;
 
+    [SerializeField] Transform EnemySpawn;
+    [SerializeField] private EnemyData coalEnemy;
+    [SerializeField] private EnemyData commonEnemy;
+
 
     private void Awake()
     {
@@ -184,38 +188,48 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnShowCoalWaypointEvent());
                 break;
             case 4:
+                EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
             case 5:
-                //Spawnear un carbonero
+                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, coalEnemy));
                 break;
             case 6:
-                //Congelar al jugador de nuevo y poner texto
+                EventBus.Publish(new OnFreezePlayerEvent(false));
                 break;
             case 7:
-                //Spawnear enemigo comun y descongelar al player
+                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
+                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
             case 8:
                 //Congelar al player y poner texto, el enemigo dispara unas veces y baja la barra de maximo
+                EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnSetTutorialEnemyTarget(0));
                 break;
             case 9:
-                //Aparece el escudo, el enemigo dispara y recibe daño el escudo, RECIBIR DAÑO AVANZA INSTANTANEAMENTE AL 10
+                //Aparece el escudo, el enemigo dispara y recibe daÃ±o el escudo, RECIBIR DAÃ‘O AVANZA INSTANTANEAMENTE AL 10
+                //Evento de activar el escudo
                 shieldsUi.alpha = 1f;
                 break;
             case 10:
                 //El enemigo deja de disparar, el escudo se regenera, una vez al maximo AVANZA DIRECTAMENTE AL 11
+                //Evento de enemigo deja de disparar
                 break;
             case 11:
                 //Aparece la vida del vagon de oro baja, el enemigo dispara de nuevo y lo rompe
+                EventBus.Publish(new OnSetTutorialEnemyTarget(1));
                 goldHpUi.alpha = 1f;
                 break;
             case 12:
                 //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
+                EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
             case 13:
                 //Se congela al player
+                EventBus.Publish(new OnFreezePlayerEvent(false));
                 break;
             case 14: 
                 //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
+                EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
             case 15:
                 //Se prende la Ui de oro total

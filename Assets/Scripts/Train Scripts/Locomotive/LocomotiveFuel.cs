@@ -17,6 +17,7 @@ public class LocomotiveFuel
     private float timer = 0;
     private bool canConsume = true;
     private bool destroyed;
+    private bool shieldsActive;
 
     private float fuelCapacity;
     private float fuelMaxCapacity;
@@ -110,6 +111,11 @@ public class LocomotiveFuel
         fuelUseXSecond = 1 / (2 * fuelOptimizer);
     }
 
+    public void SetShieldsActive(bool active)
+    {
+        shieldsActive = active;
+    }
+
     private void UpdateSharedSpeed()
     {
         if (hasFuel)
@@ -157,6 +163,12 @@ public class LocomotiveFuel
     {
         if (destroyed) return;
         if (!GameManager.Instance.IsGameplayState) return;
+
+        if(!shieldsActive)
+        {
+            currentShield = 0.5f;
+            return;
+        }
 
         if (!shieldTakenDamage)
         {
