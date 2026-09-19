@@ -339,20 +339,56 @@ public class OnShowCoalWaypointEvent: IGameEvent
 {
     public OnShowCoalWaypointEvent() { }
 }
-
-
-
-#endregion
 public class OnSetTutorialEnemyTarget : IGameEvent
 {
-    public  int index;
+    public int index;
 
     public OnSetTutorialEnemyTarget(int index)
     {
-        Debug.Log("Me llame a spawnear");
         this.index = index;
     }
 }
+
+public class OnSetShieldsActiveEvent: IGameEvent
+{
+    public bool active;
+
+    public OnSetShieldsActiveEvent(bool active)
+    {
+        this.active = active;
+    }
+}
+
+public class OnActivateGoldWagon: IGameEvent
+{
+    public OnActivateGoldWagon() { }
+}
+
+public class OnForceTutorialStepEvent : IGameEvent
+{
+    public int number;
+    public OnForceTutorialStepEvent(int number)
+    {
+        this.number = number;
+    }
+}
+public class OnAdvanceTutorialStepByClick : IGameEvent
+{
+    public OnAdvanceTutorialStepByClick()
+    {
+
+    }
+}
+public class OnAdvanceTutorialStep : IGameEvent
+{
+    public OnAdvanceTutorialStep()
+    {
+
+    }
+}
+
+#endregion
+
 #region Weapons Events
 
 #region Wichester Events

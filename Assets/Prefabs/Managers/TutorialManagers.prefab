@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3373136525375158495}
   - component: {fileID: 7196434298501702969}
   - component: {fileID: 3076365563443351243}
+  - component: {fileID: 8280426591020668928}
   m_Layer: 0
   m_Name: TutorialManagers
   m_TagString: Untagged
@@ -63,7 +64,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RunManager
   mapManagerPrefab: {fileID: 302356739947746835, guid: a3523a94986bdb941a6dad2d1b67e6d3, type: 3}
   mapStartLocation: {fileID: 0}
-  spawnManager: {fileID: 0}
 --- !u!114 &7196434298501702969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,7 +71,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2296606890412997170}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b26de64a8c32d9b4cb281911b7d09356, type: 3}
   m_Name: 
@@ -80,6 +80,7 @@ MonoBehaviour:
   RunUi: {fileID: 0}
   attackCursor: {fileID: 0}
   EnemySpawn: {fileID: 0}
+  data: {fileID: 11400000, guid: 437f9b9823dc0434eb83f05a51338718, type: 2}
 --- !u!114 &3076365563443351243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -102,4 +103,28 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c2c3d9291d27fc446892f47cb012136c, type: 2}
   spawnZone: {fileID: 0}
   coin: {fileID: 8563536407840234828, guid: 691a4540bfc541f4ea1afe22fc6bbe09, type: 3}
+  coal: {fileID: 8563536407840234828, guid: 556c228b6f81a7548aa8f821b9322f50, type: 3}
   enemyHitPS: {fileID: 1651239023368015989, guid: f73ff1e72bafc0b45ae8ed33f0a3f03d, type: 3}
+--- !u!114 &8280426591020668928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2296606890412997170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9a9757b54313f547b062ea582721f7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TutorialCOntroller
+  texts: []
+  darkerFilter: {fileID: 0}
+  tutorialText: {fileID: 0}
+  fuelUi: {fileID: 0}
+  shieldsUi: {fileID: 0}
+  goldHpUi: {fileID: 0}
+  goldAmountUi: {fileID: 0}
+  holdDuration: 1
+  EnemySpawn: {fileID: 0}
+  coalEnemy: {fileID: 0}
+  commonEnemy: {fileID: 0}

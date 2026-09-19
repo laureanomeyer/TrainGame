@@ -53,7 +53,6 @@ public class PlayerBrain : MonoBehaviour
         attackAction.canceled += DeactiveAttack;
 
         EventBus.Subscribe<OnSetAttackEnabledEvent>(CallSetCanAttackEvent);
-
         EventBus.Subscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
         EventBus.Subscribe<OnActivateUiEvent>(CallSetCanAttackEvent);
@@ -106,6 +105,20 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController.OnInteract();
     }
 
+    private void OnAdvanceStep()
+    {
+        EventBus.Publish(new OnAdvanceTutorialStepByClick());
+    }
+
+    private void OnSkipTutorial(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            Debug.Log("Holdeado!");
+            EventBus.Publish(new OnForceTutorialStepEvent(17));
+        }
+    }
+
     private void OnSkipScene()
     {
         GameManager.Instance.SkipRun();
@@ -153,8 +166,6 @@ public class PlayerBrain : MonoBehaviour
 
     public void SetCanAttack(bool canAttack)
     {
-
-
         this.canAttack = canAttack;
         playerMovementController.SetCanRotate(canAttack);
     }
@@ -188,8 +199,4 @@ public class PlayerBrain : MonoBehaviour
     {
         interactImage.SetActive(false);
     }
-
-
-
-
 }

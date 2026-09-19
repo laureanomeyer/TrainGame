@@ -36,6 +36,7 @@ public class GoldenWagonBrain : WagonBrain
         base.Start();
         collector = new GoldCollector(hpController, currentGoldUI, storageCapacity, setGoldCoins);
         ServiceLocator.Register<WagonHP>(hpController);
+        EventBus.Subscribe<OnActivateGoldWagon>(ActivateGoldWagon);
     }
 
     public override void OnDestroy()
@@ -68,11 +69,7 @@ public class GoldenWagonBrain : WagonBrain
     {
         base.TakeDamage(damageAmount);
         HandleBackDoor();
-        if (hpController.CurrentHp <= hpController.MaxHp/4 && GameManager.Instance.IsTutorial)
-        {
-            hpController.forceHp(hpController.MaxHp / 4);
-        }
-        else if (hpController.CurrentHp <= 0 && hpController != null)
+        if (hpController.CurrentHp <= 0 && hpController != null)
         {
             collector.EmptyGold();
         }
@@ -119,6 +116,12 @@ public class GoldenWagonBrain : WagonBrain
         {
             coin.SetActive(false);
         }
+    }
+
+    private void ActivateGoldWagon(OnActivateGoldWagon ev)
+    {
+        HPController.forceHp(25f);
+        HPController.forceHp(1f);
     }
 
 }
