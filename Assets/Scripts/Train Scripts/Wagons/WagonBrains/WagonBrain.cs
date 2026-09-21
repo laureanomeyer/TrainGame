@@ -205,6 +205,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
         renderController.CheckWagonToChangeRender(canBreak);
 
+        RunManager.Instance.OnWagonDestroyed(wagonID, this);
+        
         EventBus.Publish(new OnWagonDestroyedEvent());
 
         if ( wagonID != null)

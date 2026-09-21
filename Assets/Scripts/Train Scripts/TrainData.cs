@@ -40,6 +40,7 @@ public class TrainData
     {
         wagonsIDList.Remove(wagon);
     }
+
     public void SetNewWagonIDList(List<IWagonID> list)
     {
         wagonsIDList = list;
