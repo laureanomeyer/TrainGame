@@ -5,7 +5,7 @@ using TMPro;
 public class TutorialCOntroller : MonoBehaviour
 {
     [SerializeField] private string[] texts;
-    private int currentStep = 0;
+    [SerializeField] private int currentStep = 0;
 
     [SerializeField] private CanvasGroup darkerFilter;
     [SerializeField] private TextMeshProUGUI tutorialText;
@@ -33,6 +33,7 @@ public class TutorialCOntroller : MonoBehaviour
         goldHpUi.alpha = 0f;
 
         EventBus.Subscribe<OnStartFuelUseEvent>(StartFuelConsumption);
+        EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Subscribe<OnForceTutorialStepEvent>(ForceStep);
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Subscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
@@ -41,6 +42,7 @@ public class TutorialCOntroller : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnStartFuelUseEvent>(StartFuelConsumption);
+        EventBus.Unsubscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Unsubscribe<OnForceTutorialStepEvent>(ForceStep);
         EventBus.Unsubscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Unsubscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
@@ -68,11 +70,20 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Publish(new OnEnableCoalBoxEvent(true));
     }
 
+    private void SetPlayerFrozen(OnFreezePlayerEvent ev)
+    {
+        playerFrozen = !ev.Activated;
+    }
+
     private void AdvanceStepByClicking(OnAdvanceTutorialStepByClick ev)
     {
         if (!playerFrozen) return;
 
         currentStep += 1;
+        if ( currentStep >= texts.Length)
+        {
+            return;
+        }
         tutorialText.text = texts[currentStep];
         HandleSteps(currentStep);
     }
