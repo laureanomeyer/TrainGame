@@ -44,6 +44,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+        EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
     public void DestroyWeapon()

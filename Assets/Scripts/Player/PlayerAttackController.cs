@@ -75,7 +75,6 @@ public class PlayerAttackController
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.InitializeWeapon(pool, this);
         weapon.RestockBullets();
-        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 
     public void DestroyWeapon()
