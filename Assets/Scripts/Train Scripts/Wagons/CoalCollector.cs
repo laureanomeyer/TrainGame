@@ -28,8 +28,6 @@ public class CoalCollector
         originalFontSize = coalDisplayUI.fontSize;
         EventBus.Subscribe<OnCoalEarnedEvent>(GainCoal);
         EventBus.Subscribe<OnTakeCoalEvent>(GiveCoal);
-
-
     }
 
     public void ActivateOnDestroy()

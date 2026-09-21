@@ -1,6 +1,7 @@
 using System.Collections;
-using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class TutorialCOntroller : MonoBehaviour
 {
@@ -62,12 +63,12 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Publish(new OnSetTimerStartedEvent(false));
         EventBus.Publish(new OnEnableCoalBoxEvent(false));
         EventBus.Publish(new OnEnableGoldBoxEvent(false));
+        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
         playerFrozen = true;
     }
     void StartFuelConsumption(OnStartFuelUseEvent startFuelEvent)
     {
         fuelUi.alpha = 1f;
-        EventBus.Publish(new OnEnableCoalBoxEvent(true));
     }
 
     private void SetPlayerFrozen(OnFreezePlayerEvent ev)
@@ -105,71 +106,92 @@ public class TutorialCOntroller : MonoBehaviour
         switch (step)
         {
             case 0:
+                //The train is your only way to get through the road, you gotta protect it
                 break;
             case 1:
+                //This dial shows the remaining fuel
                 EventBus.Publish(new OnStartFuelUseEvent());
                 break;
             case 2:
+                //Make sure you don’t run out of it, otherwise the machine will explode
                 break;
             case 3:
-                EventBus.Publish(new OnShowCoalWaypointEvent());
-                EventBus.Publish(new OnFreezePlayerEvent(true));
+                //Try replenishing the fuel
+                EventBus.Publish(new OnEnableCoalBoxEvent(true));
+                EventBus.Publish(new OnCoalEarnedEvent(0f));
                 break;
             case 4:
+                //El player recarga fuel y se avanza al 5, te quedaste sin reservas
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
             case 5:
-                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, coalEnemy));
+                //Your fuel has been replenished but you ran out of reserves
+                EventBus.Publish(new OnFreezePlayerEvent(false));
                 break;
             case 6:
-                EventBus.Publish(new OnFreezePlayerEvent(false));
-                break;
-            case 7:
-                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
+                //Some enemies will drop coal when they’re killed
+                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, coalEnemy));
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
-            case 8:
-                //Congelar al player y poner texto, el enemigo dispara unas veces y baja la barra de maximo
+            case 7:
                 EventBus.Publish(new OnFreezePlayerEvent(false));
-                EventBus.Publish(new OnSetTutorialEnemyTarget(0));
+                break;
+            case 8:
+                //However, others will be more hostile
+                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
                 break;
             case 9:
+                //Congelar al player y poner texto, el enemigo dispara unas veces y baja la barra de maximo
+                //Damage to the hull will determine your maximun fuel capacity and it can’t be restored until you reach a station
+                EventBus.Publish(new OnSetTutorialEnemyTarget(0));
+                break;
+            case 10:
                 //Aparece el escudo, el enemigo dispara y recibe daño el escudo, RECIBIR DAÑO AVANZA INSTANTANEAMENTE AL 10
-                //Evento de activar el escudo
+                //Fortunately, your shield will prevent you from taking damage and it will regenerate after a few seconds
                 EventBus.Publish(new OnSetShieldsActiveEvent(true));
                 shieldsUi.alpha = 1f;
                 break;
-            case 10:
+            case 11:
                 //El enemigo deja de disparar, el escudo se regenera, una vez al maximo AVANZA DIRECTAMENTE AL 11
                 //Evento de enemigo deja de disparar
-                break;
-            case 11:
-                //Aparece la vida del vagon de oro baja, el enemigo dispara de nuevo y lo rompe
-                EventBus.Publish(new OnSetTutorialEnemyTarget(1));
-                goldHpUi.alpha = 1f;
-                EventBus.Publish(new OnActivateGoldWagon());
+                //Fortunately, your shield will prevent you from taking damage and it will regenerate after a few seconds
                 break;
             case 12:
-                //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
-                EventBus.Publish(new OnFreezePlayerEvent(true));
+                //Defeated enemies will drop gold and it will be deposited in the gold wagon
+                EventBus.Publish(new OnActivateGoldWagon());
                 break;
             case 13:
-                //Se congela al player, el texto explica que no esta a salvo
-                EventBus.Publish(new OnFreezePlayerEvent(false));
+                //Aparece la vida del vagon de oro baja, el enemigo dispara de nuevo y lo rompe
+                //Evento de enemigo volver a disparar
+                EventBus.Publish(new OnSetTutorialEnemyTarget(1));
+                goldHpUi.alpha = 1f;
                 break;
             case 14:
-                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
+                //You won’t be able to hold gold as long as the wagon is broken, try fixing it.
+                //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
+                //Evento enemigo dejar de disparar
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 break;
             case 15:
+                //Your gold is still not safe, you must take it to the vault to reclaim it
+                //Se congela al player, el texto explica que no esta a salvo
+                EventBus.Publish(new OnFreezePlayerEvent(false));
+                break;
+            case 16:
+                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
+                EventBus.Publish(new OnFreezePlayerEvent(true));
+                break;
+            case 17:
                 //Se prende la Ui de oro total
                 goldAmountUi.alpha = 1f;
                 break;
-            case 16:
+            case 18:
                 //Texto sobre la tienda
+                //You can use the stored gold to buy new wagons and weapons in the stations
                 break;
-            case 17:
+            case 19:
                 //Texto final, Empezar la run
+                //Now you’re ready to take on the road!
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;

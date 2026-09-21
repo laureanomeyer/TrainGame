@@ -10,6 +10,7 @@ public class FuelCharger: MonoBehaviour
     PlayerBrain playerRef;
 
     private bool canInteract = true;
+    private bool firstFill = false;
 
     private void Awake()
     {
@@ -43,10 +44,10 @@ public class FuelCharger: MonoBehaviour
             playerRef.Inventory.DepositCoal();
             EventBus.Publish(new OnDropFuelEvent());
 
-            if (GameManager.Instance.CurrentState == GameState.Tutorial) 
+            if (GameManager.Instance.CurrentState == GameState.Tutorial && firstFill == false) 
             {
-                EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
-                EventBus.Publish(new OnSetTimerStartedEvent(true));
+                EventBus.Publish(new OnAdvanceTutorialStep());
+                firstFill = true;
             }
         }
         else return;
