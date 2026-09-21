@@ -12,7 +12,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] private Mesh[] variatons;
 
     private bool initialized = false;
-   
+
 
     public void Initialize(Transform startLocation)
     {
@@ -80,9 +80,8 @@ public class MapManager : MonoBehaviour
         }
 
         Vector3 direction = (RunManager.Instance.TrainTail.position -
-                     RunManager.Instance.TrainTail.position).normalized;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        rotation = new Quaternion(0, 1, 0, 1f);
+                            RunManager.Instance.TrainTail.position).normalized;
+        Quaternion rotation = Quaternion.Euler(0f, 90f, 0f);
         
 
         GameObject tile = Instantiate(tilePrefab, spawnPosition, rotation);

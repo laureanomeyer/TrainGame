@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] Animator horseAnimator;
 
     private EnemyData data;
-    private List<IWagon> targetList;
     private IWagon targetWagon;
     private Transform target;
     private Transform weaponPosition;
@@ -38,7 +37,6 @@ public class Enemy : MonoBehaviour
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
     public DropType Drop => data.drop;
-    public List<IWagon> TargetList => targetList;
     public Transform Target => target;
     public IWagon TargetWagon => targetWagon;
     public float Range => data.range;
@@ -109,11 +107,9 @@ public class Enemy : MonoBehaviour
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
 
-        targetList = RunManager.Instance.ActiveWagons;
-
         if (!IsTutorialEnemy)
         { 
-            targetWagon = Brain.SetRandomTarget(this);
+            targetWagon = Brain.SetRandomTarget();
             target = targetWagon.Head;
         }
     }
@@ -145,36 +141,11 @@ public class Enemy : MonoBehaviour
         Movement?.Move(this);
     }
 
-/*   public void SetTargetList(List<IWagon> targetList)
-   {
-       this.targetList = targetList;
-        this.target = Brain.SetTarget(this);
-        targetWagon = null;
-        for (int i = 0; i < targetList.Count; i++)
-        {
-            IWagon wagon = targetList[i];
-            if (wagon.Head == target || wagon.Tail == target)
-            {
-                targetWagon = wagon;
-                break;
-            }
-        }
-    }*/
-
-    public void SetSingleTargetByEvent(int index)
-    {
-        Debug.Log("Me llame?");
-        targetWagon = null;
-
-        targetWagon = targetList[index];
-        target = targetWagon.Head;
-    }
-
-        public void SetSingleTargetByEvent(OnSetTutorialEnemyTarget ev)
+    public void SetSingleTargetByEvent(OnSetTutorialEnemyTarget ev)
     {
         targetWagon = null;
 
-        targetWagon = targetList[ev.index];
+        targetWagon = RunManager.Instance.ActiveWagons[ev.index];
         target = targetWagon.Head;
     }
 
@@ -228,6 +199,11 @@ public class Enemy : MonoBehaviour
 
         horseAnimator.Play(stateName, 0, 0f);
     }
+    private System.Collections.IEnumerator ReturnAfterDeathAnimation()
+    {
+        yield return new WaitForSeconds(data.animation?.deathDuration ?? 1f);
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
+    }
     #endregion
     public bool TakeDamage(float damage)
     {
@@ -247,13 +223,6 @@ public class Enemy : MonoBehaviour
             Dead();
 
         return currentHealth <= 0;
-    }
-    public void OnAttackAnimationFinished()
-    {
-        if (isDead) return;
-
-        PlayIdleAnimation();
-        attackRoutine = null;
     }
     private void Dead()
     {
@@ -281,13 +250,6 @@ public class Enemy : MonoBehaviour
         EventBus.Publish(new OnEnemyKilledEvent());
         StartCoroutine(ReturnAfterDeathAnimation());
     }
-
-    private System.Collections.IEnumerator ReturnAfterDeathAnimation()
-    {
-        yield return new WaitForSeconds(data.animation?.deathDuration ?? 1f);
-        ObjectPoolManager.ReturnObjectToPool(gameObject);
-    }
-
     private void DeadWallDeath()
     {
         isDead = true;
@@ -296,14 +258,12 @@ public class Enemy : MonoBehaviour
         ObjectPoolManager.ReturnObjectToPool(gameObject);
         flash.ResetMaterials();
     }
-
     public void SetTutorialEnemy()
     {
         IsTutorialEnemy = true;
     }
 
     //---------------------GIZMOS-------------------------
-
     void OnDrawGizmosSelected()
     {
         if (target != null)

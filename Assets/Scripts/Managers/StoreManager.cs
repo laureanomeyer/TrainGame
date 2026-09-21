@@ -29,10 +29,10 @@ public class StoreManager : MonoBehaviour
         playerDataRef = ServiceLocator.Get<PlayerData>();
         wagonsInTrain = trainDataRef.WagonsIDList;
 
-        foreach (var w in wagonsInTrain)
+/*         foreach (var w in wagonsInTrain)
         {
             Debug.Log(w.WagonName);
-        }
+        } */
 
         displayTrain.Initialize();
     }
@@ -64,10 +64,10 @@ public class StoreManager : MonoBehaviour
     {
         trainDataRef.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
 
-        foreach (var w in trainDataRef.WagonsIDList)
+/*         foreach (var w in trainDataRef.WagonsIDList)
         {
             Debug.Log("Store Manager: " + w.WagonName);
-        }
+        } */
 
         GameManager.Instance.Session.RebuildStatsSystem();
     }

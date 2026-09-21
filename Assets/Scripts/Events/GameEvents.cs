@@ -323,11 +323,10 @@ public class OnRunEndedEvent : IGameEvent
 
 public class OnSetTutorialEnemyTarget : IGameEvent
 {
-    public  int index;
+    public int index;
 
     public OnSetTutorialEnemyTarget(int index)
     {
-        Debug.Log("Me llame a spawnear");
         this.index = index;
     }
 }

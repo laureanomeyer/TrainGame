@@ -10,7 +10,6 @@ public class WagonHP : IDamagable
     private bool canBreak;
 
     private Action die;
-
     public bool IsBroken { get => isBroken; set => isBroken = value; }
     public float CurrentHp => currentHp;
     public float MaxHp => maxHp;

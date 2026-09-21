@@ -20,7 +20,7 @@ public class DynamiteSkill : EnemySkill
         activeDynamite.transform.position = enemy.transform.position;
 
         var dn = activeDynamite.GetComponent<Dynamite>();
-        dn.SetTarget(targetWagon, enemy.TargetList, damage, adjacentDamageMultiplier);
+        dn.SetTarget(targetWagon, RunManager.Instance.ActiveWagons, damage, adjacentDamageMultiplier);
     }
 
     public override void Stop(Enemy enemy)
@@ -30,10 +30,10 @@ public class DynamiteSkill : EnemySkill
 
     private IWagon FindWagonByTransform(Enemy enemy)
     {
-        for (int i = 0; i < enemy.TargetList.Count; i++)
+        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count; i++)
         {
-            if (enemy.TargetList[i].Head == enemy.Target)
-                return enemy.TargetList[i];
+            if (RunManager.Instance.ActiveWagons[i]?.Head == enemy.Target)
+                return RunManager.Instance.ActiveWagons[i];
         }
         return null;
     }

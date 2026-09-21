@@ -20,6 +20,7 @@ public class GoldenWagonBrain : WagonBrain
     private float openRotation;
     private float fixedY;
     private float fixedZ;
+    private bool tutorialTargetAssigned;
 
     private void Awake()
     {
@@ -53,10 +54,11 @@ public class GoldenWagonBrain : WagonBrain
         }
 
         hpController.Repair(repairAmount, Time.deltaTime);
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && !tutorialTargetAssigned)
         {
+            tutorialTargetAssigned = true;
             EventBus.Publish(new OnSetAttackEnabledEvent(true));
-            EventBus.Publish(new OnSetTutorialEnemyTarget(0));    
+            EventBus.Publish(new OnSetTutorialEnemyTarget(0));//solo para el tutorial y evitar multiples llamados, se cambiara a fututo 
         }
 
         if (hpWorldUI != null)

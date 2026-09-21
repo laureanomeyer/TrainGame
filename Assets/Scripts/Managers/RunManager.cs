@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [DefaultExecutionOrder(-99)]
@@ -59,6 +60,9 @@ public class RunManager : MonoBehaviour
         SetTrainTail(tail);
         activeWagons = wagons;
 
+        Debug.Log($"Run start - Wagon IDs: {string.Join(", ", trainData.WagonsIDList.Select(wagonId => wagonId.WagonName))}");
+        Debug.Log($"Run start - Active wagons: {string.Join(", ", activeWagons.Select(activeWagon => activeWagon?.Head != null ? activeWagon.Head.name : "null"))}");
+
         GameObject obj = Instantiate(mapManagerPrefab, tail.position, tail.rotation);
         mapManager = obj.GetComponent<MapManager>();
         mapManager.Initialize(mapStartLocation);
@@ -87,6 +91,10 @@ public class RunManager : MonoBehaviour
     public void OnWagonDestroyed(IWagonID wagon)
     {
         trainData.RemoveWagonID(wagon);
+
+        Debug.Log($"Wagon IDs: {string.Join(", ", trainData.WagonsIDList.Select(wagonId => wagonId.WagonName))}");
+        Debug.Log($"Active wagons: {string.Join(", ", activeWagons.Select(activeWagon => activeWagon?.Head != null ? activeWagon.Head.name : "null"))}");
+
         GameManager.Instance.Session.RebuildStatsSystem();
     }
 
