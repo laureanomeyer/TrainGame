@@ -13,7 +13,6 @@ public class CollectCoalFromLocomotive : MonoBehaviour
 
     private void Awake()
     {
-        EventBus.Subscribe<OnEnemyKilledEvent>(CallCollectCoalEvent);
         EventBus.Subscribe<OnEnableCoalBoxEvent>(Activate);
     }
     void Start()
@@ -21,13 +20,10 @@ public class CollectCoalFromLocomotive : MonoBehaviour
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
         inputHandler = new InteractInputHandler(interactAction, SetCoalInPlayerInventory);
-
-        if (!GameManager.Instance.IsTutorial) Activate();
     }
 
     private void OnDestroy()
     {
-        EventBus.Unsubscribe<OnEnemyKilledEvent>(CallCollectCoalEvent);
         EventBus.Unsubscribe<OnEnableCoalBoxEvent>(Activate);
         inputHandler.Dispose();
     }
@@ -56,16 +52,6 @@ public class CollectCoalFromLocomotive : MonoBehaviour
         {
             playerRef = null;
         }
-    }
-
-    private void CallCollectCoalEvent(OnEnemyKilledEvent enemyKillEvent)
-    {
-        Activate();
-    }
-
-    void Activate()
-    {
-        canInteract = true;
     }
     void Activate(OnEnableCoalBoxEvent ev)
     {

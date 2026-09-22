@@ -9,6 +9,8 @@ public class GoldBox : IInteractableWithInventory
     private float currentGold;
     public float CurrentGold => currentGold;
 
+    private bool firstAdd = false;
+
     public GoldBox(BoxCollider collider)
     {
         currentGold = 0;
@@ -29,7 +31,6 @@ public class GoldBox : IInteractableWithInventory
         AddGold(playerRef.DepositGold());
 
         EventBus.Publish(new OnDropGoldEvent());
-
     }
 
     public void AddGold(float amount)
@@ -39,8 +40,11 @@ public class GoldBox : IInteractableWithInventory
         EventBus.Publish(new OnGoldBoxChangedEvent (currentGold));
         ChangeGoldInData(amount);
 
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
-            EventBus.Publish(new OnStartFuelUseEvent());
+        if(GameManager.Instance.IsTutorial && !firstAdd)
+        {
+            firstAdd = !firstAdd;
+            EventBus.Publish(new OnAdvanceTutorialStep());
+        }
     }
 
     public void ChangeGoldInData(float amount)

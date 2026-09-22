@@ -14,6 +14,7 @@ public class CollectGoldFromWagon : MonoBehaviour
     private void Awake()
     {
         EventBus.Subscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
+        EventBus.Subscribe<OnEnableGoldBoxEvent>(Activate);
     }
     void Start()
     {
@@ -29,6 +30,7 @@ public class CollectGoldFromWagon : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
+        EventBus.Unsubscribe<OnEnableGoldBoxEvent>(Activate);
         inputHandler.Dispose();
     }
 
@@ -63,6 +65,11 @@ public class CollectGoldFromWagon : MonoBehaviour
     }
 
     void Activate()
+    {
+        canInteract = true;
+        boxCollider.enabled = true;
+    } 
+    void Activate(OnEnableGoldBoxEvent ev)
     {
         canInteract = true;
         boxCollider.enabled = true;

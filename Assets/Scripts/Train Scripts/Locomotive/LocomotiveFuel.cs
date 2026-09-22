@@ -19,7 +19,7 @@ public class LocomotiveFuel
     private bool destroyed;
     private bool shieldsActive;
     private bool shieldFirstDamage = false;
-    private bool firstHeal = false;
+    private bool firstHeal;
 
     private float fuelCapacity;
     private float fuelMaxCapacity;
@@ -57,6 +57,7 @@ public class LocomotiveFuel
 
         EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
         EventBus.Subscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
+        EventBus.Subscribe<OnSetFirstHeal>(SetFirstHeal);
         canConsume = !GameManager.Instance.IsTutorial;
 
         shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
@@ -66,6 +67,7 @@ public class LocomotiveFuel
     {
         EventBus.Unsubscribe<OnSetCanConsumeEvent>(SetCanConsume);
         EventBus.Unsubscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
+        EventBus.Unsubscribe<OnSetFirstHeal>(SetFirstHeal);
         OnDestroyed = null;
     }
 
@@ -142,7 +144,10 @@ public class LocomotiveFuel
             timer = 0f;
             AudioManager.Instance.Play("SFXLocomotiveHit");
 
-
+            if (GameManager.Instance.IsTutorial)
+            {
+                currentMaxFuel = Mathf.Clamp(currentMaxFuel, fuelMaxCapacity / 1.3f, fuelMaxCapacity);
+            }
             if (currentMaxFuel <= 0)
                 RaiseDestroyed();
         }
@@ -153,9 +158,9 @@ public class LocomotiveFuel
             timer = 0;
             shieldTakenDamage = true;
 
-            if (!shieldFirstDamage) 
+            if (!shieldFirstDamage && currentShield <= maxShield /3) 
             {
-                EventBus.Publish(new OnForceTutorialStepEvent(10));
+                EventBus.Publish(new OnAdvanceTutorialStep());
                 shieldFirstDamage = true;
             } 
 
@@ -182,10 +187,10 @@ public class LocomotiveFuel
         {
             currentShield = Mathf.Clamp(currentShield + 5 * deltaTime, 0f, maxShield);
 
-            if(GameManager.Instance.IsTutorial && !firstHeal)
+            if(GameManager.Instance.IsTutorial && !firstHeal && currentShield == maxShield)
             {
                 firstHeal = true;
-                EventBus.Publish(new OnForceTutorialStepEvent(11));
+                EventBus.Publish(new OnAdvanceTutorialStep());
             }
         }
         else
@@ -217,5 +222,10 @@ public class LocomotiveFuel
     public void SetCanConsume(OnSetCanConsumeEvent canConsumeEvent)
     {
         this.canConsume = canConsumeEvent.Can;
+    }
+
+    private void SetFirstHeal(OnSetFirstHeal ev)
+    {
+        firstHeal = ev.active;
     }
 }

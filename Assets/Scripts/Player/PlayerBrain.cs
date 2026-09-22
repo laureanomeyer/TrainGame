@@ -115,7 +115,7 @@ public class PlayerBrain : MonoBehaviour
         if (ctx.performed)
         {
             Debug.Log("Holdeado!");
-            EventBus.Publish(new OnForceTutorialStepEvent(17));
+            //EventBus.Publish(new OnForceTutorialStepEvent(17));
         }
     }
 

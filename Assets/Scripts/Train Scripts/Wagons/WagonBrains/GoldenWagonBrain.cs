@@ -20,6 +20,7 @@ public class GoldenWagonBrain : WagonBrain
     private float openRotation;
     private float fixedY;
     private float fixedZ;
+    private bool firstRepair = false;
 
     private void Awake()
     {
@@ -54,10 +55,11 @@ public class GoldenWagonBrain : WagonBrain
         }
 
         hpController.Repair(repairAmount, Time.deltaTime);
-        if (GameManager.Instance.CurrentState == GameState.Tutorial)
+
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && !firstRepair && hpController.CurrentHp == hpController.MaxHp)
         {
-            EventBus.Publish(new OnSetAttackEnabledEvent(true));
-            EventBus.Publish(new OnSetTutorialEnemyTarget(0));    
+            EventBus.Publish(new OnAdvanceTutorialStep());    
+            firstRepair = !firstRepair;
         }
 
         if (hpWorldUI != null)

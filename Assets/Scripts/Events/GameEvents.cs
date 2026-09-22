@@ -349,6 +349,15 @@ public class OnSetTutorialEnemyTarget : IGameEvent
     }
 }
 
+public class OnSetEnemiesCanAttack : IGameEvent
+{
+    public bool canAttack;
+    public OnSetEnemiesCanAttack(bool can)
+    {
+        this.canAttack = can;
+    }
+}
+
 public class OnSetShieldsActiveEvent: IGameEvent
 {
     public bool active;
@@ -363,15 +372,6 @@ public class OnActivateGoldWagon: IGameEvent
 {
     public OnActivateGoldWagon() { }
 }
-
-public class OnForceTutorialStepEvent : IGameEvent
-{
-    public int number;
-    public OnForceTutorialStepEvent(int number)
-    {
-        this.number = number;
-    }
-}
 public class OnAdvanceTutorialStepByClick : IGameEvent
 {
     public OnAdvanceTutorialStepByClick()
@@ -384,6 +384,16 @@ public class OnAdvanceTutorialStep : IGameEvent
     public OnAdvanceTutorialStep()
     {
 
+    }
+}
+
+public class OnSetFirstHeal: IGameEvent
+{
+    public bool active;
+
+    public OnSetFirstHeal(bool active)
+    {
+        this.active = active;
     }
 }
 
