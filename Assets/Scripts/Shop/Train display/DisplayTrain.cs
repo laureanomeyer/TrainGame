@@ -101,7 +101,7 @@ public class DisplayTrain : MonoBehaviour
 
     public GameObject AddWagon(WagonInStockSO wagonID)
     {
-        var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName, wagonID.Price);
+        var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName, wagonID.Price, wagonID.LevelSet, 1);
 
         Quaternion rotation = new Quaternion(0.00000f, -0.70711f, 0.00000f, 0.70711f);
 
@@ -144,20 +144,20 @@ public class DisplayTrain : MonoBehaviour
     #endregion
 
     #region sell wagon
+
     public ShopWagonData SellWagon(int slotIndex)
     {
         if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagonData)) return null;
 
         wagonList.Remove(wagonData.IDReference);
 
-        Vector3 span = wagonData.tail.position - wagonData.transform.position;
+        Vector3 span = wagonData.FootprintOffset;
 
         if (!string.IsNullOrEmpty(wagonData.CinematicKey))
         {
             cinematicActorRegistry?.UnregisterDynamic(wagonData.CinematicKey);
             registeredKeys.Remove(wagonData.CinematicKey);
         }
-
 
         var reindexed = new Dictionary<int, ShopWagonData>();
         foreach (var kvp in instantiatedWagonReferences)
@@ -186,13 +186,95 @@ public class DisplayTrain : MonoBehaviour
 
     #endregion
 
+    #region upgrade wagon
+
+    // Devuelve el costo para subir de nivel el wagon en ese slot, o null si no puede
+    // mejorarse (sin LevelSet asignado, o ya en el nivel máximo definido).
+    public float? GetUpgradeCost(int slotIndex)
+    {
+        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagonData)) return null;
+
+        var levelSet = wagonData.IDReference?.LevelSet;
+        if (levelSet == null) return null;
+
+        var entry = levelSet.GetLevel(wagonData.IDReference.Level + 1);
+        return entry?.upgradeCost;
+    }
+
+    // Reemplaza el prefab del wagon en ese slot por el de su próximo nivel, y reacomoda
+    // el resto del tren si el nuevo modelo ocupa distinto espacio. No cobra el oro:
+    // eso lo maneja el caller (ver ReorderManager) antes de llamar a este método.
+    public bool UpgradeWagon(int slotIndex)
+    {
+        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var oldWagonData)) return false;
+
+        IWagonID id = oldWagonData.IDReference;
+        var levelSet = id?.LevelSet;
+        if (levelSet == null) return false;
+
+        int nextLevel = id.Level + 1;
+        var entry = levelSet.GetLevel(nextLevel);
+        if (entry == null || entry.shopModel == null || entry.gameplayPrefab == null) return false;
+
+        Vector3 oldFootprint = oldWagonData.FootprintOffset;
+        Vector3 spawnPos = oldWagonData.transform.position;
+        Quaternion spawnRot = oldWagonData.transform.rotation;
+        string cinematicKey = oldWagonData.CinematicKey;
+
+        // Instancia el nuevo modelo en el mismo lugar exacto que ocupaba el anterior
+        GameObject newWagonObj = Instantiate(entry.shopModel, spawnPos, spawnRot);
+        ShopWagonData newWagonData = newWagonObj.GetComponent<ShopWagonData>();
+
+        id.Level = nextLevel;
+        id.Prefab = entry.gameplayPrefab; // prefab de gameplay que usará TrainManager en combate
+        id.Price += entry.upgradeCost;    // acumula inversión para que el reembolso al vender la contemple
+
+        newWagonData.SetID(id);
+        newWagonData.CinematicKey = cinematicKey;
+
+        if (!string.IsNullOrEmpty(cinematicKey))
+        {
+            cinematicActorRegistry?.UnregisterDynamic(cinematicKey);
+            cinematicActorRegistry?.RegisterDynamic(cinematicKey, newWagonObj.transform);
+        }
+
+        Destroy(oldWagonData.gameObject);
+        instantiatedWagonReferences[slotIndex] = newWagonData;
+
+        // Si el nuevo modelo ocupa distinto espacio (nivel 2 duplica tamaño), corremos
+        // todo lo que está detrás para que no se pise, mismo criterio que Sell/Add.
+        Vector3 newFootprint = newWagonData.FootprintOffset;
+        Vector3 delta = newFootprint - oldFootprint;
+
+        if (delta != Vector3.zero)
+        {
+            foreach (var kvp in instantiatedWagonReferences)
+            {
+                if (kvp.Key <= slotIndex) continue;
+
+                Vector3 targetPos = kvp.Value.transform.position + delta;
+                kvp.Value.transform.DOMove(targetPos, shiftDuration).SetEase(shiftEase);
+            }
+
+            tailPos += delta;
+        }
+
+        // Pop visual del upgrade, mismo lenguaje que el pop-in de compra
+        Vector3 finalScale = newWagonObj.transform.localScale;
+        newWagonObj.transform.localScale = finalScale * 0.01f;
+        newWagonObj.transform.DOScale(finalScale, popInDuration).SetEase(popInEase);
+
+        return true;
+    }
+
+    #endregion
+
     #region drag reorder
 
     [Header("Drag Reorder")]
     [SerializeField] private float dragLiftHeight = 5f;
     [SerializeField] private float dragMoveDuration = 0.3f;
     [SerializeField] private Ease dragMoveEase = Ease.OutQuad;
-
 
     private Vector3 reflowAnchorPos;
     private Quaternion reflowRot;
@@ -209,7 +291,6 @@ public class DisplayTrain : MonoBehaviour
         reflowAnchorPos = frontWagon.transform.position;
         reflowRot = frontWagon.transform.rotation;
     }
-
 
     private Dictionary<int, Vector3> ComputeReflowPositions()
     {
@@ -239,7 +320,6 @@ public class DisplayTrain : MonoBehaviour
         wagon.transform.DOMove(liftedPos, dragMoveDuration).SetEase(dragMoveEase);
     }
 
-
     public bool StepDrag(int direction)
     {
         if (draggedWagon == null) return false;
@@ -253,7 +333,6 @@ public class DisplayTrain : MonoBehaviour
         instantiatedWagonReferences[targetSlot] = draggedWagon;
 
         draggedSlot = targetSlot;
-
 
         var positions = ComputeReflowPositions();
 
@@ -297,5 +376,13 @@ public class DisplayTrain : MonoBehaviour
     public List<IWagonID> ChangeWagonIDList()
     {
         return wagonList.ToList();
+    }
+
+    private void SetLayerRecursively(GameObject obj, int layer)
+    {
+        foreach (Transform t in obj.GetComponentsInChildren<Transform>(true))
+        {
+            t.gameObject.layer = layer;
+        }
     }
 }

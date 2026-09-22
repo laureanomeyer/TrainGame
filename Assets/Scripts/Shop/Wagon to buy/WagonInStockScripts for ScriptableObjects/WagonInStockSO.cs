@@ -20,4 +20,9 @@ public class WagonInStockSO : ScriptableObject
     [Header("Shop Model")]
     [SerializeField] public GameObject shopModel;
 
+    [Header("Upgrade")]
+    [Tooltip("Dejar vacío si este vagón no puede mejorarse (regla de 'Costo-Recompensa').")]
+    [SerializeField] private WagonLevelSetSO levelSet;
+    public WagonLevelSetSO LevelSet => levelSet;
+
 }

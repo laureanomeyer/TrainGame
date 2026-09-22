@@ -31,7 +31,7 @@ public class ReorderManager : MonoBehaviour
     private void OnEnable()
     {
         inputRef.actions["Move"].performed += OnMovePerformed;
-        inputRef.actions["Jump"].performed += OnSelectPerformed;
+        inputRef.actions["Interact"].performed += OnSelectPerformed;
         inputRef.actions["Pause"].performed += OnPausePerformed;
         inputRef.actions["Repair"].performed += OnSellHotkeyPerformed;
     }
@@ -40,7 +40,7 @@ public class ReorderManager : MonoBehaviour
     {
         if (inputRef == null) return;
         inputRef.actions["Move"].performed -= OnMovePerformed;
-        inputRef.actions["Jump"].performed -= OnSelectPerformed;
+        inputRef.actions["Interact"].performed -= OnSelectPerformed;
         inputRef.actions["Pause"].performed -= OnPausePerformed;
         inputRef.actions["Repair"].performed -= OnSellHotkeyPerformed;
     }
@@ -63,7 +63,6 @@ public class ReorderManager : MonoBehaviour
             return;
         }
 
-        // Hovering: navegación entre wagones
         if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
 
         currentHoveredWagonKey -= direction;
@@ -77,16 +76,19 @@ public class ReorderManager : MonoBehaviour
         reorderCameraRef?.SetTarget(cacheRef.transform);
     }
 
+    // F: en Hovering abre el panel (calculando si hay upgrade disponible); en Dragging confirma
     private void OnSelectPerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
+        if (panelRef == null) ServiceLocator.TryGet(out panelRef);
 
         switch (managementState)
         {
             case WagonManagementState.Hovering:
                 if (cacheRef == null) return;
                 managementState = WagonManagementState.Panel;
-                panelRef?.Show();
+                float? upgradeCost = trainDisplayRef.GetUpgradeCost(currentHoveredWagonKey);
+                panelRef?.Show(upgradeCost);
                 break;
 
             case WagonManagementState.Dragging:
@@ -96,6 +98,7 @@ public class ReorderManager : MonoBehaviour
         }
     }
 
+    // R: venta rápida del wagon enfocado, sin pasar por el panel
     private void OnSellHotkeyPerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
@@ -138,6 +141,13 @@ public class ReorderManager : MonoBehaviour
         SellHoveredWagon();
     }
 
+    // Llamado desde WagonManagementPanel (botón Upgrade)
+    public void ConfirmUpgradeSelected()
+    {
+        panelRef?.Hide();
+        UpgradeHoveredWagon();
+    }
+
     private void SellHoveredWagon()
     {
         if (currentHoveredWagonKey < 0) return;
@@ -159,6 +169,31 @@ public class ReorderManager : MonoBehaviour
         }
 
         if (currentHoveredWagonKey >= count) currentHoveredWagonKey = count - 1;
+
+        cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
+        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
+        reorderCameraRef?.SetTarget(cacheRef.transform);
+    }
+
+    private void UpgradeHoveredWagon()
+    {
+        if (currentHoveredWagonKey < 0) return;
+
+        float? cost = trainDisplayRef.GetUpgradeCost(currentHoveredWagonKey);
+        managementState = WagonManagementState.Hovering;
+
+        if (cost == null) return; // no mejorable: sin LevelSet o ya en nivel máximo
+
+        if (!StoreManager.Instance.TrySpendGold(cost.Value)) return; // oro insuficiente
+
+        bool upgraded = trainDisplayRef.UpgradeWagon(currentHoveredWagonKey);
+
+        if (!upgraded)
+        {
+            // no debería pasar si GetUpgradeCost dio valor, pero devolvemos el oro por las dudas
+            StoreManager.Instance.AddGold(cost.Value);
+            return;
+        }
 
         cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
         SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
@@ -196,7 +231,7 @@ public class ReorderManager : MonoBehaviour
         {
             panelRef?.Hide();
             reorderCameraRef?.Deactivate();
-            UIRef?.DeactivateUI(); 
+            UIRef?.DeactivateUI();
         }
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));
