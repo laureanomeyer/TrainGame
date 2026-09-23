@@ -81,7 +81,7 @@ public class CursorAmmo : MonoBehaviour
         cursorRect.localPosition = localPoint;
         cursorCenterRect.localPosition = localPoint;
         ammoRect.localPosition = localPoint + (Vector2)offset;
-        
+
         UpdateCrosshairScale();
         UpdateShootCrosshairCooldown();
 
@@ -104,6 +104,15 @@ public class CursorAmmo : MonoBehaviour
         isShotCooldown = true;
 
         targetScale = expandedScale;
+    }
+    private void StartShootCrosshairAnimation(float targetScale, float speed)
+    {
+        shotCooldownDuration = speed;
+
+        shotCooldownTimer = 0;
+        isShotCooldown = true;
+
+        this.targetScale = expandedScale * targetScale;
     }
 
     private void UpdateShootCrosshairCooldown()
@@ -158,11 +167,21 @@ public class CursorAmmo : MonoBehaviour
 
     public void SetCursorVisibleEvent(OnSetAttackEnabledEvent setAttackEnableEvent)
     {
-        SetCursorVisibility(setAttackEnableEvent.Can);
+        SetCursorVisibilityTutorial(setAttackEnableEvent.Can);
     }
 
     void SetCursorVisibility(bool visible)
     {
+        cursorImage.gameObject.SetActive(visible);
+        cursorImageCenter.gameObject.SetActive(visible);
+        ammoText.gameObject.SetActive(visible);
+    }
+    void SetCursorVisibilityTutorial(bool visible)
+    {
+        if (visible)
+        {
+            StartShootCrosshairAnimation(25f, 0.5f);
+        }
         cursorImage.gameObject.SetActive(visible);
         cursorImageCenter.gameObject.SetActive(visible);
         ammoText.gameObject.SetActive(visible);

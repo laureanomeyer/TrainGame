@@ -118,6 +118,18 @@ public class OnActivateUiEvent : IGameEvent
         Activated = activated;
     }
 }
+public class OnFreezePlayerEvent : IGameEvent
+{
+    public bool Activated;
+
+    /// <summary>
+    /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
+    /// </summary>
+    public OnFreezePlayerEvent(bool activated)
+    {
+        Activated = activated;
+    }
+}
 
 public class OnActivateNonPausableUI : IGameEvent
 {
@@ -321,6 +333,12 @@ public class OnRunEndedEvent : IGameEvent
     }
 }
 
+#region Tutorial Events
+
+public class OnShowCoalWaypointEvent: IGameEvent
+{
+    public OnShowCoalWaypointEvent() { }
+}
 public class OnSetTutorialEnemyTarget : IGameEvent
 {
     public int index;
@@ -330,6 +348,57 @@ public class OnSetTutorialEnemyTarget : IGameEvent
         this.index = index;
     }
 }
+
+public class OnSetEnemiesCanAttack : IGameEvent
+{
+    public bool canAttack;
+    public OnSetEnemiesCanAttack(bool can)
+    {
+        this.canAttack = can;
+    }
+}
+
+public class OnSetShieldsActiveEvent: IGameEvent
+{
+    public bool active;
+
+    public OnSetShieldsActiveEvent(bool active)
+    {
+        this.active = active;
+    }
+}
+
+public class OnActivateGoldWagon: IGameEvent
+{
+    public OnActivateGoldWagon() { }
+}
+public class OnAdvanceTutorialStepByClick : IGameEvent
+{
+    public OnAdvanceTutorialStepByClick()
+    {
+
+    }
+}
+public class OnAdvanceTutorialStep : IGameEvent
+{
+    public OnAdvanceTutorialStep()
+    {
+
+    }
+}
+
+public class OnSetFirstHeal: IGameEvent
+{
+    public bool active;
+
+    public OnSetFirstHeal(bool active)
+    {
+        this.active = active;
+    }
+}
+
+#endregion
+
 #region Weapons Events
 
 #region Wichester Events

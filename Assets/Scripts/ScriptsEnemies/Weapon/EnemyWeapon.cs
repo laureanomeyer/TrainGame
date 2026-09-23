@@ -6,16 +6,29 @@ public class EnemyWeapon : MonoBehaviour
 {
     [SerializeField] private GameObject bulletType;
     Transform bulletSpawn;
+    bool canShoot = true;
 
-
-    private void Start()
+    private void Awake()
     {
+        EventBus.Subscribe<OnSetEnemiesCanAttack>(SetCanShoot);
         bulletSpawn = GetComponentInChildren<Transform>();
+    }
+
+    void OnDestroy()
+    {
+        EventBus.Unsubscribe<OnSetEnemiesCanAttack>(SetCanShoot);
     }
 
     public void Execute(IWagon target, float damage)
     {
+        if (!canShoot) return;
+
         Shoot(target, damage);
+    }
+
+    void SetCanShoot(OnSetEnemiesCanAttack ev)
+    {
+        this.canShoot = ev.canAttack;
     }
 
     public void Shoot(IWagon target, float damage)

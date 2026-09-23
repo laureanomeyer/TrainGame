@@ -1,7 +1,8 @@
 
+using System;
 using UnityEngine;
-
-public class CoalBox: IInteractableWithInventory
+[Obsolete("Old coal box system, still here but unused we need to delete it after merging. DEFECATED")]
+public class CoalBox: IInteractableWithInventory 
 {
     private bool canInteract = true;
     private BoxCollider collider;
@@ -84,6 +85,11 @@ public class CoalBox: IInteractableWithInventory
     {
         this.canInteract = canInteractEvent.Enable;
         collider.enabled = canInteractEvent.Enable;
+
+        if (canInteractEvent.Enable) 
+        {
+            charges = 1;
+        }
     }
 
     

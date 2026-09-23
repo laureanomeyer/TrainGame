@@ -91,7 +91,7 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -139,6 +139,24 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AdvanceStep",
+                    "type": "Button",
+                    "id": "de4458fa-36f5-4149-92a6-5ac5922574ad",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SkipTutorial",
+                    "type": "Button",
+                    "id": "98f1ee16-6131-4ab9-b2c0-423ad0462de8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Hold(duration=0.7)",
                     "initialStateCheck": false
                 }
             ],
@@ -580,6 +598,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "CallUi",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7449a3c8-a97e-4011-8ff3-9924fd9959e7",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AdvanceStep",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "afdd10a9-42ed-4a69-af0d-7d567e0ae6cd",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SkipTutorial",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,7 +1,6 @@
-using UnityEngine;
-using static TrainStats;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class TutorialController : MonoBehaviour
 {

@@ -21,6 +21,7 @@ public class GoldenWagonBrain : WagonBrain
     private float fixedY;
     private float fixedZ;
     private bool tutorialTargetAssigned;
+    private bool firstRepair = false;
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class GoldenWagonBrain : WagonBrain
         base.Start();
         collector = new GoldCollector(hpController, currentGoldUI, storageCapacity, setGoldCoins);
         ServiceLocator.Register<WagonHP>(hpController);
+        EventBus.Subscribe<OnActivateGoldWagon>(ActivateGoldWagon);
     }
 
     public override void OnDestroy()
@@ -54,11 +56,10 @@ public class GoldenWagonBrain : WagonBrain
         }
 
         hpController.Repair(repairAmount, Time.deltaTime);
-        if (GameManager.Instance.CurrentState == GameState.Tutorial && !tutorialTargetAssigned)
+        if (GameManager.Instance.CurrentState == GameState.Tutorial && !firstRepair && hpController.CurrentHp == hpController.MaxHp)
         {
-            tutorialTargetAssigned = true;
-            EventBus.Publish(new OnSetAttackEnabledEvent(true));
-            EventBus.Publish(new OnSetTutorialEnemyTarget(0));//solo para el tutorial y evitar multiples llamados, se cambiara a fututo 
+            EventBus.Publish(new OnAdvanceTutorialStep());    
+            firstRepair = !firstRepair;
         }
 
         if (hpWorldUI != null)
@@ -70,11 +71,7 @@ public class GoldenWagonBrain : WagonBrain
     {
         base.TakeDamage(damageAmount);
         HandleBackDoor();
-        if (hpController.CurrentHp <= hpController.MaxHp/4 && GameManager.Instance.IsTutorial)
-        {
-            hpController.forceHp(hpController.MaxHp / 4);
-        }
-        else if (hpController.CurrentHp <= 0 && hpController != null)
+        if (hpController.CurrentHp <= 0 && hpController != null)
         {
             collector.EmptyGold();
         }
@@ -121,6 +118,12 @@ public class GoldenWagonBrain : WagonBrain
         {
             coin.SetActive(false);
         }
+    }
+
+    private void ActivateGoldWagon(OnActivateGoldWagon ev)
+    {
+        HPController.forceHp(25f);
+        HPController.forceHp(1f);
     }
 
 }

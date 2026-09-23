@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class CoalCollector
 {
-    private float coal = 1;
+    private float coal = 0f;
     public float Coal => coal;
 
     public bool HasCoal => coal > 0;
@@ -20,16 +20,15 @@ public class CoalCollector
 
     private CancellationTokenSource cts;
 
+    private bool firstCharge = true;
+    private bool secondCharge = false;
 
     public CoalCollector(TextMeshProUGUI CurrentCoalUI)
     {
-        
         coalDisplayUI = CurrentCoalUI;
         originalFontSize = coalDisplayUI.fontSize;
         EventBus.Subscribe<OnCoalEarnedEvent>(GainCoal);
         EventBus.Subscribe<OnTakeCoalEvent>(GiveCoal);
-
-
     }
 
     public void ActivateOnDestroy()
@@ -43,10 +42,21 @@ public class CoalCollector
 
     public void GainCoal(OnCoalEarnedEvent coalEvent)
     {
-        coal +=1;
+        coal += coalEvent.Amount;
 
         coalDisplayUI.text = coal.ToString();
         PlayScaleEffect();
+
+        if (GameManager.Instance.IsTutorial && firstCharge && !secondCharge)
+        {
+            firstCharge = false;
+            secondCharge = true;
+        }
+        else if (GameManager.Instance.IsTutorial && secondCharge && !firstCharge)
+        {
+            EventBus.Publish(new OnAdvanceTutorialStep());
+            secondCharge = false;
+        }
 
     }
 

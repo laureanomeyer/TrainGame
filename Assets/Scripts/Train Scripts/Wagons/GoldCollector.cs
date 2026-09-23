@@ -24,6 +24,7 @@ public class GoldCollector
 
     private Action<float, float> setCoinsModels;
     private StatSystem statsRef;
+    private bool firstGoldEarned = false;
 
     public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI, float collectorStorageCapacity, Action<float, float> action)
     {
@@ -31,11 +32,12 @@ public class GoldCollector
         goldDisplayUI = CurrentGoldUI;
         originalFontSize = goldDisplayUI.fontSize;
         storageCapacity = collectorStorageCapacity;
-        EventBus.Subscribe<OnGoldEarnedEvent>(CollectGold);
         this.setCoinsModels = action;
         statsRef = ServiceLocator.Get<StatSystem>();
 
-        setCoinsModels(gold,storageCapacity);
+        setCoinsModels(gold, storageCapacity);
+
+        EventBus.Subscribe<OnGoldEarnedEvent>(CollectGold);
     }
 
     public void ActivateOnDestroy()
@@ -47,7 +49,7 @@ public class GoldCollector
 
     public void CollectGold(OnGoldEarnedEvent goldEvent)
     {
-        AudioManager.Instance.Play($"SFXCoinGain{UnityEngine.Random.Range(1,3)}");
+        AudioManager.Instance.Play($"SFXCoinGain{UnityEngine.Random.Range(1, 3)}");
         if (wagonHP.IsBroken == false)
         {
             gold += goldEvent.Amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
@@ -55,6 +57,12 @@ public class GoldCollector
             setCoinsModels(gold, storageCapacity);
             goldDisplayUI.text = "$" + gold;
             PlayScaleEffect();
+
+            if (!firstGoldEarned)
+            {
+                EventBus.Publish(new OnAdvanceTutorialStep());
+                firstGoldEarned = !firstGoldEarned;
+            }
         }
         else
         {
@@ -68,12 +76,11 @@ public class GoldCollector
         {
             float goldToGive = gold;
             EmptyGold();
-            
+
             if (goldToGive > 0)
             {
                 EventBus.Publish(new OnTakeGoldEvent());
             }
-
             return goldToGive;
         }
         else
