@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialCOntroller : MonoBehaviour
@@ -32,6 +31,7 @@ public class TutorialCOntroller : MonoBehaviour
         fuelUi.alpha = 0f;
         shieldsUi.alpha = 0f;
         goldHpUi.alpha = 0f;
+        goldAmountUi.alpha = 0f;
 
         EventBus.Subscribe<OnStartFuelUseEvent>(StartFuelConsumption);
         EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
@@ -49,19 +49,14 @@ public class TutorialCOntroller : MonoBehaviour
 
     private void Start()
     {
-        fuelUi.alpha = 0f;
-        shieldsUi.alpha = 0f;
-        goldHpUi.alpha = 0f;
-        goldAmountUi.alpha = 0f;
-
+        EventBus.Publish(new OnSetAttackEnabledEvent(false));
         EventBus.Publish(new OnFreezePlayerEvent(false));
         EventBus.Publish(new OnSetShieldsActiveEvent(false));
+        EventBus.Publish(new OnEnableGoldBoxEvent(false));
         EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
         EventBus.Publish(new OnSetCanConsumeEvent(false));
-        EventBus.Publish(new OnEnableGoldBoxEvent(false));
         EventBus.Publish(new OnSetTimerStartedEvent(false));
         EventBus.Publish(new OnSetTutorialVisibleEvent(true));
-        playerFrozen = true;
     }
     void StartFuelConsumption(OnStartFuelUseEvent startFuelEvent)
     {
@@ -75,27 +70,10 @@ public class TutorialCOntroller : MonoBehaviour
         if (playerFrozen)
         {
             darkerFilter.alpha = 1f;
-        }else darkerFilter.alpha = 0f;
-    }
-
-    private void AdvanceStepByClicking(OnAdvanceTutorialStepByClick ev)
-    {
-        if (!playerFrozen) return;
-
-        currentStep += 1;
-        if ( currentStep >= texts.Length)
-        {
-            return;
         }
-        tutorialText.text = texts[currentStep];
-        HandleSteps(currentStep);
+        else darkerFilter.alpha = 0f;
     }
-    private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
-    {
-        currentStep += 1;
-        tutorialText.text = texts[currentStep];
-        HandleSteps(currentStep);
-    }
+
     private void HandleSteps(int step)
     {
         switch (step)
@@ -132,11 +110,11 @@ public class TutorialCOntroller : MonoBehaviour
                 break;
             case 7:
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 break;
             case 8:
                 //However, others will be more hostile
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
-                EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 EventBus.Publish(new OnSetTutorialEnemyTarget(0));
                 break;
             case 9:
@@ -191,6 +169,7 @@ public class TutorialCOntroller : MonoBehaviour
             case 18:
                 //Se prende la Ui de oro total
                 goldAmountUi.alpha = 1f;
+                StartCoroutine(HoldCoroutine(holdDuration));
                 break;
             case 19:
                 //Texto sobre la tienda
@@ -200,19 +179,64 @@ public class TutorialCOntroller : MonoBehaviour
             case 20:
                 //Texto final, Empezar la run
                 //Now you�re ready to take on the road!
-                EventBus.Publish(new OnSetCanConsumeEvent(true));
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
+                StartCoroutine(HoldCoroutine(holdDuration));
+                break;
+            case 21:
+                Debug.Log("Final");
+                EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnSetCanConsumeEvent(true));
+                EventBus.Publish(new OnSetTimerStartedEvent(true));
+                EventBus.Publish(new OnSetTutorialVisibleEvent(false));
                 break;
 
             default:
                 break;
-
         }
     }
     private IEnumerator HoldCoroutine(float holdTime)
     {
         yield return new WaitForSeconds(holdTime);
+        AdvanceStepNaturally();
+    }
+
+    private void AdvanceStepByClicking(OnAdvanceTutorialStepByClick ev)
+    {
+        if (!playerFrozen) return;
+
         currentStep += 1;
+        if (currentStep >= texts.Length)
+        {
+            return;
+        }
         tutorialText.text = texts[currentStep];
+        HandleSteps(currentStep);
+    }
+    private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
+    {
+        currentStep += 1;
+        if (currentStep >= texts.Length)
+        {
+            return;
+        }
+        tutorialText.text = texts[currentStep];
+        HandleSteps(currentStep);
+    }
+    private void AdvanceStepNaturally()
+    {
+        currentStep += 1;
+        if (currentStep > texts.Length)
+        {
+            HandleSteps(currentStep);
+            return;
+        }
+        else if (currentStep >= texts.Length)
+        {
+            tutorialText.text = texts[currentStep -1];
+            HandleSteps(currentStep);
+            return;
+        }
+        tutorialText.text = texts[currentStep];
+        HandleSteps(currentStep);
     }
 }

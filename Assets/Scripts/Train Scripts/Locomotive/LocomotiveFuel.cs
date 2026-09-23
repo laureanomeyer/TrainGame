@@ -18,7 +18,7 @@ public class LocomotiveFuel
     private bool canConsume = true;
     private bool destroyed;
     private bool shieldsActive;
-    private bool shieldFirstDamage = false;
+    private bool shieldFirstDamage;
     private bool firstHeal;
 
     private float fuelCapacity;
@@ -58,7 +58,11 @@ public class LocomotiveFuel
         EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
         EventBus.Subscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
         EventBus.Subscribe<OnSetFirstHeal>(SetFirstHeal);
+
         canConsume = !GameManager.Instance.IsTutorial;
+        shieldsActive = !GameManager.Instance.IsTutorial;
+        shieldFirstDamage = !GameManager.Instance.IsTutorial;
+        firstHeal = !GameManager.Instance.IsTutorial;
 
         shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
     }
@@ -158,17 +162,17 @@ public class LocomotiveFuel
             timer = 0;
             shieldTakenDamage = true;
 
-            if (!shieldFirstDamage && currentShield <= maxShield /3) 
+            if (!shieldFirstDamage && currentShield <= maxShield / 3)
             {
                 EventBus.Publish(new OnAdvanceTutorialStep());
                 shieldFirstDamage = true;
-            } 
+            }
 
-            if (currentShield <= 0) 
+            if (currentShield <= 0)
             {
                 EventBus.Publish(new OnShieldsBrokenEvent());
                 AudioManager.Instance.Play("SFXShieldsBroken");
-            } 
+            }
         }
     }
 
@@ -177,7 +181,7 @@ public class LocomotiveFuel
         if (destroyed) return;
         if (!GameManager.Instance.IsGameplayState) return;
 
-        if(!shieldsActive)
+        if (!shieldsActive)
         {
             currentShield = 0f;
             return;
@@ -187,7 +191,7 @@ public class LocomotiveFuel
         {
             currentShield = Mathf.Clamp(currentShield + 5 * deltaTime, 0f, maxShield);
 
-            if(GameManager.Instance.IsTutorial && !firstHeal && currentShield == maxShield)
+            if (GameManager.Instance.IsTutorial && !firstHeal && currentShield == maxShield)
             {
                 firstHeal = true;
                 EventBus.Publish(new OnAdvanceTutorialStep());
@@ -198,7 +202,7 @@ public class LocomotiveFuel
             timer += deltaTime;
 
             if (currentShield > 0)
-                shieldsRenderer.material.SetFloat("_ShieldVisibility", Mathf.Max( 1 - timer, 0));
+                shieldsRenderer.material.SetFloat("_ShieldVisibility", Mathf.Max(1 - timer, 0));
 
             else shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
 
