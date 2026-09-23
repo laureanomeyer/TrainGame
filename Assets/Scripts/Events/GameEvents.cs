@@ -98,6 +98,15 @@ public class OnEnemyDeathEvent : IGameEvent
     }
 }
 
+public class OnGoldenWagonIsRepairedEvent : IGameEvent
+{
+    public IWagon goldenWagonInstance;
+    public OnGoldenWagonIsRepairedEvent(IWagon goldenWagonInstance)
+    {
+        this.goldenWagonInstance = goldenWagonInstance;
+    }
+}
+
 public class OnEnemyHitEvent : IGameEvent
 {
     public UnityEngine.Vector3 Position;

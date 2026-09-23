@@ -50,10 +50,7 @@ public class GoldenWagonBrain : WagonBrain
     public override void Repair(float repairAmount)
     {
         HandleBackDoor();
-        if (hpController.IsBroken == true & hpController.CurrentHp > 0)
-        {
-            hpController.IsBroken = false;
-        }
+        ChangeBrokenState();
 
         hpController.Repair(repairAmount, Time.deltaTime);
         if (GameManager.Instance.CurrentState == GameState.Tutorial && !firstRepair && hpController.CurrentHp == hpController.MaxHp)
@@ -74,6 +71,15 @@ public class GoldenWagonBrain : WagonBrain
         if (hpController.CurrentHp <= 0 && hpController != null)
         {
             collector.EmptyGold();
+        }
+    }
+
+    private void ChangeBrokenState()
+    {
+        if (hpController.IsBroken == true && hpController.CurrentHp > 0)
+        {
+            hpController.IsBroken = false;
+            EventBus.Publish(new OnGoldenWagonIsRepairedEvent(this));
         }
     }
 

@@ -44,6 +44,8 @@ public class RunManager : MonoBehaviour
         trainData = ServiceLocator.Get<TrainData>();
         cinematicRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
 
+        EventBus.Subscribe<OnGoldenWagonIsRepairedEvent>(OnGoldenWagonRepaired);
+
         speed = statSystem.GetStat(StatType.Speed);
     }
 
@@ -53,6 +55,8 @@ public class RunManager : MonoBehaviour
             Instance = null;
 
         cinematicRegistry?.UnregisterDynamic(TailAnchorKey);
+        EventBus.Unsubscribe<OnGoldenWagonIsRepairedEvent>(OnGoldenWagonRepaired);
+
     }
 
     public void OnTrainReady(Transform tail, List<IWagon> wagons)
@@ -97,6 +101,11 @@ public class RunManager : MonoBehaviour
         Debug.Log($"Active wagons: {string.Join(", ", activeWagons.Select(activeWagon => activeWagon?.Head != null ? activeWagon.Head.name : "null"))}");
 
         GameManager.Instance.Session.RebuildStatsSystem();
+    }
+
+    private void OnGoldenWagonRepaired(OnGoldenWagonIsRepairedEvent e)
+    {
+        activeWagons.Add(e.goldenWagonInstance);
     }
 
     public void OnRunFinished()
