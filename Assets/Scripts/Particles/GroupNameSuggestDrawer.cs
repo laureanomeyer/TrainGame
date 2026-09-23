@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
+/*
 [CustomPropertyDrawer(typeof(GroupNameSuggestAttribute))]
 public class GroupNameSuggestDrawer : PropertyDrawer
 {
@@ -57,3 +58,4 @@ public class GroupNameSuggestDrawer : PropertyDrawer
         EditorGUI.EndProperty();
     }
 }
+*/
