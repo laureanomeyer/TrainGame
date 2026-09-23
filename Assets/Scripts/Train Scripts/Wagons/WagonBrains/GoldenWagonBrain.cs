@@ -27,7 +27,7 @@ public class GoldenWagonBrain : WagonBrain
     {
         var dataRef = ServiceLocator.Get<TrainData>();
         dataRef.SetGoldBox(goldBox);
-
+        WagonType = WagonType.Gold;
         closedRotation = backDoor.localEulerAngles.x;
         openRotation = closedRotation - 110f;
         fixedY = backDoor.localEulerAngles.y;

@@ -11,7 +11,7 @@ public class EnemyAttackSO : ScriptableObject
 
     public void Skill(Enemy enemy)
     {
-        if (enemy.Target == null) return;
+        if (enemy.TargetWagon == null) return;
         if (!enemy.CanSkill) return;
 
         if (enemy.CanSkill && enemy.Skill != null)
@@ -23,10 +23,10 @@ public class EnemyAttackSO : ScriptableObject
 
     private void RangedAttack(Enemy enemy)
     {
-        if (enemy.Target == null) return;
+        if (enemy.TargetWagon == null) return;
         if (!enemy.CanAttack) return;
 
-        float dist = Vector3.Distance(enemy.transform.position, enemy.Target.position);
+        float dist = Vector3.Distance(enemy.transform.position, enemy.TargetWagon.Middle);
 
         if (dist <= enemy.Range + 5)
         {

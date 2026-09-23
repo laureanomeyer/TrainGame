@@ -6,7 +6,7 @@ public class EnemyMovementNormal : EnemyMovementSO
 {
     public override void Move(Enemy enemy)
     {
-        Transform train = enemy.Target;
+        Vector3 train = enemy.TargetWagon.Middle;
 
         if (train == null) return;
 
@@ -22,7 +22,7 @@ public class EnemyMovementNormal : EnemyMovementSO
         // =========================
         if (!insideLane)
         {
-            Vector3 dir = (train.position - pos).normalized;
+            Vector3 dir = (train - pos).normalized;
 
             enemy.rb.MovePosition(pos + dir * enemy.Speed * Time.deltaTime);
         }
@@ -31,7 +31,7 @@ public class EnemyMovementNormal : EnemyMovementSO
         // =========================
         else
         {
-            float targetX = train.position.x;
+            float targetX = train.x;
 
             float distanceToX = Mathf.Abs(pos.x - targetX);
 

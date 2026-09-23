@@ -128,7 +128,7 @@ public class SpawnController : MonoBehaviour
         actualSpawnCounts[data]++;
 
         var counts = actualSpawnCounts.Select(kvp => $"{kvp.Key.name}: {kvp.Value}");
-        //Debug.Log($"ActualSpawns: {string.Join(", ", counts)}");
+        Debug.Log($"ActualSpawns: {string.Join(", ", counts)}");
     }
 
 

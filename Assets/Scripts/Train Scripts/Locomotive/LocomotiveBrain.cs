@@ -4,7 +4,6 @@ using UnityEngine;
 public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 {
     [SerializeField] public Transform TailRef;
-
     [SerializeField] private Transform coalBox;
 
     [SerializeField] private float CM;
@@ -42,7 +41,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     public float MaxShield => fuelController.MaxShield;
     public Transform Head => transform;
     public Transform Tail => TailRef;
-
+    public WagonType WagonType => WagonType.Locomotive;
     void Awake()
     {
         var dataRef = ServiceLocator.Get<TrainData>();

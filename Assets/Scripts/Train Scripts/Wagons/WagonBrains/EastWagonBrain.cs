@@ -6,6 +6,12 @@ namespace GGG.RTO.Wagons
     public sealed class EastWagonBrain : WagonBrain
     {
         [SerializeField] private float hpBonus;
+
+        private void Awake()
+        {
+            WagonType = WagonType.Passive;
+        }
+
         public override IEnumerable<StatModifier> GetModifiers()
         {
             yield return new StatModifier(StatType.MaxHp, hpBonus, ModifierType.Additive, this);

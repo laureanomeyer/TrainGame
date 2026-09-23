@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TargetType { Random, Passives, Locomotive, Gold, Actives }
+public enum WagonType { Random, Passive, PassiveTorret, Active, ActiveTorret, Locomotive, Gold }
 public enum RangeType
 {
     Close = 15,
-    Medium = 30,
-    Long = 40
+    Medium = 25,
+    Long = 35
 }
 
 public enum DropType {Gold, Coal}
@@ -21,8 +21,7 @@ public class EnemyData : ScriptableObject
     public float range;
 
     public RangeType rangeType;
-    public TargetType[] target;
-
+    public WagonType targetPreference;
     public DropType drop;
     public float dropAmount;
 

@@ -4,31 +4,62 @@ using UnityEngine;
 
 public  class EnemyBrainSO : ScriptableObject
 {
-    public void Begin(Enemy enemy)
-    {
-
-    }
 
     public IWagon SetRandomTarget()
     {
-        return RunManager.Instance.ActiveWagons[Random.Range(0 , RunManager.Instance.ActiveWagons.Count)];
+        var wagonList = RunManager.Instance.ActiveWagons;
+
+        int selectedWagon = Random.Range(0, wagonList.Count);
+
+        return wagonList[selectedWagon];
     }
 
-    public IWagon ReTarget(Enemy enemy)
+    public IWagon ReTarget(IWagon destroyedWagon, WagonType preference = WagonType.Random)
     {
-        var WagonList = RunManager.Instance.ActiveWagons;
+        var wagonList = RunManager.Instance.ActiveWagons;
+        int destroyedIndex = wagonList.IndexOf(destroyedWagon);
 
-        int wagonIndex = WagonList.IndexOf(enemy.TargetWagon);
-        wagonIndex = Random.Range(0, 2) *2-1 + wagonIndex; if (wagonIndex < 0) wagonIndex = 0; if (wagonIndex > WagonList.Count) wagonIndex = WagonList.Count - 1;
+        int nextIndex = destroyedIndex + 1;
+        if (nextIndex < wagonList.Count)
+        {
+            IWagon nextWagon = wagonList[nextIndex];
+            if (IsValidTarget(nextWagon) && nextWagon != destroyedWagon)
+                return GetPreference(preference);
+        }
 
-        if (WagonList[wagonIndex] != null)
+        int previousIndex = destroyedIndex - 1;
+        foreach (IWagon wagon in wagonList)
         {
-            return WagonList[wagonIndex];
+            IWagon previousWagon = wagonList[previousIndex];
+            if (IsValidTarget(previousWagon) && previousWagon != destroyedWagon)
+                return GetPreference(preference);
+            previousIndex--;
         }
-        else
+        return wagonList.Count > 0 && IsValidTarget(wagonList[0]) ? wagonList[0] : null;
+    }
+
+    public IWagon GetPreference(WagonType preference)
+    {
+        if (preference == WagonType.Random) return SetRandomTarget();
+        foreach (var wagon in RunManager.Instance.ActiveWagons)
         {
-            return ReTarget(enemy);
+            if (IsValidTarget(wagon) && wagon.WagonType == preference)
+            {
+                return wagon;
+            }
         }
+        return SetRandomTarget();
+    }
+
+    private bool IsValidTarget(IWagon wagon)
+    {
+        if (wagon == null || wagon.Head == null)
+            return false;
+
+        if (wagon is WagonBrain wagonBrain && wagonBrain.HPController != null)
+            return !wagonBrain.HPController.IsBroken;
+
+        return true;
     }
 
     public void Tick(Enemy enemy)

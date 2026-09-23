@@ -42,7 +42,6 @@ public class WagonTurret : MonoBehaviour
             defaultCapacity,
             maxSize
         );
-
         WarmUp(defaultCapacity);
     }
 

@@ -11,7 +11,7 @@ public class DynamiteSkill : EnemySkill
 
     public override void Play(Enemy enemy)
     {
-        if (enemy.Target == null) return;
+        if (enemy.TargetWagon == null) return;
 
         IWagon targetWagon = FindWagonByTransform(enemy);
         if (targetWagon == null) return;
@@ -32,7 +32,7 @@ public class DynamiteSkill : EnemySkill
     {
         for (int i = 0; i < RunManager.Instance.ActiveWagons.Count; i++)
         {
-            if (RunManager.Instance.ActiveWagons[i]?.Head == enemy.Target)
+            if (RunManager.Instance.ActiveWagons[i]?.Middle == enemy.TargetWagon.Middle)
                 return RunManager.Instance.ActiveWagons[i];
         }
         return null;

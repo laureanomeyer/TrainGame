@@ -80,15 +80,17 @@ public class OnCoalEmptyEvent : IGameEvent
 
 public class OnWagonDestroyedEvent : IGameEvent
 {
-    public OnWagonDestroyedEvent() { }
+    public IWagon WagonInstance;
+    public OnWagonDestroyedEvent(IWagon wagonInstance) 
+    {
+        this.WagonInstance = wagonInstance;
+    }
 }
 
 public class OnEnemyDeathEvent : IGameEvent
 {
     public UnityEngine.Vector3 Position;
-
     public DropType DropType;
-
     public OnEnemyDeathEvent(UnityEngine.Vector3 position, DropType dropType)
     {
         Position = position;

@@ -35,7 +35,7 @@ public class EnemyWeapon : MonoBehaviour
     {
         if (target == null || target.Head == null || target.Tail == null) return;
 
-        Vector3 targetPosition = (target.Head.position + target.Tail.position) * 0.5f;
+        Vector3 targetPosition = target.Middle;
         Vector3 dir = (targetPosition - bulletSpawn.position).normalized;
 
         //GameObject bulletGO = ObjectPoolManager.SpawnObject(bulletType, bulletSpawn.position, Quaternion.LookRotation(dir));

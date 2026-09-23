@@ -13,20 +13,15 @@ public class Enemy : MonoBehaviour
     [Header("Animators")]
     [SerializeField] Animator cowboyAnimator;
     [SerializeField] Animator horseAnimator;
-
     private EnemyData data;
     private IWagon targetWagon;
-    private Transform target;
-    private Transform weaponPosition;
     private float currentHealth;
     private DamageFlash flash;
     private bool isDead;
     private int activeCowboyLayer;
     private Coroutine attackRoutine;
-
     private TrainRanges trainRanges;
     private (float, float) limits;
-
     public EnemyWeapon Weapon;
     public EnemyMovementSO Movement => data.movement;
     public EnemyAttackSO Attack => data.attack;
@@ -37,8 +32,9 @@ public class Enemy : MonoBehaviour
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
     public DropType Drop => data.drop;
-    public Transform Target => target;
     public IWagon TargetWagon => targetWagon;
+    public EnemyData Data => data;
+
     public float Range => data.range;
     public (float, float) Limits => limits;
 
@@ -62,9 +58,6 @@ public class Enemy : MonoBehaviour
 
     int rightLayerIndex;
     int leftLayerIndex;
-
-
-
     void Awake()
     {
         Weapon = GetComponentInChildren<EnemyWeapon>();
@@ -73,11 +66,12 @@ public class Enemy : MonoBehaviour
         leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
 
         EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
+        EventBus.Subscribe<OnWagonDestroyedEvent>(RetargetWagon);
     }
-
     void OnDestroy()
     {
         EventBus.Unsubscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
+        EventBus.Unsubscribe<OnWagonDestroyedEvent>(RetargetWagon);
     }
 
     public void Initialize(EnemyData data)
@@ -91,8 +85,6 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
-
-        Brain.Begin(this);
 
         if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
@@ -109,8 +101,7 @@ public class Enemy : MonoBehaviour
 
         if (!IsTutorialEnemy)
         { 
-            targetWagon = Brain.SetRandomTarget();
-            target = targetWagon.Head;
+            targetWagon = Brain.GetPreference(data.targetPreference);
         }
     }
 
@@ -141,14 +132,23 @@ public class Enemy : MonoBehaviour
         Movement?.Move(this);
     }
 
+    #region Events
     public void SetSingleTargetByEvent(OnSetTutorialEnemyTarget ev)
     {
         targetWagon = null;
 
         targetWagon = RunManager.Instance.ActiveWagons[ev.index];
-        target = targetWagon.Head;
     }
 
+    public void RetargetWagon(OnWagonDestroyedEvent ev)
+    {
+        if (targetWagon == ev.WagonInstance)
+        {
+            targetWagon = Brain.ReTarget(ev.WagonInstance);
+        }
+    }
+
+    #endregion
 
     #region Animations
 
@@ -266,10 +266,10 @@ public class Enemy : MonoBehaviour
     //---------------------GIZMOS-------------------------
     void OnDrawGizmosSelected()
     {
-        if (target != null)
+        if (targetWagon.Middle != null)
         {
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, target.transform.position);
+            Gizmos.DrawLine(transform.position, targetWagon.Middle);
         }
     }
     //---------------------TRIGGER----------------------

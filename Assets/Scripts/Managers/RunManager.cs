@@ -91,8 +91,7 @@ public class RunManager : MonoBehaviour
     public void OnWagonDestroyed(IWagonID wagon, IWagon wagonInstance)
     {
         trainData.RemoveWagonID(wagon);
-        if (wagonInstance is not GoldenWagonBrain)
-            activeWagons.Remove(wagonInstance);
+        activeWagons.Remove(wagonInstance);
 
         Debug.Log($"Wagon IDs: {string.Join(", ", trainData.WagonsIDList.Select(wagonId => wagonId.WagonName))}");
         Debug.Log($"Active wagons: {string.Join(", ", activeWagons.Select(activeWagon => activeWagon?.Head != null ? activeWagon.Head.name : "null"))}");

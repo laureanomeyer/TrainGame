@@ -71,6 +71,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public Camera Cam => Camera.main;
 
+    public WagonType WagonType {protected set; get;}
+
+
     bool isOnScreen; 
 
     public virtual void Start()
@@ -205,14 +208,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
         renderController.CheckWagonToChangeRender(canBreak);
 
-        RunManager.Instance.OnWagonDestroyed(wagonID, this);
-        
-        EventBus.Publish(new OnWagonDestroyedEvent());
+        EventBus.Publish(new OnWagonDestroyedEvent(this));
 
-        if ( wagonID != null)
-        {
-            trainData.RemoveWagonID(wagonID);
-        }
+        RunManager.Instance.OnWagonDestroyed(wagonID, this);
     }
 
     public virtual void SetDestroyed(bool destroyed)

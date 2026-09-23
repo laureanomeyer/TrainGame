@@ -47,7 +47,7 @@ public class WagonFixedTurret : MonoBehaviour
         if (target != null && cooldownTimer <= 0f)
         {
 
-            Debug.Log("Shooting at target");
+            //Debug.Log("Shooting at target");
             Shoot(target);
             cooldownTimer = fireCooldown;
         }
