@@ -13,6 +13,9 @@ public class Enemy : MonoBehaviour
     [Header("Animators")]
     [SerializeField] Animator cowboyAnimator;
     [SerializeField] Animator horseAnimator;
+    [Header("Debug")]
+    public string TargetWagonName;
+
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
@@ -85,6 +88,7 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
+
 
         if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
