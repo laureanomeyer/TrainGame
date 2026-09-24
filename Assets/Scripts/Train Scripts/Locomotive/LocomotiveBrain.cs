@@ -130,15 +130,13 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (started) return;
 
         started = true;
-        fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.5f);
+        fuelController.RemoveFuel(CM * stats.GetStat(StatType.MaxHp) / 1.25f);
     }
 
     public void AddFuel()
     {
         fuelController.AddFuel();
     }
-
-    public void Repair(float repairAmount) { }
 
     private void OnStatChanged(StatType type, float newValue) { }
 

@@ -146,6 +146,8 @@ public class Enemy : MonoBehaviour
 
     public void RetargetWagon(OnWagonDestroyedEvent ev)
     {
+        if (IsTutorialEnemy) return;
+
         if (targetWagon == ev.WagonInstance)
         {
             targetWagon = Brain.ReTarget(ev.WagonInstance);

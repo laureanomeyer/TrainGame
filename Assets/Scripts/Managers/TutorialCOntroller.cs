@@ -33,7 +33,6 @@ public class TutorialCOntroller : MonoBehaviour
         goldHpUi.alpha = 0f;
         goldAmountUi.alpha = 0f;
 
-        EventBus.Subscribe<OnStartFuelUseEvent>(StartFuelConsumption);
         EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Subscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
@@ -41,7 +40,6 @@ public class TutorialCOntroller : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventBus.Unsubscribe<OnStartFuelUseEvent>(StartFuelConsumption);
         EventBus.Unsubscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Unsubscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Unsubscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
@@ -58,7 +56,7 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Publish(new OnSetTimerStartedEvent(false));
         EventBus.Publish(new OnSetTutorialVisibleEvent(true));
     }
-    void StartFuelConsumption(OnStartFuelUseEvent startFuelEvent)
+    void StartFuelConsumption()
     {
         fuelUi.alpha = 1f;
     }
@@ -70,8 +68,14 @@ public class TutorialCOntroller : MonoBehaviour
         if (playerFrozen)
         {
             darkerFilter.alpha = 1f;
+            EventBus.Publish(new OnSetTutorialVisibleEvent(true));
         }
-        else darkerFilter.alpha = 0f;
+        else 
+        {
+            darkerFilter.alpha = 0f;
+            EventBus.Publish(new OnSetTutorialVisibleEvent(false));
+        }
+
     }
 
     private void HandleSteps(int step)
@@ -84,9 +88,10 @@ public class TutorialCOntroller : MonoBehaviour
                 break;
             case 1:
                 //This dial shows the remaining fuel
-                EventBus.Publish(new OnStartFuelUseEvent());
+                StartFuelConsumption();
                 break;
             case 2:
+                EventBus.Publish(new OnStartFuelUseEvent());
                 //Make sure you don�t run out of it, otherwise the machine will explode
                 break;
             case 3:
@@ -116,10 +121,12 @@ public class TutorialCOntroller : MonoBehaviour
                 //However, others will be more hostile
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
                 EventBus.Publish(new OnSetTutorialEnemyTarget(0));
+                EventBus.Publish(new OnSetEnemiesCanAttack(false));
                 break;
             case 9:
                 //Congelar al player y poner texto, el enemigo dispara unas veces y baja la barra de maximo
                 //Damage to the hull will determine your maximun fuel capacity and it can�t be restored until you reach a station
+                EventBus.Publish(new OnSetEnemiesCanAttack(true));
                 break;
             case 10:
                 //Aparece el escudo, el enemigo dispara y recibe da�o el escudo, RECIBIR DA�O AVANZA INSTANTANEAMENTE AL 10
@@ -141,12 +148,12 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnActivateGoldWagon());
                 EventBus.Publish(new OnEnableGoldBoxEvent(true));
                 EventBus.Publish(new OnSetTutorialEnemyTarget(1));
+                goldHpUi.alpha = 1f;
                 break;
             case 13:
                 //Aparece la vida del vagon de oro baja, el enemigo dispara de nuevo y lo rompe
                 //Evento de enemigo volver a disparar
                 EventBus.Publish(new OnSetEnemiesCanAttack(true));
-                goldHpUi.alpha = 1f;
                 break;
             case 14:
                 //You won�t be able to hold gold as long as the wagon is broken, try fixing it.
@@ -168,6 +175,7 @@ public class TutorialCOntroller : MonoBehaviour
                 break;
             case 18:
                 //Se prende la Ui de oro total
+                EventBus.Publish(new OnFreezePlayerEvent(false));
                 goldAmountUi.alpha = 1f;
                 StartCoroutine(HoldCoroutine(holdDuration));
                 break;
@@ -183,7 +191,7 @@ public class TutorialCOntroller : MonoBehaviour
                 StartCoroutine(HoldCoroutine(holdDuration));
                 break;
             case 21:
-                Debug.Log("Final");
+                EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
                 EventBus.Publish(new OnSetTimerStartedEvent(true));

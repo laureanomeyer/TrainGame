@@ -115,6 +115,7 @@ public class SpawnController : MonoBehaviour
         Enemy enemy = enemyGO.GetComponent<Enemy>();
 
         enemy.Initialize(enemyToSpawn);
+        enemy.SetTutorialEnemy();
         EventBus.Publish(new OnSetTutorialEnemyTarget(1));
 
         aliveEnemies++;
