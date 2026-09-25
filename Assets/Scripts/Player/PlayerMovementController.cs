@@ -65,6 +65,8 @@ public class PlayerMovementController
 
     private void MovePlayer()
     {
+        if (rb == null) return;
+
         Vector3 inputDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
         Vector3 targetVelocity = inputDirection * speed;
 
@@ -91,12 +93,9 @@ public class PlayerMovementController
         );
     }
 
-    /*Vector3 movement = new Vector3(moveInput.x, 0f, moveInput.y).normalized * speed;
-    movement.y = rb.linearVelocity.y;
-    rb.linearVelocity = movement;*/
-
     private void RotateToMouse()
     {
+        if (rb == null) return;
         if (lookToMouseController == null) return;
 
         Vector3 direction = lookToMouseController.GetMouseDirection(playerTransform);
@@ -110,6 +109,7 @@ public class PlayerMovementController
 
     public void SetCanMove(bool value)
     {
+        if (rb == null) return;
         canMove = value;
 
         if (!canMove)
@@ -121,6 +121,7 @@ public class PlayerMovementController
 
     public void SetCanRotate(bool value)
     {
+        if (rb == null) return;
         canRotate = value;
 
         if (!canRotate)

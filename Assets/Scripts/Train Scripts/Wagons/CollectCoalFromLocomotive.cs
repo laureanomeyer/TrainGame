@@ -9,7 +9,7 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     [SerializeField] private BoxCollider boxCollider;
     InteractInputHandler inputHandler;
 
-    private bool canInteract = false;
+    [SerializeField]private bool canInteract;
 
     private void Awake()
     {
@@ -20,6 +20,8 @@ public class CollectCoalFromLocomotive : MonoBehaviour
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
         inputHandler = new InteractInputHandler(interactAction, SetCoalInPlayerInventory);
+
+        canInteract = !GameManager.Instance.IsTutorial;
     }
 
     private void OnDestroy()
