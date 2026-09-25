@@ -34,6 +34,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     private StatSystem stats;
     private bool started = false;
 
+    private float chimneyCountDown;
+
     private CoalCollector coalCollector;
     public CoalCollector CoalCollector => coalCollector;
 
@@ -70,6 +72,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         cinematicRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
         cinematicRegistry?.RegisterDynamic(locomotiveAnchorKey, transform);
+
+        chimneyCountDown = Random.Range(30, 75);
     }
 
     private void OnDestroy()
@@ -94,6 +98,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         fuelController.Move(Time.deltaTime);
         fuelController.UpdateShield(Time.deltaTime);
+        ChimneyExecution();
     }
 
     public void TakeDamage(float damageAmount)
@@ -115,7 +120,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (destroyed) return;
         destroyed = true;
 
-        particleSequence?.PlayGroup("locomotiveDestroy");
+        particleSequence?.PlayGroup(ParticleGroups.LocomotiveDestroy);
 
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
@@ -153,6 +158,17 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         if (other.gameObject.CompareTag("Player"))
         {
             renderController.ActivateWagonTop();
+        }
+    }
+
+    private void ChimneyExecution()
+    {
+        chimneyCountDown -= Time.deltaTime;
+
+        if(chimneyCountDown <= 0)
+        {
+            particleSequence?.PlayGroup(ParticleGroups.ChimneySound);
+            chimneyCountDown = Random.Range(30, 75);
         }
     }
 }

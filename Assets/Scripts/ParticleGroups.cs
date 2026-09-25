@@ -3,5 +3,5 @@ public static class ParticleGroups
 {
     public const string LocomotiveDestroy = "locomotiveDestroy";
     public const string LocomotiveDestroySmoke = "locomotiveDestroySmoke";
-    public const string ExplosionFinal = "ExplosionFinal";
+    public const string ChimneySound = "ChimneySound";
 }
