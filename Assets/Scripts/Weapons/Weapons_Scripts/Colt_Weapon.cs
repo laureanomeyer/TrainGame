@@ -11,6 +11,9 @@ public class Colt_Weapon : MonoBehaviour, IWeapons
     [Header("Weapon data")]
     [SerializeField] private WeaponDataSO weaponData;
 
+    public Transform leftWeaponSpawnPoint;
+    public Transform rightWeaponSpawnPoint;
+
     private BulletTypeScriptable currentBulletUse;
 
     [Header("Bullet data")]
@@ -71,6 +74,8 @@ public class Colt_Weapon : MonoBehaviour, IWeapons
         {
             currentBulletUse = bulletData;
         }
+
+        EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
     public void DestroyWeapon()
@@ -120,10 +125,12 @@ public class Colt_Weapon : MonoBehaviour, IWeapons
         bulletData.Damage = data.damage;
 
         Vector3 spawnPositionRight = spawnPoint.position + spawnPoint.right * bulletSpreadAngle;
-        BulletPool.ShootObject(spawnPositionRight, spawnPoint.rotation, bulletData);
+
+        BulletPool.ShootObject(rightWeaponSpawnPoint.position, rightWeaponSpawnPoint.rotation, bulletData);
 
         Vector3 spawnPositionLeft = spawnPoint.position - spawnPoint.right * bulletSpreadAngle;
-        BulletPool.ShootObject(spawnPositionLeft, spawnPoint.rotation, bulletData);
+
+        BulletPool.ShootObject(leftWeaponSpawnPoint.position, leftWeaponSpawnPoint.rotation, bulletData);
 
         CurrentAmmunition -= 2;
 

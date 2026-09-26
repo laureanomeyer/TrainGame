@@ -11,6 +11,8 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     [Header("Weapon data")]
     [SerializeField] private WeaponDataSO weaponData;
 
+    public Transform weaponSpawnPoint;
+
     [Header("bullet dispersion")]
     [SerializeField] private int pelletCount;
     [SerializeField] private float spreadAngle;
@@ -87,7 +89,8 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         {
             currentBulletUse = bulletData;
         }
-        
+
+        EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
     public void DestroyWeapon()
@@ -194,7 +197,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
             var data = WeaponData;
             currentBulletUse.Damage = data.damage;
 
-            RealeasedBullet(spawnPoint);
+            RealeasedBullet(weaponSpawnPoint);
         }
     }
 

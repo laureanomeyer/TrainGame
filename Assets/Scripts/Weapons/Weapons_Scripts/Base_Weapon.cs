@@ -16,6 +16,8 @@ public class Base_Weapon : MonoBehaviour, IWeapons
     [SerializeField] private BulletTypeScriptable bulletData;
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
 
+    public Transform weaponSpawnPoint;
+
     private int currentAmmunition;
     public int CurrentAmmunition { get => currentAmmunition; set => currentAmmunition = value; }
 
@@ -69,7 +71,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons
 
         var data = WeaponData;
         bulletData.Damage = data.damage;
-        BulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, bulletData);
+        BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
         CurrentAmmunition -= 1;
 

@@ -11,6 +11,8 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     [Header("Weapon data")]
     [SerializeField] private WeaponDataSO weaponData;
 
+    public Transform weaponSpawnPoint;
+
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
 
@@ -78,6 +80,8 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         {
             currentBulletUse = bulletData;
         }
+
+        EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
     public void DestroyWeapon()
@@ -113,7 +117,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
 
         var data = WeaponData;
         currentBulletUse.Damage = data.damage;
-        BulletPool.ShootObject(spawnPoint.position, spawnPoint.rotation, currentBulletUse);
+        BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, currentBulletUse);
 
         CurrentAmmunition -= 1;
 

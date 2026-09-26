@@ -129,6 +129,11 @@ public class PlayerBrain : MonoBehaviour
         playerInteractionsController.OnOpenMainMenu();
     }
 
+    public GameObject SpawnWeapon(GameObject weapon)
+    {
+        return Instantiate(weapon, spawnPoint);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         playerInteractionsController.OnTriggerEnter(other);
