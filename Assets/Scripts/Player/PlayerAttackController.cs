@@ -7,6 +7,7 @@ public class PlayerAttackController
 
     private GameObject weaponItem;
     private IWeapons weapon;
+    public IWeapons Weapon { get => weapon; }
 
     private BulletPool pool;
     private LookObjectToMouse lookToMouseController;

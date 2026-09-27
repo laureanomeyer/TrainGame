@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Colt_Weapon : MonoBehaviour, IWeapons
+public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
@@ -27,10 +27,16 @@ public class Colt_Weapon : MonoBehaviour, IWeapons
     private bool isReloading = false;
     public bool IsReloading { get => isReloading; set => isReloading = value; }
 
+    //Rate of Fire
+
     private float waitToFire = 0;
+
+    private float baseRateOfFire;
 
     private float rateOfFire;
     public float RateOfFire { get => rateOfFire; }
+
+    private float rateOfFireBuff;
 
     private float currentReloadTime = 0;
 
@@ -57,6 +63,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        baseRateOfFire = rateOfFire;
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
 
         EventBus.Subscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
@@ -201,5 +208,24 @@ public class Colt_Weapon : MonoBehaviour, IWeapons
         currentBulletUse = legacyBulletData;
         reloadTime = 0f;
         unlockedLegacy = true;
+    }
+
+    public void UpdateRoFStats()
+    {
+
+    }
+
+    public void BufferRoF(float buffer)
+    {
+        rateOfFireBuff = buffer;
+        rateOfFire = rateOfFire / rateOfFireBuff;
+        Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
+    }
+
+    public void DebuffRoF()
+    {
+        rateOfFireBuff = 0;
+        rateOfFire = baseRateOfFire;
+        Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
     }
 }

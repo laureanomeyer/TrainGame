@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-public class Base_Weapon : MonoBehaviour, IWeapons
+public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
@@ -24,12 +24,22 @@ public class Base_Weapon : MonoBehaviour, IWeapons
     private bool isReloading =false;
     public bool IsReloading { get => isReloading; set => isReloading = value; }
 
+
+    //Rate of Fire
     private float waitToFire = 0;
+
+    private float baseRateOfFire;
 
     private float rateOfFire;
     public float RateOfFire { get => rateOfFire; }
 
+    private float rateOfFireBuff;
+
+
+    //Reloding time
     private float currentReloadTime = 0;
+
+    private float baseReloadTime;
 
     private float reloadTime;
     public float ReloadTime { get => reloadTime; }
@@ -45,6 +55,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        baseRateOfFire = rateOfFire;
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
@@ -134,4 +145,22 @@ public class Base_Weapon : MonoBehaviour, IWeapons
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
+    public void UpdateRoFStats()
+    {
+
+    }
+
+    public void BufferRoF(float buffer)
+    {
+        rateOfFireBuff = buffer;
+        rateOfFire = rateOfFire / rateOfFireBuff;
+        Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
+    }
+
+    public void DebuffRoF()
+    {
+        rateOfFireBuff = 0;
+        rateOfFire = baseRateOfFire;
+        Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
+    }
 }
