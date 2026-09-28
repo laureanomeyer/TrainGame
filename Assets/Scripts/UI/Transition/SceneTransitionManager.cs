@@ -35,16 +35,17 @@ public class SceneTransitionManager : MonoBehaviour
         #endregion
 
         HideTransitionInstantly();
+
     }
 
-    public void TransitionToScene(string sceneName, SceneTransitionType transitionType)
+    public void TransitionToScene(string sceneName, SceneTransitionType transitionType, CursorType newSceneCursor)
     {
         if (isTransitioning) return;
 
-        StartCoroutine(TransitionCoroutine(sceneName, transitionType));
+        StartCoroutine(TransitionCoroutine(sceneName, transitionType, newSceneCursor));
     }
 
-    private IEnumerator TransitionCoroutine(string sceneName, SceneTransitionType transitionType)
+    private IEnumerator TransitionCoroutine(string sceneName, SceneTransitionType transitionType, CursorType newSceneCursor)
     {
         isTransitioning = true;
 
@@ -85,7 +86,7 @@ public class SceneTransitionManager : MonoBehaviour
 
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.FinishSceneChange();
+            GameManager.Instance.FinishSceneChange(newSceneCursor);
         }
 
         yield return FadeImage(1f, 0f);
@@ -133,7 +134,6 @@ public class SceneTransitionManager : MonoBehaviour
     {
         if (transitionImage == null) return;
 
-        //canvasGroup.alpha = alpha;
         transitionImage.material.SetFloat("_Alpha", alpha);
     }
 

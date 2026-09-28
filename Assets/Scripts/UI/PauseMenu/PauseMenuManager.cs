@@ -1,4 +1,3 @@
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -134,14 +133,15 @@ public class PauseMenuManager : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
 
-        if (GameManager.Instance.CurrentState == GameState.UI)
+        if (currentCursor == CursorType.Real || currentCursor == CursorType.HiddenAndFrozen)
         {
             EventBus.Publish(new OnActivateUiEvent(false));
         }
-        else if (GameManager.Instance.CurrentState == GameState.Gameplay || GameManager.Instance.CurrentState == GameState.Tutorial)
+        else if (currentCursor == CursorType.Gameplay || currentCursor == CursorType.HiddenAndMoveable)
         {
             EventBus.Publish(new OnActivateUiEvent(true));
         }
+        //tiene que haber un cursor de hidden y playable? o algo asi que permita que se despause, vea si tiene que estar oculto pero poderse mover
     }
 
     public void QuitToMainMenu()

@@ -107,6 +107,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnAdvanceStep()
     {
+
         EventBus.Publish(new OnAdvanceTutorialStepByClick());
     }
 
@@ -173,6 +174,7 @@ public class PlayerBrain : MonoBehaviour
     {
         this.canAttack = canAttack;
         playerMovementController.SetCanRotate(canAttack);
+
     }
 
     private void SetCanMove(bool canMove)

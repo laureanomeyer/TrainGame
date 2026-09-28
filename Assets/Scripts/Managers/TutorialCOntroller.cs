@@ -55,6 +55,7 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Publish(new OnSetCanConsumeEvent(false));
         EventBus.Publish(new OnSetTimerStartedEvent(false));
         EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+        EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
     }
     void StartFuelConsumption()
     {
@@ -84,6 +85,7 @@ public class TutorialCOntroller : MonoBehaviour
         {
             case 0:
                 EventBus.Publish(new OnSetAttackEnabledEvent(false));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 //The train is your only way to get through the road, you gotta protect it
                 break;
             case 1:
@@ -102,19 +104,23 @@ public class TutorialCOntroller : MonoBehaviour
             case 4:
                 //El player recarga fuel y se avanza al 5, te quedaste sin reservas
                 EventBus.Publish(new OnFreezePlayerEvent(true));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndMoveable));
                 break;
             case 5:
                 //Your fuel has been replenished but you ran out of reserves
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 6:
                 //Some enemies will drop coal when they�re killed
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, coalEnemy));
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
                 break;
             case 7:
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 break;
             case 8:
@@ -161,18 +167,24 @@ public class TutorialCOntroller : MonoBehaviour
                 //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
                 //Evento enemigo dejar de disparar
                 EventBus.Publish(new OnFreezePlayerEvent(true));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndMoveable));
                 break;
             case 15:
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
+
                 break;
             case 16:
                 //Your gold is still not safe, you must take it to the vault to reclaim it
                 //Se congela al player, el texto explica que no esta a salvo
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(false));
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 17:
                 //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
                 EventBus.Publish(new OnFreezePlayerEvent(true));
+
                 break;
             case 18:
                 //Se prende la Ui de oro total
@@ -197,6 +209,7 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
                 EventBus.Publish(new OnSetTimerStartedEvent(true));
                 EventBus.Publish(new OnSetTutorialVisibleEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(true));
                 break;
 
             default:
@@ -212,6 +225,7 @@ public class TutorialCOntroller : MonoBehaviour
     private void AdvanceStepByClicking(OnAdvanceTutorialStepByClick ev)
     {
         if (!playerFrozen) return;
+        if (PauseMenuManager.Instance.IsPaused) return;
 
         currentStep += 1;
         if (currentStep >= texts.Length)
@@ -223,6 +237,7 @@ public class TutorialCOntroller : MonoBehaviour
     }
     private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
     {
+        if (PauseMenuManager.Instance.IsPaused) return;
         currentStep += 1;
         if (currentStep >= texts.Length)
         {
@@ -233,6 +248,7 @@ public class TutorialCOntroller : MonoBehaviour
     }
     private void AdvanceStepNaturally()
     {
+        if (PauseMenuManager.Instance.IsPaused) return;
         currentStep += 1;
         if (currentStep > texts.Length)
         {

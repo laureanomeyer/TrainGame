@@ -80,12 +80,14 @@ public class ReorderManager : MonoBehaviour
     private void OnSelectPerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
+        if (panelRef == null) ServiceLocator.TryGet(out panelRef);
 
         switch (managementState)
         {
             case WagonManagementState.Hovering:
                 if (cacheRef == null) return;
                 managementState = WagonManagementState.Panel;
+                RefreshPanelUpgradeState();
                 panelRef?.Show();
                 break;
 
@@ -94,6 +96,44 @@ public class ReorderManager : MonoBehaviour
                 managementState = WagonManagementState.Hovering;
                 break;
         }
+    }
+
+    private void RefreshPanelUpgradeState()
+    {
+        if (panelRef == null) { Debug.LogWarning("[Upgrade] panelRef es null"); return; }
+
+        var wagon = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
+        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(currentHoveredWagonKey, out var next, out float cost);
+        float gold = StoreManager.Instance.GetGold();
+        bool canAfford = hasUpgrade && gold >= cost;
+
+        Debug.Log($"[Upgrade] slot={currentHoveredWagonKey} nombre='{wagon.IDReference.WagonName}' " +
+                  $"hasUpgrade={hasUpgrade} next={(next != null ? next.wagonName : "-")} " +
+                  $"cost={cost} gold={gold} canAfford={canAfford}");
+
+        panelRef.SetUpgradeState(hasUpgrade, cost, canAfford);
+    }
+
+    // Llamado desde WagonManagementPanel (botón Upgrade)
+    public void ConfirmUpgradeSelected()
+    {
+        if (currentHoveredWagonKey < 0) return;
+        if (!trainDisplayRef.TryGetUpgradeInfo(currentHoveredWagonKey, out _, out float cost)) return;
+        if (!StoreManager.Instance.TrySpendGold(cost)) return;
+
+        panelRef?.Hide();
+        managementState = WagonManagementState.Hovering;
+
+        ShopWagonData upgraded = trainDisplayRef.UpgradeWagon(currentHoveredWagonKey);
+        if (upgraded == null)
+        {
+            StoreManager.Instance.AddGold(cost); // devolución por seguridad
+            return;
+        }
+
+        cacheRef = upgraded;
+        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
+        reorderCameraRef?.SetTarget(cacheRef.transform);
     }
 
     private void OnSellHotkeyPerformed(InputAction.CallbackContext value)
