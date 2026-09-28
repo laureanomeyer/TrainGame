@@ -239,6 +239,7 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
+        PlayDeathSound();
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Death" : "Cowboy_1|R_Death",
             IsOnPositiveZSide
@@ -259,6 +260,12 @@ public class Enemy : MonoBehaviour
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop));
         EventBus.Publish(new OnEnemyKilledEvent());
         StartCoroutine(ReturnAfterDeathAnimation());
+    }
+
+    void PlayDeathSound()
+    {
+        int soundNumber = Random.Range(1, 1001) == 1000 ? 4 : Random.Range(1, 4);
+        AudioManager.Instance.PlayOnScreen($"SFXDeathScream{soundNumber}", CameraView.IsInsideCamera(transform.position, Cam));
     }
     private void DeadWallDeath()
     {
