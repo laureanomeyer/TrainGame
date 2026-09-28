@@ -190,7 +190,6 @@ public class TutorialCOntroller : MonoBehaviour
                 //Se prende la Ui de oro total
                 EventBus.Publish(new OnFreezePlayerEvent(false));
                 goldAmountUi.alpha = 1f;
-                StartCoroutine(HoldCoroutine(holdDuration));
                 break;
             case 19:
                 //Texto sobre la tienda

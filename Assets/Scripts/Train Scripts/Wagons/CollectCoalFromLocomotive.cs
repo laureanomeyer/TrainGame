@@ -34,6 +34,8 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     {
         if (!canInteract) return;
         if (playerRef == null) return;
+        if(!playerRef.CanInteract) return;
+
         if (!playerRef.Inventory.HasCoal && coalBrain.CoalCollector.HasCoal)
         {
             playerRef.Inventory.CollectCoal();

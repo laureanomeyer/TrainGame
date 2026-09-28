@@ -29,13 +29,19 @@ public class PlayerBrain : MonoBehaviour
 
     private PlayerData playerDataRef;
 
-    private bool IsRepairing = false;
+    private bool isRepairing = false;
     private bool canAttack = true;
+    private bool canInteract = true;
+    private bool canRepair = true;
+    private bool higherLevelFrozen = false;
 
     public PlayerInventory Inventory => inventory;
     public LookObjectToMouse FaceMouse => faceMouse;
     public InteractionUIManager InteractionUIManager => interactionUIManager;
     public PlayerAttackController PlayerAttackController => playerAttackController;
+    public bool IsRepairing => isRepairing;
+    public bool CanRepair => canRepair;
+    public bool CanInteract => canInteract;
     void Awake() 
     {
         rb = GetComponent<Rigidbody>();
@@ -55,10 +61,10 @@ public class PlayerBrain : MonoBehaviour
         EventBus.Subscribe<OnSetAttackEnabledEvent>(CallSetCanAttackEvent);
         EventBus.Subscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
-        EventBus.Subscribe<OnActivateUiEvent>(CallSetCanAttackEvent);
-        EventBus.Subscribe<OnFreezePlayerEvent>(CallSetCanAttackEvent);
+        EventBus.Subscribe<OnActivateUiEvent>(HandleAttackAndMovementInUi);
+        EventBus.Subscribe<OnFreezePlayerEvent>(HandleAttackAndMovementInTutorial);
 
-        IsRepairing = false;
+        isRepairing = false;
         HideInteract();
 
     }
@@ -74,12 +80,12 @@ public class PlayerBrain : MonoBehaviour
 
         EventBus.Unsubscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Unsubscribe<OnHideInteractEvent>(CallHideInteractEvent);
-        EventBus.Unsubscribe<OnActivateUiEvent>(CallSetCanAttackEvent);
+        EventBus.Unsubscribe<OnActivateUiEvent>(HandleAttackAndMovementInUi);
     }
     private void Update()
     {
         playerInteractionsController.Update();
-        if (!IsRepairing && canAttack) playerAttackController.Update();
+        if (!isRepairing && canAttack) playerAttackController.Update();
 
         if (Keyboard.current.f8Key.wasPressedThisFrame)
         {
@@ -89,7 +95,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!IsRepairing) playerMovementController.FixedUpdate();
+        if (!isRepairing) playerMovementController.FixedUpdate();
     }
 
     private void OnMove(InputValue value)
@@ -100,6 +106,7 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnInteract()
     {
+        if (!canInteract) return;
         EventBus.Publish(new OnInteractPressedEvent());
 
         playerInteractionsController.OnInteract();
@@ -154,27 +161,52 @@ public class PlayerBrain : MonoBehaviour
     {
         playerAttackController.DeactiveAttack();
     }
+    /// <summary>
+    /// Congela al player cuando se abre una UI
+    /// </summary>
+    /// <param name="activateUIEvent"></param>
+    public void HandleAttackAndMovementInUi(OnActivateUiEvent activateUIEvent)
+    {
+        SetCanAttack(activateUIEvent.Activated);
+        SetCanMove(activateUIEvent.Activated);
+    }
 
-    public void CallSetCanAttackEvent(OnActivateUiEvent activateUIEvent)
+    /// <summary>
+    /// Congela al player cuando el tutorial lo pide
+    /// </summary>
+    /// <param name="ev"></param>
+    public void HandleAttackAndMovementInTutorial(OnFreezePlayerEvent ev)
     {
-        SetCanAttack(activateUIEvent.Activated);
-        SetCanMove(activateUIEvent.Activated);
+        SetCanAttack(ev.Activated);
+        SetCanMove(ev.Activated);
+        canRepair = ev.Activated;
+        canInteract = ev.Activated;
+
+        higherLevelFrozen = !ev.Activated;
     }
-    public void CallSetCanAttackEvent(OnFreezePlayerEvent activateUIEvent)
-    {
-        SetCanAttack(activateUIEvent.Activated);
-        SetCanMove(activateUIEvent.Activated);
-    }
+
+    /// <summary>
+    /// Cancela el ataque del player
+    /// </summary>
+    /// <param name="AttackEnableEvent"></param>
     public void CallSetCanAttackEvent(OnSetAttackEnabledEvent AttackEnableEvent)
     {
         SetCanAttack(AttackEnableEvent.Can);
     }
 
+    public void TryRegainMovementAfterRepairing()
+    {
+        SetIsRepairing(false);
+
+        if(higherLevelFrozen) return;
+
+        playerMovementController.SetCanMove(true);
+        playerMovementController.SetCanRotate(true);
+    }
     public void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
         playerMovementController.SetCanRotate(canAttack);
-
     }
 
     private void SetCanMove(bool canMove)
@@ -182,9 +214,9 @@ public class PlayerBrain : MonoBehaviour
         playerMovementController.SetCanMove(canMove);
     }
 
-    public void SetIsRepairing(bool canAttack)
+    public void SetIsRepairing(bool isRepairing)
     {
-        this.IsRepairing = canAttack;
+        this.isRepairing = isRepairing;
     }
 
     public void ChangeWeapon(GameObject weapon)
@@ -194,6 +226,8 @@ public class PlayerBrain : MonoBehaviour
 
     private void ShowInteract(OnShowInteractEvent showInteractEvent)
     {
+        if (!canInteract) return;
+
         interactImage.SetActive(true);
     }
 
@@ -204,6 +238,8 @@ public class PlayerBrain : MonoBehaviour
 
     private void HideInteract()
     {
+        if (!canInteract) return;
+
         interactImage.SetActive(false);
     }
 }

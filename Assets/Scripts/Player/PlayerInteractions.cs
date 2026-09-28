@@ -43,6 +43,14 @@ public class PlayerInteractions
         }
     }
 
+    public void Cleanup()
+    {
+        if (repairAction != null)
+        {
+            repairAction.performed -= ActiveRepairInput;
+            repairAction.canceled -= DeactiveRepairInput;
+        }
+    }
     public void Update()
     {
         Repair();
@@ -244,14 +252,14 @@ public class PlayerInteractions
     public void DeactiveRepairInput(InputAction.CallbackContext context)
     {
         buttonIsHold = false;
-        playerBrain.SetIsRepairing(false);
-        playerMovementController.SetCanMove(true);
-        playerMovementController.SetCanRotate(true);
+        if (!playerBrain.IsRepairing) return;
+        playerBrain.TryRegainMovementAfterRepairing();
     }
 
     void Repair()
     {
         if (isUsingTurret) return;
+        if(!playerBrain.CanRepair) return;
 
         if (buttonIsHold && currentWagon != null && currentWagon.CanBeRepaired)
         {
@@ -273,12 +281,4 @@ public class PlayerInteractions
         GameManager.Instance.GoToMainMenu();
     }
 
-    public void Cleanup()
-    {
-        if (repairAction != null)
-        {
-            repairAction.performed -= ActiveRepairInput;
-            repairAction.canceled -= DeactiveRepairInput;
-        }
-    }
 }

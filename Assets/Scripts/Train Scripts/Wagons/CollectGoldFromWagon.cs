@@ -37,6 +37,8 @@ public class CollectGoldFromWagon : MonoBehaviour
     private void SetGoldInPlayerInventory()
     {
         if (!canInteract) return;
+        if (playerRef == null) return;
+        if (!playerRef.CanInteract) return;
 
         if (playerRef != null)
         {
