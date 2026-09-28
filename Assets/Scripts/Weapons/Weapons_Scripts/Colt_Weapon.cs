@@ -11,6 +11,9 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     [Header("Weapon data")]
     [SerializeField] private WeaponDataSO weaponData;
 
+    [Header("Particle Sequence Controller")]
+    [SerializeField] ParticleSequenceController sequenceController;
+
     public Transform leftWeaponSpawnPoint;
     public Transform rightWeaponSpawnPoint;
 
@@ -90,6 +93,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
             currentBulletUse = legacyBulletData;
             reloadTime = 0f;
             unlockedLegacy = true;
+            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {
@@ -216,6 +220,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         currentBulletUse = legacyBulletData;
         reloadTime = 0f;
         unlockedLegacy = true;
+        sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 
     public void UpdateRoFStats()

@@ -15,6 +15,9 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
 
     public Transform weaponSpawnPoint;
 
+    [Header("Particle Sequence Controller")]
+    [SerializeField] ParticleSequenceController sequenceController;
+
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
 
@@ -64,6 +67,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         if (playerData.unlockedLegado.UnlockedWinchester)
         {
             currentBulletUse = legadoBulletData;
+            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {
@@ -182,5 +186,6 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     private void UpdateCurrentBullet(OnUnlockWinchesterLegado unlockEvent)
     {
         currentBulletUse = legadoBulletData;
+        sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 }

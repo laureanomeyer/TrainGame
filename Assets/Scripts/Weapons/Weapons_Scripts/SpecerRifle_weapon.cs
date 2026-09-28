@@ -13,6 +13,9 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
 
     public Transform weaponSpawnPoint;
 
+    [Header("Particle Sequence Controller")]
+    [SerializeField] ParticleSequenceController sequenceController;
+
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
 
@@ -75,6 +78,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         {
             currentBulletUse = legadoBulletData;
             unlockedLegado = true;
+            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {
@@ -206,5 +210,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     private void UpdateCurrentBullet(OnUnlockSpencerLegado unlockEvent)
     {
         currentBulletUse = legadoBulletData;
+        unlockedLegado = true;
+        sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 }

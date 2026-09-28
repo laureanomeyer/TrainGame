@@ -27,6 +27,9 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     [SerializeField] private int requireEnemyDefetead = 4;
     private int currentEnemiesDefetead = 0;
 
+    [Header("Particle Sequence Controller")]
+    [SerializeField] ParticleSequenceController sequenceController;
+
     [Header("Legacy charge data")]
     [Header("Mid level")]
     [SerializeField] private float midChargeTime = 0.5f;
@@ -84,6 +87,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         {
             currentBulletUse = legadoBulletData;
             unlockedLegacy = true;
+            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {
@@ -298,5 +302,6 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     {
         currentBulletUse = legadoBulletData;
         unlockedLegacy = true;
-}
+        sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
+    }
 }
