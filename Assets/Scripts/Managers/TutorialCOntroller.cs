@@ -121,17 +121,17 @@ public class TutorialCOntroller : MonoBehaviour
                 //However, others will be more hostile
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
                 EventBus.Publish(new OnSetTutorialEnemyTarget(0));
-                EventBus.Publish(new OnSetEnemiesCanAttack(false));
+                EventBus.Publish(new OnSetEnemiesFlags(false));
                 break;
             case 9:
                 //Congelar al player y poner texto, el enemigo dispara unas veces y baja la barra de maximo
                 //Damage to the hull will determine your maximun fuel capacity and it can�t be restored until you reach a station
-                EventBus.Publish(new OnSetEnemiesCanAttack(true));
+                EventBus.Publish(new OnSetEnemiesFlags(true));
                 break;
             case 10:
                 //Aparece el escudo, el enemigo dispara y recibe da�o el escudo, RECIBIR DA�O AVANZA INSTANTANEAMENTE AL 10
                 //Fortunately, your shield will prevent you from taking damage and it will regenerate after a few seconds
-                EventBus.Publish(new OnSetEnemiesCanAttack(false));
+                EventBus.Publish(new OnSetEnemiesFlags(false));
                 EventBus.Publish(new OnSetShieldsActiveEvent(true));
                 EventBus.Publish(new OnSetFirstHeal(false));
                 shieldsUi.alpha = 1f;
@@ -140,7 +140,7 @@ public class TutorialCOntroller : MonoBehaviour
                 //El enemigo deja de disparar, el escudo se regenera, una vez al maximo AVANZA DIRECTAMENTE AL 11
                 //Evento de enemigo deja de disparar
                 //Fortunately, your shield will prevent you from taking damage and it will regenerate after a few seconds
-                EventBus.Publish(new OnSetEnemiesCanAttack(true));
+                EventBus.Publish(new OnSetEnemiesFlags(true));
                 EventBus.Publish(new OnSetFirstHeal(true));
                 break;
             case 12:
@@ -153,7 +153,8 @@ public class TutorialCOntroller : MonoBehaviour
             case 13:
                 //Aparece la vida del vagon de oro baja, el enemigo dispara de nuevo y lo rompe
                 //Evento de enemigo volver a disparar
-                EventBus.Publish(new OnSetEnemiesCanAttack(true));
+                EventBus.Publish(new OnSetEnemiesFlags(true));
+                goldHpUi.alpha = 1f;
                 break;
             case 14:
                 //You won�t be able to hold gold as long as the wagon is broken, try fixing it.
