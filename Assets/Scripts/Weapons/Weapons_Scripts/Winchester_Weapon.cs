@@ -44,6 +44,8 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     private float reloadTime;
     public float ReloadTime { get => reloadTime; }
 
+    private float damage;
+
     private List<Enemy> enemiesDamage = new List<Enemy>();
 
     private BulletPool bulletPool;
@@ -57,10 +59,12 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         EventBus.Subscribe<OnUpdateEnemiesDamage>(UpdateEnemiesDamage);
         EventBus.Subscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Subscribe<OnWinchesterDetectedDeadEnemy>(CallRestock);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -82,7 +86,8 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         EventBus.Unsubscribe<OnUpdateEnemiesDamage>(UpdateEnemiesDamage);
         EventBus.Unsubscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Unsubscribe<OnWinchesterDetectedDeadEnemy>(CallRestock);
-        Debug.Log("Desuscribi evento");
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
     public void Tick(float deltaTime)
@@ -187,5 +192,19 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     {
         currentBulletUse = legadoBulletData;
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
+    }
+
+    public void UpdateRoFStats(OnStatChangedEvent @event)
+    {
+        var statsRef = ServiceLocator.Get<StatSystem>();
+
+        //Rate of fire set up
+        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Reload time set up
+        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Damage set up
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
     }
 }

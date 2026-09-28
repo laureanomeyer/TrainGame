@@ -80,11 +80,12 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
 
         //Damage set up
-        damage = WeaponData.damage;
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
         baseDamage = damage;
 
         EventBus.Subscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockColtLegado>(UpdateCurrentBullet);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -107,6 +108,8 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     {
         EventBus.Unsubscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Unsubscribe<OnUnlockColtLegado>(UpdateCurrentBullet);
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
     public void Tick(float deltaTime)
@@ -223,9 +226,30 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 
-    public void UpdateRoFStats()
+    public void UpdateRoFStats(OnStatChangedEvent @event)
     {
+        var statsRef = ServiceLocator.Get<StatSystem>();
 
+        //Rate of fire set up
+        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        baseRateOfFire = rateOfFire;
+
+        if(rateOfFireBuff > 0)
+        {
+            rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
+        }
+
+        //Reload time set up
+        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Damage set up
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+        baseDamage = damage;
+
+        if (damageBuff > 0)
+        {
+            damage = damage * (1f + damageBuff / 100f);
+        }
     }
 
     public void BufferRoF(float buffer)

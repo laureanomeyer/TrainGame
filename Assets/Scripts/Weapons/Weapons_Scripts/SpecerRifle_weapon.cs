@@ -52,6 +52,8 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     private float reloadTime;
     public float ReloadTime { get => reloadTime; }
 
+    private float damage;
+
     //Referencia a la pool de balas
     private BulletPool bulletPool;
     public BulletPool BulletPool => bulletPool;
@@ -65,10 +67,12 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
 
         EventBus.Subscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Subscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -92,7 +96,8 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     {
         EventBus.Unsubscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Unsubscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
-        Debug.Log("Desuscribi evento");
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
     public void Tick(float deltaTime)
@@ -119,8 +124,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         if (IsReloading) return;
         if (weaponSpawnPoint == null) return;
 
-        var data = WeaponData;
-        currentBulletUse.Damage = data.damage;
+        currentBulletUse.Damage = damage;
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, currentBulletUse);
 
         CurrentAmmunition -= 1;
@@ -212,5 +216,19 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         currentBulletUse = legadoBulletData;
         unlockedLegado = true;
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
+    }
+
+    public void UpdateRoFStats(OnStatChangedEvent @event)
+    {
+        var statsRef = ServiceLocator.Get<StatSystem>();
+
+        //Rate of fire set up
+        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Reload time set up
+        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Damage set up
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
     }
 }

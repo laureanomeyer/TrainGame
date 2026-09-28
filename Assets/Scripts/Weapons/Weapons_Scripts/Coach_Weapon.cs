@@ -63,6 +63,8 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     private float reloadTime;
     public float ReloadTime { get => reloadTime; }
 
+    private float damage;
+
     //Referencia a la pool de balas
     private BulletPool bulletPool;
     public BulletPool BulletPool => bulletPool;
@@ -75,11 +77,14 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         playerAtkReference = playerAttack;
 
         var statsRef = ServiceLocator.Get<StatSystem>();
+
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
 
         EventBus.Subscribe<OnCoachDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockCoachLegado>(UpdateCurrentBullet);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -101,7 +106,8 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     {
         EventBus.Unsubscribe<OnCoachDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Unsubscribe<OnUnlockCoachLegado>(UpdateCurrentBullet);
-        Debug.Log("Desuscribi evento");
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
     public void Tick(float deltaTime)
@@ -141,8 +147,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     {
         if (currentCoachCharge < midChargeTime)
         {
-            var data = WeaponData;
-            currentBulletUse.Damage = data.damage;
+            currentBulletUse.Damage = damage;
 
             ReleaseChargeBullet(playerAtkReference.spawnPoint, pelletCount, spreadAngle);
             currentCoachCharge = 0;
@@ -150,8 +155,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         }
         else if (currentCoachCharge > midChargeTime && currentCoachCharge < maxChargeTime)
         {
-            var data = WeaponData;
-            currentBulletUse.Damage = data.damage * midDamageMult;
+            currentBulletUse.Damage = damage * midDamageMult;
 
             ReleaseChargeBullet(playerAtkReference.spawnPoint, midPelletCount, midSpreedRange);
             currentCoachCharge = 0;
@@ -159,8 +163,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         }
         else if (currentCoachCharge > maxChargeTime)
         {
-            var data = WeaponData;
-            currentBulletUse.Damage = data.damage * maxDamageMult;
+            currentBulletUse.Damage = damage * maxDamageMult;
 
             ReleaseChargeBullet(playerAtkReference.spawnPoint, maxPelletCount, maxSpreedRange);
             currentCoachCharge = 0;
@@ -198,8 +201,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
                 currentEnemiesDefetead = 0;
             }
 
-            var data = WeaponData;
-            currentBulletUse.Damage = data.damage;
+            currentBulletUse.Damage = damage;
 
             RealeasedBullet(weaponSpawnPoint);
         }
@@ -303,5 +305,19 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         currentBulletUse = legadoBulletData;
         unlockedLegacy = true;
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
+    }
+
+    public void UpdateRoFStats(OnStatChangedEvent @event)
+    {
+        var statsRef = ServiceLocator.Get<StatSystem>();
+
+        //Rate of fire set up
+        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Reload time set up
+        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Damage set up
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
     }
 }
