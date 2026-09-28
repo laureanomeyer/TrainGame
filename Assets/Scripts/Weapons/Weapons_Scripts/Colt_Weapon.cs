@@ -246,7 +246,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     {
         damageBuff = buffer;
         damage = damage * (1f + damageBuff / 100f);
-        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + rateOfFire);
+        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
     }
 
     public void DebuffDamage()

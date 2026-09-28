@@ -60,7 +60,11 @@ public class WagonRenderController
 
     public void DeactivateWagonTop()
     {
-        if (wagonBrain.wagonTopMeshFilter == null) return;
+        if (wagonBrain.wagonTopMeshFilter == null)
+        {
+            Debug.Log("Sin techo");
+            return;
+        }
         if (wagonBrain.HPController != null && wagonBrain.HPController.IsBroken) return;
 
         StartFade(0f, () =>

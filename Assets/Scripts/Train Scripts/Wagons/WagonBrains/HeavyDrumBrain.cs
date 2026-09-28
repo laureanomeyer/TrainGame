@@ -26,7 +26,7 @@ public class HeavyDrumBrain : WagonBrain
             {
                 if (playerWeapon is IWeaponBuffer weaponBuffer)
                 {
-                    weaponBuffer.BufferRoF(damageUpgrade);
+                    weaponBuffer.BufferDamage(damageUpgrade);
                 }
             }
         }
@@ -46,7 +46,7 @@ public class HeavyDrumBrain : WagonBrain
             {
                 if (playerWeapon is IWeaponBuffer weaponBuffer)
                 {
-                    weaponBuffer.DebuffRoF();
+                    weaponBuffer.DebuffDamage();
                 }
             }
         }

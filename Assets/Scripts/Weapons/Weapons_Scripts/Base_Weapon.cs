@@ -167,21 +167,21 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     {
         rateOfFireBuff = buffer;
         rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
-        Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
+        Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void DebuffRoF()
     {
         rateOfFireBuff = 0;
         rateOfFire = baseRateOfFire;
-        Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
+        Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void BufferDamage(float buffer)
     {
         damageBuff = buffer;
         damage = damage * (1f + damageBuff / 100f);
-        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + rateOfFire);
+        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
     }
 
     public void DebuffDamage()
