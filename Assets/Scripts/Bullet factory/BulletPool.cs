@@ -64,6 +64,9 @@ public class BulletPool : MonoBehaviour
 
         bullet.transform.SetLocalPositionAndRotation(position, rotation);
 
+        bullet.transform.position = position;
+        bullet.transform.rotation = rotation;
+
         bullet.GetComponent<IBullet>().ResetState(bulletType);
     }
 }

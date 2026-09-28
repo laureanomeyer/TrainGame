@@ -96,17 +96,17 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         {
             if (IsReloading) return;
 
-            Shoot(playerAtkReference.spawnPoint);
+            Shoot();
             EventBus.Publish(new OnShootEvent(rateOfFire));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
         }
     }
 
-    public void Shoot(Transform spawnPoint)
+    public void Shoot()
     {
         if (IsReloading) return;
-        if (spawnPoint == null) return;
+        if (weaponSpawnPoint == null) return;
 
         if(currentBulletUse.typeOfCollsion is CheckWinchesterCollsion winchesterCollsion)
         {

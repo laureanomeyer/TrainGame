@@ -120,7 +120,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         {
             if (IsReloading) return;
 
-            Shoot(playerAtkReference.spawnPoint);
+            Shoot();
 
             EventBus.Publish(new OnShootEvent(rateOfFire));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
@@ -128,10 +128,10 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         }
     }
 
-    public void Shoot(Transform spawnPoint)
+    public void Shoot()
     {
         if (IsReloading) return;
-        if (spawnPoint == null) return;
+        if (rightWeaponSpawnPoint == null || leftWeaponSpawnPoint == null) return;
 
         if (unlockedLegacy == false)
         {
@@ -144,11 +144,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         bulletData.Damage = damage;
 
-        Vector3 spawnPositionRight = spawnPoint.position + spawnPoint.right * bulletSpreadAngle;
-
         BulletPool.ShootObject(rightWeaponSpawnPoint.position, rightWeaponSpawnPoint.rotation, bulletData);
-
-        Vector3 spawnPositionLeft = spawnPoint.position - spawnPoint.right * bulletSpreadAngle;
 
         BulletPool.ShootObject(leftWeaponSpawnPoint.position, leftWeaponSpawnPoint.rotation, bulletData);
 
@@ -191,7 +187,6 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
                 RestockWeapon();
             }
         }
-
     }
 
     public void ResetWaitToFire()

@@ -110,10 +110,10 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         }
     }
 
-    public void Shoot(Transform spawnPoint)
+    public void Shoot()
     {
         if (IsReloading) return;
-        if (spawnPoint == null) return;
+        if (weaponSpawnPoint == null) return;
 
         var data = WeaponData;
         currentBulletUse.Damage = data.damage;
@@ -139,7 +139,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         {
             if (IsReloading) return;
 
-            Shoot(playerAtkReference.spawnPoint);
+            Shoot();
             EventBus.Publish(new OnShootEvent(rateOfFire));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;

@@ -25,7 +25,7 @@ public interface IWeapons
     public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack);
     public void DestroyWeapon();
     public void Tick(float deltaTime);
-    public void Shoot(Transform spawnPoint);
+    public void Shoot();
     public void RestockBullets();
     public void Attack();
     public void ChargeTimers();

@@ -87,13 +87,14 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         }
     }
 
-    public void Shoot(Transform spawnPoint)
+    public void Shoot()
     {
         if (IsReloading) return;
-        if (spawnPoint == null) return;
+        if (weaponSpawnPoint == null) return;
 
         var data = WeaponData;
         bulletData.Damage = data.damage;
+
 
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
@@ -117,7 +118,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         {
             if (IsReloading) return;
 
-            Shoot(playerAtkReference.spawnPoint);
+            Shoot();
             EventBus.Publish(new OnShootEvent(rateOfFire));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
