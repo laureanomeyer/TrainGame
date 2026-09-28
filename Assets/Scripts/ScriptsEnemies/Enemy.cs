@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     public EnemyAttackSO Attack => data.attack;
     public EnemyBrainSO Brain => data.brain;
     public Rigidbody rb;
+    BoxCollider boxCollider;
     public float Speed => data.speed;
     public float MaxHealth => data.health;
     public float Damage => data.damage;
@@ -54,6 +55,7 @@ public class Enemy : MonoBehaviour
         rb != null && rb.position.z >= 0f;
     public bool IsOnNegativeZSide =>
         rb != null && rb.position.z < 0f;
+    public bool IsDead => isDead;
     public Camera Cam => Camera.main;
 
     public bool IsTutorialEnemy { get; private set; }
@@ -63,6 +65,8 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         Weapon = GetComponentInChildren<EnemyWeapon>();
+        rb = GetComponent<Rigidbody>();
+        boxCollider = GetComponent<BoxCollider>();
 
         rightLayerIndex = cowboyAnimator.GetLayerIndex("Right Layer");
         leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
@@ -85,7 +89,6 @@ public class Enemy : MonoBehaviour
         this.data = data;
         currentHealth = MaxHealth;
         spawnTime = Time.time;
-        rb = GetComponent<Rigidbody>();
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
 

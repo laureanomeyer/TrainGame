@@ -102,7 +102,7 @@ public class BulletScript : MonoBehaviour, IBullet
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
-
+            if (collisionEnemy.IsDead) return;
             bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
         }
     }
