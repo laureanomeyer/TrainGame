@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
+
 [CustomPropertyDrawer(typeof(GroupNameSuggestAttribute))]
 public class GroupNameSuggestDrawer : PropertyDrawer
 {
@@ -22,6 +23,7 @@ public class GroupNameSuggestDrawer : PropertyDrawer
 
         if (distinctNames.Count == 0)
         {
+            // No hay grupos cargados todavía en particles: queda como texto libre.
             EditorGUI.PropertyField(position, property, label);
             return;
         }
@@ -46,7 +48,7 @@ public class GroupNameSuggestDrawer : PropertyDrawer
             if (selected != options.Count - 1)
                 property.stringValue = options[selected];
             else if (!isCustom)
-                property.stringValue = "";
+                property.stringValue = ""; // recién pasa a modo custom, arranca vacío
         }
 
         if (selected == options.Count - 1)
