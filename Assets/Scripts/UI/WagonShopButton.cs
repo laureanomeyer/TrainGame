@@ -54,7 +54,7 @@ public class WagonShopButton : MonoBehaviour
 
     private bool isBuyingWagon;
 
-    private void Start()
+    public void Initialize()
     {
         nameTextUI = storeManager.nameTextUI;
         descriptionTextUI = storeManager.descriptionTextUI;
@@ -143,7 +143,14 @@ public class WagonShopButton : MonoBehaviour
         int selector = UnityEngine.Random.Range(0, wagonsInStock.Length);
         WagonInStockSO wagonSelected = wagonsInStock[selector];
 
-        return wagonSelected;
+        if(currentWagonInStock == wagonSelected)
+        {
+            return SelectRandomWagon();
+        }
+        else
+        {
+            return wagonSelected;
+        }
     }
 
     public void UpdateUI()

@@ -33,6 +33,8 @@ public class WagonShopManager : MonoBehaviour
         {
             button.Level = currentLevel;
             button.displayTrain = displayTrain;
+
+            button.Initialize();
         }
     }
 

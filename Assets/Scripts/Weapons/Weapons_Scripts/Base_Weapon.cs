@@ -29,10 +29,8 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private float waitToFire = 0;
 
     private float baseRateOfFire;
-
     private float rateOfFire;
     public float RateOfFire { get => rateOfFire; }
-
     private float rateOfFireBuff;
 
 
@@ -40,9 +38,13 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private float currentReloadTime = 0;
 
     private float baseReloadTime;
-
     private float reloadTime;
     public float ReloadTime { get => reloadTime; }
+
+    //Damage
+    private float baseDamage;
+    private float damage;
+    private float damageBuff;
 
     //Referencia a la pool de balas
     private BulletPool bulletPool;
@@ -50,13 +52,23 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
     public void InitializeWeapon(BulletPool pool, PlayerAttackController playerAttack)
     {
+        //Bullet pool set up
         bulletPool = pool;
         playerAtkReference = playerAttack;
 
         var statsRef = ServiceLocator.Get<StatSystem>();
+
+        //Rate of fire set up
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         baseRateOfFire = rateOfFire;
+
+        //Reload time set up
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Damage set up
+        damage = WeaponData.damage;
+        baseDamage = damage;
+
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
@@ -82,6 +94,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         var data = WeaponData;
         bulletData.Damage = data.damage;
+
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
         CurrentAmmunition -= 1;
@@ -153,7 +166,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     public void BufferRoF(float buffer)
     {
         rateOfFireBuff = buffer;
-        rateOfFire = rateOfFire / rateOfFireBuff;
+        rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
         Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
     }
 
@@ -162,5 +175,19 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         rateOfFireBuff = 0;
         rateOfFire = baseRateOfFire;
         Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon damage: " + rateOfFire);
+    }
+
+    public void BufferDamage(float buffer)
+    {
+        damageBuff = buffer;
+        damage = damage * (1f + damageBuff / 100f);
+        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + rateOfFire);
+    }
+
+    public void DebuffDamage()
+    {
+        damageBuff = 0;
+        damage = baseDamage;
+        Debug.Log("Weapon debuff Damage updated " + gameObject.name + "; Weapon damage: " + damage);
     }
 }
