@@ -117,10 +117,17 @@ public class GameManager : MonoBehaviour
         return stationRoute.GetStationNameByLevel(level);
     }
 
-
     public void EnterTransitionState()
     {
         CurrentState = GameState.Transition;
+    }
+
+    public void SkipRun()
+    {
+        Session._SessionConfig.AdvanceRun();
+        Session.RebuildStatsSystem();
+
+        ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI, CursorType.Real);
     }
 
     public void GoToStore()
@@ -130,15 +137,8 @@ public class GameManager : MonoBehaviour
         Session._SessionConfig.AdvanceRun();
         Session.RebuildStatsSystem();
 
-        ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI);
+        ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI, CursorType.Real);
         ShowCursor(CursorType.Gameplay);
-    }
-    public void SkipRun()
-    {
-        Session._SessionConfig.AdvanceRun();
-        Session.RebuildStatsSystem();
-
-        ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI);
     }
 
     public void GoToRun()
@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
 
         Session.RebuildStatsSystem();
 
-        ChangeScene(SceneRun, SceneTransitionType.StartingRun, GameState.Gameplay);
+        ChangeScene(SceneRun, SceneTransitionType.StartingRun, GameState.Gameplay, CursorType.Gameplay);
         ShowCursor(CursorType.Gameplay);
     }
 
@@ -158,8 +158,7 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-
-        ChangeScene(SceneMainMenu, SceneTransitionType.MainMenu, GameState.Menu);
+        ChangeScene(SceneMainMenu, SceneTransitionType.MainMenu, GameState.Menu, CursorType.Real);
         ShowCursor(CursorType.Real);
 
         EndSession();
@@ -173,8 +172,7 @@ public class GameManager : MonoBehaviour
 
         Session.RebuildStatsSystem();
 
-        ChangeScene(SceneTutorial, SceneTransitionType.Generic, GameState.Tutorial);
-        ShowCursor(CursorType.Gameplay);
+        ChangeScene(SceneTutorial, SceneTransitionType.Generic, GameState.Tutorial, CursorType.HiddenAndFrozen);
     }
 
     public void Defeat()
@@ -200,7 +198,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        ChangeScene(SceneFinal, SceneTransitionType.Final, GameState.Menu);
+        ChangeScene(SceneFinal, SceneTransitionType.Final, GameState.Menu, CursorType.Real);
         ShowCursor(CursorType.Real);
     }
 
@@ -230,28 +228,26 @@ public class GameManager : MonoBehaviour
         Session = new GameSession(baseStats, baseMultStats);
     }
 
-    private void ChangeScene(string sceneName, SceneTransitionType transitionType, GameState nextState)
+    private void ChangeScene(string sceneName, SceneTransitionType transitionType, GameState nextState, CursorType nextSceneCursor)
     {
         isChangingScene = true;
 
         stateAfterTransition = nextState;
         CurrentState = GameState.Transition;
 
-        SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType);    
+        SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType, nextSceneCursor);    
     }
 
-    public void FinishSceneChange()
+    public void FinishSceneChange(CursorType newSceneCursor)
     {
         isChangingScene = false;
         CurrentState = stateAfterTransition;
 
-        if (IsTutorial) ShowCursor(CursorType.Gameplay);
-        else if (IsGameplayScene && !IsInShop) ShowCursor(CursorType.Gameplay);
-        else ShowCursor(CursorType.Real);
-
         if (IsInCombat) MusicManager.Instance.SetGameplayMusic();
         else if (IsInShop) MusicManager.Instance.SetStoreMusic();
         else MusicManager.Instance.SetMenuMusic();
+
+        currentCursor = newSceneCursor;
     }
     public CursorType GetCurrentCursor()
     {
@@ -273,12 +269,15 @@ public class GameManager : MonoBehaviour
                 Cursor.visible = true;
                 EventBus.Publish(new OnShowGameplayCursorEvent(false));
                 break;
-
             case CursorType.Gameplay: 
                 Cursor.visible = false;
                 EventBus.Publish(new OnShowGameplayCursorEvent(true));
                 break;
-            case CursorType.Hidden: 
+            case CursorType.HiddenAndFrozen: 
+                Cursor.visible = false;
+                EventBus.Publish(new OnShowGameplayCursorEvent(false));
+                break;
+            case CursorType.HiddenAndMoveable:
                 Cursor.visible = false;
                 EventBus.Publish(new OnShowGameplayCursorEvent(false));
                 break;

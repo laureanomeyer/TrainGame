@@ -44,7 +44,7 @@ public class WagonManagementPanel : MonoBehaviour
     public void Hide()
     {
         panelRoot.SetActive(false);
-        EventBus.Publish(new OnShowCursorEvent(CursorType.Hidden));
+        EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
     }
 
     public void SetUpgradeState(bool hasUpgrade, float cost, bool canAfford)

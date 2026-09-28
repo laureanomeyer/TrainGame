@@ -122,7 +122,7 @@ public class StoreUiInteracts : MonoBehaviour
 
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
-        EventBus.Publish(new OnShowCursorEvent(CursorType.Hidden));
+        EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
 
         //Debug.Log("Is open: " + uiOpen);
         //Debug.Log("Is hidden: " + isHidden);
