@@ -360,12 +360,14 @@ public class OnSetTutorialEnemyTarget : IGameEvent
     }
 }
 
-public class OnSetEnemiesCanAttack : IGameEvent
+public class OnSetEnemiesFlags : IGameEvent
 {
     public bool canAttack;
-    public OnSetEnemiesCanAttack(bool can)
+    public bool canMove;
+    public OnSetEnemiesFlags(bool canAttack = false, bool canMove = false)
     {
-        this.canAttack = can;
+        this.canAttack = canAttack;
+        this.canMove = canMove;
     }
 }
 

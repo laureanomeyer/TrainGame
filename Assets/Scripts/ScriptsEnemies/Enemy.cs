@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] Animator horseAnimator;
     [Header("Debug")]
     public string TargetWagonName;
-
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
@@ -80,6 +79,7 @@ public class Enemy : MonoBehaviour
     public void Initialize(EnemyData data)
     {
         StopAllCoroutines();
+        attackRoutine = null;
 
         isDead = false;
         this.data = data;
@@ -169,9 +169,13 @@ public class Enemy : MonoBehaviour
 
     public void PlayAttackAnimation()
     {
+        if (attackRoutine != null) return;
+
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Aim" : "Cowboy_1|R_Aim 0",
             IsOnPositiveZSide ? data.animation?.positiveZAttack : data.animation?.negativeZAttack));
+
+        attackRoutine = StartCoroutine(ReturnToIdleAfterAttack());
     }
 
     private string GetAnimationName(string defaultName, string configuredName)

@@ -110,6 +110,7 @@ public class RunManager : MonoBehaviour
 
     public void OnRunFinished()
     {
+        EventBus.Publish(new OnSetEnemiesFlags(false));
         EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
     }
 }

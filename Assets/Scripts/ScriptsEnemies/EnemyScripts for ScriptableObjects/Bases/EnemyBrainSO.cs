@@ -4,7 +4,6 @@ using UnityEngine;
 
 public  class EnemyBrainSO : ScriptableObject
 {
-
     public IWagon SetRandomTarget()
     {
         var wagonList = RunManager.Instance.ActiveWagons;

@@ -10,13 +10,13 @@ public class EnemyWeapon : MonoBehaviour
 
     private void Awake()
     {
-        EventBus.Subscribe<OnSetEnemiesCanAttack>(SetCanShoot);
+        EventBus.Subscribe<OnSetEnemiesFlags>(SetCanShoot);
         bulletSpawn = GetComponentInChildren<Transform>();
     }
 
     void OnDestroy()
     {
-        EventBus.Unsubscribe<OnSetEnemiesCanAttack>(SetCanShoot);
+        EventBus.Unsubscribe<OnSetEnemiesFlags>(SetCanShoot);
     }
 
     public void Execute(IWagon target, float damage)
@@ -26,7 +26,7 @@ public class EnemyWeapon : MonoBehaviour
         Shoot(target, damage);
     }
 
-    void SetCanShoot(OnSetEnemiesCanAttack ev)
+    void SetCanShoot(OnSetEnemiesFlags ev)
     {
         this.canShoot = ev.canAttack;
     }

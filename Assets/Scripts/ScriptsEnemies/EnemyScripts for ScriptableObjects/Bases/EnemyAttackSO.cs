@@ -30,10 +30,10 @@ public class EnemyAttackSO : ScriptableObject
 
         if (dist <= enemy.Range + 5)
         {
+            enemy.PlayAttackAnimation();
             if (enemy.TargetWagon == null) return;
 
             bool isOnScreen = CameraView.IsInsideCamera(enemy.transform.position, enemy.Cam);
-            enemy.PlayAttackAnimation();
             enemy.Weapon.Execute(enemy.TargetWagon, enemy.Damage);
             enemy.ResetAttackCooldown(enemy.Cooldown);
             PlayAudio(isOnScreen);
