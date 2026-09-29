@@ -409,6 +409,23 @@ public class OnSetFirstHeal: IGameEvent
     }
 }
 
+public class OnShowArrowImage : IGameEvent
+{
+    public bool show;
+    public OnShowArrowImage(bool show)
+    {
+        this.show = show;
+    }
+}
+public class OnShowClickImage : IGameEvent
+{
+    public bool show;
+    public OnShowClickImage(bool show)
+    {
+        this.show = show;
+    }
+}
+
 #endregion
 
 #region Weapons Events

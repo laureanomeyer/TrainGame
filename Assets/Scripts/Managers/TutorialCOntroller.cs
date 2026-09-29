@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialCOntroller : MonoBehaviour
@@ -104,11 +105,13 @@ public class TutorialCOntroller : MonoBehaviour
             case 4:
                 //El player recarga fuel y se avanza al 5, te quedaste sin reservas
                 EventBus.Publish(new OnFreezePlayerEvent(true));
+                EventBus.Publish(new OnShowArrowImage(true));
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndMoveable));
                 break;
             case 5:
                 //Your fuel has been replenished but you ran out of reserves
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 6:
@@ -116,10 +119,12 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, coalEnemy));
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnShowClickImage(true));
                 EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
                 break;
             case 7:
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 break;
@@ -189,18 +194,24 @@ public class TutorialCOntroller : MonoBehaviour
             case 18:
                 //Se prende la Ui de oro total
                 EventBus.Publish(new OnFreezePlayerEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(false));
                 goldAmountUi.alpha = 1f;
                 break;
             case 19:
                 //Texto sobre la tienda
                 //You can use the stored gold to buy new wagons and weapons in the stations
-                StartCoroutine(HoldCoroutine(holdDuration));
+
                 break;
             case 20:
                 //Texto final, Empezar la run
                 //Now you�re ready to take on the road!
+                EventBus.Publish(new OnFreezePlayerEvent(true));
+                EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnSetCanConsumeEvent(true));
+                EventBus.Publish(new OnSetTimerStartedEvent(true));
+                EventBus.Publish(new OnSetTutorialVisibleEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(true));
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
-                StartCoroutine(HoldCoroutine(holdDuration));
                 break;
             case 21:
                 EventBus.Publish(new OnFreezePlayerEvent(true));
@@ -209,16 +220,12 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnSetTimerStartedEvent(true));
                 EventBus.Publish(new OnSetTutorialVisibleEvent(false));
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;
 
             default:
                 break;
         }
-    }
-    private IEnumerator HoldCoroutine(float holdTime)
-    {
-        yield return new WaitForSeconds(holdTime);
-        AdvanceStepNaturally();
     }
 
     private void AdvanceStepByClicking(OnAdvanceTutorialStepByClick ev)
@@ -227,12 +234,9 @@ public class TutorialCOntroller : MonoBehaviour
         if (PauseMenuManager.Instance.IsPaused) return;
 
         currentStep += 1;
-        if (currentStep >= texts.Length)
-        {
-            return;
-        }
-        tutorialText.text = texts[currentStep];
         HandleSteps(currentStep);
+
+        if (currentStep < texts.Length) tutorialText.text = texts[currentStep];
     }
     private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
     {
@@ -240,24 +244,6 @@ public class TutorialCOntroller : MonoBehaviour
         currentStep += 1;
         if (currentStep >= texts.Length)
         {
-            return;
-        }
-        tutorialText.text = texts[currentStep];
-        HandleSteps(currentStep);
-    }
-    private void AdvanceStepNaturally()
-    {
-        if (PauseMenuManager.Instance.IsPaused) return;
-        currentStep += 1;
-        if (currentStep > texts.Length)
-        {
-            HandleSteps(currentStep);
-            return;
-        }
-        else if (currentStep >= texts.Length)
-        {
-            tutorialText.text = texts[currentStep -1];
-            HandleSteps(currentStep);
             return;
         }
         tutorialText.text = texts[currentStep];

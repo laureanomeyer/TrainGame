@@ -13,7 +13,9 @@ public class PlayerBrain : MonoBehaviour
     [Header("Interactions")]
     [SerializeField] private float repairCapacity;
     [SerializeField] private InteractionUIManager interactionUIManager;
-    [SerializeField] private GameObject interactImage;
+    [SerializeField] private CanvasGroup interactImage;
+    [SerializeField] private CanvasGroup arrowsImage;
+    [SerializeField] private CanvasGroup clickImage;
 
     [Header("Bullets")]
     [SerializeField] private Transform spawnPoint;
@@ -30,7 +32,7 @@ public class PlayerBrain : MonoBehaviour
     private PlayerData playerDataRef;
 
     private bool isRepairing = false;
-    private bool canAttack = true;
+    [SerializeField]private bool canAttack = true;
     private bool canInteract = true;
     private bool canRepair = true;
     private bool higherLevelFrozen = false;
@@ -63,6 +65,8 @@ public class PlayerBrain : MonoBehaviour
         EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
         EventBus.Subscribe<OnActivateUiEvent>(HandleAttackAndMovementInUi);
         EventBus.Subscribe<OnFreezePlayerEvent>(HandleAttackAndMovementInTutorial);
+        EventBus.Subscribe<OnShowArrowImage>(ShowArrowImages);
+        EventBus.Subscribe<OnShowClickImage>(ShowClickImage);
 
         isRepairing = false;
         HideInteract();
@@ -77,10 +81,12 @@ public class PlayerBrain : MonoBehaviour
         attackAction.canceled -= DeactiveAttack;
 
         EventBus.Unsubscribe<OnSetAttackEnabledEvent>(CallSetCanAttackEvent);
-
         EventBus.Unsubscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Unsubscribe<OnHideInteractEvent>(CallHideInteractEvent);
         EventBus.Unsubscribe<OnActivateUiEvent>(HandleAttackAndMovementInUi);
+        EventBus.Unsubscribe<OnFreezePlayerEvent>(HandleAttackAndMovementInTutorial);
+        EventBus.Unsubscribe<OnShowArrowImage>(ShowArrowImages);
+        EventBus.Unsubscribe<OnShowClickImage>(ShowClickImage);
     }
     private void Update()
     {
@@ -102,6 +108,7 @@ public class PlayerBrain : MonoBehaviour
     {
         if (playerMovementController != null && value != null)
             playerMovementController.SetMoveInput(value.Get<Vector2>());
+        if (arrowsImage.alpha != 0f) arrowsImage.alpha = 0f;
     }
 
     private void OnInteract()
@@ -161,6 +168,8 @@ public class PlayerBrain : MonoBehaviour
     {
         if (!canAttack) return;
         playerAttackController.ActiveAttack();
+
+        if (clickImage.alpha != 0f) clickImage.alpha = 0f;
     }
     public void DeactiveAttack(InputAction.CallbackContext context)
     {
@@ -182,7 +191,6 @@ public class PlayerBrain : MonoBehaviour
     /// <param name="ev"></param>
     public void HandleAttackAndMovementInTutorial(OnFreezePlayerEvent ev)
     {
-        SetCanAttack(ev.Activated);
         SetCanMove(ev.Activated);
         canRepair = ev.Activated;
         canInteract = ev.Activated;
@@ -233,7 +241,7 @@ public class PlayerBrain : MonoBehaviour
     {
         if (!canInteract) return;
 
-        interactImage.SetActive(true);
+        interactImage.alpha = 1f;
     }
 
     public void CallHideInteractEvent(OnHideInteractEvent hideInteractEvent)
@@ -245,6 +253,17 @@ public class PlayerBrain : MonoBehaviour
     {
         if (!canInteract) return;
 
-        interactImage.SetActive(false);
+        interactImage.alpha = 0f;
+    }
+
+    private void ShowArrowImages(OnShowArrowImage ev)
+    {
+        if (ev.show) arrowsImage.alpha = 1f;
+        else arrowsImage.alpha = 0f;
+    }
+    private void ShowClickImage(OnShowClickImage ev)
+    {
+        if (ev.show) clickImage.alpha = 1f;
+        else clickImage.alpha = 0f;
     }
 }
