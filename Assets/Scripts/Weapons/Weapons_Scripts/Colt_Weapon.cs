@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
@@ -50,6 +51,9 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private float baseDamage;
     private float damage;
     private float damageBuff;
+
+    [Header("Delay between shoots")]
+    [SerializeField] private float delayBetweenShots = 0.05f; // segundos entre bala 1 y bala 2
 
     //Referencia a la pool de balas
     private BulletPool bulletPool;
@@ -151,8 +155,17 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         bulletData.Damage = damage;
 
+        StartCoroutine(ShootRoutine());
+    }
+
+    private IEnumerator ShootRoutine()
+    {
+        //Primer disparo
         BulletPool.ShootObject(rightWeaponSpawnPoint.position, rightWeaponSpawnPoint.rotation, bulletData);
 
+        yield return new WaitForSeconds(delayBetweenShots);
+
+        //Segundo disparo
         BulletPool.ShootObject(leftWeaponSpawnPoint.position, leftWeaponSpawnPoint.rotation, bulletData);
 
         CurrentAmmunition -= 2;
@@ -172,7 +185,6 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }
-
     public void RestockBullets()
     {
         currentAmmunition = weaponData.ammun;
@@ -250,6 +262,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         {
             damage = damage * (1f + damageBuff / 100f);
         }
+        Debug.Log("Stats actualizadas");
     }
 
     public void BufferRoF(float buffer)

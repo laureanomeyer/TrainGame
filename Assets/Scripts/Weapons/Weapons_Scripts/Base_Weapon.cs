@@ -185,6 +185,8 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         {
             damage = damage * (1f + damageBuff / 100f);
         }
+
+        Debug.Log("Stats actualizadas");
     }
 
     public void BufferRoF(float buffer)

@@ -206,5 +206,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
 
         //Damage set up
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+
+        Debug.Log("Stats actualizadas");
     }
 }
