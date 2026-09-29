@@ -17,6 +17,9 @@ public class WagonTurret : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float fireCooldown = 0.03f;
 
+    [Header("Particle Sequence Controller")]
+    [SerializeField] private ParticleSequenceController sequenceController;
+
     [Header("Pool")]
     [SerializeField] private int defaultCapacity = 15;
     [SerializeField] private int maxSize = 50;
@@ -93,7 +96,8 @@ public class WagonTurret : MonoBehaviour
         Aim(direction);
 
         GameObject bulletGO = bulletPool.Get();
-        AudioManager.Instance.Play("SFXDefaultShot");
+
+        sequenceController.Play("shotParticles");
 
         bulletGO.transform.SetPositionAndRotation(
             firePoint.position,

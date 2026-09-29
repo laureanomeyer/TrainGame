@@ -246,6 +246,8 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
             BulletPool.ShootObject(spawnPoint.position, finalRotation, currentBulletUse);
         }
 
+        sequenceController.Play("shotParticles");
+
         CurrentAmmunition -= CurrentAmmunition;
 
         if (CurrentAmmunition == 0)

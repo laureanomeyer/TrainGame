@@ -12,6 +12,9 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     [Header("Weapon data")]
     [SerializeField] private WeaponDataSO weaponData;
 
+    [Header("Particle Controller")]
+    [SerializeField] private ParticleSequenceController sequenceController;
+
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
@@ -100,6 +103,8 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
+        sequenceController.Play("shotParticles");
+
         CurrentAmmunition -= 1;
 
         if (CurrentAmmunition == 0)
@@ -157,7 +162,6 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         currentReloadTime = 0;
         RestockBullets();
         IsReloading = false;
-        AudioManager.Instance.Play($"SFXDefaultShot");
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
@@ -193,21 +197,21 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     {
         rateOfFireBuff = buffer;
         rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
-        //Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
+        Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void DebuffRoF()
     {
         rateOfFireBuff = 0;
         rateOfFire = baseRateOfFire;
-        //Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
+        Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void BufferDamage(float buffer)
     {
         damageBuff = buffer;
         damage = damage * (1f + damageBuff / 100f);
-        //Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
+        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
     }
 
     public void DebuffDamage()

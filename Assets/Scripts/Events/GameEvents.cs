@@ -40,7 +40,6 @@ public class OnShootEvent : IGameEvent
     public OnShootEvent(float rateOfFire)
     {
         RateOfFire = rateOfFire;
-        AudioManager.Instance.Play($"SFXDefaultShot");
     }
 }
 

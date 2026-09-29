@@ -128,6 +128,8 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         currentBulletUse.Damage = data.damage;
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, currentBulletUse);
 
+        sequenceController.Play("shotParticles");
+
         CurrentAmmunition -= 1;
 
         if (CurrentAmmunition == 0)

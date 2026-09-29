@@ -162,11 +162,13 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     {
         //Primer disparo
         BulletPool.ShootObject(rightWeaponSpawnPoint.position, rightWeaponSpawnPoint.rotation, bulletData);
+        sequenceController.Play("shotParticle1");
 
         yield return new WaitForSeconds(delayBetweenShots);
 
         //Segundo disparo
         BulletPool.ShootObject(leftWeaponSpawnPoint.position, leftWeaponSpawnPoint.rotation, bulletData);
+        sequenceController.Play("shotParticle2");
 
         CurrentAmmunition -= 2;
 
@@ -219,7 +221,6 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         currentReloadTime = 0;
         RestockBullets();
         IsReloading = false;
-        AudioManager.Instance.Play($"SFXDefaultShot");
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
