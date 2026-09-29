@@ -9,8 +9,8 @@ public class BulletScript : MonoBehaviour, IBullet
     public float Damage { get => damage; set => damage = value; }
     private float damage;
 
-    public int Speed { get => speed; set => speed = value; }
-    private int speed;
+    public float Speed { get => speed; set => speed = value; }
+    private float speed;
 
     private bool destroyOnEnemy;
     public bool DestroyOnEnemy { get => destroyOnEnemy; }
@@ -59,7 +59,7 @@ public class BulletScript : MonoBehaviour, IBullet
         currentLife = bulletType.duration;
         Damage = bulletType.Damage;
         //Damage = bulletType.Damage * (stats.GetStat(StatType.DamageMultiplier));
-        Speed = speed;
+        Speed = bulletType.speed;
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;
         tr.material = bulletType.trailMaterial;
@@ -69,7 +69,7 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public void Movement()
     {
-        rb.linearVelocity = transform.forward * bulletType.speed;
+        rb.linearVelocity = transform.forward * speed;
     }
 
     private void TimeUntilDestroy()
@@ -89,6 +89,8 @@ public class BulletScript : MonoBehaviour, IBullet
         tr.emitting = false;
         tr.Clear();
         isActive = false;
+        speed = 0;
+        rb.linearVelocity = transform.forward * speed;
         bulletPool.Release(gameObject);
     }
 

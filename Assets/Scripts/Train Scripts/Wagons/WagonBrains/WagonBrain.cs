@@ -78,7 +78,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public virtual void Start()
     {
-
         if(stats != null) stats.OnStatChanged += OnStatChanged;
         animator = GetComponent<Animator>();
 
@@ -161,8 +160,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         {
             Break();
         }
-
-
     }
 
     public void SetUpWagonHP() 
@@ -200,7 +197,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         hpController.OnMaxHpChanged(SM * stats.GetStat(StatType.MaxHp));
     }
 
-    public void Break()
+    public virtual void Break()
     {
         if (hpController.IsBroken) return;
 

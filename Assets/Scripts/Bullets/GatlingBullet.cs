@@ -10,7 +10,7 @@ public class GatlingBullet : MonoBehaviour, IBullet
     public string id => "Gatling";
 
     public float Damage { get; set; }
-    public int Speed { get; set; }
+    public float Speed { get; set; }
 
     private bool destroyOnEnemy;
     public bool DestroyOnEnemy { get => destroyOnEnemy; }

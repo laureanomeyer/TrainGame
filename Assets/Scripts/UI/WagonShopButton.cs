@@ -86,7 +86,7 @@ public class WagonShopButton : MonoBehaviour
 
         if (wagonsInStock.Length > 0)
         {
-            SetWagonInStock();
+            SetWagonInStock(false);
 
             storeManager.ActivateButtons();
         }
@@ -119,14 +119,14 @@ public class WagonShopButton : MonoBehaviour
         StartCoroutine(BuyWagonCoroutine());
     }
 
-    private void SetWagonInStock()
+    private void SetWagonInStock(bool notRepeat)
     {
         if(modelReference != null)
         {
             Destroy(modelReference);
         }
 
-        currentWagonInStock = SelectRandomWagon();
+        currentWagonInStock = SelectRandomWagon(notRepeat);
 
         nameTextUI.text = currentWagonInStock.wagonName;
 
@@ -138,14 +138,28 @@ public class WagonShopButton : MonoBehaviour
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
 
-    private WagonInStockSO SelectRandomWagon()
+    private WagonInStockSO SelectRandomWagon(bool notRepeat)
     {
         int selector = UnityEngine.Random.Range(0, wagonsInStock.Length);
         WagonInStockSO wagonSelected = wagonsInStock[selector];
 
-        if(currentWagonInStock == wagonSelected)
+        if (notRepeat)
         {
-            return SelectRandomWagon();
+            if(wagonsInStock.Length > 1)
+            {
+                if (currentWagonInStock == wagonSelected)
+                {
+                    return SelectRandomWagon(true);
+                }
+                else
+                {
+                    return wagonSelected;
+                }
+            }
+            else
+            {
+                return wagonSelected;
+            }
         }
         else
         {
@@ -184,7 +198,7 @@ public class WagonShopButton : MonoBehaviour
 
     private void UsedReroll()
     {
-        SetWagonInStock();
+        SetWagonInStock(true);
 
         if (wagonShopParticleSystem)
         {
@@ -257,7 +271,7 @@ public class WagonShopButton : MonoBehaviour
 
         GameManager.Instance.Session.RebuildStatsSystem();
 
-        SetWagonInStock();
+        SetWagonInStock(false);
 
         if (wagonShopParticleSystem != null)
         {

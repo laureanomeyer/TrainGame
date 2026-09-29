@@ -8,7 +8,7 @@ public interface IBullet
 
     public float Damage { get; set; }
 
-    public int Speed { get; set; }
+    public float Speed { get; set; }
 
     public bool DestroyOnEnemy { get; }
 
