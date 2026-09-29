@@ -9,32 +9,38 @@ public class EnemyMovementLosing : EnemyMovementSO
 
     public override void Move(Enemy enemy)
     {
-        Vector3 train = enemy.TargetWagon.Middle;
-        if (train == null) return;
-
         Vector3 pos = enemy.rb.position;
-
-        // TimeAlive solo crece, así que una vez isLosing = true, queda así
-        // para siempre durante la vida de este enemigo (irreversible).
-        bool isLosing = enemy.TimeAlive >= timeBeforeLosing;
-
-        // =========================
-        // PERDIENDO: SOLO retrocede en Z, X queda congelado, no importa el carril
-        // =========================
-        if (isLosing)
+        if (enemy.IsLosing)
         {
-            Vector3 losingPos = new Vector3(pos.x  - loseSpeed * Time.deltaTime, pos.y, pos.z);
-            enemy.rb.MovePosition(losingPos);
+            MoveLosing(enemy, pos);
+            return;
+        }
+
+        Vector3 train = enemy.TargetWagon.Middle;
+        if (train == null)
+        {
+            enemy.SetAtTarget(false);
+            return;
+        }
+
+        float minZ = enemy.Limits.Item1;
+        float maxZ = enemy.Limits.Item2;
+        bool insideLane = pos.z <= minZ && pos.z >= maxZ;
+        float targetX = train.x;
+        float distanceToX = Mathf.Abs(pos.x - targetX);
+        float stopDistance = 5f;
+
+        enemy.SetAtTarget(insideLane && distanceToX <= stopDistance);
+        if (enemy.TimeAtTarget >= timeBeforeLosing)
+        {
+            enemy.BeginLosing();
+            MoveLosing(enemy, pos);
             return;
         }
 
         // =========================
         // COMPORTAMIENTO NORMAL (mientras no esta perdiendo)
         // =========================
-        float minZ = enemy.Limits.Item1;
-        float maxZ = enemy.Limits.Item2;
-        bool insideLane = pos.z <= minZ && pos.z >= maxZ;
-
         if (!insideLane)
         {
             Vector3 dir = (train - pos).normalized;
@@ -43,10 +49,6 @@ public class EnemyMovementLosing : EnemyMovementSO
         }
         else
         {
-            float targetX = train.x;
-            float distanceToX = Mathf.Abs(pos.x - targetX);
-            float stopDistance = 5f;
-
             if (distanceToX <= stopDistance) return;
 
             Vector3 lateralDir = pos.x < targetX ? Vector3.right : Vector3.left;
@@ -55,6 +57,12 @@ public class EnemyMovementLosing : EnemyMovementSO
             
         }
 
+    }
+
+    private void MoveLosing(Enemy enemy, Vector3 pos)
+    {
+        Vector3 losingPos = new Vector3(pos.x - loseSpeed * Time.deltaTime, pos.y, pos.z);
+        enemy.rb.MovePosition(losingPos);
     }
 
     public override void Knockback(Enemy enemy)

@@ -45,6 +45,8 @@ public class SpawnController : MonoBehaviour
 
     private void OnEnable()
     {
+
+        ServiceLocator.Register<SpawnController>(this);
         EventBus.Subscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Subscribe<OnEnemyHitEvent>(EnemyHit);
         EventBus.Subscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
@@ -62,6 +64,7 @@ public class SpawnController : MonoBehaviour
         EventBus.Unsubscribe<OnEnemyHitEvent>(EnemyHit);
         EventBus.Unsubscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
         EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
+        ServiceLocator.Unregister<SpawnController>();
     }
 
 
@@ -97,6 +100,10 @@ public class SpawnController : MonoBehaviour
 
         int index = Random.Range(0, spawnPool.Count);
         EnemyData enemyToSpawn = spawnPool[index];
+        if (enemyToSpawn.movement is EnemyMovementSlowSO)
+        {
+            pos.x = 50f;
+        }
 
         GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
         Enemy enemy = enemyGO.GetComponent<Enemy>();
@@ -122,6 +129,11 @@ public class SpawnController : MonoBehaviour
         TrackSpawn(enemyToSpawn);
     }
 
+    public void ManualSpawnEnemy(Vector3 pos, EnemyData enemyToSpawn)
+    {
+        SpawnSingle(pos, enemyToSpawn);
+    }
+
     void TrackSpawn(EnemyData data)
     {
         if (!actualSpawnCounts.ContainsKey(data))
@@ -129,6 +141,7 @@ public class SpawnController : MonoBehaviour
         actualSpawnCounts[data]++;
 
         var counts = actualSpawnCounts.Select(kvp => $"{kvp.Key.name}: {kvp.Value}");
+        Debug.Log($"Spawned {data.name}. Current spawn counts: {string.Join(", ", counts)}");
     }
 
 

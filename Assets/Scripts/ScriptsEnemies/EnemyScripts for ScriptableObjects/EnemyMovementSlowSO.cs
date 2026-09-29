@@ -1,0 +1,43 @@
+using UnityEngine;
+
+[CreateAssetMenu(menuName = "Enemy/Movement/Slow")]
+public class EnemyMovementSlowSO : EnemyMovementSO
+{
+    [Header("Slow settings")]
+    [SerializeField] float slowSpeed = 3f;
+
+    public override void Move(Enemy enemy)
+    {
+        Vector3 pos = enemy.rb.position;
+        Vector3 nextPos = pos;
+
+        if (enemy.TargetWagon != null)
+        {
+            Vector3 train = enemy.TargetWagon.Middle;
+            float minZ = enemy.Limits.Item1;
+            float maxZ = enemy.Limits.Item2;
+            bool insideLane = pos.z <= minZ && pos.z >= maxZ;
+            Vector3 targetWithoutPositiveX = train;
+            targetWithoutPositiveX.x = Mathf.Min(pos.x, train.x);
+
+            if (insideLane)
+            {
+                float targetX = Mathf.Min(pos.x, train.x);
+                nextPos.x = Mathf.MoveTowards(pos.x, targetX, slowSpeed * Time.deltaTime);
+            }
+            else
+            {
+                targetWithoutPositiveX.z = Mathf.Clamp(train.z, maxZ, minZ);
+                nextPos = Vector3.MoveTowards(pos, targetWithoutPositiveX, slowSpeed * Time.deltaTime);
+            }
+        }
+
+        nextPos.x -= slowSpeed * Time.deltaTime;
+        enemy.rb.MovePosition(nextPos);
+    }
+
+    public override void Knockback(Enemy enemy)
+    {
+        enemy.rb.AddForce(enemy.rb.transform.forward * 10, ForceMode.Impulse);
+    }
+}

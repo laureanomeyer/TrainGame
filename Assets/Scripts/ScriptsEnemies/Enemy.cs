@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] Animator horseAnimator;
     [Header("Debug")]
     public string TargetWagonName;
+    public string dataName;
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
@@ -48,9 +49,11 @@ public class Enemy : MonoBehaviour
     public bool CanSkill => skillCooldownTimer <= 0f;
 
     public EnemySkillSO Skill => data.skill;
-
-    private float spawnTime;
-    public float TimeAlive => Time.time - spawnTime;
+    private float timeAtTarget;
+    private bool isAtTarget;
+    private bool isLosing;
+    public float TimeAtTarget => isAtTarget ? Time.time - timeAtTarget : 0f;
+    public bool IsLosing => isLosing;
     public bool IsOnPositiveZSide =>
         rb != null && rb.position.z >= 0f;
     public bool IsOnNegativeZSide =>
@@ -86,12 +89,15 @@ public class Enemy : MonoBehaviour
         attackRoutine = null;
 
         isDead = false;
+        isAtTarget = false;
+        timeAtTarget = 0f;
+        isLosing = false;
         this.data = data;
         currentHealth = MaxHealth;
-        spawnTime = Time.time;
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
 
+        dataName = data.name;
 
         if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
@@ -120,6 +126,21 @@ public class Enemy : MonoBehaviour
     public void ResetSkillCooldown(float cooldown)
     {
         skillCooldownTimer = cooldown;
+    }
+
+    public void SetAtTarget(bool atTarget)
+    {
+        if (atTarget && !isAtTarget)
+        {
+            timeAtTarget = Time.time;
+        }
+
+        isAtTarget = atTarget;
+    }
+
+    public void BeginLosing()
+    {
+        isLosing = true;
     }
 
     void Update()
