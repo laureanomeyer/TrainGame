@@ -142,6 +142,11 @@ public class PlayerBrain : MonoBehaviour
         return Instantiate(weapon, spawnPoint);
     }
 
+    public void DestroyWeapon(GameObject weapon)
+    {
+         Destroy(weapon);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         playerInteractionsController.OnTriggerEnter(other);

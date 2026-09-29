@@ -71,11 +71,17 @@ public class PlayerAttackController
     //Funcion para setear el arma equipada
     public void SetWeapon(GameObject weaponObtein)
     {
+        if(weaponItem != null)
+        {
+            brain.DestroyWeapon(weaponItem);
+        }
         weaponItem = brain.SpawnWeapon(weaponObtein);
         playerDataRef.ChangeWeaponData(weaponObtein);
         weapon = weaponItem.GetComponent<IWeapons>();
         weapon.InitializeWeapon(pool, this);
         weapon.RestockBullets();
+
+        EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 
     public void DestroyWeapon()
