@@ -10,6 +10,7 @@ public class WagonReaction : MonoBehaviour, IReactiveObject
     }
     public void OnDamage()
     {
+        AudioManager.Instance.Play("SFXWagonHit1");
         animator.SetTrigger("Damage");
     }
 }
