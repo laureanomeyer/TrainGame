@@ -187,7 +187,7 @@ public class ReorderManager : MonoBehaviour
 
         if (sold == null) return;
 
-        StoreManager.Instance.AddGold(sold.IDReference.Price * sellRefundFraction);
+        StoreManager.Instance.AddGold(Mathf.Floor(sold.IDReference.Price * sellRefundFraction));
 
         int count = trainDisplayRef.InstantiatedWagonReferences.Count;
         if (count == 0)
