@@ -181,6 +181,41 @@ public class ParticleSequenceController : MonoBehaviour
         return false;
     }
 
+    /// <summary>True si hay al menos una entrada esperando su delay o emitiendo actualmente.</summary>
+    public bool IsRunning
+    {
+        get
+        {
+            if (_activeRoutines.Count > 0) return true;
+
+            foreach (var entry in particles)
+            {
+                if (entry.particle != null && entry.particle.isPlaying) return true;
+                if (entry.visualEffect != null && entry.visualEffect.HasAnySystemAwake()) return true;
+            }
+
+            return false;
+        }
+    }
+
+    /// <summary>True si hay al menos una entrada del grupo indicado esperando su delay o emitiendo actualmente.</summary>
+    public bool IsGroupRunning(string group)
+    {
+        if (string.IsNullOrEmpty(group)) return false;
+
+        foreach (var entry in particles)
+        {
+            if (entry.group != group) continue;
+
+            if (_activeRoutines.ContainsKey(entry.id)) return true;
+            if (entry.particle != null && entry.particle.isPlaying) return true;
+            if (entry.visualEffect != null && entry.visualEffect.HasAnySystemAwake()) return true;
+        }
+
+        return false;
+    }
+
+
     // ---------- Internals ----------
 
     private void PlayEntry(ParticleEntry entry, float? overrideDelay = null)
