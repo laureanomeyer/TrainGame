@@ -33,6 +33,9 @@ public class WagonTurret : MonoBehaviour
     public Transform PlayerUsePoint => playerUsePoint;
     public Transform TurretPivot => turretPivot;
 
+    [Header("Damage")]
+    [SerializeField] private float damage = 1;
+    private float currentDamage;
 
     private void Awake()
     {
@@ -105,7 +108,10 @@ public class WagonTurret : MonoBehaviour
         );
 
         if (bulletGO.TryGetComponent(out IBullet bullet))
+        {
+            bulletType.Damage = damage;
             bullet.ResetState(bulletType);
+        }
 
         cooldownTimer = fireCooldown;
     }

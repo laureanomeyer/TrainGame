@@ -18,6 +18,10 @@ public class WagonFixedTurret : MonoBehaviour
     [SerializeField] private int defaultCapacity = 10;
     [SerializeField] private int maxSize = 30;
 
+    [Header("Damage")]
+    [SerializeField] private float damage = 1;
+    private float currentDamage;
+
     private float cooldownTimer;
     private IObjectPool<GameObject> bulletPool;
 
@@ -108,6 +112,7 @@ public class WagonFixedTurret : MonoBehaviour
         IBullet bullet = bulletGO.GetComponent<IBullet>();
         if (bullet != null)
         {
+            bulletType.Damage = damage;
             bullet.ResetState(bulletType);
         }
 
