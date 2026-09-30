@@ -7,6 +7,12 @@ using UnityEngine;
 public class CoalCollector
 {
     private float coal = 0f;
+
+    /// <summary>
+    /// only for testing purposes. If this is still here, delete it with this summary & variable
+    /// </summary>
+    private float totalCoal = 0f;
+
     public float Coal => coal;
 
     public bool HasCoal => coal > 0;
@@ -43,6 +49,10 @@ public class CoalCollector
     public void GainCoal(OnCoalEarnedEvent coalEvent)
     {
         coal += coalEvent.Amount;
+
+        //Remove this too (referring to the summary in the variable declarations)
+        totalCoal++;
+        Debug.Log(totalCoal);
 
         coalDisplayUI.text = coal.ToString();
         PlayScaleEffect();

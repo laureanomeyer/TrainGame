@@ -17,6 +17,8 @@ public class TESTLocomotiveBrain : MonoBehaviour
     [SerializeField] public Renderer locomotiveTopRender;
     [SerializeField] public MeshFilter locomotiveTopMeshFilter;
 
+    [SerializeField] private GameObject locomotiveBase;
+    [SerializeField] private GameObject locomotiveDestroy;
 
     [SerializeField] private float explosionDelayPerUnit = 0.1f;
 
@@ -56,6 +58,8 @@ public class TESTLocomotiveBrain : MonoBehaviour
         EventBus.Subscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
 
         renderController.ForceDeactivateTop();
+
+        particleSequenceController.OnGroupStarted += AssetChange;
     }
 
     private void OnDestroy()
@@ -69,6 +73,7 @@ public class TESTLocomotiveBrain : MonoBehaviour
             fuelController.Destroy();
         }
 
+        particleSequenceController.OnGroupStarted -= AssetChange;
         EventBus.Unsubscribe<OnStartFuelUseEvent>(RemoveFuelTutorial);
     }
 
@@ -96,8 +101,7 @@ public class TESTLocomotiveBrain : MonoBehaviour
         }
 
         particleSequenceController.PlayGroup(ParticleGroups.LocomotiveDestroy);
-        particleSequenceController.PlayGroup(ParticleGroups.LocomotiveDestroySmoke);
-
+        
     }
 
     void RemoveFuel()
@@ -135,6 +139,15 @@ public class TESTLocomotiveBrain : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             renderController.ActivateWagonTop();
+        }
+    }
+
+    private void AssetChange(string group)
+    {
+        if (group == ParticleGroups.Locomotive2Destroy)
+        {
+            locomotiveBase.SetActive(false);
+            locomotiveDestroy.SetActive(true);
         }
     }
 }

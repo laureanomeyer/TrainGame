@@ -18,6 +18,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     [Header("Cinematic")]
     [SerializeField] private string locomotiveAnchorKey = "Locomotive";
+    [SerializeField] private GameObject locomotiveBase;
+    [SerializeField] private GameObject locomotiveDestroy;
 
     [Header("Top Locomotive Render")]
     [SerializeField] public Renderer locomotiveTopRender;
@@ -50,7 +52,10 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
         stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
         animator = GetComponent<Animator>();
+
         particleSequence = GetComponent<ParticleSequenceController>();
+        particleSequence.OnGroupStarted += OnSecondParticle;
+
         fuelController = new LocomotiveFuel(
             EM * stats.GetStat(StatType.Defense),
             CM * stats.GetStat(StatType.MaxHp),
@@ -140,6 +145,15 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     }
 
     private void OnStatChanged(StatType type, float newValue) { }
+
+    private void OnSecondParticle(string group)
+    {
+        if (group == ParticleGroups.Locomotive2Destroy)
+        {
+            locomotiveBase.SetActive(false);
+            locomotiveDestroy.SetActive(true);
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
