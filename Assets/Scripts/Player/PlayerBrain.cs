@@ -32,10 +32,10 @@ public class PlayerBrain : MonoBehaviour
     private PlayerData playerDataRef;
 
     private bool isRepairing = false;
-    [SerializeField]private bool canAttack = true;
+    [SerializeField] private bool canAttack = true;
     private bool canInteract = true;
     private bool canRepair = true;
-    private bool higherLevelFrozen = false;
+    [SerializeField] private bool higherLevelFrozen = false;
 
     public PlayerInventory Inventory => inventory;
     public LookObjectToMouse FaceMouse => faceMouse;

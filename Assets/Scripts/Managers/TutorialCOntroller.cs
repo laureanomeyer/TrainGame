@@ -187,9 +187,9 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 17:
-                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
+                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 18
                 EventBus.Publish(new OnFreezePlayerEvent(true));
-
+                EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
                 break;
             case 18:
                 //Se prende la Ui de oro total
@@ -200,11 +200,12 @@ public class TutorialCOntroller : MonoBehaviour
             case 19:
                 //Texto sobre la tienda
                 //You can use the stored gold to buy new wagons and weapons in the stations
-
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 20:
                 //Texto final, Empezar la run
                 //Now you�re ready to take on the road!
+                EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
