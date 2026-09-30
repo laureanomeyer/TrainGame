@@ -102,6 +102,14 @@ public class BulletScript : MonoBehaviour, IBullet
             return;
         }
 
+        if (other.gameObject.TryGetComponent<IReactiveObject>(out IReactiveObject reactive))
+        {
+            // El objeto SÍ tiene la interfaz. Aquí puedes usarla directamente.
+            reactive.OnDamage();
+            Deactivate();
+            return;
+        }
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
