@@ -398,6 +398,13 @@ public class OnAdvanceTutorialStep : IGameEvent
 
     }
 }
+public class OnSkipTutorial : IGameEvent
+{
+    public OnSkipTutorial()
+    {
+
+    }
+}
 
 public class OnSetFirstHeal: IGameEvent
 {

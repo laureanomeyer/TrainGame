@@ -1,6 +1,4 @@
-using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialCOntroller : MonoBehaviour
@@ -37,6 +35,7 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Subscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
+        EventBus.Subscribe<OnSkipTutorial>(SkipTutorial);
     }
 
     private void OnDestroy()
@@ -44,6 +43,7 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Unsubscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Unsubscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Unsubscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
+        EventBus.Unsubscribe<OnSkipTutorial>(SkipTutorial);
     }
 
     private void Start()
@@ -248,6 +248,13 @@ public class TutorialCOntroller : MonoBehaviour
             return;
         }
         tutorialText.text = texts[currentStep];
+        HandleSteps(currentStep);
+    }
+
+    private void SkipTutorial(OnSkipTutorial ev)
+    {
+        if (PauseMenuManager.Instance.IsPaused) return;
+        currentStep = 21;
         HandleSteps(currentStep);
     }
 }

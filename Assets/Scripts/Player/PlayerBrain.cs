@@ -44,7 +44,7 @@ public class PlayerBrain : MonoBehaviour
     public bool IsRepairing => isRepairing;
     public bool CanRepair => canRepair;
     public bool CanInteract => canInteract;
-    void Awake() 
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -125,13 +125,12 @@ public class PlayerBrain : MonoBehaviour
         EventBus.Publish(new OnAdvanceTutorialStepByClick());
     }
 
-    private void OnSkipTutorial(InputAction.CallbackContext ctx)
+    public void OnSkipTutorial(InputValue value)
     {
-        if (ctx.performed)
-        {
-            Debug.Log("Holdeado!");
-            //EventBus.Publish(new OnForceTutorialStepEvent(17));
-        }
+
+        EventBus.Publish(new OnSkipTutorial());
+        //EventBus.Publish(new OnForceTutorialStepEvent(17));
+
     }
 
     private void OnSkipScene()
@@ -151,7 +150,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void DestroyWeapon(GameObject weapon)
     {
-         Destroy(weapon);
+        Destroy(weapon);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -211,7 +210,7 @@ public class PlayerBrain : MonoBehaviour
     {
         SetIsRepairing(false);
 
-        if(higherLevelFrozen) return;
+        if (higherLevelFrozen) return;
 
         playerMovementController.SetCanMove(true);
         playerMovementController.SetCanRotate(true);
