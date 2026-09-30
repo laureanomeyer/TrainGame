@@ -72,6 +72,8 @@ public class ParticleSequenceController : MonoBehaviour
     private Dictionary<string, Coroutine> _activeRoutines;
     private Dictionary<string, GroupSettings> _groupSettings;
 
+    public event Action<string> OnGroupStarted;
+
     private void Awake()
     {
         _lookup = new Dictionary<string, ParticleEntry>(particles.Count);
@@ -131,9 +133,9 @@ public class ParticleSequenceController : MonoBehaviour
         if (string.IsNullOrEmpty(group)) return;
 
         float stagger = 0f;
-        float groupDelay = 0f;  
+        float groupDelay = 0f;
 
-        if(_groupSettings.TryGetValue(group, out var settings))
+        if (_groupSettings.TryGetValue(group, out var settings))
         {
             stagger = settings.staggerInterval;
             groupDelay = settings.delayBeforeGroup;
@@ -149,6 +151,8 @@ public class ParticleSequenceController : MonoBehaviour
             PlayEntry(entry, effectiveDelay);
             index++;
         }
+
+        OnGroupStarted?.Invoke(group);
     }
 
     /// <summary>Detiene una entrada puntual (cancela su delay pendiente si lo tenía).</summary>
