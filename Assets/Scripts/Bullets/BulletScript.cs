@@ -106,8 +106,10 @@ public class BulletScript : MonoBehaviour, IBullet
         {
             // El objeto SÍ tiene la interfaz. Aquí puedes usarla directamente.
             reactive.OnDamage();
-            Deactivate();
-            return;
+            if (destroyOnEnemy)
+            {
+                Deactivate();
+            }
         }
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
