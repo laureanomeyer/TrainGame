@@ -58,6 +58,7 @@ public class MainMenuButtons : MonoBehaviour
 
     private void SetMasterVolume(float volume)
     {
+        volume = Mathf.Clamp01(volume);
         AudioListener.volume = volume;
 
         PlayerPrefs.SetFloat("MasterVolume", volume);
@@ -66,18 +67,28 @@ public class MainMenuButtons : MonoBehaviour
 
     private void SetMusicVolume(float volume)
     {
+        volume = Mathf.Clamp01(volume);
+
         if (MusicManager.Instance != null)
         {
             MusicManager.Instance.SetVolume(volume);
         }
+
+        PlayerPrefs.SetFloat("MusicVolume", volume);
+        PlayerPrefs.Save();
     }
 
     private void SetSFXVolume(float volume)
     {
+        volume = Mathf.Clamp01(volume);
+
         if (AudioManager.Instance != null)
         {
             AudioManager.Instance.SetSFXVolume(volume);
         }
+
+        PlayerPrefs.SetFloat("SFXVolume", volume);
+        PlayerPrefs.Save();
     }
 
     private void OnDestroy()
