@@ -28,6 +28,8 @@ public class HeavyDrumBrain : WagonBrain
                 {
                     weaponBuffer.BufferDamage(damageUpgrade);
                 }
+
+                renderController.DeactivateWagonTop();
             }
         }
     }
@@ -49,6 +51,8 @@ public class HeavyDrumBrain : WagonBrain
                     weaponBuffer.DebuffDamage();
                 }
             }
+
+            renderController.ActivateWagonTop();
         }
     }
 }

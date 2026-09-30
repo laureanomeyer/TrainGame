@@ -29,6 +29,8 @@ public class FastDrumBrain : WagonBrain
                     weaponBuffer.BufferRoF(rofUpgrade);
                 }
             }
+
+            renderController.DeactivateWagonTop();
         }
     }
 
@@ -49,6 +51,8 @@ public class FastDrumBrain : WagonBrain
                     weaponBuffer.DebuffRoF();
                 }
             }
+
+            renderController.ActivateWagonTop();
         }
     }
 }
