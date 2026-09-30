@@ -57,11 +57,17 @@ public class ParticleSequenceController : MonoBehaviour
         [GroupNameSuggest]
         public string group;
 
-        [Min(0f), Tooltip("Segundos que se suman de delay entre cada entrada consecutiva del grupo, según su orden en la lista.")]
+        [Min(0f)]
         public float staggerInterval = 0f;
 
-        [Min(0f), Tooltip("Delay adicional antes de que arranque este grupo entero. Útil para escalonar un grupo respecto a otro cuando ambos se llaman en el mismo frame (ej. 'humo' arranca 1.5s después que 'explosion').")]
+        [Min(0f)]
         public float delayBeforeGroup = 0f;
+
+        public UnityEvent onGroupStarted;
+
+        [Tooltip("Opcional. Nombre de otro grupo que se dispara automáticamente cuando este termina (delays + emisión completados). Dejar vacío si no encadena con nada.")]
+        [GroupNameSuggest]
+        public string nextGroup;
     }
 
     [SerializeField] private List<ParticleEntry> particles = new();
@@ -73,6 +79,7 @@ public class ParticleSequenceController : MonoBehaviour
     private Dictionary<string, GroupSettings> _groupSettings;
 
     public event Action<string> OnGroupStarted;
+    public event Action<string> OnGroupCompleted;
 
     private void Awake()
     {
@@ -142,6 +149,7 @@ public class ParticleSequenceController : MonoBehaviour
         }
 
         int index = 0;
+        bool anyEntry = false;
 
         foreach (var entry in particles)
         {
@@ -150,9 +158,13 @@ public class ParticleSequenceController : MonoBehaviour
             float effectiveDelay = groupDelay + entry.delay + index * stagger;
             PlayEntry(entry, effectiveDelay);
             index++;
+            anyEntry = true;
         }
 
         OnGroupStarted?.Invoke(group);
+
+        if (anyEntry)
+            StartCoroutine(NotifyWhenGroupCompletes(group));
     }
 
     /// <summary>Detiene una entrada puntual (cancela su delay pendiente si lo tenía).</summary>
@@ -287,5 +299,14 @@ public class ParticleSequenceController : MonoBehaviour
         {
             entry.visualEffect.Stop();
         }
+    }
+    private IEnumerator NotifyWhenGroupCompletes(string group)
+    {
+        yield return new WaitUntil(() => !IsGroupRunning(group));
+
+        OnGroupCompleted?.Invoke(group);
+
+        if (_groupSettings.TryGetValue(group, out var settings) && !string.IsNullOrEmpty(settings.nextGroup))
+            PlayGroup(settings.nextGroup);
     }
 }
