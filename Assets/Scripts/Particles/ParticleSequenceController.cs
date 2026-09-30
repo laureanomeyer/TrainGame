@@ -71,8 +71,6 @@ public class ParticleSequenceController : MonoBehaviour
     private Dictionary<string, float> _groupStagger;
     private Dictionary<string, Coroutine> _activeRoutines;
     private Dictionary<string, GroupSettings> _groupSettings;
-    private readonly Dictionary<float, WaitForSeconds> _waitCache = new();
-    private readonly Dictionary<float, WaitForSecondsRealtime> _waitRealtimeCache = new();
 
     private void Awake()
     {
@@ -206,7 +204,11 @@ public class ParticleSequenceController : MonoBehaviour
 
     private IEnumerator PlayDelayed(ParticleEntry entry, float delay)
     {
-        yield return GetWait(delay, entry.useUnscaledTime);
+        if (entry.useUnscaledTime)
+            yield return new WaitForSecondsRealtime(delay);
+        else
+            yield return new WaitForSeconds(delay);
+
         FireEntry(entry);
         _activeRoutines.Remove(entry.id);
     }
@@ -246,25 +248,5 @@ public class ParticleSequenceController : MonoBehaviour
         {
             entry.visualEffect.Stop();
         }
-    }
-
-    private object GetWait(float seconds, bool unscaled)
-    {
-        if (unscaled)
-        {
-            if (!_waitRealtimeCache.TryGetValue(seconds, out var waitRt))
-            {
-                waitRt = new WaitForSecondsRealtime(seconds);
-                _waitRealtimeCache[seconds] = waitRt;
-            }
-            return waitRt;
-        }
-
-        if (!_waitCache.TryGetValue(seconds, out var wait))
-        {
-            wait = new WaitForSeconds(seconds);
-            _waitCache[seconds] = wait;
-        }
-        return wait;
     }
 }
