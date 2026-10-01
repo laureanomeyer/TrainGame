@@ -20,7 +20,7 @@ public class Dynamite : MonoBehaviour
         damage = dmg;
         adjacentDamageMultiplier = adjacentMult;
 
-        mover = new ArcMover(transform.position, target.Head, speed, arcHeight);
+        mover = new ArcMover(transform.position, target.Middle, speed, arcHeight);
     }
 
     void Update()

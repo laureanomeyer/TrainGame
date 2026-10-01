@@ -7,15 +7,15 @@ public class ManualSpawn : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float spawnAtProgress;
 
     private SpawnController spawnController;
-    private SceneRunController sceneRunController;
+    private SessionConfig sessionConfig;
     private bool hasSpawned;
 
     private void Start()
     {
         spawnController = ServiceLocator.Get<SpawnController>();
-        sceneRunController = ServiceLocator.Get<SceneRunController>();
+        sessionConfig = ServiceLocator.Get<SessionConfig>();
 
-        if (sceneRunController == null)
+        if (sessionConfig == null)
         {
             Debug.LogError("ManualSpawn requires a SceneRunController in the scene.", this);
             enabled = false;
@@ -24,7 +24,7 @@ public class ManualSpawn : MonoBehaviour
 
     private void Update()
     {
-        if (hasSpawned || sceneRunController.Progress < spawnAtProgress)
+        if (hasSpawned || sessionConfig.RunDurantion < spawnAtProgress)
             return;
 
         hasSpawned = true;
