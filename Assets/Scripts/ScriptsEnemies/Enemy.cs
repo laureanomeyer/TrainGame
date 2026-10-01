@@ -14,6 +14,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] Animator cowboyAnimator;
     [SerializeField] Animator horseAnimator;
     [Header("Debug")]
+    [SerializeField] private EnemyMovementSO endMovement;
+
     public string TargetWagonName;
     public string dataName;
     private EnemyData data;
@@ -26,7 +28,7 @@ public class Enemy : MonoBehaviour
     private TrainRanges trainRanges;
     private (float, float) limits;
     public EnemyWeapon Weapon;
-    public EnemyMovementSO Movement => data.movement;
+    public EnemyMovementSO Movement {get ; private set;} 
     public EnemyAttackSO Attack => data.attack;
     public EnemyBrainSO Brain => data.brain;
     public Rigidbody rb;
@@ -65,6 +67,8 @@ public class Enemy : MonoBehaviour
 
     int rightLayerIndex;
     int leftLayerIndex;
+
+
     void Awake()
     {
         Weapon = GetComponentInChildren<EnemyWeapon>();
@@ -76,11 +80,14 @@ public class Enemy : MonoBehaviour
 
         EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Subscribe<OnWagonDestroyedEvent>(RetargetWagon);
+        EventBus.Subscribe<OnRunEndedEvent>(ChangeMovement);
     }
     void OnDestroy()
     {
         EventBus.Unsubscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Unsubscribe<OnWagonDestroyedEvent>(RetargetWagon);
+        EventBus.Unsubscribe<OnRunEndedEvent>(ChangeMovement);
+
     }
 
     public void Initialize(EnemyData data)
@@ -93,6 +100,8 @@ public class Enemy : MonoBehaviour
         timeAtTarget = 0f;
         isLosing = false;
         this.data = data;
+
+        Movement = data.movement;
         currentHealth = MaxHealth;
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
@@ -176,6 +185,12 @@ public class Enemy : MonoBehaviour
         {
             targetWagon = Brain.ReTarget(ev.WagonInstance);
         }
+    }
+
+    public void ChangeMovement(OnRunEndedEvent ev)
+    {
+        Debug.Log($"Changing movement for {dataName} to end movement");
+        Movement = endMovement;
     }
 
     #endregion

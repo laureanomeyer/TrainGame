@@ -217,10 +217,17 @@ public class TutorialCOntroller : MonoBehaviour
             case 21:
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnEnableGoldBoxEvent(true));
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
                 EventBus.Publish(new OnSetTimerStartedEvent(true));
                 EventBus.Publish(new OnSetTutorialVisibleEvent(false));
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnSetShieldsActiveEvent(true));
+
+                fuelUi.alpha = 1f;
+                shieldsUi.alpha = 1f;
+                goldHpUi.alpha = 1f;
+                goldAmountUi.alpha = 1f;
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;
 
@@ -253,6 +260,7 @@ public class TutorialCOntroller : MonoBehaviour
 
     private void SkipTutorial(OnSkipTutorial ev)
     {
+
         if (PauseMenuManager.Instance.IsPaused) return;
         currentStep = 21;
         HandleSteps(currentStep);
