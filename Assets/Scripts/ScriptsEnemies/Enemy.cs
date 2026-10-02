@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     public EnemyBrainSO Brain => data.brain;
     public Rigidbody rb;
     BoxCollider boxCollider;
-    public float Speed => data.speed;
+    public float Speed => data.movement.speed;
     public float MaxHealth => data.health;
     public float Damage => data.damage;
     public float Cooldown => data.attackCooldown;
@@ -41,7 +41,7 @@ public class Enemy : MonoBehaviour
     public IWagon TargetWagon => targetWagon;
     public EnemyData Data => data;
 
-    public float Range => data.range;
+    public float Range => (float)data.rangeType;
     public (float, float) Limits => limits;
 
     float attackCooldownTimer;

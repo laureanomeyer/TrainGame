@@ -15,10 +15,9 @@ public enum DropType {Gold, Coal}
 public class EnemyData : ScriptableObject
 {
     public float health;
-    public float speed;
+    //public readonly float speed = 10;
     public float damage;
     public float attackCooldown;
-    public float range;
 
     public RangeType rangeType;
     public WagonType targetPreference;
@@ -43,24 +42,6 @@ public class EnemyData : ScriptableObject
 
     private void OnValidate()
     {
-        ApplyRangePreset();
     }
 
-    private void ApplyRangePreset()
-    {
-        switch (rangeType)
-        {
-            case RangeType.Close:
-                range = (float)RangeType.Close;
-                break;
-
-            case RangeType.Medium:
-                range = (float)RangeType.Medium;
-                break;
-
-            case RangeType.Long:
-                range = (float)RangeType.Long;
-                break;
-        }
-    }
 }

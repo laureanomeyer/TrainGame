@@ -102,7 +102,12 @@ public class SpawnController : MonoBehaviour
         EnemyData enemyToSpawn = spawnPool[index];
         if (enemyToSpawn.movement is EnemyMovementSlowSO)
         {
-            pos.x = 50f;
+            pos.x = 60f;
+            if (pos.z < 0) 
+            {pos.z = Random.Range(-35,-50);}
+            else 
+            {pos.z = Random.Range(35,50); }
+            
         }
 
         GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
@@ -154,7 +159,7 @@ public class SpawnController : MonoBehaviour
 
         for (int i = 0; i < currentlevelData.MaxHordeSpawn; i++)
         {
-            if (IsOutsideCamera(spawnPos))
+            if (CameraView.IsOutsideCamera(spawnPos, cam))
             {
                 Spawn(spawnPos);
                 spawnPos = spawnZone.GetRandomPoint(positive, negative);
@@ -195,15 +200,7 @@ public class SpawnController : MonoBehaviour
         spawnInterval = currentlevelData.spawnInterval;
     }
 
-    bool IsOutsideCamera(Vector3 worldPos)
-    {
-        Vector3 vp = cam.WorldToViewportPoint(worldPos);
-
-        return
-            vp.x < 0 || vp.x > 1 ||
-            vp.y < 0 || vp.y > 1 ||
-            vp.z < 0;
-    }
+    
 
     void SpawCoin(Vector3 position, Transform goTo)
     {
