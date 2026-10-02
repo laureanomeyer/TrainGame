@@ -55,9 +55,13 @@ public class LocomotiveFuel
         trainDataRef = ServiceLocator.Get<TrainData>();
         trainDataRef.SetSpeed(actualSpeed);
 
-        EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
-        EventBus.Subscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
-        EventBus.Subscribe<OnSetFirstHeal>(SetFirstHeal);
+        if (GameManager.Instance.IsTutorial)
+        {
+            EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
+            EventBus.Subscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
+            EventBus.Subscribe<OnSetFirstHeal>(SetFirstHeal);
+            EventBus.Subscribe<OnSetTimerStartedEvent>(ResetMaxHp);
+        }
 
         canConsume = !GameManager.Instance.IsTutorial;
         shieldsActive = !GameManager.Instance.IsTutorial;
@@ -69,9 +73,14 @@ public class LocomotiveFuel
 
     public void Destroy()
     {
-        EventBus.Unsubscribe<OnSetCanConsumeEvent>(SetCanConsume);
-        EventBus.Unsubscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
-        EventBus.Unsubscribe<OnSetFirstHeal>(SetFirstHeal);
+        if (GameManager.Instance.IsTutorial)
+        {
+            EventBus.Unsubscribe<OnSetCanConsumeEvent>(SetCanConsume);
+            EventBus.Unsubscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
+            EventBus.Unsubscribe<OnSetFirstHeal>(SetFirstHeal);
+            EventBus.Unsubscribe<OnSetTimerStartedEvent>(ResetMaxHp);
+        }
+
         OnDestroyed = null;
     }
 
@@ -194,7 +203,6 @@ public class LocomotiveFuel
             if (GameManager.Instance.IsTutorial && !firstHeal && currentShield == maxShield)
             {
                 firstHeal = true;
-                EventBus.Publish(new OnAdvanceTutorialStep());
             }
         }
         else
@@ -231,5 +239,15 @@ public class LocomotiveFuel
     private void SetFirstHeal(OnSetFirstHeal ev)
     {
         firstHeal = ev.active;
+    }
+
+    private void ResetMaxHp(OnSetTimerStartedEvent ev)
+    {
+        if (ev.Can)
+        {
+            currentMaxFuel = fuelMaxCapacity;
+            currentFuel = fuelMaxCapacity;
+        }
+
     }
 }

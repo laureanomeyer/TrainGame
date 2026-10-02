@@ -9,7 +9,7 @@ public class Coal : MonoBehaviour
 
     public void SetTarget(Transform targetTRF)
     {
-        mover = new ArcMover(transform.position, targetTRF, speed, arcHeight);
+        mover = new ArcMover(transform.position, targetTRF.position, speed, arcHeight);
     }
 
     void Update()

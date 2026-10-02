@@ -15,10 +15,12 @@ public class OnGoldEarnedEvent : IGameEvent
 public class OnCoalEarnedEvent : IGameEvent
 {
     public float Amount;
+    public bool Set;
 
-    public OnCoalEarnedEvent(float amount)
+    public OnCoalEarnedEvent(float amount, bool Set = false)
     {
         Amount = amount;
+        this.Set = Set;
     }
 
 }
@@ -36,10 +38,12 @@ public class OnGoldBoxChangedEvent : IGameEvent
 public class OnShootEvent : IGameEvent
 {
     public float RateOfFire;
+    public float ShotStrenght;
 
-    public OnShootEvent(float rateOfFire)
+    public OnShootEvent(float rateOfFire, float shotStrenght = 1)
     {
         RateOfFire = rateOfFire;
+        ShotStrenght = shotStrenght;
     }
 }
 
@@ -339,6 +343,7 @@ public class OnRunEndedEvent : IGameEvent
     public RunResult Result;
     public OnRunEndedEvent(RunResult result) 
     {
+        Debug.Log($"Run ended with result: {result}");
         Result = result;
     }
 }
@@ -394,6 +399,13 @@ public class OnAdvanceTutorialStepByClick : IGameEvent
 public class OnAdvanceTutorialStep : IGameEvent
 {
     public OnAdvanceTutorialStep()
+    {
+
+    }
+}
+public class OnSkipTutorial : IGameEvent
+{
+    public OnSkipTutorial()
     {
 
     }

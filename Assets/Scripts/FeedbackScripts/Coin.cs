@@ -15,7 +15,7 @@ public class Coin : MonoBehaviour
 
     public void SetTarget(Transform targetTRF)
     {
-        mover = new ArcMover(transform.position, targetTRF, speed, arcHeight);
+        mover = new ArcMover(transform.position, targetTRF.position, speed, arcHeight);
 
         if(tr == null)
         {

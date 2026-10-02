@@ -178,7 +178,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
             if (IsReloading) return;
 
             Shoot();
-            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnShootEvent(rateOfFire, 10));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
         }

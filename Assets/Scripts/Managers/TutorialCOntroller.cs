@@ -1,6 +1,4 @@
-using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialCOntroller : MonoBehaviour
@@ -37,6 +35,7 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Subscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
+        EventBus.Subscribe<OnSkipTutorial>(SkipTutorial);
     }
 
     private void OnDestroy()
@@ -44,6 +43,7 @@ public class TutorialCOntroller : MonoBehaviour
         EventBus.Unsubscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Unsubscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Unsubscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
+        EventBus.Unsubscribe<OnSkipTutorial>(SkipTutorial);
     }
 
     private void Start()
@@ -171,6 +171,7 @@ public class TutorialCOntroller : MonoBehaviour
                 //You won�t be able to hold gold as long as the wagon is broken, try fixing it.
                 //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
                 //Evento enemigo dejar de disparar
+                EventBus.Publish(new OnSetEnemiesFlags(false));
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndMoveable));
                 break;
@@ -187,9 +188,9 @@ public class TutorialCOntroller : MonoBehaviour
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 17:
-                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 15
+                //Se descongela al player y aparece la Ui de oro sobre la bolsa, se recoje y se deposita, al depositar SE AVANZA AL 18
                 EventBus.Publish(new OnFreezePlayerEvent(true));
-
+                EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
                 break;
             case 18:
                 //Se prende la Ui de oro total
@@ -200,26 +201,42 @@ public class TutorialCOntroller : MonoBehaviour
             case 19:
                 //Texto sobre la tienda
                 //You can use the stored gold to buy new wagons and weapons in the stations
-
+                EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
                 break;
             case 20:
                 //Texto final, Empezar la run
                 //Now you�re ready to take on the road!
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnEnableGoldBoxEvent(true));
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
                 EventBus.Publish(new OnSetTimerStartedEvent(true));
                 EventBus.Publish(new OnSetTutorialVisibleEvent(false));
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnSetShieldsActiveEvent(true));
+
+                fuelUi.alpha = 1f;
+                shieldsUi.alpha = 1f;
+                goldHpUi.alpha = 1f;
+                goldAmountUi.alpha = 1f;
+
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;
             case 21:
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnEnableGoldBoxEvent(true));
                 EventBus.Publish(new OnSetCanConsumeEvent(true));
                 EventBus.Publish(new OnSetTimerStartedEvent(true));
                 EventBus.Publish(new OnSetTutorialVisibleEvent(false));
                 EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnSetShieldsActiveEvent(true));
+
+                fuelUi.alpha = 1f;
+                shieldsUi.alpha = 1f;
+                goldHpUi.alpha = 1f;
+                goldAmountUi.alpha = 1f;
+
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;
 
@@ -247,6 +264,14 @@ public class TutorialCOntroller : MonoBehaviour
             return;
         }
         tutorialText.text = texts[currentStep];
+        HandleSteps(currentStep);
+    }
+
+    private void SkipTutorial(OnSkipTutorial ev)
+    {
+
+        if (PauseMenuManager.Instance.IsPaused) return;
+        currentStep = 21;
         HandleSteps(currentStep);
     }
 }

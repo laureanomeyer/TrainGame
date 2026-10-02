@@ -28,10 +28,13 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
     [Header("Legacy data UI")]
     [SerializeField] private TextMeshProUGUI legacyName;
-    [SerializeField] private GameObject legacyStar;
+    [SerializeField] private CanvasGroup legacyStar;
+    [SerializeField] private TextMeshProUGUI legacyUnlockCondition;
     [SerializeField] private TextMeshProUGUI legacyDescription;
+    [SerializeField] private CanvasGroup legacyLocked;
 
     [SerializeField] private Button buyButton;
+
     public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
     public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
     private WeaponShopButtonManager buttonManager;
@@ -166,16 +169,26 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
             WeaponWithLegacyInStockSO legacyWeapon = stockInfo as WeaponWithLegacyInStockSO;
 
             legacyName.text = legacyWeapon.legacyName;
-            legacyDescription.text = legacyWeapon.legacyDescription + "\n \n" + legacyWeapon.legacyUnlockDescription;
+            legacyUnlockCondition.text = legacyWeapon.legacyUnlockDescription;
+            legacyDescription.text = legacyWeapon.legacyDescription;
 
-            legacyStar.SetActive(legacyWeapon.CheckUnlockLegacy());
+            if (legacyWeapon.CheckUnlockLegacy())
+            {
+                legacyStar.alpha = 1f;
+                legacyLocked.alpha = 0f;
+            }
+            else
+            {
+                legacyStar.alpha = 0f;
+                legacyLocked.alpha = 1f;
+            }
         }
         else
         {
-            legacyName.text = "";
-            legacyDescription.text = "";
+            legacyName.text = "Basic";
+            legacyUnlockCondition.text = "This weapon does not have a legacy";
 
-            legacyStar.SetActive(false);
+            legacyStar.alpha = 0f;
         }
     }
 

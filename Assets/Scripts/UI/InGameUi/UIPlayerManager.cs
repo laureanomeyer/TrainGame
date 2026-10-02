@@ -16,7 +16,6 @@ public class UIPlayerManager : MonoBehaviour
 
     [Header("Shields UI")]
     [SerializeField] private Image shieldImage;
-    //[SerializeField] private GameObject shieldIndicator;
 
     [Header("GoldWagon UI")]
     [SerializeField] private Image goldenWagonHp;
@@ -87,22 +86,19 @@ public class UIPlayerManager : MonoBehaviour
 
             var currentShield = locomotive.fuelController.CurrentShield / locomotive.fuelController.MaxShield;
             lerpedShield = Mathf.MoveTowards(lerpedShield, currentShield, Time.deltaTime);
-            //shieldIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedShield));
             shieldImage.fillAmount = lerpedShield;
 
             var currentFuel = locomotive.fuelController.CurrentFuel / locomotive.fuelController.FuelMaxCapaciy;
             lerpedFuel = Mathf.MoveTowards(lerpedFuel, currentFuel, Time.deltaTime);
-            fuelIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -80, lerpedFuel));
+            fuelIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(80, -80, lerpedFuel));
 
             var currentCapacity = locomotive.fuelController.CurrentMaxFuel / locomotive.fuelController.FuelMaxCapaciy;
             lerpedCapacity = Mathf.MoveTowards(lerpedCapacity, currentCapacity, Time.deltaTime);
             fuelImage.fillAmount = lerpedCapacity;
-            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(90, -90, lerpedCapacity));
+            fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(80, -80, lerpedCapacity));
 
             if (goldenWagonHpController != null)
             {
-                //if (goldenWagonHp == null) return;
-
                 var currentGoldenWagonHp = goldenWagonHpController.CurrentHp / goldenWagonHpController.MaxHp;
                 lerpedGoldCapacity = Mathf.MoveTowards(lerpedGoldCapacity, currentGoldenWagonHp, Time.deltaTime);
 
