@@ -1,16 +1,20 @@
 using TMPro;
+using DG.Tweening;
 using UnityEngine;
 
 public class TutorialTextUI : MonoBehaviour
 {
-    [SerializeField] private GameObject textContainer;
+    [SerializeField] private CanvasGroup textContainer;
     [SerializeField] private TMP_Text tutorialText;
+
+    private Vector3 initialScale;
 
     private void Awake()
     {
         if (textContainer != null)
         {
-            textContainer.SetActive(false);
+            textContainer.alpha = 0f;
+            initialScale = textContainer.transform.localScale;
         }
     }
 
@@ -43,6 +47,17 @@ public class TutorialTextUI : MonoBehaviour
 
     private void SetVisible(bool show)
     {
-        textContainer.SetActive(show);
+        if (show)
+        {
+            textContainer.alpha = 1f;
+            textContainer.transform.DOScale(initialScale, 0.5f).SetEase(Ease.OutBounce);
+        }
+
+        else
+        {
+            textContainer.alpha = 0f;
+            textContainer.transform.DOScale(0.8f, 0.2f);
+        }
+
     }
 }
