@@ -50,11 +50,18 @@ public class CoalCollector
 
     public void GainCoal(OnCoalEarnedEvent coalEvent)
     {
-        coal += coalEvent.Amount;
+        if (!coalEvent.Set)
+        {
+            coal += coalEvent.Amount;
 
-        //Remove this too (referring to the summary in the variable declarations)
-        totalCoal++;
-        Debug.Log(totalCoal);
+            totalCoal++;
+            Debug.Log("Total coal: " +  coal);
+
+        }
+        else 
+        {
+            coal = coalEvent.Amount;
+        }
 
         coalDisplayUI.text = coal.ToString();
         PlayScaleEffect();
@@ -121,6 +128,6 @@ public class CoalCollector
 
     private void GiveSigleCoal(OnSetTimerStartedEvent ev)
     {
-        if (ev.Can) EventBus.Publish(new OnCoalEarnedEvent(1f));
+        if (ev.Can) EventBus.Publish(new OnCoalEarnedEvent(1f, true));
     }
 }

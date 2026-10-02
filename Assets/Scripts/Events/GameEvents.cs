@@ -15,10 +15,12 @@ public class OnGoldEarnedEvent : IGameEvent
 public class OnCoalEarnedEvent : IGameEvent
 {
     public float Amount;
+    public bool Set;
 
-    public OnCoalEarnedEvent(float amount)
+    public OnCoalEarnedEvent(float amount, bool Set = false)
     {
         Amount = amount;
+        this.Set = Set;
     }
 
 }

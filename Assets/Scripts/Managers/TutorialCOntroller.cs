@@ -171,6 +171,7 @@ public class TutorialCOntroller : MonoBehaviour
                 //You won�t be able to hold gold as long as the wagon is broken, try fixing it.
                 //Se descongela al player, aparece la ui de reparar sobre el vagon de oro, se mata al enemigo. Al llegar el oro a la caja se avanza al 13
                 //Evento enemigo dejar de disparar
+                EventBus.Publish(new OnSetEnemiesFlags(false));
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndMoveable));
                 break;
@@ -222,7 +223,6 @@ public class TutorialCOntroller : MonoBehaviour
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;
             case 21:
-                EventBus.Publish(new OnStartFuelUseEvent());
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
                 EventBus.Publish(new OnEnableGoldBoxEvent(true));
