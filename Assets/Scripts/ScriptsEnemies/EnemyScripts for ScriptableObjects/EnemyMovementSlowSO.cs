@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Movement/Slow")]
 public class EnemyMovementSlowSO : EnemyMovementSO
 {
-    [Header("Slow settings")]
-    [SerializeField] float slowSpeed = 3f;
-
     public override void Move(Enemy enemy)
     {
         Vector3 pos = enemy.rb.position;
@@ -23,16 +20,16 @@ public class EnemyMovementSlowSO : EnemyMovementSO
             if (insideLane)
             {
                 float targetX = Mathf.Min(pos.x, train.x);
-                nextPos.x = Mathf.MoveTowards(pos.x, targetX, slowSpeed * Time.deltaTime);
+                nextPos.x = Mathf.MoveTowards(pos.x, targetX, speed * Time.deltaTime);
             }
             else
             {
                 targetWithoutPositiveX.z = Mathf.Clamp(train.z, maxZ, minZ);
-                nextPos = Vector3.MoveTowards(pos, targetWithoutPositiveX, slowSpeed * Time.deltaTime);
+                nextPos = Vector3.MoveTowards(pos, targetWithoutPositiveX, speed * Time.deltaTime);
             }
         }
 
-        nextPos.x -= slowSpeed * Time.deltaTime;
+        nextPos.x -= speed * Time.deltaTime;
         enemy.rb.MovePosition(nextPos);
     }
 
