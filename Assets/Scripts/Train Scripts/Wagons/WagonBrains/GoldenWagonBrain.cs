@@ -20,7 +20,6 @@ public class GoldenWagonBrain : WagonBrain
     private float openRotation;
     private float fixedY;
     private float fixedZ;
-    private bool tutorialTargetAssigned;
     private bool firstRepair = false;
 
     private void Awake()
@@ -89,7 +88,7 @@ public class GoldenWagonBrain : WagonBrain
         float targetX = Mathf.Lerp(closedRotation, openRotation, t);
 
         Quaternion targetRotation = Quaternion.Euler(targetX, fixedY, fixedZ);
-        backDoor.localRotation = Quaternion.RotateTowards(backDoor.localRotation, targetRotation, 30f);
+        backDoor.localRotation = Quaternion.RotateTowards(backDoor.localRotation, targetRotation, 180f);
     }
     public void setGoldCoins(float currentGold, float maxGold)
     {

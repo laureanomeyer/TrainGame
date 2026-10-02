@@ -36,10 +36,12 @@ public class OnGoldBoxChangedEvent : IGameEvent
 public class OnShootEvent : IGameEvent
 {
     public float RateOfFire;
+    public float ShotStrenght;
 
-    public OnShootEvent(float rateOfFire)
+    public OnShootEvent(float rateOfFire, float shotStrenght = 1)
     {
         RateOfFire = rateOfFire;
+        ShotStrenght = shotStrenght;
     }
 }
 

@@ -205,16 +205,6 @@ public class TutorialCOntroller : MonoBehaviour
             case 20:
                 //Texto final, Empezar la run
                 //Now you�re ready to take on the road!
-                EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
-                EventBus.Publish(new OnFreezePlayerEvent(true));
-                EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
-                EventBus.Publish(new OnSetCanConsumeEvent(true));
-                EventBus.Publish(new OnSetTimerStartedEvent(true));
-                EventBus.Publish(new OnSetTutorialVisibleEvent(false));
-                EventBus.Publish(new OnSetAttackEnabledEvent(true));
-                PlayerPrefs.SetInt("TutorialCompleted", 1);
-                break;
-            case 21:
                 EventBus.Publish(new OnFreezePlayerEvent(true));
                 EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
                 EventBus.Publish(new OnEnableGoldBoxEvent(true));
@@ -228,6 +218,25 @@ public class TutorialCOntroller : MonoBehaviour
                 shieldsUi.alpha = 1f;
                 goldHpUi.alpha = 1f;
                 goldAmountUi.alpha = 1f;
+
+                PlayerPrefs.SetInt("TutorialCompleted", 1);
+                break;
+            case 21:
+                EventBus.Publish(new OnStartFuelUseEvent());
+                EventBus.Publish(new OnFreezePlayerEvent(true));
+                EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
+                EventBus.Publish(new OnEnableGoldBoxEvent(true));
+                EventBus.Publish(new OnSetCanConsumeEvent(true));
+                EventBus.Publish(new OnSetTimerStartedEvent(true));
+                EventBus.Publish(new OnSetTutorialVisibleEvent(false));
+                EventBus.Publish(new OnSetAttackEnabledEvent(true));
+                EventBus.Publish(new OnSetShieldsActiveEvent(true));
+
+                fuelUi.alpha = 1f;
+                shieldsUi.alpha = 1f;
+                goldHpUi.alpha = 1f;
+                goldAmountUi.alpha = 1f;
+
                 PlayerPrefs.SetInt("TutorialCompleted", 1);
                 break;
 

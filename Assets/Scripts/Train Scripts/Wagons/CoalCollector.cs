@@ -35,12 +35,14 @@ public class CoalCollector
         originalFontSize = coalDisplayUI.fontSize;
         EventBus.Subscribe<OnCoalEarnedEvent>(GainCoal);
         EventBus.Subscribe<OnTakeCoalEvent>(GiveCoal);
+        EventBus.Subscribe<OnSetTimerStartedEvent>(GiveSigleCoal);
     }
 
     public void ActivateOnDestroy()
     {
         EventBus.Unsubscribe<OnCoalEarnedEvent>(GainCoal);
         EventBus.Unsubscribe<OnTakeCoalEvent>(GiveCoal);
+        EventBus.Unsubscribe<OnSetTimerStartedEvent>(GiveSigleCoal);
 
         cts?.Cancel();
         cts?.Dispose();
@@ -79,7 +81,7 @@ public class CoalCollector
     {
         if (coal > 0)
         {
-            coal -=1;
+            coal -= 1;
         }
         coalDisplayUI.text = coal.ToString();
     }
@@ -115,5 +117,10 @@ public class CoalCollector
         }
 
         coalDisplayUI.fontSize = to;
+    }
+
+    private void GiveSigleCoal(OnSetTimerStartedEvent ev)
+    {
+        if (ev.Can) EventBus.Publish(new OnCoalEarnedEvent(1f));
     }
 }

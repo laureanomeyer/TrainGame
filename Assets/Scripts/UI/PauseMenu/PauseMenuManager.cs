@@ -118,7 +118,7 @@ public class PauseMenuManager : MonoBehaviour
         }
         EventBus.Publish(new OnHideInteractEvent());
         EventBus.Publish(new OnShowCursorEvent(CursorType.Real));
-        EventBus.Publish(new OnActivateUiEvent(false));
+        EventBus.Publish(new OnSetAttackEnabledEvent(false));
     }
 
     public void ResumeGame()
@@ -133,13 +133,13 @@ public class PauseMenuManager : MonoBehaviour
         Time.timeScale = 1f;
         isPaused = false;
 
-        if (currentCursor == CursorType.Real || currentCursor == CursorType.HiddenAndFrozen)
+        if (currentCursor == CursorType.Real || currentCursor == CursorType.HiddenAndFrozen || currentCursor == CursorType.HiddenAndMoveable)
         {
-            EventBus.Publish(new OnActivateUiEvent(false));
+            EventBus.Publish(new OnSetAttackEnabledEvent(false));
         }
-        else if (currentCursor == CursorType.Gameplay || currentCursor == CursorType.HiddenAndMoveable)
+        else if (currentCursor == CursorType.Gameplay )
         {
-            EventBus.Publish(new OnActivateUiEvent(true));
+            EventBus.Publish(new OnSetAttackEnabledEvent(true));
         }
         //tiene que haber un cursor de hidden y playable? o algo asi que permita que se despause, vea si tiene que estar oculto pero poderse mover
     }

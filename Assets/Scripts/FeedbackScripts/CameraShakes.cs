@@ -59,7 +59,7 @@ public class CameraShakes : MonoBehaviour
     public void ShootCameraShake(OnShootEvent shootEvent)
     {
         StopAllCoroutines();
-        StartCoroutine(DoCameraShake(shootTimer, shootIntensity));
+        StartCoroutine(DoCameraShake(shootTimer, shootIntensity * shootEvent.ShotStrenght));
     }
 
     public void ShieldsRunOutShake(OnShieldsBrokenEvent sheldBrokenEvent)
