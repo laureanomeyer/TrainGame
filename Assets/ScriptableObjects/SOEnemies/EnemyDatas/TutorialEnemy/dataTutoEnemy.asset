@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5efb091a6448a70488ed797db4b66b21, type: 3}
+  m_Name: dataTutoEnemy
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  health: 1
+  damage: 1
+  attackCooldown: 3
+  rangeType: 25
+  targetPreference: 0
+  drop: 0
+  dropAmount: 1
+  enemyMesh: {fileID: 8417361359673230750, guid: 067819e4b13dba9438fac288a25be594, type: 3}
+  horseMesh: {fileID: -8854106560732313159, guid: 067819e4b13dba9438fac288a25be594, type: 3}
+  material:
+  - {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+  attack: {fileID: 11400000, guid: 0b5dd61ef6313854a8982fc85535fdc8, type: 2}
+  brain: {fileID: 11400000, guid: e7a7801ad1a79d04e968e81d22d36bf0, type: 2}
+  movement: {fileID: 11400000, guid: 1f2d9c8cb5a71704fb12a4c0c7ecfac8, type: 2}
+  skill: {fileID: 11400000, guid: a240834bacc452f4d9399f9318c29bd6, type: 2}
+  animation: {fileID: 11400000, guid: bbb740d22ac4419449747dfcbb05d8fb, type: 2}
