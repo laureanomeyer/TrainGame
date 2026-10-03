@@ -20,6 +20,8 @@ public class SceneTransitionManager : MonoBehaviour
     [SerializeField] private float textStayDuration = 1f;
 
     private bool isTransitioning;
+    private Material fadeMaterial;
+    private readonly int AlphaId = Shader.PropertyToID("_Alpha");
 
     private void Awake()
     {
@@ -35,7 +37,15 @@ public class SceneTransitionManager : MonoBehaviour
         #endregion
 
         HideTransitionInstantly();
+        if (transitionImage == null) return;
 
+        fadeMaterial = new Material(transitionImage.material);
+        transitionImage.material = fadeMaterial;
+    }
+
+    private void OnDestroy()
+    {
+        if (fadeMaterial != null) Destroy(fadeMaterial);
     }
 
     public void TransitionToScene(string sceneName, SceneTransitionType transitionType, CursorType newSceneCursor)
@@ -132,9 +142,9 @@ public class SceneTransitionManager : MonoBehaviour
 
     private void SetFadeAlpha(float alpha)
     {
-        if (transitionImage == null) return;
+        if (fadeMaterial == null) return;
 
-        transitionImage.material.SetFloat("_Alpha", alpha);
+        fadeMaterial.SetFloat(AlphaId, alpha);
     }
 
     private void SetTextAlpha(float alpha)
@@ -214,4 +224,6 @@ public class SceneTransitionManager : MonoBehaviour
     {
         AudioListener[] listeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
     }
+
+
 }
