@@ -14,7 +14,7 @@ public class EnemyAttackSO : ScriptableObject
         if (enemy.TargetWagon == null) return;
         if (!enemy.CanSkill) return;
 
-        if (enemy.CanSkill && enemy.Skill != null)
+        if (enemy.CanSkill && enemy.Skill != null && IsTargetInRange(enemy))
         {
             enemy.Skill.Play(enemy);
             enemy.ResetSkillCooldown(enemy.Skill.Cooldown);
@@ -26,24 +26,24 @@ public class EnemyAttackSO : ScriptableObject
         if (enemy.TargetWagon == null) return;
         if (!enemy.CanAttack) return;
 
-        float dist = Vector3.Distance(enemy.transform.position, enemy.TargetWagon.Middle);
-
-        if (dist <= enemy.Range + 5)
+        if (IsTargetInRange(enemy))
         {
             enemy.PlayAttackAnimation();
             if (enemy.TargetWagon == null) return;
 
-            bool isOnScreen = CameraView.IsInsideCamera(enemy.transform.position, enemy.Cam);
             enemy.Weapon.Execute(enemy.TargetWagon, enemy.Damage);
             enemy.ResetAttackCooldown(enemy.Cooldown);
-            PlayAudio(isOnScreen);
 
         }
     }
 
-    private void PlayAudio(bool isOnScreen)
+    private bool IsTargetInRange(Enemy enemy)
     {
-        AudioManager.Instance.PlayOnScreen("SFXEnemyShot", isOnScreen);
+        if (enemy.TargetWagon == null) return false;
+
+        float dist = Vector3.Distance(enemy.transform.position, enemy.TargetWagon.Middle);
+        return dist <= enemy.Range + 5;
     }
+
 
 }

@@ -13,11 +13,14 @@ public class DynamiteSkill : EnemySkill
     {
         if (enemy.TargetWagon == null) return;
 
-        IWagon targetWagon = FindWagonByTransform(enemy);
+        IWagon targetWagon = enemy.TargetWagon;
         if (targetWagon == null) return;
 
-        activeDynamite = ObjectPoolManager.Instantiate(dynamitePrefab);
-        activeDynamite.transform.position = enemy.transform.position;
+        activeDynamite = ObjectPoolManager.SpawnObject(
+            dynamitePrefab,
+            enemy.transform.position,
+            Quaternion.identity
+        );
 
         var dn = activeDynamite.GetComponent<Dynamite>();
         dn.SetTarget(targetWagon, RunManager.Instance.ActiveWagons, damage, adjacentDamageMultiplier);
@@ -26,15 +29,5 @@ public class DynamiteSkill : EnemySkill
     public override void Stop(Enemy enemy)
     {
         return;
-    }
-
-    private IWagon FindWagonByTransform(Enemy enemy)
-    {
-        for (int i = 0; i < RunManager.Instance.ActiveWagons.Count; i++)
-        {
-            if (RunManager.Instance.ActiveWagons[i]?.Middle == enemy.TargetWagon.Middle)
-                return RunManager.Instance.ActiveWagons[i];
-        }
-        return null;
     }
 }

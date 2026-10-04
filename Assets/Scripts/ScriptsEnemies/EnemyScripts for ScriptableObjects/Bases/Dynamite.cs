@@ -61,9 +61,9 @@ public class Dynamite : MonoBehaviour
 
     private void ApplyDamage(IWagon wagon, float amount)
     {
-        if (wagon == null || wagon.Head == null) return;
-
-        var damagable = wagon.Head.GetComponent<IDamagable>();
-        damagable?.TakeDamage(amount);
+        if (wagon is IDamagable damagable)
+        {
+            damagable.TakeDamage(amount);
+        }
     }
 }

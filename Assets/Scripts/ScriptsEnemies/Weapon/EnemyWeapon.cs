@@ -8,6 +8,8 @@ public class EnemyWeapon : MonoBehaviour
     Transform bulletSpawn;
     bool canShoot = true;
 
+    Camera Cam => Camera.main;
+
     private void Awake()
     {
         EventBus.Subscribe<OnSetEnemiesFlags>(SetCanShoot);
@@ -43,6 +45,16 @@ public class EnemyWeapon : MonoBehaviour
 
         EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
         bullet.Init(dir, damage);
+        bool isOnScreen = CameraView.IsInsideCamera(transform.position,Cam);
+
+        PlayAudio(isOnScreen);
+
     }
+
+        private void PlayAudio(bool isOnScreen)
+    {
+        AudioManager.Instance.PlayOnScreen("SFXEnemyShot", isOnScreen);
+    }
+
 
 }

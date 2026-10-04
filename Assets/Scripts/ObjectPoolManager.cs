@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
-    // Dictionary en vez de List: búsqueda O(1) en vez de O(n)
-    private static Dictionary<string, PooledObjectInfo> ObjectPools = new();
+    private static Dictionary<int, PooledObjectInfo> ObjectPools = new();
+    private static Dictionary<GameObject, int> PoolIdsByObject = new();
 
     // Contenedor raíz para no ensuciar la jerarquía de la escena
     private static Transform poolParentTransform;
@@ -19,71 +18,77 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
+    private static PooledObjectInfo GetOrCreatePool(int id)
+    {
+        if (!ObjectPools.TryGetValue(id, out PooledObjectInfo pool))
+        {
+            pool = new PooledObjectInfo(id);
+            ObjectPools.Add(id, pool);
+        }
+
+        return pool;
+    }
+
     public static GameObject SpawnObject(GameObject objectToSpawn, Vector3 spawnPosition, Quaternion spawnRotation)
     {
-        string key = objectToSpawn.name;
+        if (objectToSpawn == null) return null;
 
-        if (!ObjectPools.TryGetValue(key, out PooledObjectInfo pool))
+        int id = objectToSpawn.GetInstanceID();
+        PooledObjectInfo pool = GetOrCreatePool(id);
+
+        GameObject spawnableObject = null;
+        while (pool.InactiveObjects.Count > 0)
         {
-            pool = new PooledObjectInfo() { LookupString = key };
-            ObjectPools.Add(key, pool);
-        }
+            GameObject candidate = pool.InactiveObjects.Dequeue();
+            pool.InactiveSet.Remove(candidate);
 
-        // Limpia referencias a objetos destruidos y busca uno reutilizable
-        GameObject spawneableObj = null;
-        while (pool.inactiveObjects.Count > 0)
-        {
-            GameObject candidate = pool.inactiveObjects[0];
-            pool.inactiveObjects.RemoveAt(0);
-
-            if (candidate != null) // false si fue Destroy()
+            if (candidate != null)
             {
-                spawneableObj = candidate;
+                spawnableObject = candidate;
                 break;
             }
+
+            PoolIdsByObject.Remove(candidate);
         }
 
-        if (spawneableObj == null)
+        if (spawnableObject == null)
         {
             EnsureParentExists();
-            spawneableObj = Object.Instantiate(objectToSpawn, spawnPosition, spawnRotation, poolParentTransform);
+            spawnableObject = Object.Instantiate(objectToSpawn, spawnPosition, spawnRotation, poolParentTransform);
+            PoolIdsByObject.Add(spawnableObject, id);
         }
         else
         {
-            spawneableObj.transform.position = spawnPosition;
-            spawneableObj.transform.rotation = spawnRotation;
-            spawneableObj.SetActive(true);
+            spawnableObject.transform.SetPositionAndRotation(spawnPosition, spawnRotation);
+            spawnableObject.SetActive(true);
         }
 
-        return spawneableObj;
+        return spawnableObject;
     }
 
     public static void ReturnObjectToPool(GameObject obj)
     {
-        string goName = obj.name.Replace("(Clone)", string.Empty);
+        if (obj == null) return;
 
-        if (!ObjectPools.TryGetValue(goName, out PooledObjectInfo pool))
+        if (!PoolIdsByObject.TryGetValue(obj, out int id) || !ObjectPools.TryGetValue(id, out PooledObjectInfo pool))
         {
             Debug.LogWarning("Quiere liberar un objeto no pooleado: " + obj.name);
-            Object.Destroy(obj); // evita que quede activo y perdido en la escena
+            Object.Destroy(obj);
+            return;
         }
-        else
-        {
-            obj.SetActive(false);
-            pool.inactiveObjects.Add(obj);
-        }
+
+        if (!pool.InactiveSet.Add(obj)) return;
+
+        obj.SetActive(false);
+        pool.InactiveObjects.Enqueue(obj);
     }
 
-    // Opcional: prewarm para precrear objetos antes de que se necesiten
     public static void PrewarmPool(GameObject objectToSpawn, int count)
     {
-        string key = objectToSpawn.name;
+        if (objectToSpawn == null || count <= 0) return;
 
-        if (!ObjectPools.TryGetValue(key, out PooledObjectInfo pool))
-        {
-            pool = new PooledObjectInfo() { LookupString = key };
-            ObjectPools.Add(key, pool);
-        }
+        int id = objectToSpawn.GetInstanceID();
+        PooledObjectInfo pool = GetOrCreatePool(id);
 
         EnsureParentExists();
 
@@ -91,20 +96,28 @@ public class ObjectPoolManager : MonoBehaviour
         {
             GameObject obj = Object.Instantiate(objectToSpawn, Vector3.zero, Quaternion.identity, poolParentTransform);
             obj.SetActive(false);
-            pool.inactiveObjects.Add(obj);
+            PoolIdsByObject.Add(obj, id);
+            pool.InactiveObjects.Enqueue(obj);
+            pool.InactiveSet.Add(obj);
         }
     }
 
-    // Opcional: limpiar todo al cambiar de escena, si no usás DontDestroyOnLoad
     public static void ClearAllPools()
     {
         ObjectPools.Clear();
+        PoolIdsByObject.Clear();
         poolParentTransform = null;
     }
 }
 
 public class PooledObjectInfo
 {
-    public string LookupString;
-    public List<GameObject> inactiveObjects = new List<GameObject>();
+    public int Id { get; }
+    public Queue<GameObject> InactiveObjects { get; } = new();
+    internal HashSet<GameObject> InactiveSet { get; } = new();
+
+    public PooledObjectInfo(int id)
+    {
+        Id = id;
+    }
 }
