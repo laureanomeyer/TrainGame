@@ -127,8 +127,8 @@ public class GoldenWagonBrain : WagonBrain
 
     private void ActivateGoldWagon(OnActivateGoldWagon ev)
     {
-        HPController.forceHp(25f);
         HPController.forceHp(1f);
+        hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
     }
 
 }

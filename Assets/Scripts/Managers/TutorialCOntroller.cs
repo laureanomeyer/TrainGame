@@ -44,12 +44,11 @@ public class TutorialController : MonoBehaviour
     private TutorialStep[] steps;
     private bool playerFrozen;
     private bool finished;
+    private bool textRevealing;
 
     private void Awake()
     {
         BuildSteps();
-
-        tutorialText.text = texts[currentStep];
 
         fuelUi.alpha = 0f;
         shieldsUi.alpha = 0f;
@@ -60,6 +59,7 @@ public class TutorialController : MonoBehaviour
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Subscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
         EventBus.Subscribe<OnSkipTutorial>(SkipTutorial);
+        EventBus.Subscribe<OnTutorialTextRevealStateEvent>(SetTextRevealing);
     }
 
     private void OnDestroy()
@@ -68,6 +68,7 @@ public class TutorialController : MonoBehaviour
         EventBus.Unsubscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
         EventBus.Unsubscribe<OnAdvanceTutorialStep>(AdvanceStepNaturally);
         EventBus.Unsubscribe<OnSkipTutorial>(SkipTutorial);
+        EventBus.Unsubscribe<OnTutorialTextRevealStateEvent>(SetTextRevealing);
     }
 
     private void Start()
@@ -80,6 +81,8 @@ public class TutorialController : MonoBehaviour
         EventBus.Publish(new OnSetCanConsumeEvent(false));
         EventBus.Publish(new OnSetTimerStartedEvent(false));
         EventBus.Publish(new OnSetTutorialVisibleEvent(true));
+
+        EventBus.Publish(new OnSetTutorialTextEvent(texts[currentStep]));
     }
 
     private void BuildSteps()
@@ -189,10 +192,10 @@ public class TutorialController : MonoBehaviour
             }),
  
             // 19 Enemy shoots
-            new TutorialStep(PlayerMode.Reading),
+            new TutorialStep(PlayerMode.Reading, () => EventBus.Publish(new OnActivateGoldWagon())),
  
             // 20  Try fixing it
-            new TutorialStep(PlayerMode.Interact, () => EventBus.Publish(new OnSetEnemiesFlags(false))),
+            new TutorialStep(PlayerMode.Interact),
  
             // 21  Freeze player, you can use the gold to buy
             new TutorialStep(PlayerMode.Reading),
@@ -236,8 +239,18 @@ public class TutorialController : MonoBehaviour
     private void AdvanceStepByClicking(OnAdvanceTutorialStepByClick ev)
     {
         if (!playerFrozen) return;
+        if (PauseMenuManager.Instance.IsPaused) return;
+
+        if (textRevealing)
+        {
+            EventBus.Publish(new OnCompleteTutorialTextEvent());
+            return;
+        }
+
         Advance();
     }
+
+    private void SetTextRevealing(OnTutorialTextRevealStateEvent ev) => textRevealing = ev.Revealing;
 
     private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
     {
@@ -269,7 +282,7 @@ public class TutorialController : MonoBehaviour
 
         currentStep = index;
 
-        if (index < texts.Length) tutorialText.text = texts[index];
+        if (index < texts.Length) EventBus.Publish(new OnSetTutorialTextEvent(texts[index]));
 
         ApplyMode(steps[index].Mode);
         steps[index].OnEnter?.Invoke();

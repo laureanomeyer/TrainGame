@@ -438,6 +438,22 @@ public class OnShowClickImage : IGameEvent
     }
 }
 
+public class OnTutorialTextRevealStateEvent : IGameEvent
+{
+    public bool Revealing;
+
+    public OnTutorialTextRevealStateEvent(bool revealing)
+    {
+        Revealing = revealing;
+    }
+}
+public class OnCompleteTutorialTextEvent : IGameEvent
+{
+    public OnCompleteTutorialTextEvent()
+    {
+    }
+}
+
 #endregion
 
 #region Weapons Events
