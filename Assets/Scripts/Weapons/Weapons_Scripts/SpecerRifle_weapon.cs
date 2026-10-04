@@ -67,7 +67,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
 
         EventBus.Subscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Subscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
-        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
@@ -96,7 +96,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     {
         EventBus.Unsubscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Unsubscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
-        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateStats);
         Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
@@ -220,7 +220,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 
-    public void UpdateRoFStats(OnStatChangedEvent @event)
+    public void UpdateStats(OnStatChangedEvent @event)
     {
         var statsRef = ServiceLocator.Get<StatSystem>();
 

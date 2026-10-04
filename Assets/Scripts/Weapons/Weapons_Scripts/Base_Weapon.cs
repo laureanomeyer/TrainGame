@@ -72,13 +72,13 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
         baseDamage = damage;
 
-        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
     public void DestroyWeapon()
     {
-        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateStats);
         Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
@@ -97,9 +97,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         if (IsReloading) return;
         if (weaponSpawnPoint == null) return;
 
-        var data = WeaponData;
-        bulletData.Damage = data.damage;
-
+        bulletData.Damage = damage;
 
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
@@ -165,7 +163,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 
-    public void UpdateRoFStats(OnStatChangedEvent @event)
+    public void UpdateStats(OnStatChangedEvent @event)
     {
         var statsRef = ServiceLocator.Get<StatSystem>();
 

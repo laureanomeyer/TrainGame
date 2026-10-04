@@ -59,7 +59,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         EventBus.Subscribe<OnUpdateEnemiesDamage>(UpdateEnemiesDamage);
         EventBus.Subscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Subscribe<OnWinchesterDetectedDeadEnemy>(CallRestock);
-        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
@@ -86,7 +86,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         EventBus.Unsubscribe<OnUpdateEnemiesDamage>(UpdateEnemiesDamage);
         EventBus.Unsubscribe<OnUnlockWinchesterLegado>(UpdateCurrentBullet);
         EventBus.Unsubscribe<OnWinchesterDetectedDeadEnemy>(CallRestock);
-        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateStats);
         Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
@@ -124,8 +124,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
             currentBulletUse.typeOfCollsion = winchesterCollsion;
         }
 
-        var data = WeaponData;
-        currentBulletUse.Damage = data.damage;
+        currentBulletUse.Damage = damage;
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, currentBulletUse);
 
         sequenceController.Play("shotParticles");
@@ -196,7 +195,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 
-    public void UpdateRoFStats(OnStatChangedEvent @event)
+    public void UpdateStats(OnStatChangedEvent @event)
     {
         var statsRef = ServiceLocator.Get<StatSystem>();
 

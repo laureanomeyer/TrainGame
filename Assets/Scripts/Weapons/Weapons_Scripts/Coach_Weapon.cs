@@ -84,7 +84,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
 
         EventBus.Subscribe<OnCoachDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockCoachLegado>(UpdateCurrentBullet);
-        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -106,7 +106,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     {
         EventBus.Unsubscribe<OnCoachDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Unsubscribe<OnUnlockCoachLegado>(UpdateCurrentBullet);
-        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateStats);
         Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
@@ -309,7 +309,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 
-    public void UpdateRoFStats(OnStatChangedEvent @event)
+    public void UpdateStats(OnStatChangedEvent @event)
     {
         var statsRef = ServiceLocator.Get<StatSystem>();
 

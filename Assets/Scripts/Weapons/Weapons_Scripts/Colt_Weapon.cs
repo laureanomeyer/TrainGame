@@ -18,8 +18,6 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     public Transform leftWeaponSpawnPoint;
     public Transform rightWeaponSpawnPoint;
 
-    private BulletTypeScriptable currentBulletUse;
-
     [Header("Bullet data")]
     [SerializeField] private BulletTypeScriptable bulletData;
     [SerializeField] private BulletTypeScriptable legacyBulletData;
@@ -89,20 +87,15 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         EventBus.Subscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockColtLegado>(UpdateCurrentBullet);
-        EventBus.Subscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
         if (playerData.unlockedLegado.UnlockedCoach)
         {
-            currentBulletUse = legacyBulletData;
             reloadTime = 0f;
             unlockedLegacy = true;
             sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
-        }
-        else
-        {
-            currentBulletUse = bulletData;
         }
 
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
@@ -112,7 +105,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     {
         EventBus.Unsubscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Unsubscribe<OnUnlockColtLegado>(UpdateCurrentBullet);
-        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateRoFStats);
+        EventBus.Unsubscribe<OnStatChangedEvent>(UpdateStats);
         Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
@@ -233,13 +226,12 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private void UpdateCurrentBullet(OnUnlockColtLegado unlockEvent)
     {
         Debug.Log("Finalizado desbloqueo de colt");
-        currentBulletUse = legacyBulletData;
         reloadTime = 0f;
         unlockedLegacy = true;
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
     }
 
-    public void UpdateRoFStats(OnStatChangedEvent @event)
+    public void UpdateStats(OnStatChangedEvent @event)
     {
         var statsRef = ServiceLocator.Get<StatSystem>();
 

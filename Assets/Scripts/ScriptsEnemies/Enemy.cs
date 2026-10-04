@@ -259,8 +259,8 @@ public class Enemy : MonoBehaviour
         if (isDead) return false;
 
         currentHealth -= damage;
+        Debug.Log("Damage receive: " + damage);
         EventBus.Publish(new OnEnemyHitEvent(transform.position));
-
 
         flash.Flash();
         DamagePopupManager.Instance?.ShowDamage(damage, transform.position);
