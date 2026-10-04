@@ -50,6 +50,7 @@ public class GoldCollector
     public void CollectGold(OnGoldEarnedEvent goldEvent)
     {
         AudioManager.Instance.Play($"SFXCoinGain{UnityEngine.Random.Range(1, 3)}");
+
         if (wagonHP.IsBroken == false)
         {
             gold += goldEvent.Amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
@@ -60,6 +61,7 @@ public class GoldCollector
 
             if (!firstGoldEarned)
             {
+                Debug.Log("Nextsssssssssssssssssss");
                 EventBus.Publish(new OnAdvanceTutorialStep());
                 firstGoldEarned = !firstGoldEarned;
             }

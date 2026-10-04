@@ -114,6 +114,7 @@ public class TutorialController : MonoBehaviour
             new TutorialStep(PlayerMode.Reading, () =>
             {
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, coalEnemy));
+                EventBus.Publish(new OnSetTutorialEnemyTarget(0));
             }),
 
             // 7  unfreeze
@@ -125,71 +126,82 @@ public class TutorialController : MonoBehaviour
             // 8  However, others will be more hostile 
             new TutorialStep(PlayerMode.Reading, () =>
             {
-                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
-                EventBus.Publish(new OnSetTutorialEnemyTarget(0));
-                EventBus.Publish(new OnSetEnemiesFlags(true));
+
             }),
  
             // 9  Hull damage lowers your max fuel until you reach a station 
             new TutorialStep(PlayerMode.Keep, () =>
-                EventBus.Publish(new OnSetEnemiesFlags(true))),
+            {
+                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
+                EventBus.Publish(new OnSetTutorialEnemyTarget(0));
+                EventBus.Publish(new OnSetEnemiesFlags(true));
+            }),
 
-            // Can only be fixed when reaching a station
+            // 10 Can only be fixed when reaching a station
             new TutorialStep(PlayerMode.Keep),
  
-            // 10 Your shield prevents damage and regenerates 
+            // 11 Your shield prevents damage and regenerates 
             new TutorialStep(PlayerMode.Keep, () =>
             {
-                EventBus.Publish(new OnSetEnemiesFlags(false));
+                EventBus.Publish(new OnSetEnemiesFlags(true));
                 EventBus.Publish(new OnSetShieldsActiveEvent(true));
                 EventBus.Publish(new OnSetFirstHeal(false));
                 shieldsUi.alpha = 1f;
             }),
  
-            // 11 Enemy stops shooting, shield regenerates 
+            // 12 Enemy stops shooting, shield regenerates 
             new TutorialStep(PlayerMode.Keep, () =>
             {
-                EventBus.Publish(new OnSetEnemiesFlags(true));
+                EventBus.Publish(new OnSetEnemiesFlags(false));
                 EventBus.Publish(new OnSetFirstHeal(true));
             }),
  
-            // 12 Defeated enemies drop gold, deposited in the gold wagon 
+            // 13 Defeated enemies drop gold, deposited in the gold wagon 
             new TutorialStep(PlayerMode.Keep, () =>
             {
                 EventBus.Publish(new OnActivateGoldWagon());
                 EventBus.Publish(new OnEnableGoldBoxEvent(true));
-                EventBus.Publish(new OnSetTutorialEnemyTarget(1));
-                goldHpUi.alpha = 1f;
             }),
  
-            // 13 Enemy shoots again and breaks the gold wagon 
-            new TutorialStep(PlayerMode.Keep, () =>
+            // 14 Unfreezes player and lets them kill the enemy
+            new TutorialStep(PlayerMode.Combat, () =>
             {
-                EventBus.Publish(new OnSetEnemiesFlags(true));
-                goldHpUi.alpha = 1f;
             }),
  
-            // 14 Can't hold gold while the wagon is broken: fix it 
-            new TutorialStep(PlayerMode.Interact, () =>
-                EventBus.Publish(new OnSetEnemiesFlags(false))),
- 
-            // 15 (free play: kill the enemy, gold reaches the box) 
-            new TutorialStep(PlayerMode.Combat),
- 
-            // 16 Your gold is not safe yet: take it to the vault 
+            // 15 Your gold is not safe
             new TutorialStep(PlayerMode.Reading),
  
-            // 17 Pick up the gold bag and deposit it; advances on deposit 
-            new TutorialStep(PlayerMode.Gameplay),
+            // 16 Unfreeze the player, let them carry the gold
+            new TutorialStep(PlayerMode.Interact, () => goldAmountUi.alpha = 1f),
  
-            // 18 Total gold UI appears */
-            new TutorialStep(PlayerMode.Reading, () => goldAmountUi.alpha = 1f),
+            // 17 Gold ui pops up
+            new TutorialStep(PlayerMode.Reading, () =>
+            {
+                goldHpUi.alpha = 1f;
+            } ),
  
-            // 19 Use stored gold to buy wagons and weapons in stations 
+            // 18 Shows goldwag hp
+            new TutorialStep(PlayerMode.Reading,() =>
+            {                
+                EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
+                EventBus.Publish(new OnSetTutorialEnemyTarget(1));
+                EventBus.Publish(new OnSetEnemiesFlags(true));
+            }),
+ 
+            // 19 Enemy shoots
             new TutorialStep(PlayerMode.Reading),
  
-            // 20 Now you're ready to take on the road! 
+            // 20  Try fixing it
+            new TutorialStep(PlayerMode.Interact, () => EventBus.Publish(new OnSetEnemiesFlags(false))),
+ 
+            // 21  Freeze player, you can use the gold to buy
+            new TutorialStep(PlayerMode.Reading),
+
+            // 22 now you are ready
+            new TutorialStep(PlayerMode.Keep),
+
             new TutorialStep(PlayerMode.Keep, FinishTutorial),
+
         };
     }
 
@@ -227,7 +239,11 @@ public class TutorialController : MonoBehaviour
         Advance();
     }
 
-    private void AdvanceStepNaturally(OnAdvanceTutorialStep ev) => Advance();
+    private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
+    {
+        Advance();
+        Debug.Log("Otro");
+    }
 
     private void SkipTutorial(OnSkipTutorial ev)
     {

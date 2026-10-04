@@ -131,6 +131,7 @@ public class LocomotiveFuel
     public void SetShieldsActive(OnSetShieldsActiveEvent ev)
     {
         shieldsActive = ev.active;
+        currentShield = maxShield;
     }
 
     private void UpdateSharedSpeed()
@@ -192,7 +193,6 @@ public class LocomotiveFuel
 
         if (!shieldsActive)
         {
-            currentShield = 0f;
             return;
         }
 
