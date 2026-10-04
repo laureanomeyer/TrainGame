@@ -18,7 +18,6 @@ public class EnemyData : ScriptableObject
     public float speed;
     public float damage;
     public float attackCooldown;
-    public float range;
 
     public RangeType rangeType;
     public WagonType targetPreference;
@@ -39,30 +38,6 @@ public class EnemyData : ScriptableObject
     public EnemySkillSO skill;
 
     public EnemyAnimationSO animation;
-
-
-    private void OnValidate()
-    {
-        ApplyRangePreset();
-    }
-
-    private void ApplyRangePreset()
-    {
-        switch (rangeType)
-        {
-            case RangeType.Close:
-                range = (float)RangeType.Close;
-                break;
-
-            case RangeType.Medium:
-                range = (float)RangeType.Medium;
-                break;
-
-            case RangeType.Long:
-                range = (float)RangeType.Long;
-                break;
-        }
-    }
 
     
 }

@@ -1,215 +1,76 @@
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpawnController : MonoBehaviour
 {
-    //se setean con el level spawn data
-    float spawnInterval;
-    int maxEnemies;
-    bool canSpawn = true;
-
-    [Header("Levels")]
-
-    [SerializeField] List<LevelSpawnsData> levelList = new();
-    LevelSpawnsData currentlevelData;
-
-    TrainRanges trainRanges = new TrainRanges();
-
-    [SerializeField] SpawnZone spawnZone;
-
     [Header("Coins")]
-    [SerializeField] GameObject coin;
+    [SerializeField] private GameObject coin;
     private Transform goldBox;
 
     [Header("Coal")]
-    [SerializeField] GameObject coal;
+    [SerializeField] private GameObject coal;
     private Transform coalBox;
 
     [Header("Particle Systems")]
-    [SerializeField] ParticleSystem enemyHitPS;
-
-    private List<IWagon> trainList = new();
-
-    List<EnemyData> spawnPool = new();
-
-    Camera cam;
-
-    float timer;
-    int aliveEnemies;
+    [SerializeField] private ParticleSystem enemyHitPS;
 
     private TrainData trainDataRef;
-    private SessionConfig sessionConfig;
 
     private void OnEnable()
     {
-
-        ServiceLocator.Register<SpawnController>(this);
+        ServiceLocator.Register(this);
         EventBus.Subscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Subscribe<OnEnemyHitEvent>(EnemyHit);
-        EventBus.Subscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
-        EventBus.Subscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
-
-        canSpawn = !GameManager.Instance.IsTutorial;
-
         trainDataRef = ServiceLocator.Get<TrainData>();
-        sessionConfig = ServiceLocator.Get<SessionConfig>();
     }
 
     private void OnDisable()
     {
         EventBus.Unsubscribe<OnEnemyDeathEvent>(EnemyDead);
         EventBus.Unsubscribe<OnEnemyHitEvent>(EnemyHit);
-        EventBus.Unsubscribe<OnSpawnEnemyEvent>(SpawnSingleEnemy);
-        EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(CallSetCanSpawnEvent);
         ServiceLocator.Unregister<SpawnController>();
     }
 
-
-    public void Start()
+    private void Start()
     {
-        trainList = RunManager.Instance.ActiveWagons;
-        cam = Camera.main;
-        SetLevelData();
-        BuildPool();
-        TrySpawn();
         goldBox = trainDataRef.GoldBoxPosition;
         coalBox = trainDataRef.CoalBoxPosition;
-
     }
 
-    void Update()
+    public Enemy SpawnEnemy(GameObject prefab, EnemyData data, Vector3 position, Quaternion rotation)
     {
-
-        timer += Time.deltaTime;
-
-        if (timer >= spawnInterval && aliveEnemies < maxEnemies && spawnPool.Count > 0)
+        if (prefab == null || data == null)
         {
-            TrySpawn();
-            timer = 0;
-        }
-    }
-
-    private Dictionary<EnemyData, int> actualSpawnCounts = new();
-
-    void Spawn(Vector3 pos)
-    {
-        if (spawnPool.Count == 0) return;
-
-        int index = Random.Range(0, spawnPool.Count);
-        EnemyData enemyToSpawn = spawnPool[index];
-        if (enemyToSpawn.movement is EnemyMovementSlowSO)
-        {
-            pos.x = 60f;
-            if (pos.z < 0) 
-            {pos.z = Random.Range(-35,-50);}
-            else 
-            {pos.z = Random.Range(35,50); }
-            
+            Debug.LogError("Cannot spawn an enemy without a prefab and EnemyData.", this);
+            return null;
         }
 
-        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
-        Enemy enemy = enemyGO.GetComponent<Enemy>();
-
-        enemy.Initialize(enemyToSpawn);
-
-        aliveEnemies++;
-        TrackSpawn(enemyToSpawn);
-    }
-    
-    void SpawnSingle(Vector3 pos, EnemyData enemyToSpawn)
-    {
-        if (spawnPool.Count == 0) return;
-
-        GameObject enemyGO = ObjectPoolManager.SpawnObject(currentlevelData.prefab, pos, Quaternion.identity);
-        Enemy enemy = enemyGO.GetComponent<Enemy>();
-
-        enemy.Initialize(enemyToSpawn);
-        enemy.SetTutorialEnemy();
-        EventBus.Publish(new OnSetTutorialEnemyTarget(1));
-
-        aliveEnemies++;
-        TrackSpawn(enemyToSpawn);
-    }
-
-    public void ManualSpawnEnemy(Vector3 pos, EnemyData enemyToSpawn)
-    {
-        SpawnSingle(pos, enemyToSpawn);
-    }
-
-    void TrackSpawn(EnemyData data)
-    {
-        if (!actualSpawnCounts.ContainsKey(data))
-            actualSpawnCounts[data] = 0;
-        actualSpawnCounts[data]++;
-
-        var counts = actualSpawnCounts.Select(kvp => $"{kvp.Key.name}: {kvp.Value}");
-        Debug.Log($"Spawned {data.name}. Current spawn counts: {string.Join(", ", counts)}");
-    }
-
-
-    void TrySpawn()
-    {
-
-        if (!canSpawn) return;
-        (float positive, float negative) = trainRanges.SetRanges(50, Vector3.zero);
-        Vector3 spawnPos = spawnZone.GetRandomPoint(positive, negative);
-
-        for (int i = 0; i < currentlevelData.MaxHordeSpawn; i++)
+        GameObject enemyGO = ObjectPoolManager.SpawnObject(prefab, position, rotation);
+        if (enemyGO == null)
         {
-            if (CameraView.IsOutsideCamera(spawnPos, cam))
-            {
-                Spawn(spawnPos);
-                spawnPos = spawnZone.GetRandomPoint(positive, negative);
-
-            }
-        }
-    }
-
-    void SpawnSingleEnemy(OnSpawnEnemyEvent spawnEnemyEvent)
-    {
-        SpawnSingle(spawnEnemyEvent.Position, spawnEnemyEvent.Enemy);
-    }
-
-    void BuildPool()
-    {
-        spawnPool.Clear();
-
-        foreach (var entry in currentlevelData.spawneables)
-        {
-            for (int i = 0; i < entry.weight; i++)
-            {
-                spawnPool.Add(entry.enemyData);
-            }
+            Debug.LogError($"Failed to spawn enemy prefab '{prefab.name}'.", this);
+            return null;
         }
 
+        if (!enemyGO.TryGetComponent(out Enemy enemy))
+        {
+            Debug.LogError($"Enemy prefab '{prefab.name}' does not contain an Enemy component.", enemyGO);
+            ObjectPoolManager.ReturnObjectToPool(enemyGO);
+            return null;
+        }
+
+        enemy.Initialize(data);
+        return enemy;
     }
 
-    void SetLevelData()
-    {
-        int index = sessionConfig.CurrentLevel;
-
-        if (index > levelList.Count - 1)
-            currentlevelData = levelList.Last();
-        else
-            currentlevelData = levelList[index];
-
-        maxEnemies = currentlevelData.maxAliveEnemies;
-        spawnInterval = currentlevelData.spawnInterval;
-    }
-
-    
-
-    void SpawCoin(Vector3 position, Transform goTo)
+    private void SpawnCoin(Vector3 position, Transform goTo)
     {
         GameObject coinGO = ObjectPoolManager.SpawnObject(coin, position, Quaternion.identity);
         Coin coinScript = coinGO.GetComponent<Coin>();
         coinScript.SetTarget(goTo);
+        
     }
 
-    void SpawCoal(Vector3 position, Transform goTo)
+    private void SpawnCoal(Vector3 position, Transform goTo)
     {
         if (goTo == null) Debug.Log("coal box nulla");
         GameObject coalGO = ObjectPoolManager.SpawnObject(coal, position, Quaternion.identity);
@@ -217,38 +78,21 @@ public class SpawnController : MonoBehaviour
         coalScript.SetTarget(goTo);
     }
 
-
-    void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
+    private void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
     {
         if (enemyDeathEvent.DropType == DropType.Gold)
-        {
-            SpawCoin(enemyDeathEvent.Position, goldBox);
-        }
+            SpawnCoin(enemyDeathEvent.Position, goldBox);
         else if (enemyDeathEvent.DropType == DropType.Coal)
-        {
-            SpawCoal(enemyDeathEvent.Position, coalBox);
-        }
-        aliveEnemies--;
+            SpawnCoal(enemyDeathEvent.Position, coalBox);
     }
 
-
-    void SpawnParticles(Vector3 position)
+    private void SpawnParticles(Vector3 position)
     {
-        ParticleSystem PS = Instantiate(enemyHitPS, position, Quaternion.identity);
+        Instantiate(enemyHitPS, position, Quaternion.identity);
     }
 
-    void EnemyHit(OnEnemyHitEvent enemyHitEvent)
+    private void EnemyHit(OnEnemyHitEvent enemyHitEvent)
     {
         SpawnParticles(enemyHitEvent.Position);
-    }
-
-    public void CallSetCanSpawnEvent(OnStartSpawningEnemiesEvent spawnEnemiesEvent)
-    {
-        SetCanSpawn(spawnEnemiesEvent.Can);
-    }
-
-    void SetCanSpawn(bool canSpawn)
-    {
-        this.canSpawn = canSpawn;
     }
 }

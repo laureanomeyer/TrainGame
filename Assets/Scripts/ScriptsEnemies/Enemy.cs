@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour
     private float currentHealth;
     private DamageFlash flash;
     private bool isDead;
+    private bool inactiveEventPublished;
     private int activeCowboyLayer;
     private Coroutine attackRoutine;
     private TrainRanges trainRanges;
@@ -96,9 +97,12 @@ public class Enemy : MonoBehaviour
         attackRoutine = null;
 
         isDead = false;
+        inactiveEventPublished = false;
         isAtTarget = false;
         timeAtTarget = 0f;
         isLosing = false;
+        IsTutorialEnemy = false;
+        targetWagon = null;
         this.data = data;
 
         Movement = data.movement;
@@ -278,6 +282,7 @@ public class Enemy : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
+        PublishBecameInactive();
         PlayDeathSound();
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Death" : "Cowboy_1|R_Death",
@@ -308,12 +313,40 @@ public class Enemy : MonoBehaviour
     }
     private void DeadWallDeath()
     {
+        if (isDead) return;
+
         isDead = true;
+        PublishBecameInactive();
         if (healthBar != null)
         { healthBar.Hide(); }
         ObjectPoolManager.ReturnObjectToPool(gameObject);
         flash.ResetMaterials();
     }
+
+    public void Despawn()
+    {
+        if (isDead || !gameObject.activeSelf) return;
+
+        isDead = true;
+        StopAllCoroutines();
+        attackRoutine = null;
+        PublishBecameInactive();
+
+        if (healthBar != null)
+            healthBar.Hide();
+        flash?.ResetMaterials();
+
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
+    }
+
+    private void PublishBecameInactive()
+    {
+        if (inactiveEventPublished) return;
+
+        inactiveEventPublished = true;
+        EventBus.Publish(new OnEnemyBecameInactiveEvent(this));
+    }
+
     public void SetTutorialEnemy()
     {
         IsTutorialEnemy = true;

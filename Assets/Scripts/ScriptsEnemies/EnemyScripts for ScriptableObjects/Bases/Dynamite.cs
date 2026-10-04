@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Dynamite : MonoBehaviour
+public class Dynamite : ArcMotion
 {
     [SerializeField] float speed = 5f;
     [SerializeField] float arcHeight = 2f;
@@ -11,8 +11,6 @@ public class Dynamite : MonoBehaviour
     private float damage;
     private float adjacentDamageMultiplier;
 
-    private ArcMover mover;
-
     public void SetTarget(IWagon target, List<IWagon> wagons, float dmg, float adjacentMult)
     {
         targetWagon = target;
@@ -20,15 +18,10 @@ public class Dynamite : MonoBehaviour
         damage = dmg;
         adjacentDamageMultiplier = adjacentMult;
 
-        mover = new ArcMover(transform.position, target.Middle, speed, arcHeight);
+        BeginArcMotion(target.Middle, speed, arcHeight);
     }
 
-    void Update()
-    {
-        Move();
-    }
-
-    private void Move()
+    protected override void Update()
     {
         if (targetWagon == null || targetWagon.Head == null)
         {
@@ -36,13 +29,13 @@ public class Dynamite : MonoBehaviour
             return;
         }
 
-        transform.position = mover.Tick(Time.deltaTime);
+        base.Update();
+    }
 
-        if (mover.IsFinished)
-        {
-            DoDamage();
-            ObjectPoolManager.ReturnObjectToPool(gameObject);
-        }
+    protected override void OnArcMotionCompleted()
+    {
+        DoDamage();
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
     private void DoDamage()

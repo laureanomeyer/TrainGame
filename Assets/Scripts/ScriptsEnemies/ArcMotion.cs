@@ -1,6 +1,31 @@
 using UnityEngine;
 
-public static class ArcMotion
+public abstract class ArcMotion : MonoBehaviour
+{
+    private ArcMover arcMover;
+    private bool hasCompleted;
+
+    protected void BeginArcMotion(Vector3 target, float speed, float arcHeight)
+    {
+        arcMover = new ArcMover(transform.position, target, speed, arcHeight);
+        hasCompleted = false;
+    }
+
+    protected virtual void Update()
+    {
+        if (arcMover == null || hasCompleted) return;
+
+        transform.position = arcMover.Tick(Time.deltaTime);
+        if (!arcMover.IsFinished) return;
+
+        hasCompleted = true;
+        OnArcMotionCompleted();
+    }
+
+    protected virtual void OnArcMotionCompleted() { }
+}
+
+public static class ArcMotionMath
 {
     public static Vector3 Evaluate(Vector3 start, Vector3 end, float t, float arcHeight)
     {

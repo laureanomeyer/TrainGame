@@ -101,6 +101,26 @@ public class OnEnemyDeathEvent : IGameEvent
     }
 }
 
+public class OnEnemyBecameInactiveEvent : IGameEvent
+{
+    public Enemy Enemy;
+
+    public OnEnemyBecameInactiveEvent(Enemy enemy)
+    {
+        Enemy = enemy;
+    }
+}
+
+public class OnArcMotionEnded : IGameEvent
+{
+    public ArcMotion ArcMotion;
+
+    public OnArcMotionEnded(ArcMotion arcMotion)
+    {
+        ArcMotion = arcMotion;
+    }
+}
+
 public class OnGoldenWagonIsRepairedEvent : IGameEvent
 {
     public IWagon goldenWagonInstance;

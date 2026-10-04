@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Coin : MonoBehaviour
+public class Coin : ArcMotion
 {
     [SerializeField] float speed = 5f;
     [SerializeField] float arcHeight = 2f;
@@ -10,12 +10,11 @@ public class Coin : MonoBehaviour
 
     private TrailRenderer tr;
 
-    private ArcMover mover;
-
+    private bool hasArrived;
 
     public void SetTarget(Transform targetTRF)
     {
-        mover = new ArcMover(transform.position, targetTRF.position, speed, arcHeight);
+        BeginArcMotion(targetTRF.position, speed, arcHeight);
 
         if(tr == null)
         {
@@ -23,29 +22,30 @@ public class Coin : MonoBehaviour
         }
 
         currentTime = 0;
+        hasArrived = false;
         ActiveTrail();
     }
 
-    void Update()
+    protected override void Update()
     {
-        if (mover == null) return;
+        base.Update();
+        if (!hasArrived || !gameObject.activeSelf) return;
 
-        if (mover.IsFinished)
+        if (currentTime < timeInBox)
         {
-            if(currentTime < timeInBox)
-            {
-                currentTime += Time.deltaTime;
-            }
-            else
-            {
-                tr.emitting = false;
-                ObjectPoolManager.ReturnObjectToPool(gameObject);
-            }
+            currentTime += Time.deltaTime;
         }
         else
         {
-            transform.position = mover.Tick(Time.deltaTime);
+            tr.emitting = false;
+            ObjectPoolManager.ReturnObjectToPool(gameObject);
         }
+    }
+
+    protected override void OnArcMotionCompleted()
+    {
+        hasArrived = true;
+        EventBus.Publish(new OnArcMotionEnded(this));
     }
 
     public void ActiveTrail()

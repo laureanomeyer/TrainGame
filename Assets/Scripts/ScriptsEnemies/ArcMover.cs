@@ -27,8 +27,8 @@ public class ArcMover
     {
         if (Target == null || IsFinished) return Start;
 
-        t = ArcMotion.AdvanceT(t, Speed, deltaTime, journeyLength);
-        Vector3 pos = ArcMotion.Evaluate(Start, Target, t, ArcHeight);
+        t = ArcMotionMath.AdvanceT(t, Speed, deltaTime, journeyLength);
+        Vector3 pos = ArcMotionMath.Evaluate(Start, Target, t, ArcHeight);
 
         if (t >= 1f) IsFinished = true;
 
