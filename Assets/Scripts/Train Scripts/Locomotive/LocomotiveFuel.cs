@@ -130,8 +130,17 @@ public class LocomotiveFuel
 
     public void SetShieldsActive(OnSetShieldsActiveEvent ev)
     {
-        shieldsActive = ev.active;
-        currentShield = maxShield;
+        if (ev.active) 
+        {
+            shieldsActive = true;
+            currentShield = maxShield;
+        }
+        else
+        {
+            currentShield = 0;
+            shieldsActive = false;
+        }
+
     }
 
     private void UpdateSharedSpeed()
@@ -167,6 +176,7 @@ public class LocomotiveFuel
         }
         else
         {
+
             AudioManager.Instance.Play("SFXShieldHit");
             currentShield -= amount / defense;
             timer = 0;
