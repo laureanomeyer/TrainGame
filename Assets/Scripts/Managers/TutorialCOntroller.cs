@@ -80,6 +80,7 @@ public class TutorialController : MonoBehaviour
         EventBus.Publish(new OnSetShieldsActiveEvent(false));
         EventBus.Publish(new OnEnableGoldBoxEvent(false));
         EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
+        EventBus.Publish(new OnEnableCoalBoxEvent(false));
         EventBus.Publish(new OnSetCanConsumeEvent(false));
         EventBus.Publish(new OnSetTimerStartedEvent(false));
         EventBus.Publish(new OnSetTutorialVisibleEvent(true));
@@ -150,7 +151,6 @@ public class TutorialController : MonoBehaviour
             {
                 EventBus.Publish(new OnSetEnemiesFlags(true));
                 EventBus.Publish(new OnSetShieldsActiveEvent(true));
-                EventBus.Publish(new OnSetFirstHeal(false));
                 shieldsUi.alpha = 1f;
             }),
  
@@ -158,7 +158,6 @@ public class TutorialController : MonoBehaviour
             new TutorialStep(PlayerMode.Keep, () =>
             {
                 EventBus.Publish(new OnSetEnemiesFlags(false));
-                EventBus.Publish(new OnSetFirstHeal(true));
             }),
  
             // 13 Defeated enemies drop gold, deposited in the gold wagon 
