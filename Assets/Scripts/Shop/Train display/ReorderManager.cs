@@ -20,16 +20,13 @@ public class ReorderManager : MonoBehaviour
 
     private void Awake()
     {
-        ServiceLocator.Register(this);
-        ServiceLocator.TryGet(out trainDisplayRef);
-        ServiceLocator.TryGet(out UIRef);
-        ServiceLocator.TryGet(out reorderCameraRef);
-        ServiceLocator.TryGet(out panelRef);
         currentHoveredWagonKey = -1;
     }
 
     private void OnEnable()
     {
+        ServiceLocator.Register(this);
+
         inputRef.actions["Move"].performed += OnMovePerformed;
         inputRef.actions["Jump"].performed += OnSelectPerformed;
         inputRef.actions["Pause"].performed += OnPausePerformed;
@@ -38,11 +35,21 @@ public class ReorderManager : MonoBehaviour
 
     private void OnDisable()
     {
+        ServiceLocator.Unregister<ReorderManager>();
+
         if (inputRef == null) return;
         inputRef.actions["Move"].performed -= OnMovePerformed;
         inputRef.actions["Jump"].performed -= OnSelectPerformed;
         inputRef.actions["Pause"].performed -= OnPausePerformed;
         inputRef.actions["Repair"].performed -= OnSellHotkeyPerformed;
+    }
+
+    private void ResolveRefs()
+    {
+        if (trainDisplayRef == null) ServiceLocator.TryGet(out trainDisplayRef);
+        if (UIRef == null) ServiceLocator.TryGet(out UIRef);
+        if (reorderCameraRef == null) ServiceLocator.TryGet(out reorderCameraRef);
+        if (panelRef == null) ServiceLocator.TryGet(out panelRef);
     }
 
     private void OnMovePerformed(InputAction.CallbackContext value)
@@ -80,7 +87,7 @@ public class ReorderManager : MonoBehaviour
     private void OnSelectPerformed(InputAction.CallbackContext value)
     {
         if (!isInReorderMode) return;
-        if (panelRef == null) ServiceLocator.TryGet(out panelRef);
+        ResolveRefs();
 
         switch (managementState)
         {
@@ -100,16 +107,10 @@ public class ReorderManager : MonoBehaviour
 
     private void RefreshPanelUpgradeState()
     {
-        if (panelRef == null) { Debug.LogWarning("[Upgrade] panelRef es null"); return; }
+        if (panelRef == null) return;
 
-        var wagon = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
-        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(currentHoveredWagonKey, out var next, out float cost);
-        float gold = StoreManager.Instance.GetGold();
-        bool canAfford = hasUpgrade && gold >= cost;
-
-        Debug.Log($"[Upgrade] slot={currentHoveredWagonKey} nombre='{wagon.IDReference.WagonName}' " +
-                  $"hasUpgrade={hasUpgrade} next={(next != null ? next.wagonName : "-")} " +
-                  $"cost={cost} gold={gold} canAfford={canAfford}");
+        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(currentHoveredWagonKey, out _, out float cost);
+        bool canAfford = hasUpgrade && StoreManager.Instance.GetGold() >= cost;
 
         panelRef.SetUpgradeState(hasUpgrade, cost, canAfford);
     }
@@ -207,16 +208,12 @@ public class ReorderManager : MonoBehaviour
 
     public void ToggleReorderMode(bool toggled)
     {
+        ResolveRefs();
+        if (trainDisplayRef == null) return;
+
         if (toggled && trainDisplayRef.InstantiatedWagonReferences.Count <= 0) return;
 
         if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
-
-        if (trainDisplayRef == null) ServiceLocator.TryGet(out trainDisplayRef);
-        if (UIRef == null) ServiceLocator.TryGet(out UIRef);
-        if (reorderCameraRef == null) ServiceLocator.TryGet(out reorderCameraRef);
-        if (panelRef == null) ServiceLocator.TryGet(out panelRef);
-
-        if (trainDisplayRef == null) return;
 
         if (toggled)
         {
@@ -230,13 +227,13 @@ public class ReorderManager : MonoBehaviour
             cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
             SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
             reorderCameraRef?.Activate(cacheRef.transform);
-            UIRef.HideUI();
+            UIRef?.HideUI();
         }
         else
         {
             panelRef?.Hide();
             reorderCameraRef?.Deactivate();
-            UIRef?.DeactivateUI(); 
+            UIRef?.DeactivateUI();
         }
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));

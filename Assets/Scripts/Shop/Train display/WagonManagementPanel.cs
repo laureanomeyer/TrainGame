@@ -12,20 +12,17 @@ public class WagonManagementPanel : MonoBehaviour
 
     private ReorderManager reorderManagerRef;
 
-    private void Awake()
-    {
-        ServiceLocator.Register(this);
-    }
-
     private void OnEnable()
     {
+        ServiceLocator.Register(this);
         ServiceLocator.TryGet(out reorderManagerRef);
 
         moveButton.onClick.AddListener(OnMoveClicked);
         sellButton.onClick.AddListener(OnSellClicked);
         if (upgradeButton != null) upgradeButton.onClick.AddListener(OnUpgradeClicked);
 
-        Hide();
+        // Estado inicial: oculto, sin tocar el cursor (eso lo decide quien abre/cierra el panel)
+        panelRoot.SetActive(false);
     }
 
     private void OnDisable()
@@ -33,6 +30,8 @@ public class WagonManagementPanel : MonoBehaviour
         moveButton.onClick.RemoveListener(OnMoveClicked);
         sellButton.onClick.RemoveListener(OnSellClicked);
         if (upgradeButton != null) upgradeButton.onClick.RemoveListener(OnUpgradeClicked);
+
+        ServiceLocator.Unregister<WagonManagementPanel>();
     }
 
     public void Show()

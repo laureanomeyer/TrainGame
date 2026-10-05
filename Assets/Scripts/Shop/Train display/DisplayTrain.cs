@@ -55,20 +55,29 @@ public class DisplayTrain : MonoBehaviour
         upgradeLookup = new Dictionary<string, (WagonUpgradePathSO, int)>();
 
         foreach (var asset in wagonAssets)
-            wagonAssetsReference[asset.wagonName] = asset.shopModel;
-
-
-        foreach (var path in upgradePaths)
         {
-            if (path == null || path.levels == null) continue;
+            if (asset == null) continue;
+            wagonAssetsReference[asset.wagonName] = asset.shopModel;
+        }
 
-            for (int i = 0; i < path.levels.Length; i++)
+        if (upgradePaths == null || upgradePaths.Count == 0)
+            Debug.LogWarning("[DisplayTrain] 'upgradePaths' está vacío: ningún vagón va a poder mejorarse.", this);
+        else
+        {
+            foreach (var path in upgradePaths)
             {
-                var so = path.levels[i].wagon;
-                if (so == null) continue;
+                if (path == null || path.levels == null) continue;
 
-                wagonAssetsReference[so.wagonName] = so.shopModel;
-                upgradeLookup[so.wagonName] = (path, i);
+                for (int i = 0; i < path.levels.Length; i++)
+                {
+                    var so = path.levels[i].wagon;
+                    if (so == null) continue;
+
+                    // Todos los niveles entran al lookup: sin esto, un vagón de nivel 2
+                    // no encuentra su shop model al volver de la run.
+                    wagonAssetsReference[so.wagonName] = so.shopModel;
+                    upgradeLookup[so.wagonName] = (path, i);
+                }
             }
         }
 
@@ -85,11 +94,17 @@ public class DisplayTrain : MonoBehaviour
         int counter = 0;
         foreach (var wagon in wagonList)
         {
-            instantiatedWagonReferences.Add(counter, CreateWagon(wagonAssetsReference[wagon.WagonName], wagon).Item2);
+            if (!wagonAssetsReference.TryGetValue(wagon.WagonName, out var model) || model == null)
+            {
+                // Se omite solo del display; sigue en wagonList y vuelve a la run igual.
+                Debug.LogError($"[DisplayTrain] '{wagon.WagonName}' no está en wagonAssets ni en upgradePaths. Se omite del display.", this);
+                continue;
+            }
+
+            instantiatedWagonReferences.Add(counter, CreateWagon(model, wagon).Item2);
             counter++;
         }
 
-        Debug.Log($"[Upgrade] lookup ({upgradeLookup.Count}): {string.Join(", ", upgradeLookup.Keys)}");
         ServiceLocator.Register(this);
     }
 
@@ -99,6 +114,18 @@ public class DisplayTrain : MonoBehaviour
             cinematicActorRegistry?.UnregisterDynamic(key);
 
         registeredKeys.Clear();
+
+        ServiceLocator.Unregister<DisplayTrain>();
+    }
+
+    // Lleva cualquier tween en curso (shift, pop-in, punch) a su estado final,
+    // para que los cálculos de posición partan de valores definitivos.
+    private void CompleteAllTweens()
+    {
+        if (instantiatedWagonReferences == null) return;
+
+        foreach (var w in instantiatedWagonReferences.Values)
+            if (w != null) w.transform.DOComplete();
     }
 
     #region create and add wagons
@@ -120,6 +147,8 @@ public class DisplayTrain : MonoBehaviour
 
     public GameObject AddWagon(WagonInStockSO wagonID)
     {
+        CompleteAllTweens();
+
         var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName, wagonID.Price);
 
         Quaternion rotation = new Quaternion(0.00000f, -0.70711f, 0.00000f, 0.70711f);
@@ -167,16 +196,19 @@ public class DisplayTrain : MonoBehaviour
     {
         if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagonData)) return null;
 
+        CompleteAllTweens();
+
         wagonList.Remove(wagonData.IDReference);
 
-        Vector3 span = wagonData.tail.position - wagonData.transform.position;
+        // Mismo paso que usan CreateWagon y ComputeReflowPositions: footprint + gap.
+        // Así los vagones de atrás quedan exactamente donde el reflow los espera.
+        Vector3 span = wagonData.FootprintOffset - (wagonData.transform.rotation * Vector3.forward) * wagonGap;
 
         if (!string.IsNullOrEmpty(wagonData.CinematicKey))
         {
             cinematicActorRegistry?.UnregisterDynamic(wagonData.CinematicKey);
             registeredKeys.Remove(wagonData.CinematicKey);
         }
-
 
         var reindexed = new Dictionary<int, ShopWagonData>();
         foreach (var kvp in instantiatedWagonReferences)
@@ -198,6 +230,7 @@ public class DisplayTrain : MonoBehaviour
 
         tailPos -= span;
 
+        wagonData.transform.DOKill();
         Destroy(wagonData.gameObject);
 
         return wagonData;
@@ -212,7 +245,6 @@ public class DisplayTrain : MonoBehaviour
     [SerializeField] private float dragMoveDuration = 0.3f;
     [SerializeField] private Ease dragMoveEase = Ease.OutQuad;
 
-
     private Vector3 reflowAnchorPos;
     private Quaternion reflowRot;
 
@@ -224,11 +256,16 @@ public class DisplayTrain : MonoBehaviour
 
     public void CacheSlotLayout()
     {
+        if (instantiatedWagonReferences == null || instantiatedWagonReferences.Count == 0) return;
+
+        // Sin esto, si el slot 0 se está moviendo (venta reciente) el ancla queda a mitad de camino
+        // y todo el tren se desplaza; y un pop-in a medias podría quedar cortado.
+        CompleteAllTweens();
+
         var frontWagon = instantiatedWagonReferences[0];
         reflowAnchorPos = frontWagon.transform.position;
         reflowRot = frontWagon.transform.rotation;
     }
-
 
     private Dictionary<int, Vector3> ComputeReflowPositions()
     {
@@ -258,7 +295,6 @@ public class DisplayTrain : MonoBehaviour
         wagon.transform.DOMove(liftedPos, dragMoveDuration).SetEase(dragMoveEase);
     }
 
-
     public bool StepDrag(int direction)
     {
         if (draggedWagon == null) return false;
@@ -272,7 +308,6 @@ public class DisplayTrain : MonoBehaviour
         instantiatedWagonReferences[targetSlot] = draggedWagon;
 
         draggedSlot = targetSlot;
-
 
         var positions = ComputeReflowPositions();
 
@@ -322,6 +357,7 @@ public class DisplayTrain : MonoBehaviour
         return upgradeLookup.TryGetValue(w.IDReference.WagonName, out var e) ? e.level + 1 : 0;
     }
 
+    // El costo de mejora es el Price del SO del siguiente nivel.
     public bool TryGetUpgradeInfo(int slotIndex, out WagonInStockSO next, out float cost)
     {
         next = null;
@@ -331,11 +367,13 @@ public class DisplayTrain : MonoBehaviour
         if (!upgradeLookup.TryGetValue(wagon.IDReference.WagonName, out var entry)) return false;
 
         int nextIndex = entry.level + 1;
-        if (nextIndex >= entry.path.levels.Length) return false; // ya está al máximo
+        if (nextIndex >= entry.path.levels.Length) return false; // nivel máximo
 
         next = entry.path.levels[nextIndex].wagon;
-        cost = entry.path.levels[entry.level].upgradeCost;
-        return next != null;
+        if (next == null) return false;
+
+        cost = next.Price;
+        return true;
     }
 
     // Reemplaza el wagon del slot por su siguiente nivel y reacomoda el tren.
@@ -344,15 +382,18 @@ public class DisplayTrain : MonoBehaviour
     {
         if (!TryGetUpgradeInfo(slotIndex, out var next, out _)) return null;
 
+        // Completar tweens antes de leer la posición del wagon viejo
+        CompleteAllTweens();
+
         var oldWagon = instantiatedWagonReferences[slotIndex];
 
-        // 1. Datos lógicos: mismo nodo en la lista, así el orden no cambia
+        // 1. Datos lógicos: mismo nodo en la lista, el orden no cambia.
+        //    Price = precio del nivel actual → la venta devuelve la fracción de la última mejora.
         var newID = new WagonStore(next.Wagon, next.wagonName, next.Price);
         var node = wagonList.Find(oldWagon.IDReference);
         if (node != null) node.Value = newID;
 
         // 2. Modelo nuevo en el mismo lugar
-        oldWagon.transform.DOKill();
         GameObject newGO = Instantiate(next.shopModel, oldWagon.transform.position, oldWagon.transform.rotation);
         newGO.layer = oldWagon.gameObject.layer;
 
@@ -368,6 +409,7 @@ public class DisplayTrain : MonoBehaviour
         }
 
         instantiatedWagonReferences[slotIndex] = newWagon;
+        oldWagon.transform.DOKill();
         Destroy(oldWagon.gameObject);
 
         // 4. Reflow completo con el footprint nuevo
@@ -382,7 +424,6 @@ public class DisplayTrain : MonoBehaviour
                 continue;
             }
 
-            kvp.Value.transform.DOKill();
             kvp.Value.transform.DOMove(positions[kvp.Key], shiftDuration).SetEase(shiftEase);
             kvp.Value.transform.DORotateQuaternion(reflowRot, shiftDuration);
         }
