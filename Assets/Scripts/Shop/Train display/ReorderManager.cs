@@ -6,22 +6,26 @@ public class ReorderManager : MonoBehaviour
     [SerializeField] private PlayerInput inputRef;
     [SerializeField] private float sellRefundFraction = 0.5f;
 
+    [Header("Option descriptions")]
+    [SerializeField] private string moveDescription = "Change wagon order";
+    [SerializeField] private string maxLevelDescription = "Max level";
+
     private DisplayTrain trainDisplayRef;
     private StoreUiInteracts UIRef;
     private ReorderCameraController reorderCameraRef;
-    private WagonManagementPanel panelRef;
+    private ReorderHUD hudRef;
 
-    private enum WagonManagementState { Hovering, Panel, Dragging }
-    private WagonManagementState managementState = WagonManagementState.Hovering;
+    private enum State { Hovering, Panel, Dragging }
+    private State state = State.Hovering;
 
     private ShopWagonData cacheRef;
-    private int currentHoveredWagonKey;
+    private int hoveredSlot = -1;
+    private ReorderHUD.Option selectedOption = ReorderHUD.Option.Move;
     private bool isInReorderMode;
 
-    private void Awake()
-    {
-        currentHoveredWagonKey = -1;
-    }
+    private const int OptionCount = 3;
+
+    #region Lifecycle
 
     private void OnEnable()
     {
@@ -30,7 +34,6 @@ public class ReorderManager : MonoBehaviour
         inputRef.actions["Move"].performed += OnMovePerformed;
         inputRef.actions["Jump"].performed += OnSelectPerformed;
         inputRef.actions["Pause"].performed += OnPausePerformed;
-        inputRef.actions["Repair"].performed += OnSellHotkeyPerformed;
     }
 
     private void OnDisable()
@@ -41,7 +44,6 @@ public class ReorderManager : MonoBehaviour
         inputRef.actions["Move"].performed -= OnMovePerformed;
         inputRef.actions["Jump"].performed -= OnSelectPerformed;
         inputRef.actions["Pause"].performed -= OnPausePerformed;
-        inputRef.actions["Repair"].performed -= OnSellHotkeyPerformed;
     }
 
     private void ResolveRefs()
@@ -49,202 +51,269 @@ public class ReorderManager : MonoBehaviour
         if (trainDisplayRef == null) ServiceLocator.TryGet(out trainDisplayRef);
         if (UIRef == null) ServiceLocator.TryGet(out UIRef);
         if (reorderCameraRef == null) ServiceLocator.TryGet(out reorderCameraRef);
-        if (panelRef == null) ServiceLocator.TryGet(out panelRef);
+        if (hudRef == null) ServiceLocator.TryGet(out hudRef);
     }
 
-    private void OnMovePerformed(InputAction.CallbackContext value)
+    #endregion
+
+    #region Input
+
+    private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         if (!isInReorderMode) return;
-        if (managementState == WagonManagementState.Panel) return;
 
-        int direction = Mathf.RoundToInt(value.ReadValue<Vector2>().x);
-        if (direction == 0) return;
+        int dir = Mathf.RoundToInt(ctx.ReadValue<Vector2>().x);
+        if (dir == 0) return;
 
-        if (managementState == WagonManagementState.Dragging)
+        ResolveRefs();
+
+        switch (state)
         {
-            if (trainDisplayRef.StepDrag(direction))
-            {
-                currentHoveredWagonKey = trainDisplayRef.DraggedSlot;
-                reorderCameraRef?.SetTarget(trainDisplayRef.DraggedWagon.transform);
-            }
-            return;
+            case State.Hovering:
+                MoveHover(dir);
+                break;
+
+            case State.Panel:
+                selectedOption = (ReorderHUD.Option)(((int)selectedOption + dir + OptionCount) % OptionCount);
+                RefreshPanel();
+                break;
+
+            case State.Dragging:
+                if (trainDisplayRef.StepDrag(dir))
+                {
+                    hoveredSlot = trainDisplayRef.DraggedSlot;
+                    reorderCameraRef?.SetTarget(trainDisplayRef.DraggedWagon.transform);
+                }
+                break;
         }
-
-        // Hovering: navegación entre wagones
-        if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
-
-        currentHoveredWagonKey -= direction;
-        int count = trainDisplayRef.InstantiatedWagonReferences.Count;
-        if (currentHoveredWagonKey > count - 1) currentHoveredWagonKey = 0;
-        if (currentHoveredWagonKey < 0) currentHoveredWagonKey = count - 1;
-
-        cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
-        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
-
-        reorderCameraRef?.SetTarget(cacheRef.transform);
     }
 
-    private void OnSelectPerformed(InputAction.CallbackContext value)
+    private void OnSelectPerformed(InputAction.CallbackContext ctx)
     {
         if (!isInReorderMode) return;
         ResolveRefs();
 
-        switch (managementState)
+        switch (state)
         {
-            case WagonManagementState.Hovering:
+            case State.Hovering:
                 if (cacheRef == null) return;
-                managementState = WagonManagementState.Panel;
-                RefreshPanelUpgradeState();
-                panelRef?.Show();
+                state = State.Panel;
+                selectedOption = ReorderHUD.Option.Move;
+                RefreshPanel();
                 break;
 
-            case WagonManagementState.Dragging:
+            case State.Panel:
+                ExecuteSelectedOption();
+                break;
+
+            case State.Dragging:
                 trainDisplayRef.EndDrag();
-                managementState = WagonManagementState.Hovering;
+                state = State.Hovering;
+                ShowHover();
                 break;
         }
     }
 
-    private void RefreshPanelUpgradeState()
+    private void OnPausePerformed(InputAction.CallbackContext ctx)
     {
-        if (panelRef == null) return;
+        if (!isInReorderMode) return;
+        ResolveRefs();
 
-        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(currentHoveredWagonKey, out _, out float cost);
-        bool canAfford = hasUpgrade && StoreManager.Instance.GetGold() >= cost;
+        switch (state)
+        {
+            case State.Hovering:
+                ToggleReorderMode(false);
+                break;
 
-        panelRef.SetUpgradeState(hasUpgrade, cost, canAfford);
+            case State.Panel:
+                state = State.Hovering;
+                ShowHover();
+                break;
+
+            case State.Dragging:
+                hoveredSlot = trainDisplayRef.CancelDrag();
+                reorderCameraRef?.SetTarget(cacheRef.transform);
+                state = State.Hovering;
+                ShowHover();
+                break;
+        }
     }
 
-    // Llamado desde WagonManagementPanel (botón Upgrade)
-    public void ConfirmUpgradeSelected()
+    #endregion
+
+    #region Hover
+
+    private void MoveHover(int dir)
     {
-        if (currentHoveredWagonKey < 0) return;
-        if (!trainDisplayRef.TryGetUpgradeInfo(currentHoveredWagonKey, out _, out float cost)) return;
+        int count = trainDisplayRef.InstantiatedWagonReferences.Count;
+        if (count == 0) return;
+
+        int slot = hoveredSlot - dir;
+        if (slot > count - 1) slot = 0;
+        if (slot < 0) slot = count - 1;
+
+        SetHovered(slot, moveCamera: true);
+        ShowHover();
+    }
+
+    private void SetHovered(int slot, bool moveCamera)
+    {
+        if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+
+        hoveredSlot = slot;
+        cacheRef = trainDisplayRef.InstantiatedWagonReferences[slot];
+        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
+
+        if (moveCamera) reorderCameraRef?.SetTarget(cacheRef.transform);
+    }
+
+    private void ShowHover()
+    {
+        if (hudRef == null || cacheRef == null) return;
+
+        var so = trainDisplayRef.GetWagonSO(hoveredSlot);
+        string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
+        string description = so != null ? so.Description : string.Empty;
+
+        hudRef.ShowHover(cacheRef, wagonName, description);
+    }
+
+    #endregion
+
+    #region Panel
+
+    private void RefreshPanel()
+    {
+        if (hudRef == null || cacheRef == null) return;
+
+        var so = trainDisplayRef.GetWagonSO(hoveredSlot);
+        string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
+
+        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out _, out float cost);
+        bool canAfford = hasUpgrade && StoreManager.Instance.GetGold() >= cost;
+
+        string description = selectedOption switch
+        {
+            ReorderHUD.Option.Move => moveDescription,
+            ReorderHUD.Option.Upgrade => hasUpgrade ? $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}" : maxLevelDescription,
+            _ => $"Sell for {hudRef.FormatMoney(GetSellValue(cacheRef), true)}"
+        };
+
+        hudRef.ShowPanel(cacheRef, wagonName, selectedOption, description, canAfford);
+    }
+
+    private void ExecuteSelectedOption()
+    {
+        switch (selectedOption)
+        {
+            case ReorderHUD.Option.Move:
+                trainDisplayRef.CacheSlotLayout();
+                trainDisplayRef.BeginDrag(hoveredSlot);
+                state = State.Dragging;
+                hudRef?.ShowDrag(cacheRef);
+                break;
+
+            case ReorderHUD.Option.Upgrade:
+                TryUpgradeHovered();
+                break;
+
+            case ReorderHUD.Option.Sell:
+                SellHovered();
+                break;
+        }
+    }
+
+    private void TryUpgradeHovered()
+    {
+        if (!trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out _, out float cost)) return;
         if (!StoreManager.Instance.TrySpendGold(cost)) return;
 
-        panelRef?.Hide();
-        managementState = WagonManagementState.Hovering;
-
-        ShopWagonData upgraded = trainDisplayRef.UpgradeWagon(currentHoveredWagonKey);
+        var upgraded = trainDisplayRef.UpgradeWagon(hoveredSlot);
         if (upgraded == null)
         {
             StoreManager.Instance.AddGold(cost); // devolución por seguridad
             return;
         }
 
-        cacheRef = upgraded;
-        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
-        reorderCameraRef?.SetTarget(cacheRef.transform);
+        cacheRef = null; // el modelo viejo fue destruido
+        SetHovered(hoveredSlot, moveCamera: true);
+        state = State.Hovering;
+        ShowHover();
     }
 
-    private void OnSellHotkeyPerformed(InputAction.CallbackContext value)
+    private void SellHovered()
     {
-        if (!isInReorderMode) return;
-        if (managementState != WagonManagementState.Hovering) return;
-
-        SellHoveredWagon();
-    }
-
-    private void OnPausePerformed(InputAction.CallbackContext value)
-    {
-        if (!isInReorderMode) return;
-
-        if (managementState == WagonManagementState.Dragging)
-        {
-            trainDisplayRef.EndDrag();
-        }
-        else if (managementState == WagonManagementState.Panel)
-        {
-            panelRef?.Hide();
-        }
-
-        managementState = WagonManagementState.Hovering;
-        ToggleReorderMode(false);
-    }
-
-    // Llamado desde WagonManagementPanel (botón Move)
-    public void ConfirmMoveSelected()
-    {
-        panelRef?.Hide();
-
-        trainDisplayRef.CacheSlotLayout();
-        trainDisplayRef.BeginDrag(currentHoveredWagonKey);
-        managementState = WagonManagementState.Dragging;
-    }
-
-    // Llamado desde WagonManagementPanel (botón Sell)
-    public void ConfirmSellSelected()
-    {
-        panelRef?.Hide();
-        SellHoveredWagon();
-    }
-
-    private void SellHoveredWagon()
-    {
-        if (currentHoveredWagonKey < 0) return;
-
-        ShopWagonData sold = trainDisplayRef.SellWagon(currentHoveredWagonKey);
-        managementState = WagonManagementState.Hovering;
-
+        var sold = trainDisplayRef.SellWagon(hoveredSlot);
         if (sold == null) return;
 
-        StoreManager.Instance.AddGold(Mathf.Floor(sold.IDReference.Price * sellRefundFraction));
+        StoreManager.Instance.AddGold(GetSellValue(sold));
+        cacheRef = null;
 
         int count = trainDisplayRef.InstantiatedWagonReferences.Count;
         if (count == 0)
         {
-            cacheRef = null;
-            currentHoveredWagonKey = -1;
+            hoveredSlot = -1;
             ToggleReorderMode(false);
             return;
         }
 
-        if (currentHoveredWagonKey >= count) currentHoveredWagonKey = count - 1;
-
-        cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
-        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
-        reorderCameraRef?.SetTarget(cacheRef.transform);
+        SetHovered(Mathf.Min(hoveredSlot, count - 1), moveCamera: true);
+        state = State.Hovering;
+        ShowHover();
     }
+
+    private float GetSellValue(ShopWagonData wagon) =>
+        Mathf.Floor(wagon.IDReference.Price * sellRefundFraction);
+
+    #endregion
+
+    #region Mode toggle
 
     public void ToggleReorderMode(bool toggled)
     {
         ResolveRefs();
         if (trainDisplayRef == null) return;
-
-        if (toggled && trainDisplayRef.InstantiatedWagonReferences.Count <= 0) return;
-
-        if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+        if (toggled == isInReorderMode) return;
 
         if (toggled)
         {
-            managementState = WagonManagementState.Hovering;
+            int count = trainDisplayRef.InstantiatedWagonReferences.Count;
+            if (count <= 0) return;
 
-            if (currentHoveredWagonKey < 0 || currentHoveredWagonKey >= trainDisplayRef.InstantiatedWagonReferences.Count)
-                currentHoveredWagonKey = 0;
-
+            state = State.Hovering;
             trainDisplayRef.CacheSlotLayout();
 
-            cacheRef = trainDisplayRef.InstantiatedWagonReferences[currentHoveredWagonKey];
-            SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
+            int slot = (hoveredSlot < 0 || hoveredSlot >= count) ? 0 : hoveredSlot;
+            SetHovered(slot, moveCamera: false);
             reorderCameraRef?.Activate(cacheRef.transform);
+
             UIRef?.HideUI();
+            EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
+
+            isInReorderMode = true;
+            ShowHover();
         }
         else
         {
-            panelRef?.Hide();
+            if (state == State.Dragging) trainDisplayRef.CancelDrag();
+            if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+
+            state = State.Hovering;
+            hudRef?.Hide();
             reorderCameraRef?.Deactivate();
             UIRef?.DeactivateUI();
+
+            isInReorderMode = false;
         }
 
         EventBus.Publish(new OnActivateUiEvent(!toggled));
-        isInReorderMode = toggled;
     }
+
+    #endregion
 
     private void SetLayerRecursively(GameObject obj, int layer)
     {
         foreach (Transform t in obj.GetComponentsInChildren<Transform>(true))
-        {
             t.gameObject.layer = layer;
-        }
     }
 }

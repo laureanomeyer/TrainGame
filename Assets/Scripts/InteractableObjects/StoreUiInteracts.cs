@@ -160,10 +160,7 @@ public class StoreUiInteracts : MonoBehaviour
 
     private void OnPausePressed(InputAction.CallbackContext context)
     {
-        if (uiOpen)
-        {
-            //Debug.Log("PuaseButton");
+        if (uiOpen && !isHidden)
             DeactivateUI();
-        }
     }
 }

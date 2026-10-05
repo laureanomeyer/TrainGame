@@ -32,6 +32,7 @@ public class DisplayTrain : MonoBehaviour
 
     private LinkedList<IWagonID> wagonList;
     private Dictionary<int, ShopWagonData> instantiatedWagonReferences;
+    private Dictionary<string, WagonInStockSO> soLookup;
 
     private ICinematicActorRegistry cinematicActorRegistry;
 
@@ -53,6 +54,14 @@ public class DisplayTrain : MonoBehaviour
         wagonAssetsReference = new Dictionary<string, GameObject>();
         instantiatedWagonReferences = new Dictionary<int, ShopWagonData>();
         upgradeLookup = new Dictionary<string, (WagonUpgradePathSO, int)>();
+        soLookup = new Dictionary<string, WagonInStockSO>();
+
+        foreach (var asset in wagonAssets)
+        {
+            if (asset == null) continue;
+            wagonAssetsReference[asset.wagonName] = asset.shopModel;
+            soLookup[asset.wagonName] = asset;                        // ← nuevo
+        }
 
         foreach (var asset in wagonAssets)
         {
@@ -77,6 +86,7 @@ public class DisplayTrain : MonoBehaviour
                     // no encuentra su shop model al volver de la run.
                     wagonAssetsReference[so.wagonName] = so.shopModel;
                     upgradeLookup[so.wagonName] = (path, i);
+                    soLookup[so.wagonName] = so;
                 }
             }
         }
@@ -248,6 +258,8 @@ public class DisplayTrain : MonoBehaviour
     private Vector3 reflowAnchorPos;
     private Quaternion reflowRot;
 
+    private int dragOriginSlot = -1;
+
     private int draggedSlot = -1;
     private ShopWagonData draggedWagon;
 
@@ -288,6 +300,7 @@ public class DisplayTrain : MonoBehaviour
         if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagon)) return;
 
         draggedSlot = slotIndex;
+        dragOriginSlot = slotIndex;   // ← nuevo
         draggedWagon = wagon;
 
         var positions = ComputeReflowPositions();
@@ -337,6 +350,35 @@ public class DisplayTrain : MonoBehaviour
 
         draggedWagon = null;
         draggedSlot = -1;
+        dragOriginSlot = -1;         
+    }
+
+    public int CancelDrag()
+    {
+        if (draggedWagon == null) return draggedSlot;
+
+        int origin = dragOriginSlot;
+
+        var ordered = instantiatedWagonReferences.OrderBy(k => k.Key).Select(k => k.Value).ToList();
+        ordered.Remove(draggedWagon);
+        ordered.Insert(origin, draggedWagon);
+
+        instantiatedWagonReferences = new Dictionary<int, ShopWagonData>();
+        for (int i = 0; i < ordered.Count; i++)
+            instantiatedWagonReferences[i] = ordered[i];
+
+        var positions = ComputeReflowPositions();
+        foreach (var kvp in instantiatedWagonReferences)
+        {
+            kvp.Value.transform.DOMove(positions[kvp.Key], dragMoveDuration).SetEase(dragMoveEase);
+            kvp.Value.transform.DORotateQuaternion(reflowRot, dragMoveDuration);
+        }
+
+        draggedWagon = null;
+        draggedSlot = -1;
+        dragOriginSlot = -1;
+
+        return origin;
     }
 
     private void SyncWagonListFromSlots()
@@ -350,14 +392,14 @@ public class DisplayTrain : MonoBehaviour
 
     #region upgrade wagon
 
-    // Nivel actual (1..N) del wagon en el slot, o 0 si no pertenece a ningún path.
+
     public int GetWagonLevel(int slotIndex)
     {
         if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var w)) return 0;
         return upgradeLookup.TryGetValue(w.IDReference.WagonName, out var e) ? e.level + 1 : 0;
     }
 
-    // El costo de mejora es el Price del SO del siguiente nivel.
+
     public bool TryGetUpgradeInfo(int slotIndex, out WagonInStockSO next, out float cost)
     {
         next = null;
@@ -376,31 +418,28 @@ public class DisplayTrain : MonoBehaviour
         return true;
     }
 
-    // Reemplaza el wagon del slot por su siguiente nivel y reacomoda el tren.
-    // No cobra: el caller (ReorderManager) se encarga del oro.
+
     public ShopWagonData UpgradeWagon(int slotIndex)
     {
         if (!TryGetUpgradeInfo(slotIndex, out var next, out _)) return null;
 
-        // Completar tweens antes de leer la posición del wagon viejo
+
         CompleteAllTweens();
 
         var oldWagon = instantiatedWagonReferences[slotIndex];
 
-        // 1. Datos lógicos: mismo nodo en la lista, el orden no cambia.
-        //    Price = precio del nivel actual → la venta devuelve la fracción de la última mejora.
         var newID = new WagonStore(next.Wagon, next.wagonName, next.Price);
         var node = wagonList.Find(oldWagon.IDReference);
         if (node != null) node.Value = newID;
 
-        // 2. Modelo nuevo en el mismo lugar
+
         GameObject newGO = Instantiate(next.shopModel, oldWagon.transform.position, oldWagon.transform.rotation);
         newGO.layer = oldWagon.gameObject.layer;
 
         ShopWagonData newWagon = newGO.GetComponent<ShopWagonData>();
         newWagon.SetID(newID);
 
-        // 3. Cinematic key: se conserva, apuntando al transform nuevo
+
         if (!string.IsNullOrEmpty(oldWagon.CinematicKey))
         {
             cinematicActorRegistry?.UnregisterDynamic(oldWagon.CinematicKey);
@@ -412,7 +451,7 @@ public class DisplayTrain : MonoBehaviour
         oldWagon.transform.DOKill();
         Destroy(oldWagon.gameObject);
 
-        // 4. Reflow completo con el footprint nuevo
+
         CacheSlotLayout();
         var positions = ComputeReflowPositions();
 
@@ -428,13 +467,19 @@ public class DisplayTrain : MonoBehaviour
             kvp.Value.transform.DORotateQuaternion(reflowRot, shiftDuration);
         }
 
-        // 5. tailPos = cola del último wagon en su posición final
+
         int lastIndex = instantiatedWagonReferences.Count - 1;
         tailPos = positions[lastIndex] + instantiatedWagonReferences[lastIndex].FootprintOffset;
 
         newGO.transform.DOPunchScale(Vector3.one * upgradePunchScale, upgradePunchDuration, 6, 0.5f);
 
         return newWagon;
+    }
+
+    public WagonInStockSO GetWagonSO(int slotIndex)
+    {
+        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var w)) return null;
+        return soLookup.TryGetValue(w.IDReference.WagonName, out var so) ? so : null;
     }
 
     #endregion
