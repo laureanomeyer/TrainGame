@@ -78,14 +78,21 @@ public class TutorialController : MonoBehaviour
         ApplyMode(PlayerMode.Reading);
 
         EventBus.Publish(new OnSetShieldsActiveEvent(false));
-        EventBus.Publish(new OnEnableGoldBoxEvent(false));
-        EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
-        EventBus.Publish(new OnEnableCoalBoxEvent(false));
-        EventBus.Publish(new OnSetCanConsumeEvent(false));
-        EventBus.Publish(new OnSetTimerStartedEvent(false));
-        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
 
+        EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
+        EventBus.Publish(new OnSetTimerStartedEvent(false));
+        EventBus.Publish(new OnSetCanConsumeEvent(false));
+
+        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
         EventBus.Publish(new OnSetTutorialTextEvent(texts[currentStep]));
+
+        EventBus.Publish(new OnEnableGoldBoxEvent(false));
+        EventBus.Publish(new OnSetGoldWagonWaypoint(false));
+        //Primero pones el waypoint de carbon en apagado
+        EventBus.Publish(new OnSetCoalWaypoint(false));
+        //Despues desactivas la caja de carbon
+        EventBus.Publish(new OnDeactivateFuelChargerWaypoint());
+
     }
 
     private void BuildSteps()

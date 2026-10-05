@@ -9,12 +9,20 @@ public class CollectGoldFromWagon : MonoBehaviour
     [SerializeField] private BoxCollider boxCollider;
     InteractInputHandler inputHandler;
 
+    [SerializeField] private GameObject objectT;
+    [SerializeField] private LayerMask outlineLayer;
+    [SerializeField] private LayerMask whiteOutlineLayer;
+
     private bool canInteract = false;
+    private bool playerIn = false;
 
     private void Awake()
     {
         EventBus.Subscribe<OnEnemyKilledEvent>(CallCollectGoldEvent);
         EventBus.Subscribe<OnEnableGoldBoxEvent>(Activate);
+
+        if (objectT != null)
+            objectT.layer = LayerMask.NameToLayer("Outline");
     }
     void Start()
     {
@@ -37,27 +45,43 @@ public class CollectGoldFromWagon : MonoBehaviour
     private void SetGoldInPlayerInventory()
     {
         if (!canInteract) return;
+        if (!playerIn) return;
         if (playerRef == null) return;
         if (!playerRef.CanInteract) return;
 
-        if (playerRef != null)
-        {
-            playerRef.Inventory.GoldAmount += goldBrain.Collector.GiveGold();
-        }
+        playerRef.Inventory.GoldAmount += goldBrain.Collector.GiveGold();
+        EventBus.Publish(new OnHideInteractEvent());
+        objectT.layer = LayerMask.NameToLayer("Outline");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (!canInteract) return;
+        if (!other.gameObject.CompareTag("Player")) return;
+        if (!other.TryGetComponent<PlayerBrain>(out playerRef)) return;
+
+        playerIn = true;
+
+        if (goldBrain.Collector.Gold != 0)
         {
-            other.TryGetComponent<PlayerBrain>(out playerRef);
+            EventBus.Publish(new OnShowInteractEvent());
+            if (objectT != null)
+                objectT.layer = LayerMask.NameToLayer("WhiteOutline");
         }
     }
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (!other.gameObject.CompareTag("Player")) return;
+
+        playerIn = false;
+        playerRef = null;
+
+        if (canInteract)
         {
-            playerRef = null;
+            EventBus.Publish(new OnHideInteractEvent());
+            if (objectT != null)
+                objectT.layer = LayerMask.NameToLayer("Outline");
         }
     }
 
@@ -70,7 +94,7 @@ public class CollectGoldFromWagon : MonoBehaviour
     {
         canInteract = true;
         boxCollider.enabled = true;
-    } 
+    }
     void Activate(OnEnableGoldBoxEvent ev)
     {
         canInteract = true;

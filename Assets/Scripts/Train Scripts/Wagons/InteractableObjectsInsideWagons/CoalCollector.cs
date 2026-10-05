@@ -50,6 +50,10 @@ public class CoalCollector
 
     public void GainCoal(OnCoalEarnedEvent coalEvent)
     {
+        if (coal <= 0)
+        {
+            EventBus.Publish(new OnSetCoalWaypoint(true));
+        }
         if (!coalEvent.Set)
         {
             coal += coalEvent.Amount;
@@ -89,6 +93,11 @@ public class CoalCollector
         if (coal > 0)
         {
             coal -= 1;
+
+            if (coal == 0)
+            {
+                EventBus.Publish(new OnSetCoalWaypoint(false));
+            }
         }
         coalDisplayUI.text = coal.ToString();
     }

@@ -6,6 +6,7 @@ public class GolodenWagonBoxWaypoints : MonoBehaviour, IWaypointsUI
     private IndicatorRenderer indicatorRenderer;
 
     [SerializeField] private IndicatorOffScreen indicatorOffScreen;
+    [SerializeField] private IndicatorOnScreen indicatorOnScreen;
 
     void Start()
     {
@@ -13,32 +14,31 @@ public class GolodenWagonBoxWaypoints : MonoBehaviour, IWaypointsUI
 
         indicatorOffScreen.SetRenderer(indicatorRenderer);
 
-        EventBus.Subscribe<OnTakeGoldEvent>(CallDeactivateWayPointEvent);
-        EventBus.Subscribe<OnDropGoldEvent>(CallActivateWayPointEvent);
+        EventBus.Subscribe<OnSetGoldWagonWaypoint>(HandleWaypointVisibility);
+
+        DeactivateWaypointUI();
     }
     private void OnDestroy()
     {
-        EventBus.Unsubscribe<OnTakeGoldEvent>(CallDeactivateWayPointEvent);
-        EventBus.Unsubscribe<OnDropGoldEvent>(CallActivateWayPointEvent);
-    }
-    public void CallActivateWayPointEvent(OnDropGoldEvent activateWayPointEvent)
-    {
-        ActivateWaypointUI();
-    }
-
-    public void CallDeactivateWayPointEvent(OnTakeGoldEvent deactivateWayPointEvent)
-    {
-        DeactivateWaypointUI();
+        EventBus.Unsubscribe<OnSetGoldWagonWaypoint>(HandleWaypointVisibility);
     }
 
     public void ActivateWaypointUI()
     {
         indicatorOffScreen.visible = true;
+        indicatorOnScreen.visible = true;
     }
 
     public void DeactivateWaypointUI()
     {
         indicatorOffScreen.visible = false;
+        indicatorOnScreen.visible = false;
+    }
+
+    public void HandleWaypointVisibility(OnSetGoldWagonWaypoint ev)
+    {
+        indicatorOffScreen.visible = ev.Show;
+        indicatorOnScreen.visible = ev.Show;
     }
 
 }

@@ -6,6 +6,7 @@ public class InteractableObjectBrain : MonoBehaviour
     [SerializeField] private InputActionAsset inputActions;
     [SerializeField] private InteractableType behaviorType;
     [SerializeField] private BoxCollider col;
+    private bool canInteract;
     private IInteractableWithInventory objectBehavior;
     InteractInputHandler inputHandler;
     PlayerBrain playerRef;
@@ -34,17 +35,18 @@ public class InteractableObjectBrain : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && canInteract)
         {
             other.TryGetComponent<PlayerBrain>(out playerRef);
+            EventBus.Publish(new OnShowInteractEvent());
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && canInteract)
         {
             playerRef = null;
+            EventBus.Publish(new OnHideInteractEvent());
         }
     }
-
 }

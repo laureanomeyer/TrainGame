@@ -10,9 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4292823356123919832}
   - component: {fileID: 7109623675331961768}
-  - component: {fileID: 6677325356836619238}
-  - component: {fileID: 7825038718591061496}
   - component: {fileID: 1772504938988449446}
+  - component: {fileID: 3931185256239481995}
   m_Layer: 3
   m_Name: GoldBox
   m_TagString: Untagged
@@ -58,40 +57,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.8491347, y: 1.493452, z: 1.5332073}
   m_Center: {x: -0.9245677, y: 0.80544096, z: 1.2995814}
---- !u!114 &6677325356836619238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1464401652875814331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6b03e1311cecd54d85e0ce6678569c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractableObjectBrain
-  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  behaviorType: 1
-  col: {fileID: 7109623675331961768}
---- !u!114 &7825038718591061496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1464401652875814331}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cd53223bfeb3c046bdc0e79a5941e9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionTrigger
-  objectT: {fileID: 5535564577036436381}
-  outlineLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  whiteOutlineLayer:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!114 &1772504938988449446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,6 +71,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GoldBoxWaypoints
   indicatorOnScreen: {fileID: 7766441207618870443}
   indicatorOffScreen: {fileID: 6367674252144375831}
+--- !u!114 &3931185256239481995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1464401652875814331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2026a27d7d7cf3e48830d0d693d45945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GoldSafeBrain
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  boxCollider: {fileID: 7333574520402911468}
+  objectT: {fileID: 5535564577036436381}
+  outlineLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  whiteOutlineLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  canInteract: 0
 --- !u!1 &2265940698369708892
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,7 +293,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1104470219656805924}
   - component: {fileID: 439538155036447985}
-  - component: {fileID: 2728760231018745957}
   - component: {fileID: 6428999732380688441}
   - component: {fileID: 3614904144631400449}
   m_Layer: 3
@@ -354,25 +340,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.898534, y: 1.8037632, z: 3.1382449}
   m_Center: {x: -0.50297064, y: 0.98418367, z: 2.1263785}
---- !u!114 &2728760231018745957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3290545796818616260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cd53223bfeb3c046bdc0e79a5941e9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionTrigger
-  objectT: {fileID: 1174519170511990474}
-  outlineLayer:
-    serializedVersion: 2
-    m_Bits: 8
-  whiteOutlineLayer:
-    serializedVersion: 2
-    m_Bits: 512
 --- !u!114 &6428999732380688441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,6 +369,13 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   coalBrain: {fileID: 2900975310691610324}
   boxCollider: {fileID: 439538155036447985}
+  objectT: {fileID: 1174519170511990474}
+  outlineLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  whiteOutlineLayer:
+    serializedVersion: 2
+    m_Bits: 512
   canInteract: 0
 --- !u!1 &3837915469814561841
 GameObject:
@@ -430,7 +404,7 @@ Transform:
   m_GameObject: {fileID: 3837915469814561841}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.6700008, y: 2.71, z: 1.3199999}
+  m_LocalPosition: {x: 5, y: 2.71, z: 1.3199999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -454,8 +428,8 @@ MonoBehaviour:
   style:
     texture: {fileID: 2800000, guid: 5f6910cc566d0b1448f7cc4787cbfa2f, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
-    width: 100
-    height: 100
+    width: 138
+    height: 170
 --- !u!114 &6367674252144375831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -469,8 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOffScreen
   visible: 0
-  renderers:
-  - {fileID: 0}
+  renderers: []
   style:
     texture: {fileID: 2800000, guid: 3474c58b009b6224cb46539576afdff8, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -563,7 +536,7 @@ Transform:
   m_GameObject: {fileID: 6176506645571132237}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.04, y: 2.72, z: 2.11}
+  m_LocalPosition: {x: 5, y: 2.72, z: 2.11}
   m_LocalScale: {x: 4.1271, y: 3.4231699, z: 0.24905999}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -586,8 +559,8 @@ MonoBehaviour:
   style:
     texture: {fileID: 2800000, guid: c7e25eada6d8f2a4dac4f23cf7711b76, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
-    width: 100
-    height: 100
+    width: 138
+    height: 170
 --- !u!114 &6438675391185084156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -869,7 +842,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8222789761746815592}
   - component: {fileID: 6525529739999462292}
-  - component: {fileID: 7906367566990126569}
   m_Layer: 3
   m_Name: Waypoints
   m_TagString: Untagged
@@ -886,7 +858,7 @@ Transform:
   m_GameObject: {fileID: 7131068646574043805}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.077, y: 0.727, z: 6.84}
+  m_LocalPosition: {x: 0.93, y: 0.727, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -909,34 +881,8 @@ MonoBehaviour:
   style:
     texture: {fileID: 2800000, guid: c7e25eada6d8f2a4dac4f23cf7711b76, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
-    width: 100
-    height: 100
---- !u!114 &7906367566990126569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7131068646574043805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c08470e2a2343b14e90107557e5208ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOffScreen
-  visible: 0
-  renderers: []
-  style:
-    texture: {fileID: 2800000, guid: a3cdb43e1917d7246bb7fcf2c3632026, type: 3}
-    color: {r: 1, g: 1, b: 1, a: 1}
-    width: 100
-    height: 100
-  showArrow: 1
-  arrowStyle:
-    texture: {fileID: 2800000, guid: 0a2592ae50a6a0c42a0f017fea5fa648, type: 3}
-    color: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
-    margin: 0
-    width: 32
-    height: 32
+    width: 138
+    height: 170
 --- !u!1 &7140174118155908298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1539,7 +1485,6 @@ GameObject:
   - component: {fileID: 7234334852325864327}
   - component: {fileID: 9040159520845939729}
   - component: {fileID: 8478406243106104320}
-  - component: {fileID: 631750995607314906}
   - component: {fileID: 6750623764705149986}
   m_Layer: 3
   m_Name: FuelCharger
@@ -1600,18 +1545,6 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   locomotive: {fileID: 2900975310691610324}
   coll: {fileID: 9040159520845939729}
---- !u!114 &631750995607314906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8426430648945959898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cd53223bfeb3c046bdc0e79a5941e9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionTrigger
   objectT: {fileID: 7531430811474246542}
   outlineLayer:
     serializedVersion: 2
@@ -1632,7 +1565,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FuelChargerWaypoints
   indicatorOnScreen: {fileID: 6525529739999462292}
-  indicatorOffScreen: {fileID: 7906367566990126569}
 --- !u!1001 &1358280213353128386
 PrefabInstance:
   m_ObjectHideFlags: 0
