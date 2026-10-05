@@ -130,7 +130,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938208744672089818}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -139,8 +139,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -12.89002, y: -119.29}
-  m_SizeDelta: {x: 197.749, y: 201.719}
+  m_AnchoredPosition: {x: -25.4, y: -115.1}
+  m_SizeDelta: {x: 193.472, y: 197.3561}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &3524413261093164401
 CanvasRenderer:
@@ -524,7 +524,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -8.190001, y: 20.140491}
+  m_AnchoredPosition: {x: -20.6, y: 16.1}
   m_SizeDelta: {x: 197.749, y: 201.719}
   m_Pivot: {x: 1.0000001, y: 0.000000004656613}
 --- !u!222 &3675673195784714894
@@ -799,6 +799,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6697771589056466121}
+  - component: {fileID: 8131638651843135353}
   m_Layer: 5
   m_Name: TrainProgressBar
   m_TagString: Untagged
@@ -831,6 +832,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0.5, y: 0}
   m_SizeDelta: {x: 1.0002, y: -0.00024414}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &8131638651843135353
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4996607273657379096}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &5143859770973102812
 GameObject:
   m_ObjectHideFlags: 0
@@ -1192,7 +1205,7 @@ GameObject:
   - component: {fileID: 7262323256770734672}
   - component: {fileID: 2979095776259156438}
   m_Layer: 5
-  m_Name: ShieldsHP
+  m_Name: ShieldsHPBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

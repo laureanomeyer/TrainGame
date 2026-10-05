@@ -14,6 +14,7 @@ public class TutorialController : MonoBehaviour
     [SerializeField] private CanvasGroup shieldsUi;
     [SerializeField] private CanvasGroup goldHpUi;
     [SerializeField] private CanvasGroup goldAmountUi;
+    [SerializeField] private CanvasGroup runUi;
 
     [SerializeField] Transform EnemySpawn;
     [SerializeField] private EnemyData coalEnemy;
@@ -54,6 +55,7 @@ public class TutorialController : MonoBehaviour
         shieldsUi.alpha = 0f;
         goldHpUi.alpha = 0f;
         goldAmountUi.alpha = 0f;
+        runUi.alpha = 0f;
 
         EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
@@ -306,6 +308,7 @@ public class TutorialController : MonoBehaviour
         fuelUi.alpha = 1f;
         shieldsUi.alpha = 1f;
         goldHpUi.alpha = 1f;
+        runUi.alpha = 1f;
         goldAmountUi.alpha = 1f;
 
         PlayerPrefs.SetInt("TutorialCompleted", 1);

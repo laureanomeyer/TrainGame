@@ -16,6 +16,12 @@ public class TutorialTextUI : MonoBehaviour
     [SerializeField] private float bounceHeight = 4f;
     [SerializeField] private float bounceDuration = 0.2f;
 
+    [Header("Open animation")]
+    [SerializeField] private float openDuration = 0.25f;
+    [SerializeField] private Ease openEase = Ease.OutCubic;
+
+    private Tween scaleTween;
+
     private Vector3 initialScale;
     private Tween revealTween;
     private bool isVisible;
@@ -50,6 +56,7 @@ public class TutorialTextUI : MonoBehaviour
         EventBus.Unsubscribe<OnCompleteTutorialTextEvent>(CallCompleteRevealEvent);
 
         revealTween?.Kill();
+        scaleTween?.Kill();
         bounceActive = false;
     }
 
@@ -197,21 +204,34 @@ public class TutorialTextUI : MonoBehaviour
 
     private void SetVisible(bool show)
     {
+        bool wasVisible = isVisible;
         isVisible = show;
 
         if (show)
         {
             textContainer.alpha = 1f;
-            textContainer.transform.DOScale(initialScale, 0.5f).SetEase(Ease.OutBounce);
 
-            // This event can fire repeatedly: only start if a reveal is pending and not already running.
+            // This event fires repeatedly while the box is already open: only animate on hidden -> visible.
+            if (!wasVisible)
+            {
+                scaleTween?.Kill();
+                textContainer.transform.localScale = new Vector3(initialScale.x, 0f, initialScale.z);
+                scaleTween = textContainer.transform
+                    .DOScaleY(initialScale.y, openDuration)
+                    .SetEase(openEase)
+                    .SetLink(gameObject);
+            }
+
+            // Only start if a reveal is pending and not already running.
             bool running = revealTween != null && revealTween.IsActive();
             if (!textRevealed && !running) StartReveal();
         }
         else
         {
             textContainer.alpha = 0f;
-            textContainer.transform.DOScale(0.8f, 0.2f);
+
+            scaleTween?.Kill();
+            scaleTween = textContainer.transform.DOScale(0.8f, 0.2f).SetLink(gameObject);
 
             // Hidden mid-reveal: stop, and restart from the first letter next time it shows.
             revealTween?.Kill();
