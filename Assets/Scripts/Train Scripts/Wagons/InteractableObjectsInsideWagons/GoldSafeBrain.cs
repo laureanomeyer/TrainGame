@@ -140,5 +140,6 @@ public class GoldSafeBrain : MonoBehaviour
     private void RestartGoldAmount(OnSetTutorialFinished ev)
     {
         playerDataRef.ChangePlayerGold(0f);
+        EventBus.Publish(new OnGoldBoxChangedEvent(0f));
     }
 }
