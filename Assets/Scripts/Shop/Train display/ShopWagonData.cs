@@ -9,6 +9,7 @@ public class ShopWagonData : MonoBehaviour
     private Vector3 localFootprint;
     private Renderer[] renderers;
 
+    public Vector3 LocalFootprint => localFootprint;
     public Vector3 FootprintOffset => transform.rotation * localFootprint;
 
     private void Awake()
@@ -21,8 +22,7 @@ public class ShopWagonData : MonoBehaviour
     {
         IDReference = id;
     }
-
-    #region reordering
+    #region Reordering
     public Bounds GetWorldBounds()
     {
         Bounds b = new(transform.position, Vector3.zero);
