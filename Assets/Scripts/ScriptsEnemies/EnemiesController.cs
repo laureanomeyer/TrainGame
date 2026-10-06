@@ -127,13 +127,17 @@ public class EnemiesController : MonoBehaviour
     {
         Enemy[] snapshot = activeEnemies.ToArray();
         foreach (Enemy enemy in snapshot)
-        {
-            if (enemy != null)
-                enemy.Despawn();
-        }
+            DespawnSpecific(enemy);
 
         activeEnemies.Clear();
         activeEnemySet.Clear();
+    }
+
+    public void DespawnSpecific(Enemy enemy)
+    {
+        if (enemy == null) return;
+
+        enemy.Despawn();
     }
 
     private void OnEnemyBecameInactive(OnEnemyBecameInactiveEvent eventData)
