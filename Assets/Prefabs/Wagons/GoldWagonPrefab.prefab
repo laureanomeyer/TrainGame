@@ -90,6 +90,57 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2263468406906085204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3287328227824750273}
+  - component: {fileID: 1622404727216003415}
+  m_Layer: 3
+  m_Name: RepairWaypoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3287328227824750273
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2263468406906085204}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.635679, y: 2.166129, z: 7.1039305}
+  m_LocalScale: {x: 1.9016012, y: 1.9016, z: 1.9016012}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7431592220043553176}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1622404727216003415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2263468406906085204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c660d981a1dbd44eaa0fdbbbd053c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOnScreen
+  visible: 1
+  renderers: []
+  style:
+    texture: {fileID: 2800000, guid: 7cd180626b2a0f949933eacf2af0dcf2, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    width: 138
+    height: 170
 --- !u!1 &2265256250853251408
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,81 +918,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.33030903, y: 6.483366, z: 4.8090105}
   m_Center: {x: 0.91953653, y: -0.009216082, z: 2.3100152}
---- !u!1 &5170705659644037976
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8155578476197809499}
-  - component: {fileID: 3918011858918993664}
-  - component: {fileID: 7810282626078081846}
-  m_Layer: 3
-  m_Name: WagonHPImage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8155578476197809499
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5170705659644037976}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00012397769}
-  m_LocalScale: {x: 0.43802, y: 0.43802, z: 0.43802}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2082195248104177015}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -18.500002, y: 45.500008}
-  m_SizeDelta: {x: 100, y: 10}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &3918011858918993664
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5170705659644037976}
-  m_CullTransparentMesh: 1
---- !u!114 &7810282626078081846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5170705659644037976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.295432, g: 0.8018868, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 87eeb45556dc5ec44be26cd4610d1771, type: 3}
-  m_Type: 3
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 0
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5189475862246834822
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +951,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 3287328227824750273}
   - {fileID: 2082195248104177015}
   - {fileID: 2770435868359303452}
   - {fileID: 4917770023805593896}
@@ -1024,8 +1001,8 @@ MonoBehaviour:
   RES: 2
   tail: {fileID: 8663742170297892083}
   wagonBack: {fileID: 4936106062851941100}
-  hpImage: {fileID: 7810282626078081846}
-  hpBackgroundImage: {fileID: 6537560832152523160}
+  hpImage: {fileID: 0}
+  hpBackgroundImage: {fileID: 0}
   particles: {fileID: 6300750388685003151}
   destroyWagonMaterial: {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
   WagonNormal: {fileID: 7775916690420115740}
@@ -1112,8 +1089,6 @@ RectTransform:
   m_LocalScale: {x: 0.23100995, y: 0.23101, z: 0.23100995}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3578173269108589645}
-  - {fileID: 8155578476197809499}
   - {fileID: 8642068170117259600}
   m_Father: {fileID: 7431592220043553176}
   m_LocalEulerAnglesHint: {x: 90, y: 90, z: 0}
@@ -1328,81 +1303,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &7327180369411987681
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3578173269108589645}
-  - component: {fileID: 6908375952787105543}
-  - component: {fileID: 6537560832152523160}
-  m_Layer: 3
-  m_Name: WagonHPImageBackground
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3578173269108589645
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7327180369411987681}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00012397769}
-  m_LocalScale: {x: 0.43802, y: 0.43802, z: 0.43802}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2082195248104177015}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -18.5, y: 45.5}
-  m_SizeDelta: {x: 100, y: 10}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6908375952787105543
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7327180369411987681}
-  m_CullTransparentMesh: 1
---- !u!114 &6537560832152523160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7327180369411987681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.055079818, g: 0.31132078, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 87eeb45556dc5ec44be26cd4610d1771, type: 3}
-  m_Type: 3
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 0
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7494213314446741678
 GameObject:
   m_ObjectHideFlags: 0
@@ -6397,6 +6297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8450276076056107103}
   - component: {fileID: 8710539770654113804}
+  - component: {fileID: 313301532235977477}
   m_Layer: 3
   m_Name: Waypoint
   m_TagString: Untagged
@@ -6413,7 +6314,7 @@ Transform:
   m_GameObject: {fileID: 7741565866159520540}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0.70710695, w: 0}
-  m_LocalPosition: {x: -0.001389874, y: 0.0011118844, z: 0.005524955}
+  m_LocalPosition: {x: -0.065, y: 0.008, z: 0.006}
   m_LocalScale: {x: 0.014890161, y: 0.01298189, z: 0.014890165}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6446,6 +6347,25 @@ MonoBehaviour:
     margin: 0
     width: 32
     height: 32
+--- !u!114 &313301532235977477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741565866159520540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c660d981a1dbd44eaa0fdbbbd053c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOnScreen
+  visible: 1
+  renderers: []
+  style:
+    texture: {fileID: 2800000, guid: 5f6910cc566d0b1448f7cc4787cbfa2f, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    width: 138
+    height: 170
 --- !u!1 &7775916690420115740
 GameObject:
   m_ObjectHideFlags: 0
@@ -6583,7 +6503,6 @@ GameObject:
   - component: {fileID: 5490961078345988287}
   - component: {fileID: 6520225226669234781}
   - component: {fileID: 7731964540471770141}
-  - component: {fileID: 6462328995279217160}
   - component: {fileID: 2729133191560440141}
   - component: {fileID: 6843619099168014727}
   m_Layer: 3
@@ -6682,18 +6601,6 @@ MonoBehaviour:
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   goldBrain: {fileID: 2708095789307227240}
   boxCollider: {fileID: 6843619099168014727}
---- !u!114 &6462328995279217160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8865518626607812637}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cd53223bfeb3c046bdc0e79a5941e9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InteractionTrigger
   objectT: {fileID: 8865518626607812637}
   outlineLayer:
     serializedVersion: 2
@@ -6714,6 +6621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GolodenWagonBoxWaypoints
   indicatorOffScreen: {fileID: 8710539770654113804}
+  indicatorOnScreen: {fileID: 313301532235977477}
 --- !u!65 &6843619099168014727
 BoxCollider:
   m_ObjectHideFlags: 0

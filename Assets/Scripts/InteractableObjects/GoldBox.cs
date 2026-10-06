@@ -31,6 +31,7 @@ public class GoldBox : IInteractableWithInventory
         AddGold(playerRef.DepositGold());
 
         EventBus.Publish(new OnDropGoldEvent());
+        EventBus.Publish(new OnSetGoldWaypoint(false));
     }
 
     public void AddGold(float amount)

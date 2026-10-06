@@ -18,8 +18,6 @@ public class InteractionTrigger : MonoBehaviour
 
         if (objectT != null)
             objectT.layer = LayerMask.NameToLayer("WhiteOutline");
-
-        EventBus.Publish(new OnShowInteractEvent());
     }
 
     private void OnTriggerExit(Collider other)
@@ -28,7 +26,5 @@ public class InteractionTrigger : MonoBehaviour
 
         if (objectT != null)
             objectT.layer = LayerMask.NameToLayer("Outline");
-
-        EventBus.Publish(new OnHideInteractEvent());
     }
 }

@@ -11,9 +11,8 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
 
     void Awake()
     {
-        EventBus.Subscribe<OnTakeFuelEvent>(CallDeactivateWayPointEvent);
-        EventBus.Subscribe<OnDropFuelEvent>(CallActivateWayPointEvent);
-        EventBus.Subscribe<OnEnableCoalBoxEvent>(SetWaypointVisible);
+        EventBus.Subscribe<OnSetCoalWaypoint>(HandleWaypointVisibility); //Prende y apaga segun la cantidad de carbon
+
     }
     void Start()
     {
@@ -21,25 +20,12 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
 
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
+
+        DeactivateWaypointUI();
     }
     private void OnDestroy()
     {
-        EventBus.Unsubscribe<OnTakeFuelEvent>(CallDeactivateWayPointEvent);
-        EventBus.Unsubscribe<OnDropFuelEvent>(CallActivateWayPointEvent);
-        EventBus.Unsubscribe<OnEnableCoalBoxEvent>(SetWaypointVisible);
-    }
-    public void SetWaypointVisible(OnEnableCoalBoxEvent enableCoalBoxEvent)
-    {
-        indicatorOnScreen.visible = enableCoalBoxEvent.Enable;
-    }
-
-    public void CallActivateWayPointEvent(OnDropFuelEvent dropFuelEvent)
-    {
-        ActivateWaypointUI();
-    }
-    public void CallDeactivateWayPointEvent(OnTakeFuelEvent takeFuelEvent)
-    {
-        DeactivateWaypointUI();
+        EventBus.Unsubscribe<OnSetCoalWaypoint>(HandleWaypointVisibility);
     }
 
     public void ActivateWaypointUI()
@@ -47,12 +33,16 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
         indicatorOnScreen.visible = true;
         indicatorOffScreen.visible = true;
     }
-
-
     public void DeactivateWaypointUI()
     {
         indicatorOnScreen.visible = false;
         indicatorOffScreen.visible = false;
+    }
+
+    public void HandleWaypointVisibility(OnSetCoalWaypoint ev)
+    {
+        indicatorOffScreen.visible = ev.Show;
+        indicatorOnScreen.visible = ev.Show;
     }
 
 }

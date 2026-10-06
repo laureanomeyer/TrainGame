@@ -7,11 +7,8 @@ public class WagonUpgradePathSO : ScriptableObject
     [Serializable]
     public struct WagonLevel
     {
-        [Tooltip("SO de este nivel (shopModel = modelo del display, Wagon = prefab de gameplay)")]
+        [Tooltip("SO de este nivel. Su Price es lo que cuesta mejorar HACIA este nivel (en el nivel 1, es el precio de compra).")]
         public WagonInStockSO wagon;
-
-        [Tooltip("Costo para pasar DE este nivel al siguiente. Se ignora en el último nivel.")]
-        public float upgradeCost;
     }
 
     [Tooltip("Índice 0 = Nivel 1, 1 = Nivel 2, 2 = Nivel 3")]

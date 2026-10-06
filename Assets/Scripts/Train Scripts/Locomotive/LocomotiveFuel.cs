@@ -19,7 +19,6 @@ public class LocomotiveFuel
     private bool destroyed;
     private bool shieldsActive;
     private bool shieldFirstDamage;
-    private bool firstHeal;
 
     private float fuelCapacity;
     private float fuelMaxCapacity;
@@ -59,14 +58,12 @@ public class LocomotiveFuel
         {
             EventBus.Subscribe<OnSetCanConsumeEvent>(SetCanConsume);
             EventBus.Subscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
-            EventBus.Subscribe<OnSetFirstHeal>(SetFirstHeal);
             EventBus.Subscribe<OnSetTimerStartedEvent>(ResetMaxHp);
         }
 
         canConsume = !GameManager.Instance.IsTutorial;
         shieldsActive = !GameManager.Instance.IsTutorial;
         shieldFirstDamage = !GameManager.Instance.IsTutorial;
-        firstHeal = !GameManager.Instance.IsTutorial;
 
         shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
     }
@@ -77,7 +74,6 @@ public class LocomotiveFuel
         {
             EventBus.Unsubscribe<OnSetCanConsumeEvent>(SetCanConsume);
             EventBus.Unsubscribe<OnSetShieldsActiveEvent>(SetShieldsActive);
-            EventBus.Unsubscribe<OnSetFirstHeal>(SetFirstHeal);
             EventBus.Unsubscribe<OnSetTimerStartedEvent>(ResetMaxHp);
         }
 
@@ -130,8 +126,17 @@ public class LocomotiveFuel
 
     public void SetShieldsActive(OnSetShieldsActiveEvent ev)
     {
-        shieldsActive = ev.active;
-        currentShield = maxShield;
+        if (ev.active) 
+        {
+            currentShield = maxShield;
+            shieldsActive = true;
+        }
+        else
+        {
+            currentShield = 0;
+            shieldsActive = false;
+        }
+
     }
 
     private void UpdateSharedSpeed()
@@ -167,6 +172,7 @@ public class LocomotiveFuel
         }
         else
         {
+
             AudioManager.Instance.Play("SFXShieldHit");
             currentShield -= amount / defense;
             timer = 0;
@@ -191,6 +197,8 @@ public class LocomotiveFuel
         if (destroyed) return;
         if (!GameManager.Instance.IsGameplayState) return;
 
+        Debug.Log(currentShield);
+
         if (!shieldsActive)
         {
             return;
@@ -199,11 +207,6 @@ public class LocomotiveFuel
         if (!shieldTakenDamage)
         {
             currentShield = Mathf.Clamp(currentShield + 5 * deltaTime, 0f, maxShield);
-
-            if (GameManager.Instance.IsTutorial && !firstHeal && currentShield == maxShield)
-            {
-                firstHeal = true;
-            }
         }
         else
         {
@@ -234,11 +237,6 @@ public class LocomotiveFuel
     public void SetCanConsume(OnSetCanConsumeEvent canConsumeEvent)
     {
         this.canConsume = canConsumeEvent.Can;
-    }
-
-    private void SetFirstHeal(OnSetFirstHeal ev)
-    {
-        firstHeal = ev.active;
     }
 
     private void ResetMaxHp(OnSetTimerStartedEvent ev)

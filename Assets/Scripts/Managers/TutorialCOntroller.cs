@@ -14,6 +14,7 @@ public class TutorialController : MonoBehaviour
     [SerializeField] private CanvasGroup shieldsUi;
     [SerializeField] private CanvasGroup goldHpUi;
     [SerializeField] private CanvasGroup goldAmountUi;
+    [SerializeField] private CanvasGroup runUi;
 
     [SerializeField] Transform EnemySpawn;
     [SerializeField] private EnemyData coalEnemy;
@@ -54,6 +55,7 @@ public class TutorialController : MonoBehaviour
         shieldsUi.alpha = 0f;
         goldHpUi.alpha = 0f;
         goldAmountUi.alpha = 0f;
+        runUi.alpha = 0f;
 
         EventBus.Subscribe<OnFreezePlayerEvent>(SetPlayerFrozen);
         EventBus.Subscribe<OnAdvanceTutorialStepByClick>(AdvanceStepByClicking);
@@ -76,13 +78,21 @@ public class TutorialController : MonoBehaviour
         ApplyMode(PlayerMode.Reading);
 
         EventBus.Publish(new OnSetShieldsActiveEvent(false));
-        EventBus.Publish(new OnEnableGoldBoxEvent(false));
-        EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
-        EventBus.Publish(new OnSetCanConsumeEvent(false));
-        EventBus.Publish(new OnSetTimerStartedEvent(false));
-        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
 
+        EventBus.Publish(new OnStartSpawningEnemiesEvent(false));
+        EventBus.Publish(new OnSetTimerStartedEvent(false));
+        EventBus.Publish(new OnSetCanConsumeEvent(false));
+
+        EventBus.Publish(new OnSetTutorialVisibleEvent(true));
         EventBus.Publish(new OnSetTutorialTextEvent(texts[currentStep]));
+
+        EventBus.Publish(new OnEnableGoldBoxEvent(false));
+        EventBus.Publish(new OnSetGoldWagonWaypoint(false));
+        //Primero pones el waypoint de carbon en apagado
+        EventBus.Publish(new OnSetCoalWaypoint(false));
+        //Despues desactivas la caja de carbon
+        EventBus.Publish(new OnDeactivateFuelChargerWaypoint());
+
     }
 
     private void BuildSteps()
@@ -148,7 +158,6 @@ public class TutorialController : MonoBehaviour
             {
                 EventBus.Publish(new OnSetEnemiesFlags(true));
                 EventBus.Publish(new OnSetShieldsActiveEvent(true));
-                EventBus.Publish(new OnSetFirstHeal(false));
                 shieldsUi.alpha = 1f;
             }),
  
@@ -156,7 +165,6 @@ public class TutorialController : MonoBehaviour
             new TutorialStep(PlayerMode.Keep, () =>
             {
                 EventBus.Publish(new OnSetEnemiesFlags(false));
-                EventBus.Publish(new OnSetFirstHeal(true));
             }),
  
             // 13 Defeated enemies drop gold, deposited in the gold wagon 
@@ -306,6 +314,7 @@ public class TutorialController : MonoBehaviour
         fuelUi.alpha = 1f;
         shieldsUi.alpha = 1f;
         goldHpUi.alpha = 1f;
+        runUi.alpha = 1f;
         goldAmountUi.alpha = 1f;
 
         PlayerPrefs.SetInt("TutorialCompleted", 1);

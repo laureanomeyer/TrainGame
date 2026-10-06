@@ -55,13 +55,14 @@ public class GoldCollector
         {
             gold += goldEvent.Amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
 
+            EventBus.Publish(new OnSetGoldWagonWaypoint(true));
+
             setCoinsModels(gold, storageCapacity);
             goldDisplayUI.text = "$" + gold;
             PlayScaleEffect();
 
             if (!firstGoldEarned)
             {
-                Debug.Log("Nextsssssssssssssssssss");
                 EventBus.Publish(new OnAdvanceTutorialStep());
                 firstGoldEarned = !firstGoldEarned;
             }
@@ -82,6 +83,7 @@ public class GoldCollector
             if (goldToGive > 0)
             {
                 EventBus.Publish(new OnTakeGoldEvent());
+                EventBus.Publish(new OnSetGoldWaypoint(true));
             }
             return goldToGive;
         }
@@ -96,6 +98,7 @@ public class GoldCollector
         gold = 0;
         setCoinsModels(gold, storageCapacity);
         goldDisplayUI.text = string.Empty;
+        EventBus.Publish(new OnSetGoldWagonWaypoint(false));
     }
 
     private async void PlayScaleEffect()

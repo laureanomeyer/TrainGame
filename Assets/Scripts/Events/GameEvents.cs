@@ -235,6 +235,38 @@ public class OnTakeCoalEvent : IGameEvent
     public OnTakeCoalEvent() { }
 }
 
+public class OnSetCoalWaypoint : IGameEvent
+{
+    public bool Show;
+
+    public OnSetCoalWaypoint(bool show)
+    {
+        Show = show;
+    }
+}
+public class OnDeactivateFuelChargerWaypoint : IGameEvent
+{
+    public OnDeactivateFuelChargerWaypoint() { }
+}
+public class OnSetGoldWaypoint : IGameEvent
+{
+    public bool Show;
+
+    public OnSetGoldWaypoint(bool show)
+    {
+        Show = show;
+    }
+}
+public class OnSetGoldWagonWaypoint : IGameEvent
+{
+    public bool Show;
+
+    public OnSetGoldWagonWaypoint(bool show)
+    {
+        Show = show;
+    }
+}
+
 public class OnDropFuelEvent : IGameEvent
 {
     public OnDropFuelEvent() { }
@@ -471,6 +503,16 @@ public class OnCompleteTutorialTextEvent : IGameEvent
 {
     public OnCompleteTutorialTextEvent()
     {
+    }
+}
+
+public class OnSetRepairGoldWagonWaypoint : IGameEvent
+{
+    public bool Show;
+
+    public OnSetRepairGoldWagonWaypoint(bool show)
+    {
+        Show = show;
     }
 }
 

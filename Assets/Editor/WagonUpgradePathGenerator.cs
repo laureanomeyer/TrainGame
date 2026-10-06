@@ -4,9 +4,9 @@ using UnityEngine;
 
 public static class WagonUpgradePathGenerator
 {
-    // Multiplicadores de costo de upgrade sobre el precio base del nivel 1
-    private const float CostLv1To2 = 1.0f;
-    private const float CostLv2To3 = 1.5f;
+    // Precio de cada nivel (= costo de mejorar HACIA ese nivel), como multiplicador del precio del nivel 1
+    private const float PriceLv2Multiplier = 1.0f;
+    private const float PriceLv3Multiplier = 1.5f;
 
     private const string MenuPath = "Assets/Train Survival/Create Upgrade Paths";
 
@@ -30,18 +30,18 @@ public static class WagonUpgradePathGenerator
             }
 
             float basePrice = lv1.Price;
-            float cost1 = Mathf.Round(basePrice * CostLv1To2);
-            float cost2 = Mathf.Round(basePrice * CostLv2To3);
+            float priceLv2 = Mathf.Round(basePrice * PriceLv2Multiplier);
+            float priceLv3 = Mathf.Round(basePrice * PriceLv3Multiplier);
 
-            var lv2 = CreateLevelCopy(lv1, folder, baseName, 2, "II", basePrice + cost1);
-            var lv3 = CreateLevelCopy(lv1, folder, baseName, 3, "III", basePrice + cost1 + cost2);
+            var lv2 = CreateLevelCopy(lv1, folder, baseName, 2, "II", priceLv2);
+            var lv3 = CreateLevelCopy(lv1, folder, baseName, 3, "III", priceLv3);
 
             var path = ScriptableObject.CreateInstance<WagonUpgradePathSO>();
             path.levels = new[]
             {
-                new WagonUpgradePathSO.WagonLevel { wagon = lv1, upgradeCost = cost1 },
-                new WagonUpgradePathSO.WagonLevel { wagon = lv2, upgradeCost = cost2 },
-                new WagonUpgradePathSO.WagonLevel { wagon = lv3, upgradeCost = 0f },
+                new WagonUpgradePathSO.WagonLevel { wagon = lv1 },
+                new WagonUpgradePathSO.WagonLevel { wagon = lv2 },
+                new WagonUpgradePathSO.WagonLevel { wagon = lv3 },
             };
 
             AssetDatabase.CreateAsset(path, pathAssetPath);
