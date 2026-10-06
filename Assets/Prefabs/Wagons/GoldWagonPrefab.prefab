@@ -1303,6 +1303,57 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6317362584176578554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9014159498177906804}
+  - component: {fileID: 7895770547712328852}
+  m_Layer: 3
+  m_Name: RepairWaypoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9014159498177906804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6317362584176578554}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.70710677, z: -0.70710695, w: 0}
+  m_LocalPosition: {x: -0.065, y: 0.008, z: 0.006}
+  m_LocalScale: {x: 0.014890161, y: 0.01298189, z: 0.014890165}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2770435868359303452}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7895770547712328852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6317362584176578554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c660d981a1dbd44eaa0fdbbbd053c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: HUDIndicator::HUDIndicator.IndicatorOnScreen
+  visible: 1
+  renderers: []
+  style:
+    texture: {fileID: 2800000, guid: 7cd180626b2a0f949933eacf2af0dcf2, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    width: 138
+    height: 170
 --- !u!1 &7494213314446741678
 GameObject:
   m_ObjectHideFlags: 0
@@ -6526,6 +6577,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8450276076056107103}
+  - {fileID: 9014159498177906804}
   - {fileID: 6163634403516150076}
   m_Father: {fileID: 7431592220043553176}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6622,6 +6674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GolodenWagonBoxWaypoints
   indicatorOffScreen: {fileID: 8710539770654113804}
   indicatorOnScreen: {fileID: 313301532235977477}
+  repairIndicator: {fileID: 7895770547712328852}
 --- !u!65 &6843619099168014727
 BoxCollider:
   m_ObjectHideFlags: 0

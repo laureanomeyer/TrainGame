@@ -92,6 +92,8 @@ public class TutorialController : MonoBehaviour
         EventBus.Publish(new OnSetCoalWaypoint(false));
         //Despues desactivas la caja de carbon
         EventBus.Publish(new OnDeactivateFuelChargerWaypoint());
+        EventBus.Publish(new OnSetRepairIconEnabledEvent(false));
+
 
     }
 
@@ -193,10 +195,12 @@ public class TutorialController : MonoBehaviour
  
             // 18 Shows goldwag hp
             new TutorialStep(PlayerMode.Reading,() =>
-            {                
+            {
                 EventBus.Publish(new OnSpawnEnemyEvent(EnemySpawn.position, commonEnemy));
                 EventBus.Publish(new OnSetTutorialEnemyTarget(1));
                 EventBus.Publish(new OnSetEnemiesFlags(true));
+                EventBus.Publish(new OnSetRepairIconEnabledEvent(true));
+
             }),
  
             // 19 Enemy shoots
@@ -206,7 +210,11 @@ public class TutorialController : MonoBehaviour
             new TutorialStep(PlayerMode.Interact),
  
             // 21  Freeze player, you can use the gold to buy
-            new TutorialStep(PlayerMode.Reading),
+            new TutorialStep(PlayerMode.Reading,() =>
+            {
+                EventBus.Publish(new OnSetRepairIconEnabledEvent(false));
+                EventBus.Publish(new OnSetEnemiesFlags(false));
+            }),
 
             // 22 now you are ready
             new TutorialStep(PlayerMode.Keep),
@@ -302,7 +310,6 @@ public class TutorialController : MonoBehaviour
         finished = true;
 
         EventBus.Publish(new OnFreezePlayerEvent(true));
-        EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
         EventBus.Publish(new OnEnableGoldBoxEvent(true));
         EventBus.Publish(new OnSetCanConsumeEvent(true));
         EventBus.Publish(new OnSetTimerStartedEvent(true));
@@ -310,6 +317,8 @@ public class TutorialController : MonoBehaviour
         EventBus.Publish(new OnSetAttackEnabledEvent(true));
         EventBus.Publish(new OnSetShieldsActiveEvent(true));
         EventBus.Publish(new OnEnableCoalBoxEvent(true));
+        EventBus.Publish(new OnSetTutorialFinished());
+        EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
 
         fuelUi.alpha = 1f;
         shieldsUi.alpha = 1f;

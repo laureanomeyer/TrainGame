@@ -516,6 +516,33 @@ public class OnSetRepairGoldWagonWaypoint : IGameEvent
     }
 }
 
+public class OnSetRepairIconEnabledEvent : IGameEvent
+{
+    public bool Enabled;
+
+    public OnSetRepairIconEnabledEvent(bool enabled)
+    {
+        Enabled = enabled;
+    }
+}
+public class OnShowRepairIconEvent : IGameEvent
+{
+    public bool Show;
+
+    public OnShowRepairIconEvent(bool enabled)
+    {
+        Show = enabled;
+    }
+}
+public class OnSetTutorialFinished : IGameEvent
+{
+    public OnSetTutorialFinished()
+    {
+    }
+}
+
+
+
 #endregion
 
 #region Weapons Events

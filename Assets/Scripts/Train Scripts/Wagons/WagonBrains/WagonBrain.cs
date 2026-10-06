@@ -245,6 +245,11 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         if (other.gameObject.CompareTag("Player"))
         {
             renderController.DeactivateWagonTop();
+
+            if (GameManager.Instance.IsTutorial)
+            {
+                EventBus.Publish(new OnShowRepairIconEvent(true));
+            }
         }
     }
 
@@ -253,6 +258,11 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         if (other.gameObject.CompareTag("Player"))
         {
             renderController.ActivateWagonTop();
+
+            if (GameManager.Instance.IsTutorial)
+            {
+                EventBus.Publish(new OnShowRepairIconEvent(false));
+            }
         }
     }
 

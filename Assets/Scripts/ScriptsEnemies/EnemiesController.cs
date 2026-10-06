@@ -43,6 +43,7 @@ public class EnemiesController : MonoBehaviour
         EventBus.Subscribe<OnEnemyBecameInactiveEvent>(OnEnemyBecameInactive);
         EventBus.Subscribe<OnSpawnEnemyEvent>(SpawnRequestedEnemy);
         EventBus.Subscribe<OnStartSpawningEnemiesEvent>(SetSpawningState);
+        EventBus.Subscribe<OnSetTutorialFinished>(ClearTutorial);
         StartCoroutine(InitializeAfterEnable());
     }
 
@@ -53,6 +54,7 @@ public class EnemiesController : MonoBehaviour
         EventBus.Unsubscribe<OnEnemyBecameInactiveEvent>(OnEnemyBecameInactive);
         EventBus.Unsubscribe<OnSpawnEnemyEvent>(SpawnRequestedEnemy);
         EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(SetSpawningState);
+        EventBus.Unsubscribe<OnSetTutorialFinished>(ClearTutorial);
         ServiceLocator.Unregister<EnemiesController>();
         isInitialized = false;
         timer = 0f;
@@ -138,6 +140,11 @@ public class EnemiesController : MonoBehaviour
         if (enemy == null) return;
 
         enemy.Despawn();
+    }
+
+    private void ClearTutorial(OnSetTutorialFinished ev)
+    {
+        DespawnAll();
     }
 
     private void OnEnemyBecameInactive(OnEnemyBecameInactiveEvent eventData)

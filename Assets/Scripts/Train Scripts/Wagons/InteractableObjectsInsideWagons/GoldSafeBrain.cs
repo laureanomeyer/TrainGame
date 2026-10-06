@@ -26,7 +26,7 @@ public class GoldSafeBrain : MonoBehaviour
         currentGold = 0;
         playerDataRef = ServiceLocator.Get<PlayerData>();
         EventBus.Subscribe<OnEnableGoldBoxEvent>(SetCanInteract);
-        EventBus.Subscribe<OnStartSpawningEnemiesEvent>(RestartGoldAmount);
+        EventBus.Subscribe<OnSetTutorialFinished>(RestartGoldAmount);
 
 
         if (objectT != null)
@@ -45,7 +45,7 @@ public class GoldSafeBrain : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnEnableGoldBoxEvent>(SetCanInteract);
-        EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(RestartGoldAmount);
+        EventBus.Unsubscribe<OnSetTutorialFinished>(RestartGoldAmount);
 
         inputHandler?.Dispose();
     }
@@ -137,7 +137,7 @@ public class GoldSafeBrain : MonoBehaviour
     /// only for tutorial
     /// </summary>
     /// <param name="ev"></param>
-    private void RestartGoldAmount(OnStartSpawningEnemiesEvent ev)
+    private void RestartGoldAmount(OnSetTutorialFinished ev)
     {
         playerDataRef.ChangePlayerGold(0f);
     }

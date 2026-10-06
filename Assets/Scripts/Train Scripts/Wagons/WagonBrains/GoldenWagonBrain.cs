@@ -55,6 +55,7 @@ public class GoldenWagonBrain : WagonBrain
         if (GameManager.Instance.CurrentState == GameState.Tutorial && !firstRepair && hpController.CurrentHp == hpController.MaxHp)
         {
             EventBus.Publish(new OnAdvanceTutorialStep());    
+            EventBus.Publish(new OnShowRepairIconEvent(false));
             firstRepair = !firstRepair;
         }
 

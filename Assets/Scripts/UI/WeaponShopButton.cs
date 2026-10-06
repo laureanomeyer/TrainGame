@@ -187,6 +187,8 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         {
             legacyName.text = "Basic";
             legacyUnlockCondition.text = "This weapon does not have a legacy";
+            legacyDescription.text = "";
+            legacyLocked.alpha = 0f;
 
             legacyStar.alpha = 0f;
         }
