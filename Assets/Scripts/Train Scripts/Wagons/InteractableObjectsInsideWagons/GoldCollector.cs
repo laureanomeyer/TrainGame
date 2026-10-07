@@ -26,6 +26,8 @@ public class GoldCollector
     private StatSystem statsRef;
     private bool firstGoldEarned = false;
 
+    private float maxGold;
+
     public GoldCollector(WagonHP hpController, TextMeshProUGUI CurrentGoldUI, float collectorStorageCapacity, Action<float, float> action)
     {
         wagonHP = hpController;
@@ -33,10 +35,14 @@ public class GoldCollector
         originalFontSize = goldDisplayUI.fontSize;
         storageCapacity = collectorStorageCapacity;
         this.setCoinsModels = action;
+
+        var statsRef = ServiceLocator.Get<StatSystem>();
+        maxGold = statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
+        Debug.Log(maxGold);
+
         statsRef = ServiceLocator.Get<StatSystem>();
 
         setCoinsModels(gold, storageCapacity);
-
         EventBus.Subscribe<OnGoldEarnedEvent>(CollectGold);
     }
 
@@ -53,7 +59,12 @@ public class GoldCollector
 
         if (wagonHP.IsBroken == false)
         {
-            gold += goldEvent.Amount * statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
+            gold += goldEvent.Amount;
+
+            if(gold > maxGold)
+            {
+                gold = maxGold;
+            }
 
             EventBus.Publish(new OnSetGoldWagonWaypoint(true));
 
