@@ -45,7 +45,10 @@ public class SceneRunController : MonoBehaviour
             currentTime -= Time.deltaTime;
 
         if (currentTime <= 0f)
-            EndRun(RunResult.Victory);
+        {
+            currentTime = 0f;
+            EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
+        }
     }
 
     private void CallRunEndedEvent(OnRunEndedEvent runEndedEvent)
