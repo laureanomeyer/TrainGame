@@ -10,7 +10,7 @@ public class EnemyMovementLosing : EnemyMovementSO
     public override void Move(Enemy enemy)
     {
         Vector3 pos = enemy.rb.position;
-        if (enemy.IsLosing)
+        if (enemy.MovementState == EnemyMovementState.Losing)
         {
             MoveLosing(enemy, pos);
             return;
@@ -34,7 +34,6 @@ public class EnemyMovementLosing : EnemyMovementSO
         if (enemy.TimeAtTarget >= timeBeforeLosing)
         {
             enemy.BeginLosing();
-            MoveLosing(enemy, pos);
             return;
         }
 
@@ -56,9 +55,7 @@ public class EnemyMovementLosing : EnemyMovementSO
             enemy.rb.MovePosition(nextPos);
             
         }
-
     }
-
     private void MoveLosing(Enemy enemy, Vector3 pos)
     {
         Vector3 losingPos = new Vector3(pos.x - losingSpeed * Time.deltaTime, pos.y, pos.z);
@@ -69,4 +66,10 @@ public class EnemyMovementLosing : EnemyMovementSO
     {
         enemy.rb.AddForce(enemy.rb.transform.forward * 10, ForceMode.Impulse);
     }
+
+    public override void Begin(Enemy enemy)
+    {
+        enemy.ChangeState(EnemyMovementState.Moving);
+    }
+
 }

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class EnemyUIHpBar : MonoBehaviour
 {
     [SerializeField] private Image hpBarFill;
+    [SerializeField] private Image ArmorBarFill;
+
     [SerializeField] private Canvas canvas;
 
     private Camera mainCamera;
@@ -30,6 +32,14 @@ public class EnemyUIHpBar : MonoBehaviour
 
         if (canvas != null)
             canvas.enabled = amount > 0f;
+    }
+
+    public void ShowArmor(bool show)
+    {
+        if (ArmorBarFill != null)
+        {
+            ArmorBarFill.enabled = show;
+        }
     }
 
     public void Hide()

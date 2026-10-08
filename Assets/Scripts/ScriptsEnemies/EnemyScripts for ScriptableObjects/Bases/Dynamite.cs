@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 public class Dynamite : ArcMotion
 {
-    [SerializeField] float speed = 5f;
-    [SerializeField] float arcHeight = 2f;
-
     private IWagon targetWagon;
     private List<IWagon> allWagons;
     private float damage;
@@ -20,22 +17,9 @@ public class Dynamite : ArcMotion
 
         BeginArcMotion(target.Middle, speed, arcHeight);
     }
-
-    protected override void Update()
-    {
-        if (targetWagon == null || targetWagon.Head == null)
-        {
-            ObjectPoolManager.ReturnObjectToPool(gameObject);
-            return;
-        }
-
-        base.Update();
-    }
-
     protected override void OnArcMotionCompleted()
     {
         DoDamage();
-        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
     private void DoDamage()

@@ -1,6 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#region EnemyStates
+
+public enum EnemyState
+{
+    EnemyHealthState,
+    EnemyMovementState,
+    EnemyAttackState
+
+}
+
+public enum EnemyHealthState
+{
+    Normal,
+    Armored,
+    Dead
+}
+public enum EnemyMovementState
+{
+    Moving,
+    Losing,
+    Waiting
+}
+
+public enum EnemyAttackState
+{
+    Normal,
+    Buffed,
+}
+
+#endregion
+
 public class Enemy : MonoBehaviour
 {
     [Header("Weapon")]
@@ -15,6 +46,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] Animator horseAnimator;
     [Header("Debug")]
     [SerializeField] private EnemyMovementSO endMovement;
+    public EnemyWeapon Weapon;
+    BoxCollider boxCollider;
 
     public string TargetWagonName;
     public string dataName;
@@ -22,18 +55,19 @@ public class Enemy : MonoBehaviour
     private IWagon targetWagon;
     private float currentHealth;
     private DamageFlash flash;
-    private bool isDead;
-    private bool inactiveEventPublished;
     private int activeCowboyLayer;
     private Coroutine attackRoutine;
     private TrainRanges trainRanges;
     private (float, float) limits;
-    public EnemyWeapon Weapon;
+    public (float, float) Limits => limits;
+
+    public EnemyUIHpBar HealthBar => healthBar;
+
+    #region Data
     public EnemyMovementSO Movement {get ; private set;} 
     public EnemyAttackSO Attack => data.attack;
     public EnemyBrainSO Brain => data.brain;
     public Rigidbody rb;
-    BoxCollider boxCollider;
     public float Speed => data.movement.speed;
     public float MaxHealth => data.health;
     public float Damage => data.damage;
@@ -43,32 +77,38 @@ public class Enemy : MonoBehaviour
     public EnemyData Data => data;
 
     public float Range => (float)data.rangeType;
-    public (float, float) Limits => limits;
+    private EnemyHealthState healthState;
+    private EnemyMovementState movementState;
+    private EnemyAttackState attackState;
+
+    #endregion
+
+    #region Booleans
+    private bool inactiveEventPublished;
 
     float attackCooldownTimer;
     float skillCooldownTimer;
-
     public bool CanAttack => attackCooldownTimer <= 0f;
     public bool CanSkill => skillCooldownTimer <= 0f;
 
     public EnemySkillSO Skill => data.skill;
     private float timeAtTarget;
-    private bool isAtTarget;
-    private bool isLosing;
-    public float TimeAtTarget => isAtTarget ? Time.time - timeAtTarget : 0f;
-    public bool IsLosing => isLosing;
+    public EnemyHealthState HealthState => healthState;
+    public EnemyMovementState MovementState => movementState;
+    public EnemyAttackState AttackState => attackState;
+    public float TimeAtTarget =>
+        movementState == EnemyMovementState.Waiting
+            ? Time.time - timeAtTarget
+            : 0f;
     public bool IsOnPositiveZSide =>
         rb != null && rb.position.z >= 0f;
     public bool IsOnNegativeZSide =>
         rb != null && rb.position.z < 0f;
-    public bool IsDead => isDead;
     public Camera Cam => Camera.main;
-
     public bool IsTutorialEnemy { get; private set; }
-
     int rightLayerIndex;
     int leftLayerIndex;
-
+    #endregion
 
     void Awake()
     {
@@ -96,11 +136,11 @@ public class Enemy : MonoBehaviour
         StopAllCoroutines();
         attackRoutine = null;
 
-        isDead = false;
+        ChangeState(EnemyHealthState.Normal);
+        ChangeState(EnemyMovementState.Moving);
+        ChangeState(EnemyAttackState.Normal);
         inactiveEventPublished = false;
-        isAtTarget = false;
         timeAtTarget = 0f;
-        isLosing = false;
         IsTutorialEnemy = false;
         targetWagon = null;
         this.data = data;
@@ -110,11 +150,15 @@ public class Enemy : MonoBehaviour
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
 
+        Movement.Begin(this);
+
         dataName = data.name;
 
         if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
+
+        healthBar.ShowArmor(HealthState == EnemyHealthState.Armored);
 
         PlayIdleAnimation();
 
@@ -141,34 +185,52 @@ public class Enemy : MonoBehaviour
         skillCooldownTimer = cooldown;
     }
 
+    public void ChangeState(EnemyHealthState state)
+    {
+        healthState = state;
+    }
+
+    public void ChangeState(EnemyMovementState state)
+    {
+        if (movementState == state) return;
+
+        movementState = state;
+        if (state == EnemyMovementState.Waiting)
+            timeAtTarget = Time.time;
+    }
+
+    public void ChangeState(EnemyAttackState state)
+    {
+        attackState = state;
+    }
+
     public void SetAtTarget(bool atTarget)
     {
-        if (atTarget && !isAtTarget)
-        {
-            timeAtTarget = Time.time;
-        }
+        if (movementState == EnemyMovementState.Losing) return;
 
-        isAtTarget = atTarget;
+        ChangeState(atTarget ? EnemyMovementState.Waiting : EnemyMovementState.Moving);
     }
 
     public void BeginLosing()
     {
-        isLosing = true;
+        ChangeState(EnemyMovementState.Losing);
     }
 
     void Update()
     {
-        if (isDead) return;
+        if (healthState == EnemyHealthState.Dead) return;
+
 
         attackCooldownTimer -= Time.deltaTime;
         skillCooldownTimer -= Time.deltaTime;
         Attack?.Attack(this);
         Attack?.Skill(this);
+
     }
 
     void FixedUpdate()
     {
-        if (isDead) return;
+        if (HealthState == EnemyHealthState.Dead) return;
 
         Movement?.Move(this);
     }
@@ -193,7 +255,6 @@ public class Enemy : MonoBehaviour
 
     public void ChangeMovement(OnRunEndedEvent ev)
     {
-        Debug.Log($"Changing movement for {dataName} to end movement");
         Movement = endMovement;
     }
 
@@ -230,7 +291,7 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(data.animation?.attackDuration ?? 0.8f);
 
-        if (!isDead) PlayIdleAnimation();
+        if (HealthState != EnemyHealthState.Dead) PlayIdleAnimation();
         attackRoutine = null;
     }
 
@@ -260,28 +321,39 @@ public class Enemy : MonoBehaviour
     #endregion
     public bool TakeDamage(float damage)
     {
-        if (isDead) return false;
-
+        switch (HealthState)
+        {
+            case EnemyHealthState.Normal:
+                ApplyDamage(damage);
+                return currentHealth <= 0;
+            case EnemyHealthState.Armored:
+                ApplyDamage(damage -1 );
+                healthBar.ShowArmor(false);
+                ChangeState(EnemyHealthState.Normal);
+                return true;
+            case EnemyHealthState.Dead:
+                return false;
+            default:
+                return false;
+        }
+    }
+    private void ApplyDamage(float damage)
+    {
         currentHealth -= damage;
-        Debug.Log("Damage receive: " + damage);
         EventBus.Publish(new OnEnemyHitEvent(transform.position));
-
-        flash.Flash();
         DamagePopupManager.Instance?.ShowDamage(damage, transform.position);
         if (healthBar != null)
         {
             healthBar.SetHealth(currentHealth, MaxHealth);
         }
         if (currentHealth <= 0)
-            Dead();
-
-        return currentHealth <= 0;
+            Die();
     }
-    private void Dead()
+    private void Die()
     {
-        if (isDead) return;
+        if (HealthState == EnemyHealthState.Dead) return;
 
-        isDead = true;
+        ChangeState(EnemyHealthState.Dead);
         PublishBecameInactive();
         PlayDeathSound();
         PlayCowboyAnimation(GetAnimationName(
@@ -293,6 +365,14 @@ public class Enemy : MonoBehaviour
         if (healthBar != null)
         { healthBar.Hide(); }
         flash.ResetMaterials();
+        SpawnDrop();
+        EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop));
+        EventBus.Publish(new OnEnemyKilledEvent());
+        StartCoroutine(ReturnAfterDeathAnimation());
+    }
+
+    void SpawnDrop()
+    {
         if (Drop == DropType.Coal)
         {
             EventBus.Publish(new OnCoalEarnedEvent(data.dropAmount));
@@ -301,9 +381,6 @@ public class Enemy : MonoBehaviour
         {
             EventBus.Publish(new OnGoldEarnedEvent(data.dropAmount));
         }
-        EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop));
-        EventBus.Publish(new OnEnemyKilledEvent());
-        StartCoroutine(ReturnAfterDeathAnimation());
     }
 
     void PlayDeathSound()
@@ -311,23 +388,11 @@ public class Enemy : MonoBehaviour
         int soundNumber = Random.Range(1, 1001) == 1000 ? 4 : Random.Range(1, 4);
         AudioManager.Instance.PlayOnScreen($"SFXDeathScream{soundNumber}", CameraView.IsInsideCamera(transform.position, Cam));
     }
-    private void DeadWallDeath()
-    {
-        if (isDead) return;
-
-        isDead = true;
-        PublishBecameInactive();
-        if (healthBar != null)
-        { healthBar.Hide(); }
-        ObjectPoolManager.ReturnObjectToPool(gameObject);
-        flash.ResetMaterials();
-    }
-
     public void Despawn()
     {
-        if (isDead || !gameObject.activeSelf) return;
+        if (HealthState == EnemyHealthState.Dead || !gameObject.activeSelf) return;
 
-        isDead = true;
+        ChangeState(EnemyHealthState.Dead);
         StopAllCoroutines();
         attackRoutine = null;
         PublishBecameInactive();
@@ -352,6 +417,7 @@ public class Enemy : MonoBehaviour
         IsTutorialEnemy = true;
     }
 
+
     //---------------------GIZMOS-------------------------
     void OnDrawGizmosSelected()
     {
@@ -366,7 +432,7 @@ public class Enemy : MonoBehaviour
     {
         if (other.gameObject.CompareTag("deadWall"))
         {
-            DeadWallDeath();
+            Despawn();
         }
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Enemy/Movement/Slow")]
-public class EnemyMovementSlowSO : EnemyMovementSO
+public class EnemyMovementSlow : EnemyMovementSO
 {
     public override void Move(Enemy enemy)
     {
@@ -37,4 +37,10 @@ public class EnemyMovementSlowSO : EnemyMovementSO
     {
         enemy.rb.AddForce(enemy.rb.transform.forward * 10, ForceMode.Impulse);
     }
+
+    public override void Begin(Enemy enemy)
+    {
+        enemy.BeginLosing();
+    }
+
 }

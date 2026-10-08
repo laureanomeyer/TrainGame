@@ -3,26 +3,70 @@ using UnityEngine;
 public abstract class ArcMotion : MonoBehaviour
 {
     private ArcMover arcMover;
-    private bool hasCompleted;
+    protected bool hasCompleted;
+    [SerializeField] protected float speed = 5f;
+    [SerializeField] protected float arcHeight = 2f;
+
+    protected TrailRenderer tr;
+    protected float timeInBox = 0.5f;
+    protected float currentTime = 0;
+    protected bool hasArrived;
+
+    protected bool hasTrail;
 
     protected void BeginArcMotion(Vector3 target, float speed, float arcHeight)
     {
         arcMover = new ArcMover(transform.position, target, speed, arcHeight);
         hasCompleted = false;
+        hasArrived = false;
+        currentTime = 0f;
+
+        if (tr == null)
+            tr = GetComponent<TrailRenderer>();
+
+        hasTrail = tr != null;
+        Trail(true);
     }
 
     protected virtual void Update()
     {
-        if (arcMover == null || hasCompleted) return;
+        if (arcMover == null || hasCompleted || !gameObject.activeSelf) return;
 
-        transform.position = arcMover.Tick(Time.deltaTime);
-        if (!arcMover.IsFinished) return;
+        if (!hasArrived)
+        {
+            transform.position = arcMover.Tick(Time.deltaTime);
+            if (!arcMover.IsFinished) return;
+
+            hasArrived = true;
+            Trail(false);
+            EventBus.Publish(new OnArcMotionEnded(this));
+            OnArcMotionCompleted();
+        }
+
+        if (!gameObject.activeSelf) return;
+        if (currentTime < timeInBox)
+        {
+            currentTime += Time.deltaTime;
+            return;
+        }
 
         hasCompleted = true;
-        OnArcMotionCompleted();
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 
-    protected virtual void OnArcMotionCompleted() { }
+    protected virtual void OnArcMotionCompleted()
+    {
+    }
+
+    protected void Trail(bool isActive)
+    {
+        if (!hasTrail) return;
+
+        if (isActive)
+            tr.Clear();
+
+        tr.emitting = isActive;
+    }
 }
 
 public static class ArcMotionMath

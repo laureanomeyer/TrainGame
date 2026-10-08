@@ -53,4 +53,8 @@ public class EnemyMovementNormal : EnemyMovementSO
         enemy.rb.AddForce(enemy.rb.transform.forward * 10, ForceMode.Impulse);
     }
 
+    public override void Begin(Enemy enemy)
+    {
+        enemy.ChangeState(EnemyMovementState.Moving);
+    }
 }

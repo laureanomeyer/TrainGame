@@ -11,10 +11,10 @@ public class EnemiesController : MonoBehaviour
     [SerializeField] private SpawnZone spawnZone;
 
     private readonly List<Enemy> activeEnemies = new();
+    private readonly Dictionary<EnemyData, (int quantActive, int quantSpawned)> enemyCounts = new();
     private readonly HashSet<Enemy> activeEnemySet = new();
     private ReadOnlyCollection<Enemy> readOnlyActiveEnemies;
     private readonly List<EnemyData> spawnPool = new();
-    private readonly Dictionary<EnemyData, int> actualSpawnCounts = new();
     private readonly TrainRanges trainRanges = new();
 
     private SpawnController spawnController;
@@ -59,7 +59,7 @@ public class EnemiesController : MonoBehaviour
         isInitialized = false;
         timer = 0f;
         spawnPool.Clear();
-        actualSpawnCounts.Clear();
+        enemyCounts.Clear();
         hasReportedAutomaticSpawnError = false;
     }
 
@@ -98,7 +98,7 @@ public class EnemiesController : MonoBehaviour
 
     public void RegisterEnemy(Enemy enemy)
     {
-        if (enemy == null || enemy.IsDead || !activeEnemySet.Add(enemy)) return;
+        if (enemy == null || enemy.HealthState == EnemyHealthState.Dead || !activeEnemySet.Add(enemy)) return;
 
         activeEnemies.Add(enemy);
     }
@@ -142,6 +142,18 @@ public class EnemiesController : MonoBehaviour
         enemy.Despawn();
     }
 
+    public bool TryGetRandomActiveEnemy(out Enemy enemy)
+    {
+        if (activeEnemies.Count == 0)
+        {
+            enemy = null;
+            return false;
+        }
+
+        enemy = activeEnemies[UnityEngine.Random.Range(0, activeEnemies.Count)];
+        return enemy != null;
+    }
+
     private void ClearTutorial(OnSetTutorialFinished ev)
     {
         DespawnAll();
@@ -153,6 +165,12 @@ public class EnemiesController : MonoBehaviour
         if (ReferenceEquals(enemy, null) || !activeEnemySet.Remove(enemy)) return;
 
         activeEnemies.Remove(enemy);
+
+        EnemyData data = enemy.Data;
+        if (data != null && enemyCounts.TryGetValue(data, out var counts))
+        {
+            enemyCounts[data] = (Mathf.Max(0, counts.quantActive - 1), counts.quantSpawned);
+        }
     }
 
     private bool EnsureInitialized()
@@ -273,7 +291,7 @@ public class EnemiesController : MonoBehaviour
     {
         if (data == null || !EnsureInitialized()) return null;
 
-        if (data.movement is EnemyMovementSlowSO)
+        if (data.movement is EnemyMovementSlow)
         {
             position.x = 60f;
             position.z = position.z < 0
@@ -299,12 +317,13 @@ public class EnemiesController : MonoBehaviour
 
     private void TrackSpawn(EnemyData data)
     {
-        if (!actualSpawnCounts.ContainsKey(data))
-            actualSpawnCounts[data] = 0;
-        actualSpawnCounts[data]++;
+        enemyCounts.TryGetValue(data, out var counts);
+        enemyCounts[data] = (counts.quantActive + 1, counts.quantSpawned + 1);
 
-        var counts = actualSpawnCounts.Select(kvp => $"{kvp.Key.name}: {kvp.Value}");
-        Debug.Log($"Spawned {data.name}. Current spawn counts: {string.Join(", ", counts)}");
+        var summary = enemyCounts.Select(kvp =>
+            $"{kvp.Key.name}: active={kvp.Value.quantActive}, spawned={kvp.Value.quantSpawned}");
+
+        Debug.Log($"Spawned {data.name}. Enemy counts: {string.Join(", ", summary)}");
     }
 
     private void SetSpawningState(OnStartSpawningEnemiesEvent spawnEvent)

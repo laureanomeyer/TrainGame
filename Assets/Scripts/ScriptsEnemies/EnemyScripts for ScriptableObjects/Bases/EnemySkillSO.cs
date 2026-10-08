@@ -4,6 +4,7 @@ public enum SkillType
 {
     None,
     Dynamite,
+    Armor,
 }
 
 [CreateAssetMenu(fileName = "EnemySkillSO", menuName = "Enemy/Skill")]
@@ -23,14 +24,17 @@ public class EnemySkillSO : ScriptableObject
     {
         switch (skillType)
         {
+            case SkillType.None:
+                if (!(skill is NoneSkill))
+                    skill = new NoneSkill();
+                break;
             case SkillType.Dynamite:
                 if (!(skill is DynamiteSkill))
                     skill = new DynamiteSkill();
                 break;
-
-            case SkillType.None:
-                if (!(skill is NoneSkill))
-                    skill = new NoneSkill();
+            case SkillType.Armor:
+                if (!(skill is ArmorSkill))
+                    skill = new ArmorSkill();
                 break;
         }
     }

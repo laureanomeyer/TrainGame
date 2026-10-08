@@ -63,6 +63,12 @@ public  class EnemyBrainSO : ScriptableObject
 
     public void Tick(Enemy enemy)
     {
-        throw new System.NotImplementedException();
+        return;
+    }
+
+    public void AddArmor(Enemy enemy)
+    {
+        enemy.HealthBar.ShowArmor(true);
+        enemy.ChangeState(EnemyHealthState.Armored);
     }
 }
