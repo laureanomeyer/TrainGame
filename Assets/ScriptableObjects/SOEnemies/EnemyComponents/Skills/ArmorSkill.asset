@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c62aa80267623064dab2592d79bab4a0, type: 3}
   m_Name: ArmorSkill
   m_EditorClassIdentifier: Assembly-CSharp::EnemySkillSO
-  skillType: 0
+  skillType: 2
   skill:
-    rid: -2
+    rid: 4172394869175628314
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+    - rid: 4172394869175628314
+      type: {class: ArmorSkill, ns: , asm: Assembly-CSharp}
+      data:
+        cooldown: 4
+        armorPrefab: {fileID: 8563536407840234828, guid: 3671c02f01a7fc34eb248e7d0c93caff, type: 3}
