@@ -37,7 +37,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private float rateOfFire;
     public float RateOfFire { get => rateOfFire; }
 
-    private float rateOfFireBuff;
+    private float rateOfFireBuff = 0;
 
     //Reload time
     private float currentReloadTime = 0;
@@ -48,7 +48,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     //Damage
     private float baseDamage;
     private float damage;
-    private float damageBuff;
+    private float damageBuff = 0;
 
     [Header("Delay between shoots")]
     [SerializeField] private float delayBetweenShots = 0.05f; // segundos entre bala 1 y bala 2
@@ -260,28 +260,28 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
     public void BufferRoF(float buffer)
     {
-        rateOfFireBuff = buffer;
+        rateOfFireBuff += buffer;
         rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
         Debug.Log("Weapon buff ROF updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
-    public void DebuffRoF()
+    public void DebuffRoF(float buffer)
     {
-        rateOfFireBuff = 0;
+        rateOfFireBuff -= buffer;
         rateOfFire = baseRateOfFire;
         Debug.Log("Weapon debuff ROF updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void BufferDamage(float buffer)
     {
-        damageBuff = buffer;
+        damageBuff += buffer;
         damage = damage * (1f + damageBuff / 100f);
         Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
     }
 
-    public void DebuffDamage()
+    public void DebuffDamage(float buffer)
     {
-        damageBuff = 0;
+        damageBuff -= buffer;
         damage = baseDamage;
         Debug.Log("Weapon debuff Damage updated " + gameObject.name + "; Weapon damage: " + damage);
     }

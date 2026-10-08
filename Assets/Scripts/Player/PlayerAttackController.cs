@@ -36,6 +36,8 @@ public class PlayerAttackController
             SetWeapon(playerDataRef.PlayerWeapon);
         }
 
+        //EventBus.Publish(new OnFinishPlayerInitialize());
+
         EventBus.Publish(new OnAmmoChangedEvent(weapon.CurrentAmmunition));
     }
 

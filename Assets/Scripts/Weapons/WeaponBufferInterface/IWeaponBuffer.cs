@@ -4,9 +4,9 @@ public interface IWeaponBuffer
 {
     public void BufferRoF(float buffer);
 
-    public void DebuffRoF();
+    public void DebuffRoF(float buffer);
 
     public void BufferDamage(float buffer);
 
-    public void DebuffDamage();
+    public void DebuffDamage(float buffer);
 }

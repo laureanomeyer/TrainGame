@@ -197,7 +197,7 @@ public class LocomotiveFuel
         if (destroyed) return;
         if (!GameManager.Instance.IsGameplayState) return;
 
-        Debug.Log(currentShield);
+        //Debug.Log(currentShield);
 
         if (!shieldsActive)
         {

@@ -30,6 +30,7 @@ public class TrainManager : MonoBehaviour
         foreach (var brain in wagonBrains) brain.RegisterModifiers(statSystemRef);
         foreach (var brain in wagonBrains) brain.StartWagon();
         RunManager.Instance.OnTrainReady(tail, wagonsCreated);
+        EventBus.Publish(new OnFinishBuildTrain(wagonBrains));
 
 /* 
         foreach (var w in trainDataRef.WagonsIDList)

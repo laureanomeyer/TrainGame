@@ -545,6 +545,13 @@ public class OnSetTutorialFinished : IGameEvent
 
 #endregion
 
+#region Player Events
+public class OnFinishPlayerInitialize : IGameEvent
+{
+    public OnFinishPlayerInitialize(){}
+}
+#endregion
+
 #region Weapons Events
 
 #region Wichester Events
@@ -663,4 +670,16 @@ public class OnUnlockColtLegado : IGameEvent
 
 #endregion
 
+#endregion
+
+#region Wagon Events
+public class OnFinishBuildTrain : IGameEvent
+{
+    public List<WagonBrain> wagonBrains;
+
+    public OnFinishBuildTrain(List<WagonBrain> wagonBrains)
+    {
+        this.wagonBrains = wagonBrains;
+    }
+}
 #endregion

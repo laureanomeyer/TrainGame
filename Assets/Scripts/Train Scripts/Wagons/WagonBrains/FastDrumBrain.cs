@@ -1,3 +1,6 @@
+using System;
+using System.Data;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FastDrumBrain : WagonBrain
@@ -10,49 +13,54 @@ public class FastDrumBrain : WagonBrain
     private void Awake()
     {
         WagonType = WagonType.Passive;
+        EventBus.Subscribe<OnFinishPlayerInitialize>(SearchForWagons);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void OnDestroy()
     {
-        if (other.gameObject.CompareTag("Player"))
+        base.OnDestroy();
+        EventBus.Unsubscribe<OnFinishPlayerInitialize>(SearchForWagons);
+        Debug.Log("Eventos desuscripto de FastDrum");
+    }
+
+    private void SearchForWagons(OnFinishPlayerInitialize trainEvent)
+    {
+        playerWeapon = GameObject.FindWithTag("Player").GetComponent<PlayerBrain>().PlayerAttackController.Weapon;
+
+        if (playerWeapon.WeaponData.type == WeaponType.Revolver && playerWeapon is IWeaponBuffer weaponBuffer)
         {
-            if(playerWeapon == null)
-            {
-                PlayerBrain playerRef = other.GetComponent<PlayerBrain>();
-                playerWeapon = playerRef.PlayerAttackController.Weapon;
-            }
-
-            if(playerWeapon.WeaponData.type == WeaponType.Revolver)
-            {
-                if (playerWeapon is IWeaponBuffer weaponBuffer)
-                {
-                    weaponBuffer.BufferRoF(rofUpgrade);
-                }
-            }
-
-            renderController.DeactivateWagonTop();
+            weaponBuffer.BufferRoF(rofUpgrade);
         }
+
+        /*
+        //Codigo para inspiring
+        WagonBrain previousWagon;
+        WagonBrain nextWagon;
+
+        int index = trainEvent.wagonBrains.IndexOf(this);
+        if (index == -1) return;
+
+        if (index > 0)
+        {
+            previousWagon = trainEvent.wagonBrains[index - 1];
+            Debug.Log(previousWagon.ToString());
+        }
+
+        if (index < trainEvent.wagonBrains.Count - 1)
+        {
+            nextWagon = trainEvent.wagonBrains[index + 1];
+            Debug.Log(nextWagon.ToString());
+        }
+        */
     }
 
-    private void OnTriggerExit(Collider other)
+    public override void Break()
     {
-        if (other.gameObject.CompareTag("Player"))
+        base.Break();
+
+        if (playerWeapon.WeaponData.type == WeaponType.Revolver && playerWeapon is IWeaponBuffer weaponBuffer)
         {
-            if (playerWeapon == null)
-            {
-                PlayerBrain playerRef = other.GetComponent<PlayerBrain>();
-                playerWeapon = playerRef.PlayerAttackController.Weapon;
-            }
-
-            if (playerWeapon.WeaponData.type == WeaponType.Revolver)
-            {
-                if (playerWeapon is IWeaponBuffer weaponBuffer)
-                {
-                    weaponBuffer.DebuffRoF();
-                }
-            }
-
-            renderController.ActivateWagonTop();
+            weaponBuffer.DebuffRoF(rofUpgrade);
         }
     }
 }

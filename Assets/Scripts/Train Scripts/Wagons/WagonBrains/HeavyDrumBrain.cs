@@ -10,49 +10,33 @@ public class HeavyDrumBrain : WagonBrain
     private void Awake()
     {
         WagonType = WagonType.Passive;
+        EventBus.Subscribe<OnFinishPlayerInitialize>(SearchForWagons);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public override void OnDestroy()
     {
-        if (other.gameObject.CompareTag("Player"))
+        base.OnDestroy();
+        EventBus.Unsubscribe<OnFinishPlayerInitialize>(SearchForWagons);
+        Debug.Log("Eventos desuscripto de FastDrum");
+    }
+
+    private void SearchForWagons(OnFinishPlayerInitialize trainEvent)
+    {
+        playerWeapon = GameObject.FindWithTag("Player").GetComponent<PlayerBrain>().PlayerAttackController.Weapon;
+
+        if (playerWeapon.WeaponData.type == WeaponType.Revolver && playerWeapon is IWeaponBuffer weaponBuffer)
         {
-            if (playerWeapon == null)
-            {
-                PlayerBrain playerRef = other.GetComponent<PlayerBrain>();
-                playerWeapon = playerRef.PlayerAttackController.Weapon;
-            }
-
-            if (playerWeapon.WeaponData.type == WeaponType.Revolver)
-            {
-                if (playerWeapon is IWeaponBuffer weaponBuffer)
-                {
-                    weaponBuffer.BufferDamage(damageUpgrade);
-                }
-
-                renderController.DeactivateWagonTop();
-            }
+            weaponBuffer.BufferDamage(damageUpgrade);
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    public override void Break()
     {
-        if (other.gameObject.CompareTag("Player"))
+        base.Break();
+
+        if (playerWeapon.WeaponData.type == WeaponType.Revolver && playerWeapon is IWeaponBuffer weaponBuffer)
         {
-            if (playerWeapon == null)
-            {
-                PlayerBrain playerRef = other.GetComponent<PlayerBrain>();
-                playerWeapon = playerRef.PlayerAttackController.Weapon;
-            }
-
-            if (playerWeapon.WeaponData.type == WeaponType.Revolver)
-            {
-                if (playerWeapon is IWeaponBuffer weaponBuffer)
-                {
-                    weaponBuffer.DebuffDamage();
-                }
-            }
-
-            renderController.ActivateWagonTop();
+            weaponBuffer.DebuffDamage(damageUpgrade);
         }
     }
 }

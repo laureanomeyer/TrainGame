@@ -60,6 +60,7 @@ public class PlayerBrain : MonoBehaviour
         attackAction.performed += ActiveAttack;
         attackAction.canceled += DeactiveAttack;
 
+        EventBus.Publish(new OnFinishPlayerInitialize());
         EventBus.Subscribe<OnSetAttackEnabledEvent>(CallSetCanAttackEvent);
         EventBus.Subscribe<OnShowInteractEvent>(ShowInteract);
         EventBus.Subscribe<OnHideInteractEvent>(CallHideInteractEvent);
