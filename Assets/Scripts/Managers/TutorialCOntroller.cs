@@ -204,7 +204,7 @@ public class TutorialController : MonoBehaviour
             }),
  
             // 19 Enemy shoots
-            new TutorialStep(PlayerMode.Reading, () => EventBus.Publish(new OnActivateGoldWagon())),
+            new TutorialStep(PlayerMode.Reading),
  
             // 20  Try fixing it
             new TutorialStep(PlayerMode.Interact),
