@@ -52,6 +52,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
     [Header("Delay between shoots")]
     [SerializeField] private float delayBetweenShots = 0.05f; // segundos entre bala 1 y bala 2
+    private bool isShooting;
 
     //Referencia a la pool de balas
     private BulletPool bulletPool;
@@ -120,20 +121,19 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     }
     public void Attack()
     {
+        if (isShooting || IsReloading) return;
+
         if (waitToFire > rateOfFire)
         {
-            if (IsReloading) return;
-
             Shoot();
-
             EventBus.Publish(new OnShootEvent(rateOfFire));
-            EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
-            waitToFire = 0;
+            // ya NO reiniciamos waitToFire aquí
         }
     }
 
     public void Shoot()
     {
+        if (isShooting) return;   // ya hay una ráfaga en curso
         if (IsReloading) return;
         if (rightWeaponSpawnPoint == null || leftWeaponSpawnPoint == null) return;
 
@@ -148,38 +148,51 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         bulletData.Damage = damage;
 
+        isShooting = true;        // se bloquea ANTES de iniciar la corrutina
         StartCoroutine(ShootRoutine());
     }
 
     private IEnumerator ShootRoutine()
     {
-        //Primer disparo
+        // Primer disparo
         BulletPool.ShootObject(rightWeaponSpawnPoint.position, rightWeaponSpawnPoint.rotation, bulletData);
         sequenceController.Play("shotParticle1");
+        CurrentAmmunition--;
+        EventBus.Publish(new OnAmmoChangedEvent(CurrentAmmunition));
 
         yield return new WaitForSeconds(delayBetweenShots);
 
-        //Segundo disparo
-        BulletPool.ShootObject(leftWeaponSpawnPoint.position, leftWeaponSpawnPoint.rotation, bulletData);
-        sequenceController.Play("shotParticle2");
+        // Segundo disparo
+        if (CurrentAmmunition > 0)
+        {
+            BulletPool.ShootObject(leftWeaponSpawnPoint.position, leftWeaponSpawnPoint.rotation, bulletData);
+            sequenceController.Play("shotParticle2");
+            CurrentAmmunition--;
+            EventBus.Publish(new OnAmmoChangedEvent(CurrentAmmunition));
+        }
 
-        CurrentAmmunition -= 2;
+        waitToFire = 0;      // el cooldown empieza AHORA, al terminar la ráfaga
+        isShooting = false;
 
         if (CurrentAmmunition <= 0)
         {
-            if (unlockedLegacy == false)
+            if (unlockedLegacy == false && curretEnemiesDefetead < unlockLegacyCondition)
             {
-                if (curretEnemiesDefetead < unlockLegacyCondition)
-                {
-                    Debug.Log("Legado de colt no desbloquado");
-                    curretEnemiesDefetead = 0;
-                }
+                Debug.Log("Legado de colt no desbloquado");
+                curretEnemiesDefetead = 0;
             }
 
             IsReloading = true;
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        isShooting = false;
+    }
+
     public void RestockBullets()
     {
         currentAmmunition = weaponData.ammun;
