@@ -12,7 +12,6 @@ public class EnemyUIHpBar : MonoBehaviour
 
     private void Awake()
     {
-        ArmorBarFill.enabled = false;
         mainCamera = Camera.main;
     }
 

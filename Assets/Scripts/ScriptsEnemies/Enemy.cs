@@ -133,30 +133,47 @@ public class Enemy : MonoBehaviour
 
     public void Initialize(EnemyData data)
     {
+        if (data == null)
+        {
+            Debug.Log("anda a saber pq no ai data xd");
+            return;
+        }
         StopAllCoroutines();
         attackRoutine = null;
 
+        Debug.Log("paso 1");
         ChangeState(EnemyHealthState.Normal);
+        Debug.Log("paso 2");
         ChangeState(EnemyMovementState.Moving);
+        Debug.Log("paso 3");
         ChangeState(EnemyAttackState.Normal);
+        Debug.Log("paso 4");
         inactiveEventPublished = false;
+        Debug.Log("paso 5");
         timeAtTarget = 0f;
+        Debug.Log("paso 6");
         IsTutorialEnemy = false;
+        Debug.Log("paso 7");
         targetWagon = null;
+        Debug.Log("paso 8");
         this.data = data;
 
         Movement = data.movement;
         currentHealth = MaxHealth;
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
+        Debug.Log("paso 9");
 
         Movement.Begin(this);
+        Debug.Log("paso 10");
 
         dataName = data.name;
 
+        Debug.Log("paso 11");
         if (enemyRend) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend) horseRend.sharedMesh = data.horseMesh.sharedMesh;
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
+        Debug.Log("paso 12");
 
         healthBar.ShowArmor(HealthState == EnemyHealthState.Armored);
 
@@ -165,6 +182,7 @@ public class Enemy : MonoBehaviour
         flash = GetComponent<DamageFlash>();
         flash.StopCoroutine();
         flash.SetMaterialArray(0, data.material);
+        Debug.Log("paso 13");
 
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
@@ -173,6 +191,7 @@ public class Enemy : MonoBehaviour
         { 
             targetWagon = Brain.GetPreference(data.targetPreference);
         }
+        Debug.Log("paso 14");
     }
 
     public void ResetAttackCooldown(float cooldown)

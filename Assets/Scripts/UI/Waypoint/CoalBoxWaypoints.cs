@@ -11,19 +11,23 @@ public class CoalBoxWaypoints : MonoBehaviour, IWaypointsUI
 
     void Awake()
     {
-        EventBus.Subscribe<OnSetCoalWaypoint>(HandleWaypointVisibility); //Prende y apaga segun la cantidad de carbon
 
-    }
-    void Start()
-    {
         indicatorRenderer = CanvasElementsReferences.CanvasIndicatorRenderer;
 
         indicatorOnScreen.SetRenderer(indicatorRenderer);
         indicatorOffScreen.SetRenderer(indicatorRenderer);
 
+    }
+    private void OnEnable()
+    {
+        EventBus.Subscribe<OnSetCoalWaypoint>(HandleWaypointVisibility); //Prende y apaga segun la cantidad de carbon
+
+    }
+    void Start()
+    {
         DeactivateWaypointUI();
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         EventBus.Unsubscribe<OnSetCoalWaypoint>(HandleWaypointVisibility);
     }

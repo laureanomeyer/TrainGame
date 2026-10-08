@@ -204,7 +204,11 @@ public class GameManager : MonoBehaviour
 
     public void StartNewSession()
     {
-        if (isChangingScene) return;
+        if (isChangingScene) 
+        {
+            Debug.Log("Cambiando de escena");
+            return;
+        }
 
         gameEnded = false;
         LastRunResult = RunResult.None;

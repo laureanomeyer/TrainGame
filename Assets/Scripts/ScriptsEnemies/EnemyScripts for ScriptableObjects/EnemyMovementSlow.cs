@@ -40,7 +40,7 @@ public class EnemyMovementSlow : EnemyMovementSO
 
     public override void Begin(Enemy enemy)
     {
-        enemy.BeginLosing();
+        enemy.ChangeState(EnemyMovementState.Losing);
     }
 
 }

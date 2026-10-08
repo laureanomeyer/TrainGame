@@ -250,7 +250,9 @@ public class EnemiesController : MonoBehaviour
         }
 
         if (cam == null)
-            cam = Camera.main;
+        {
+           cam = Camera.main;
+        }
         if (cam == null)
         {
             ReportAutomaticSpawnError("EnemiesController requires a MainCamera for automatic waves.");
@@ -263,7 +265,7 @@ public class EnemiesController : MonoBehaviour
         for (int i = 0; i < currentLevelData.MaxHordeSpawn && activeEnemies.Count < maxAliveEnemies; i++)
         {
             if (CameraView.IsOutsideCamera(spawnPosition, cam))
-                SpawnWeightedEnemy(spawnPosition);
+                SpawnWeightedEnemy(spawnPosition); 
 
             spawnPosition = spawnZone.GetRandomPoint(positive, negative);
         }
