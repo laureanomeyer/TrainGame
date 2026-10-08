@@ -24,6 +24,9 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     [Header("Legado Bullet data")]
     [SerializeField] private BulletTypeScriptable legadoBulletData;
 
+    [Header("Point to unlock legado")]
+    [SerializeField] private int PointToUnlockLegado = 100;
+
     private BulletTypeScriptable currentBulletUse;
 
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
@@ -75,6 +78,10 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         }
         else
         {
+            if(playerData.unlockedLegado.LeftWinchesterPoints == -1)
+            {
+                playerData.unlockedLegado.LeftWinchesterPoints = PointToUnlockLegado;
+            }
             currentBulletUse = bulletData;
         }
 

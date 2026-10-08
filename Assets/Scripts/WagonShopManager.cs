@@ -1,6 +1,5 @@
-using System;
+
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -33,6 +32,7 @@ public class WagonShopManager : MonoBehaviour
         {
             button.Level = currentLevel;
             button.displayTrain = displayTrain;
+            button.buyButton = buyButton;
 
             button.Initialize();
         }

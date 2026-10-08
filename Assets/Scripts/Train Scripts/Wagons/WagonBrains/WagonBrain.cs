@@ -240,7 +240,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
@@ -253,7 +253,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
@@ -265,6 +265,5 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
             }
         }
     }
-
 
 }

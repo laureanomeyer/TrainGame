@@ -38,7 +38,6 @@ public class GoldCollector
 
         var statsRef = ServiceLocator.Get<StatSystem>();
         maxGold = statsRef.GetLocoMultiplier(StatType.GoldMultiplier);
-        Debug.Log(maxGold);
 
         statsRef = ServiceLocator.Get<StatSystem>();
 

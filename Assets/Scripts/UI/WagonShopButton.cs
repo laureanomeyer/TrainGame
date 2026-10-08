@@ -1,8 +1,9 @@
-using System;
+
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class WagonShopButton : MonoBehaviour
 {
@@ -13,6 +14,11 @@ public class WagonShopButton : MonoBehaviour
     public int Level { get => currentLevel; set => currentLevel = value; }
 
     public DisplayTrain displayTrain;
+
+    public Button buyButton;
+
+    private RectTransform buyButtonRect;
+    private Vector2 buttonOriginalPos;
 
     private WagonInStockSO[] wagonsInStock;
 
@@ -54,11 +60,21 @@ public class WagonShopButton : MonoBehaviour
 
     private bool isBuyingWagon;
 
+    [Header("Shake Feedback")]
+    [SerializeField] private float shakeDistance = 15f;
+    [SerializeField] private float shakeDuration = 0.3f;
+    [SerializeField] private int shakeCount = 3;
+
+    private Coroutine shakeCoroutine;
+
     public void Initialize()
     {
         nameTextUI = storeManager.nameTextUI;
         descriptionTextUI = storeManager.descriptionTextUI;
         priceTextUI = storeManager.priceTextUI;
+
+        buyButtonRect = buyButton.GetComponent<RectTransform>();
+        buttonOriginalPos = buyButtonRect.anchoredPosition;
 
         interacZone = GetComponent<InteractionZone>();
 
@@ -114,7 +130,10 @@ public class WagonShopButton : MonoBehaviour
             return;
 
         if (!storeManager.TryConsumeGold(currentWagonInStock.Price))
+        {
+            PlayShake();
             return;
+        }
 
         StartCoroutine(BuyWagonCoroutine());
     }
@@ -236,6 +255,64 @@ public class WagonShopButton : MonoBehaviour
         interacZone.DeactivateUI();
     }
 
+    private void PlayShake()
+    {
+        if (buyButtonRect == null) return;
+
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            // solo restauramos si había un shake en curso
+            buyButtonRect.anchoredPosition = buttonOriginalPos;
+        }
+        else
+        {
+            // no hay shake activo: la posición actual es la buena
+            buttonOriginalPos = buyButtonRect.anchoredPosition;
+        }
+
+        shakeCoroutine = StartCoroutine(ShakeRoutine());
+    }
+
+    private void ResetShake()
+    {
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            shakeCoroutine = null;
+        }
+
+        if (buyButtonRect != null)
+        {
+            buyButtonRect.anchoredPosition = buttonOriginalPos;
+        }
+    }
+
+    private IEnumerator ShakeRoutine()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < shakeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = elapsed / shakeDuration;
+
+            // Oscila izquierda-derecha y la amplitud baja a 0, así termina en el centro
+            float offset = Mathf.Sin(t * shakeCount * Mathf.PI * 2f) * shakeDistance * (1f - t);
+            buyButtonRect.anchoredPosition = buttonOriginalPos + new Vector2(offset, 0f);
+
+            yield return null;
+        }
+
+        buyButtonRect.anchoredPosition = buttonOriginalPos;
+        shakeCoroutine = null;
+    }
+
+    private void OnDisable()
+    {
+        ResetShake();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -255,6 +332,8 @@ public class WagonShopButton : MonoBehaviour
             storeManager.buyButton.onClick.RemoveListener(Interact);
 
             storeManager.closeButton.onClick.RemoveListener(CloseFuction);
+
+            ResetShake();
         }
     }
 

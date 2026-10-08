@@ -17,7 +17,7 @@ public class UnlockedLegacy
         EventBus.Subscribe<OnUpdatedColtLegado>(UpdateColt);
     }
 
-    public int LeftWinchesterPoints = 20;
+    public int LeftWinchesterPoints = -1;
 
     public bool UnlockedWinchester = false;
 
