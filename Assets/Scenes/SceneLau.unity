@@ -1667,6 +1667,8 @@ MonoBehaviour:
   bottomBar: {fileID: 1163677379}
   barTargetHeight: 90
   letterBoxDuration: 0.5
+  letterboxOnDefeat: 1
+  letterboxOnVictory: 0
 --- !u!114 &1062379975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2534,6 +2536,22 @@ PrefabInstance:
       propertyPath: spawnZone
       value: 
       objectReference: {fileID: 1260365775}
+    - target: {fileID: 8626146185774691146, guid: 43b7c7693761b754ebc9f80553df883d, type: 3}
+      propertyPath: levelList.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8626146185774691146, guid: 43b7c7693761b754ebc9f80553df883d, type: 3}
+      propertyPath: 'levelList.Array.data[7]'
+      value: 
+      objectReference: {fileID: 11400000, guid: c6c93f9ab77714c469911e780646ca5e, type: 2}
+    - target: {fileID: 8626146185774691146, guid: 43b7c7693761b754ebc9f80553df883d, type: 3}
+      propertyPath: 'levelList.Array.data[8]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a1ef655192ae4644b011e553f146b3c, type: 2}
+    - target: {fileID: 8626146185774691146, guid: 43b7c7693761b754ebc9f80553df883d, type: 3}
+      propertyPath: 'levelList.Array.data[9]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 420067154986397469cb93e6a7eef95f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
