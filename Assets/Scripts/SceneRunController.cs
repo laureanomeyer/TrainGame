@@ -25,6 +25,8 @@ public class SceneRunController : MonoBehaviour
 
         if (cinematicSystem != null)
             cinematicSystem.OnCinematicFinished += FinishRun;
+
+        ServiceLocator.Register<SceneRunController>(this);
     }
 
     private void OnDestroy()
@@ -34,6 +36,9 @@ public class SceneRunController : MonoBehaviour
 
         if (cinematicSystem != null)
             cinematicSystem.OnCinematicFinished -= FinishRun;
+
+        ServiceLocator.Unregister<SceneRunController>();
+
     }
 
     private void Update()
@@ -47,7 +52,7 @@ public class SceneRunController : MonoBehaviour
         if (currentTime <= 0f)
         {
             currentTime = 0f;
-            EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
+            //EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
         }
     }
 

@@ -271,7 +271,6 @@ public class TutorialController : MonoBehaviour
     private void AdvanceStepNaturally(OnAdvanceTutorialStep ev)
     {
         Advance();
-        Debug.Log("Otro");
     }
 
     private void SkipTutorial(OnSkipTutorial ev)

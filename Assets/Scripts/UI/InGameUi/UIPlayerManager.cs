@@ -108,6 +108,51 @@ public class UIPlayerManager : MonoBehaviour
         }
     }
 
+    void UpdateFuelUI()
+    {
+        var fuel = locomotive.fuelController;
+
+        bool isLow = fuel.CurrentFuel < fuel.FuelMaxCapaciy / 3;
+        if (animator != null) animator.SetBool("FuelLow", isLow);
+        if (lowFuel != null) lowFuel.SetActive(isLow);
+
+        var currentFuel = fuel.CurrentFuel / fuel.FuelMaxCapaciy;
+        lerpedFuel = Mathf.MoveTowards(lerpedFuel, currentFuel, Time.deltaTime);
+        fuelIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(80, -80, lerpedFuel));
+    }
+
+    void UpdateShieldUI()
+    {
+        var fuel = locomotive.fuelController;
+
+        var currentShield = fuel.CurrentShield / fuel.MaxShield;
+        lerpedShield = Mathf.MoveTowards(lerpedShield, currentShield, Time.deltaTime);
+        shieldImage.fillAmount = lerpedShield;
+    }
+
+    void UpdateCapacityUi()
+    {
+        var fuel = locomotive.fuelController;
+
+        var currentCapacity = fuel.CurrentMaxFuel / fuel.FuelMaxCapaciy;
+        lerpedCapacity = Mathf.MoveTowards(lerpedCapacity, currentCapacity, Time.deltaTime);
+        fuelImage.fillAmount = lerpedCapacity;
+        fuelMaxCapacityIndicator.transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(80, -80, lerpedCapacity));
+    }
+
+    void UpdateGoldenWagonHpUI()
+    {
+        if (goldenWagonHpController == null)
+        {
+            ServiceLocator.TryGet<WagonHP>(out goldenWagonHpController);
+            return;
+        }
+
+        var currentGoldenWagonHp = goldenWagonHpController.CurrentHp / goldenWagonHpController.MaxHp;
+        lerpedGoldCapacity = Mathf.MoveTowards(lerpedGoldCapacity, currentGoldenWagonHp, Time.deltaTime);
+        goldenWagonHp.fillAmount = lerpedGoldCapacity;
+    }
+
     void UpdateInventoryUI()
     {
         PlayerInventory inventory = player.Inventory;
