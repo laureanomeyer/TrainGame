@@ -15,7 +15,6 @@ public enum DropType {Gold, Coal}
 public class EnemyData : ScriptableObject
 {
     public float health;
-    public float speed;
     public float damage;
     public float attackCooldown;
 
@@ -24,12 +23,14 @@ public class EnemyData : ScriptableObject
     public DropType drop;
     public float dropAmount;
 
+    [Header("Legacy direct mesh binding (kept for compatibility)")]
     public SkinnedMeshRenderer enemyMesh;
     public SkinnedMeshRenderer horseMesh;
 
-    public Material[] material;
+    [Header("New single-prefab visual approach")]
+    public EnemyVisualSO visual;
 
-    
+    public Material[] material;
 
     public EnemyAttackSO attack;     // logica ataque
     public EnemyBrainSO brain;       // logica targeteo
