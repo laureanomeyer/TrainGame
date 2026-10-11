@@ -99,7 +99,6 @@ public class Cinematic : MonoBehaviour
             animatedCameraTransform.localPosition = Vector3.zero;
             animatedCameraTransform.localRotation = Quaternion.identity;
         }
-        RunManager.Instance.OnRunFinished();
     }
 
     private IEnumerator StartFadeBeforeTimelineEnds()
@@ -115,7 +114,7 @@ public class Cinematic : MonoBehaviour
         if (runFinishedCalled) yield break;
 
         runFinishedCalled = true;
-
+        RunManager.Instance.OnRunFinished();
     }
 
     private void OnCinematicFinished(PlayableDirector director)

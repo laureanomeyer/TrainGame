@@ -52,7 +52,7 @@ public class SceneRunController : MonoBehaviour
         if (currentTime <= 0f)
         {
             currentTime = 0f;
-            //EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
+            EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
         }
     }
 

@@ -319,6 +319,8 @@ public class TutorialController : MonoBehaviour
         EventBus.Publish(new OnSetTutorialFinished());
         EventBus.Publish(new OnStartSpawningEnemiesEvent(true));
 
+        ApplyMode(PlayerMode.Combat);
+
         fuelUi.alpha = 1f;
         shieldsUi.alpha = 1f;
         goldHpUi.alpha = 1f;
