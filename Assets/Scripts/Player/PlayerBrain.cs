@@ -48,11 +48,12 @@ public class PlayerBrain : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
+
         inventory = new PlayerInventory();
         faceMouse = new LookObjectToMouse(groundMask);
         playerMovementController = new PlayerMovementController(rb, faceMouse, transform, speed);
         playerInteractionsController = new PlayerInteractions(this, playerMovementController, faceMouse, interactionUIManager, repairCapacity);
-        playerAttackController = new PlayerAttackController(spawnPoint, weaponItem, GameObject.FindGameObjectWithTag("Factory").GetComponent<BulletPool>(), this, faceMouse);
+        playerAttackController = new PlayerAttackController(spawnPoint, weaponItem, ServiceLocator.Get<BulletPool>(), this, faceMouse);
 
         playerDataRef = ServiceLocator.Get<PlayerData>();
 

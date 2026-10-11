@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class ReorderManager : MonoBehaviour
 {
+    [SerializeField] private StoreManager storeManagerRef;
     [SerializeField] private PlayerInput inputRef;
     [SerializeField] private float sellRefundFraction = 0.5f;
 
@@ -190,7 +191,7 @@ public class ReorderManager : MonoBehaviour
         string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
 
         bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out _, out float cost);
-        bool canAfford = hasUpgrade && StoreManager.Instance.GetGold() >= cost;
+        bool canAfford = hasUpgrade && storeManagerRef.GetGold() >= cost;
 
         string description = selectedOption switch
         {
@@ -226,12 +227,12 @@ public class ReorderManager : MonoBehaviour
     private void TryUpgradeHovered()
     {
         if (!trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out _, out float cost)) return;
-        if (!StoreManager.Instance.TrySpendGold(cost)) return;
+        if (!storeManagerRef.TrySpendGold(cost)) return;
 
         var upgraded = trainDisplayRef.UpgradeWagon(hoveredSlot);
         if (upgraded == null)
         {
-            StoreManager.Instance.AddGold(cost); // devolución por seguridad
+            storeManagerRef.AddGold(cost); // devolución por seguridad
             return;
         }
 
@@ -246,7 +247,7 @@ public class ReorderManager : MonoBehaviour
         var sold = trainDisplayRef.SellWagon(hoveredSlot);
         if (sold == null) return;
 
-        StoreManager.Instance.AddGold(GetSellValue(sold));
+        storeManagerRef.AddGold(GetSellValue(sold));
         cacheRef = null;
 
         int count = trainDisplayRef.InstantiatedWagonReferences.Count;

@@ -14,6 +14,9 @@ public class TrainManager : MonoBehaviour
     private StatSystem statSystemRef;
     private TrainData trainDataRef;
 
+    private int addDefaultCapacityToPool = 0;
+    private int addMaxCapacityToPool = 0;
+
     private void Awake()
     {
         trainDataRef = ServiceLocator.Get<TrainData>();
@@ -29,6 +32,10 @@ public class TrainManager : MonoBehaviour
 
         foreach (var brain in wagonBrains) brain.RegisterModifiers(statSystemRef);
         foreach (var brain in wagonBrains) brain.StartWagon();
+
+        BulletPool pool = ServiceLocator.Get<BulletPool>();
+        pool.InitializePool(addDefaultCapacityToPool, addMaxCapacityToPool);
+
         RunManager.Instance.OnTrainReady(tail, wagonsCreated);
         EventBus.Publish(new OnFinishBuildTrain(wagonBrains));
 
@@ -56,6 +63,13 @@ public class TrainManager : MonoBehaviour
     {
         GameObject wagonInstance = Instantiate(wagonToCreate, tail.position, tail.rotation);
         WagonBrain wagonBrain = wagonInstance.GetComponent<WagonBrain>();
+
+        if(wagonBrain.WagonType == WagonType.PassiveTorret)
+        {
+            addDefaultCapacityToPool += 10;
+            addMaxCapacityToPool += 20;
+            Debug.Log("Capacidad de la pool aumentada");
+        }
 
         wagonsCreated.Add(wagonBrain);
         wagonBrains.Add(wagonBrain);

@@ -373,7 +373,7 @@ GameObject:
   - component: {fileID: 8707225630396016752}
   - component: {fileID: 1714325756519525256}
   m_Layer: 3
-  m_Name: Wagon_Colt_LV2
+  m_Name: Wagon_Motivational_LV2
   m_TagString: Train
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -452,6 +452,10 @@ MonoBehaviour:
   - {fileID: 6426947880810949910, guid: 0cfee1d9f30c99a498865b6d09f56b11, type: 3}
   wagonTopRender: {fileID: 2975181123030563190}
   wagonTopMeshFilter: {fileID: 5816501060373763881}
+  wagonType: 2
+  turrets:
+  - {fileID: 2765749237097656151}
+  - {fileID: 3644062954500194812}
 --- !u!114 &2765749237097656151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,9 +475,13 @@ MonoBehaviour:
   range: 50
   fireCooldown: 1
   shootAngle: 50
+  magazineSize: 10
+  reloadTime: 2
   defaultCapacity: 10
   maxSize: 30
   damage: 1
+  isAlive: 1
+  bulletPool: {fileID: 0}
 --- !u!114 &3644062954500194812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,9 +501,13 @@ MonoBehaviour:
   range: 50
   fireCooldown: 1
   shootAngle: 50
+  magazineSize: 10
+  reloadTime: 2
   defaultCapacity: 10
   maxSize: 30
   damage: 1
+  isAlive: 1
+  bulletPool: {fileID: 0}
 --- !u!114 &8707225630396016752
 MonoBehaviour:
   m_ObjectHideFlags: 0

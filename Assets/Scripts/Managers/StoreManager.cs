@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class StoreManager : MonoBehaviour
 {
-    public static StoreManager Instance;
-
     [SerializeField] private GoldUIDisplay goldDisplay;
 
     [SerializeField] private DisplayTrain displayTrain;
@@ -16,25 +14,13 @@ public class StoreManager : MonoBehaviour
 
     void Awake()
     {
-        #region Singleton
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        #endregion
-
+        BulletPool bulletPool = ServiceLocator.Get<BulletPool>();
         trainDataRef = ServiceLocator.Get<TrainData>();
         playerDataRef = ServiceLocator.Get<PlayerData>();
         wagonsInTrain = trainDataRef.WagonsIDList;
 
-/*         foreach (var w in wagonsInTrain)
-        {
-            Debug.Log(w.WagonName);
-        } */
-
-        displayTrain.Initialize();
+        displayTrain.Initialize(wagonsInTrain);
+        bulletPool.InitializePool();
     }
 
     private void Start()

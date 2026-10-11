@@ -61,7 +61,7 @@ public class DisplayTrain : MonoBehaviour
 
     #region Init
 
-    public void Initialize()
+    public void Initialize(List<IWagonID> wagonsInTrain)
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
 
@@ -103,7 +103,7 @@ public class DisplayTrain : MonoBehaviour
         layoutOrigin = currentTail.position - LayoutForward * wagonGap;
 
         wagonList = new LinkedList<IWagonID>();
-        foreach (var wagon in StoreManager.Instance.wagonsInTrain)
+        foreach (var wagon in wagonsInTrain)
             wagonList.AddLast(wagon);
 
         int slot = 0;

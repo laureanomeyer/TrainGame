@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class WeaponShopButtonManager : MonoBehaviour
 {
+    [SerializeField] private StoreManager storeManagerRef;
+
     [Header("Button from HUD")]
     [SerializeField] public GameObject[] shopButtons;
     private List<IWeaponShopButton> buttons = new List<IWeaponShopButton>();
@@ -61,11 +63,11 @@ public class WeaponShopButtonManager : MonoBehaviour
 
     public bool TryConsumeGold(float amount)
     {
-        return StoreManager.Instance.TrySpendGold(amount);
+        return storeManagerRef.TrySpendGold(amount);
     }
 
     public float ShowPlayerGold()
     {
-        return StoreManager.Instance.GetGold();
+        return storeManagerRef.GetGold();
     }
 }

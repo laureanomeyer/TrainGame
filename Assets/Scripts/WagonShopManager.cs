@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class WagonShopManager : MonoBehaviour
 {
+    [SerializeField] private StoreManager storeManagerRef;
+
     [Header("Wagon shop sections")]
     [SerializeField] private WagonShopButton[] shopButtons;
 
@@ -40,11 +42,11 @@ public class WagonShopManager : MonoBehaviour
 
     public bool TryConsumeGold(float amount)
     {
-        return StoreManager.Instance.TrySpendGold(amount);
+        return storeManagerRef.TrySpendGold(amount);
     }
     public float GetPlayerGold()
     {
-        return StoreManager.Instance.GetGold();
+        return storeManagerRef.GetGold();
     }
 
     public void ActivateButtons()
