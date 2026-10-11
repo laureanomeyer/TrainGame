@@ -101,6 +101,6 @@ public class ArmorSkill : EnemySkill
             return;
         }
 
-        enemy.Brain.AddArmor(enemy);
+        enemy.Brain.AddArmor(enemy, 0);
     }
 }

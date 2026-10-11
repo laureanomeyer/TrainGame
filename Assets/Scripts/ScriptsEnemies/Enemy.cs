@@ -39,9 +39,6 @@ public class Enemy : MonoBehaviour
 
     [Header("Weapon")]
     [SerializeField] GameObject weapon;
-    [Header("Meshes")]
-    [SerializeField] SkinnedMeshRenderer enemyRend;
-    [SerializeField] SkinnedMeshRenderer horseRend;
     [Header("UI")]
     [SerializeField] private EnemyUIHpBar healthBar;
     [Header("Animators")]
@@ -333,37 +330,44 @@ public class Enemy : MonoBehaviour
 
     #region Animations & Visuals
     [SerializeField] GameObject DefaultVisualPrefab;
-    List<GameObject> activeVisuals = new List<GameObject>();
+    Dictionary<GameObject, GameObject> visualPool = new Dictionary<GameObject, GameObject>();
     GameObject activeVisualInstance = null;
-    public (bool, int) CheckVisualsPool(GameObject prefab)
-    {
-        foreach (var visual in activeVisuals)
-        {
-            if (visual == prefab)
-                return (false, -1);
-        }
-        return (true, activeVisuals.IndexOf(prefab));
-    }
+
     public void InitializeVisuals()
     {
-        if (CheckVisualsPool(data.visual.visualPrefab).Item1 && CheckVisualsPool(data.visual.visualPrefab).Item2 == -1)
+        GameObject prefab = data.visual.visualPrefab;
+        if (prefab == null)
         {
-            activeVisualInstance = Instantiate(data.visual.visualPrefab, visualAnchor);
-            activeVisuals.Add(activeVisualInstance);
+            Debug.LogError($"Enemy visual prefab is missing for {name}.", this);
+            return;
         }
-        else
+
+        if (activeVisualInstance != null)
         {
-            activeVisuals[CheckVisualsPool(data.visual.visualPrefab).Item2].SetActive(true);
+            activeVisualInstance.SetActive(false);
         }
-        if (!activeVisualInstance.activeSelf)
+
+        if (!visualPool.TryGetValue(prefab, out activeVisualInstance))
         {
-            activeVisualInstance.SetActive(true);
+            activeVisualInstance = Instantiate(prefab, visualAnchor);
+            visualPool.Add(prefab, activeVisualInstance);
+        }
+
+        activeVisualInstance.SetActive(true);
+    }
+    public void InitializeAnimations()
+    {
+        if (cowboyAnimator != null && data.visual.cowboyAnimatorOverride != null)
+        {
+            cowboyAnimator.runtimeAnimatorController = data.visual.cowboyAnimatorOverride;
+        }
+        if (horseAnimator != null && data.visual.mountAnimatorOverride != null)
+        {
+            horseAnimator.runtimeAnimatorController = data.visual.mountAnimatorOverride;
         }
     }
 
-
-
-
+    #endregion
     //---------------------GIZMOS-------------------------
     void OnDrawGizmosSelected()
     {

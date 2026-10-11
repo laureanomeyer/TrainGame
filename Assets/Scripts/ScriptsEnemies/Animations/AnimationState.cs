@@ -1,12 +1,12 @@
 public readonly struct AnimationState
 {
-    public readonly int Hash;
+    public readonly int FullPathHash;
     public readonly bool Loop;
     public readonly float Speed;
 
-    public AnimationState(int hash, bool loop = false, float speed = 1f)
+    public AnimationState(int fullPathHash, bool loop = false, float speed = 1f)
     {
-        Hash = hash;
+        FullPathHash = fullPathHash;
         Loop = loop;
         Speed = speed;
     }

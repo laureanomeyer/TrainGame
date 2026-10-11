@@ -24,9 +24,9 @@ public class AnimatorBrain
             return;
         }
 
-        if (idleAnimation.Hash != 0)
+        if (idleAnimation.FullPathHash != 0)
         {
-            this.animator.Play(idleAnimation.Hash, 0, 0f);
+            this.animator.Play(idleAnimation.FullPathHash, 0, 0f);
         }
     }
 
@@ -37,7 +37,7 @@ public class AnimatorBrain
 
     public bool Play(AnimationState next, bool lockAnimation = false, bool overrideLock = false, float fade = 0.1f, float? speed = null)
     {
-        if (animator == null || next.Hash == 0)
+        if (animator == null || next.FullPathHash == 0)
         {
             return false;
         }
@@ -47,7 +47,7 @@ public class AnimatorBrain
             return false;
         }
 
-        if (!overrideLock && current.Hash == next.Hash)
+        if (!overrideLock && current.FullPathHash == next.FullPathHash)
         {
             return false;
         }
@@ -56,7 +56,7 @@ public class AnimatorBrain
         locked = lockAnimation;
 
         animator.speed = speed ?? next.Speed;
-        animator.CrossFade(next.Hash, fade, 0, 0f);
+        animator.CrossFade(next.FullPathHash, fade, 0, 0f);
 
         return true;
     }
@@ -73,18 +73,18 @@ public class AnimatorBrain
 
     public bool IsPlaying(AnimationState state)
     {
-        return state.Hash != 0 && animator != null && animator.GetCurrentAnimatorStateInfo(0).shortNameHash == state.Hash;
+        return state.FullPathHash != 0 && animator != null && animator.GetCurrentAnimatorStateInfo(0).fullPathHash == state.FullPathHash;
     }
 
     public bool Finished()
     {
-        if (animator == null || current.Hash == 0 || current.Loop)
+        if (animator == null || current.FullPathHash == 0 || current.Loop)
         {
             return false;
         }
 
         AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
-        return info.shortNameHash == current.Hash && info.normalizedTime >= 1f;
+        return info.fullPathHash == current.FullPathHash && info.normalizedTime >= 1f;
     }
 
     public void SetPlaybackSpeed(float speed)
@@ -105,7 +105,7 @@ public class AnimatorBrain
 
     public void Tick()
     {
-        if (animator == null || !locked || current.Hash == 0)
+        if (animator == null || !locked || current.FullPathHash == 0)
         {
             return;
         }
@@ -119,7 +119,7 @@ public class AnimatorBrain
         {
             locked = false;
 
-            if (idleAnimation.Hash != 0 && idleAnimation.Hash != current.Hash)
+            if (idleAnimation.FullPathHash != 0 && idleAnimation.FullPathHash != current.FullPathHash)
             {
                 Play(idleAnimation, overrideLock: true);
             }
