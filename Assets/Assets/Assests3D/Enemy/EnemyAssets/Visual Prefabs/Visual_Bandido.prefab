@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4712663389865720237}
+  - component: {fileID: -2558893163970655158}
   m_Layer: 0
   m_Name: Visual_Bandido
   m_TagString: Untagged
@@ -33,6 +34,20 @@ Transform:
   - {fileID: 9178935540134514798}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-2558893163970655158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108637109946217003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3940af2ab7d16584cb1e1e3f89efbd00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVisualAnimatorBindings
+  cowboyAnimator: {fileID: 5904728671878372849}
+  mountAnimator: {fileID: 3159886728267698495}
 --- !u!1001 &4967887700226791246
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -88,13 +103,43 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 106b05ed6712f2546934742c78c8fbcb, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5904728671878372849}
   m_SourcePrefab: {fileID: 100100000, guid: 106b05ed6712f2546934742c78c8fbcb, type: 3}
 --- !u!4 &4862694591585956005 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 106b05ed6712f2546934742c78c8fbcb, type: 3}
   m_PrefabInstance: {fileID: 4967887700226791246}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5201677752671005215 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 106b05ed6712f2546934742c78c8fbcb, type: 3}
+  m_PrefabInstance: {fileID: 4967887700226791246}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5904728671878372849
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5201677752671005215}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8fb15c379b486054393da064edbb1151, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &8712380882533513093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -150,8 +195,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: eafa2e49b5ba51347bdab33c943259be, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3159886728267698495}
   m_SourcePrefab: {fileID: 100100000, guid: eafa2e49b5ba51347bdab33c943259be, type: 3}
+--- !u!1 &8370486988714625748 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: eafa2e49b5ba51347bdab33c943259be, type: 3}
+  m_PrefabInstance: {fileID: 8712380882533513093}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3159886728267698495
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8370486988714625748}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c79eff00f07b8f249b3144f5509d4f87, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &9178935540134514798 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: eafa2e49b5ba51347bdab33c943259be, type: 3}

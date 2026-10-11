@@ -66,7 +66,7 @@ public  class EnemyBrainSO : ScriptableObject
         return;
     }
 
-    public void AddArmor(Enemy enemy)
+    public void AddArmor(Enemy enemy, int armorAmount)
     {
         enemy.HealthBar.ShowArmor(true);
         enemy.ChangeState(EnemyHealthState.Armored);

@@ -33,7 +33,7 @@ public class EnemyMovementLosing : EnemyMovementSO
         enemy.SetAtTarget(insideLane && distanceToX <= stopDistance);
         if (enemy.TimeAtTarget >= timeBeforeLosing)
         {
-            enemy.BeginLosing();
+            enemy.ChangeState(EnemyMovementState.Losing);
             return;
         }
 

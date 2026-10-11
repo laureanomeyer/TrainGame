@@ -5,13 +5,8 @@ public class EnemyVisualSO : ScriptableObject
 {
     [Header("Visual prefab")]
     public GameObject visualPrefab;
+    [Header("Animator overrides")]
+    public AnimatorOverrideController cowboyAnimatorOverride;
+    public AnimatorOverrideController mountAnimatorOverride;
 
-    [Header("Shared runtime controller")]
-    public RuntimeAnimatorController runtimeAnimatorController;
-
-    [Header("Optional fallback mapping")]
-    public EnemyAnimationSO animation;
-
-    [Header("Optional direct material override")]
-    public Material[] materials;
 }
