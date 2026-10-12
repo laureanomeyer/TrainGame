@@ -62,28 +62,29 @@ public class SpawnController : MonoBehaviour
         return enemy;
     }
 
-    private void SpawnCoin(Vector3 position, Transform goTo)
+    private void SpawnCoin(Vector3 position, Transform goTo, float amount)
     {
         GameObject coinGO = ObjectPoolManager.SpawnObject(coin, position, Quaternion.identity);
         Coin coinScript = coinGO.GetComponent<Coin>();
         coinScript.SetTarget(goTo);
-        
+        coinScript.SetCoinAmount(amount);
     }
 
-    private void SpawnCoal(Vector3 position, Transform goTo)
+    private void SpawnCoal(Vector3 position, Transform goTo, float amount)
     {
         if (goTo == null) Debug.Log("coal box nulla");
         GameObject coalGO = ObjectPoolManager.SpawnObject(coal, position, Quaternion.identity);
         Coal coalScript = coalGO.GetComponent<Coal>();
         coalScript.SetTarget(goTo);
+        coalScript.SetCoalAmount(amount);
     }
 
     private void EnemyDead(OnEnemyDeathEvent enemyDeathEvent)
     {
         if (enemyDeathEvent.DropType == DropType.Gold)
-            SpawnCoin(enemyDeathEvent.Position, goldBox);
+            SpawnCoin(enemyDeathEvent.Position, goldBox, enemyDeathEvent.DropAmount);
         else if (enemyDeathEvent.DropType == DropType.Coal)
-            SpawnCoal(enemyDeathEvent.Position, coalBox);
+            SpawnCoal(enemyDeathEvent.Position, coalBox, enemyDeathEvent.DropAmount);
     }
 
     private void SpawnParticles(Vector3 position)

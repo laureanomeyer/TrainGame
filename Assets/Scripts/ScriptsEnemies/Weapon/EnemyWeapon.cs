@@ -35,7 +35,23 @@ public class EnemyWeapon : MonoBehaviour
 
     public void Shoot(IWagon target, float damage)
     {
-        if (target == null || target.Head == null || target.Tail == null) return;
+        if (target == null ||
+            (target is Object unityObject && unityObject == null) ||
+            target.Head == null || target.Tail == null)
+        {
+            return;
+        }
+        if (bulletType == null)
+        {
+            Debug.LogError($"Enemy weapon '{name}' has no bullet prefab.", this);
+            return;
+        }
+
+        if (bulletSpawn == null)
+        {
+            Debug.LogError($"Enemy weapon '{name}' has no bullet spawn transform.", this);
+            return;
+        }
 
         Vector3 targetPosition = target.Middle;
         Vector3 dir = (targetPosition - bulletSpawn.position).normalized;
@@ -44,6 +60,13 @@ public class EnemyWeapon : MonoBehaviour
         GameObject bulletGO = Instantiate(bulletType, bulletSpawn.position, Quaternion.LookRotation(dir));
 
         EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
+        if (bullet == null)
+        {
+            Debug.LogError($"Enemy weapon '{name}' bullet prefab has no EnemyBullet component.", bulletGO);
+            Destroy(bulletGO);
+            return;
+        }
+
         bullet.Init(dir, damage);
         bool isOnScreen = CameraView.IsInsideCamera(transform.position,Cam);
 

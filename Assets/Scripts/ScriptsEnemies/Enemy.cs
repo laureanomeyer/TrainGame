@@ -39,19 +39,14 @@ public class Enemy : MonoBehaviour
 
     [Header("Weapon")]
     [SerializeField] GameObject weapon;
-    [Header("Meshes")]
-    [SerializeField] SkinnedMeshRenderer enemyRend;
-    [SerializeField] SkinnedMeshRenderer horseRend;
+    SkinnedMeshRenderer enemyRend;
+    SkinnedMeshRenderer horseRend;
     [Header("UI")]
     [SerializeField] private EnemyUIHpBar healthBar;
-    [Header("Animators")]
-    [SerializeField] Animator cowboyAnimator;
-    [SerializeField] Animator horseAnimator;
     [Header("Debug")]
     [SerializeField] private EnemyMovementSO endMovement;
     public EnemyWeapon Weapon;
     BoxCollider boxCollider;
-
     public string TargetWagonName;
     public string dataName;
     private EnemyData data;
@@ -65,7 +60,7 @@ public class Enemy : MonoBehaviour
     public (float, float) Limits => limits;
 
     public EnemyUIHpBar HealthBar => healthBar;
-    private EnemyAnimationSO ActiveAnimation => data != null && data.visual != null && data.visual.animation != null ? data.visual.animation : data.animation;
+    private EnemyAnimationSO ActiveAnimation => data.animation;
 
     #region Data
     public EnemyMovementSO Movement {get ; private set;} 
@@ -95,7 +90,6 @@ public class Enemy : MonoBehaviour
     float skillCooldownTimer;
     public bool CanAttack => attackCooldownTimer <= 0f;
     public bool CanSkill => skillCooldownTimer <= 0f;
-
     public EnemySkillSO Skill => data.skill;
     private float timeAtTarget;
     public EnemyHealthState HealthState => healthState;
@@ -113,8 +107,8 @@ public class Enemy : MonoBehaviour
     public bool IsTutorialEnemy { get; private set; }
     int rightLayerIndex;
     int leftLayerIndex;
+    
     #endregion
-
     public Transform VisualAnchor => visualAnchor;
 
     void Awake()
@@ -137,10 +131,10 @@ public class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
 
-        if (cowboyAnimator != null)
+        if (animations != null)
         {
-            rightLayerIndex = cowboyAnimator.GetLayerIndex("Right Layer");
-            leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
+            rightLayerIndex = animations.CowboyAnimator.GetLayerIndex("Right Layer");
+            leftLayerIndex = animations.CowboyAnimator.GetLayerIndex("Left Layer");
         }
 
         EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
@@ -177,8 +171,7 @@ public class Enemy : MonoBehaviour
         Movement.Begin(this);
 
         dataName = data.name;
-
-        ApplyVisual(data.visual);
+        SetAnimators();
 
         if (enemyRend && data.enemyMesh) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend && data.horseMesh) horseRend.sharedMesh = data.horseMesh.sharedMesh;
@@ -190,6 +183,9 @@ public class Enemy : MonoBehaviour
         PlayIdleAnimation();
 
         flash = GetComponent<DamageFlash>();
+        flash.SetRenderers(activeVisualRoot != null
+            ? activeVisualRoot.GetComponentsInChildren<Renderer>(true)
+            : new Renderer[0]);
         flash.StopCoroutine();
         flash.SetMaterialArray(0, data.material);
 
@@ -199,53 +195,6 @@ public class Enemy : MonoBehaviour
         if (!IsTutorialEnemy)
         { 
             targetWagon = Brain.GetPreference(data.targetPreference);
-        }
-    }
-
-    private void ApplyVisual(EnemyVisualSO visualDefinition)
-    {
-        if (activeVisualRoot != null)
-        {
-            Destroy(activeVisualRoot);
-            activeVisualRoot = null;
-        }
-
-        enemyRend = null;
-        horseRend = null;
-        cowboyAnimator = null;
-        horseAnimator = null;
-
-        if (visualDefinition == null || visualDefinition.visualPrefab == null)
-        {
-            return;
-        }
-
-        activeVisualRoot = Instantiate(visualDefinition.visualPrefab, visualAnchor);
-        activeVisualRoot.transform.localPosition = Vector3.zero;
-        activeVisualRoot.transform.localRotation = Quaternion.identity;
-        activeVisualRoot.transform.localScale = Vector3.one;
-
-        cowboyAnimator = activeVisualRoot.GetComponentInChildren<Animator>(true);
-
-        if (visualDefinition.runtimeAnimatorController != null && cowboyAnimator != null)
-        {
-            cowboyAnimator.runtimeAnimatorController = visualDefinition.runtimeAnimatorController;
-        }
-
-        var renderers = activeVisualRoot.GetComponentsInChildren<SkinnedMeshRenderer>(true);
-        if (renderers != null && renderers.Length > 0)
-        {
-            enemyRend = renderers[0];
-        }
-
-        if (renderers != null && renderers.Length > 1)
-        {
-            horseRend = renderers[1];
-        }
-
-        if (visualDefinition.materials != null && visualDefinition.materials.Length > 0 && enemyRend != null)
-        {
-            enemyRend.materials = visualDefinition.materials;
         }
     }
 
@@ -332,12 +281,18 @@ public class Enemy : MonoBehaviour
         Movement = endMovement;
     }
 
-    
 
     #endregion
 
     #region Animations
 
+    EnemyAnimationsContainer animations;
+    private void SetAnimators()
+    {
+        activeVisualRoot = Instantiate(data.visualPrefab, visualAnchor);
+
+        animations = activeVisualRoot.GetComponentInChildren<EnemyAnimationsContainer>(true);
+    }
     public void PlayIdleAnimation()
     {
         PlayCowboyAnimation(GetAnimationName(
@@ -350,7 +305,6 @@ public class Enemy : MonoBehaviour
     public void PlayAttackAnimation()
     {
         if (attackRoutine != null) return;
-
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Aim" : "Cowboy_1|R_Aim 0",
             IsOnPositiveZSide ? ActiveAnimation?.positiveZAttack : ActiveAnimation?.negativeZAttack));
@@ -373,25 +327,26 @@ public class Enemy : MonoBehaviour
 
     private void PlayCowboyAnimation(string stateName)
     {
-        if (string.IsNullOrEmpty(stateName) || cowboyAnimator == null) return;
+        if (string.IsNullOrEmpty(stateName) || animations.CowboyAnimator == null) return;
 
-        activeCowboyLayer = cowboyAnimator.GetLayerIndex(IsOnPositiveZSide ? "Left Layer" : "Right Layer");
+        activeCowboyLayer = animations.CowboyAnimator.GetLayerIndex(IsOnPositiveZSide ? "Left Layer" : "Right Layer");
 
         if (activeCowboyLayer < 0) return;
 
-        cowboyAnimator.SetLayerWeight(activeCowboyLayer, 1f);
-        cowboyAnimator.Play(stateName, activeCowboyLayer, 0f);
+        animations.CowboyAnimator.SetLayerWeight(activeCowboyLayer, 1f);
+        animations.CowboyAnimator.Play(stateName, activeCowboyLayer, 0f);
     }
 
     private void PlayHorseAnimation(string stateName)
     {
-        if (string.IsNullOrEmpty(stateName) || horseAnimator == null) return;
+        if (string.IsNullOrEmpty(stateName) || animations.HorseAnimator == null) return;
 
-        horseAnimator.Play(stateName, 0, 0f);
+        animations.HorseAnimator.Play(stateName, 0, 0f);
     }
     private System.Collections.IEnumerator ReturnAfterDeathAnimation()
     {
         yield return new WaitForSeconds(ActiveAnimation?.deathDuration ?? 1f);
+        Destroy(activeVisualRoot);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
     #endregion
@@ -442,7 +397,7 @@ public class Enemy : MonoBehaviour
         { healthBar.Hide(); }
         flash.ResetMaterials();
         SpawnDrop();
-        EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop));
+        EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop, data.dropAmount));
         EventBus.Publish(new OnEnemyKilledEvent());
         StartCoroutine(ReturnAfterDeathAnimation());
     }

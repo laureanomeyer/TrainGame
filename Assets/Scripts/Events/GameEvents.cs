@@ -94,10 +94,12 @@ public class OnEnemyDeathEvent : IGameEvent
 {
     public UnityEngine.Vector3 Position;
     public DropType DropType;
-    public OnEnemyDeathEvent(UnityEngine.Vector3 position, DropType dropType)
+    public float DropAmount;
+    public OnEnemyDeathEvent(UnityEngine.Vector3 position, DropType dropType, float dropAmount)
     {
         Position = position;
         DropType = dropType;
+        DropAmount = dropAmount;
     }
 }
 
