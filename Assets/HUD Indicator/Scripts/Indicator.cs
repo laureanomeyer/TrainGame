@@ -12,19 +12,26 @@ namespace HUDIndicator {
         
         protected Dictionary<IndicatorRenderer, IndicatorCanvas> indicatorsCanvas = new Dictionary<IndicatorRenderer, IndicatorCanvas>();
 
-		private void Start() {
-            if (renderers.Count == 0) {
-                IndicatorRenderer[] renderersInScene = GameObject.FindObjectsByType<IndicatorRenderer>(FindObjectsSortMode.None);
+        private void Start()
+        {
+            renderers.RemoveAll(r => r == null);
 
-                if (renderersInScene.Length > 0) {
+            if (renderers.Count == 0)
+            {
+                IndicatorRenderer[] renderersInScene = FindObjectsByType<IndicatorRenderer>(FindObjectsSortMode.None);
+
+                if (renderersInScene.Length > 0)
+                {
                     renderers = renderersInScene.ToList();
-				}
-                else {
-                    Debug.LogError("No IndicatorRenderer found in scene");
                 }
-			}
-            
-            foreach(IndicatorRenderer renderer in renderers) {
+                else
+                {
+                    Debug.LogError($"No IndicatorRenderer found in scene ({name})", this);
+                }
+            }
+
+            foreach (IndicatorRenderer renderer in renderers)
+            {
                 CreateIndicatorCanvas(renderer);
             }
         }

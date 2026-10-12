@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,8 +6,10 @@ public class CollectCoalFromLocomotive : MonoBehaviour
 {
     PlayerBrain playerRef;
     [SerializeField] private InputActionAsset inputActions;
-    [SerializeField] private LocomotiveBrain coalBrain;
+    [SerializeField] private CoalCollector coalBrain;
     [SerializeField] private BoxCollider boxCollider;
+    [SerializeField] private TextMeshProUGUI currentCoalUI;
+
     InteractInputHandler inputHandler;
 
     [SerializeField] private GameObject objectT;
@@ -28,6 +31,7 @@ public class CollectCoalFromLocomotive : MonoBehaviour
         inputActions.Enable();
         var interactAction = inputActions.FindAction("Player/Interact");
         inputHandler = new InteractInputHandler(interactAction, SetCoalInPlayerInventory);
+        coalBrain = new CoalCollector(currentCoalUI);
 
         canInteract = !GameManager.Instance.IsTutorial;
     }
@@ -45,7 +49,7 @@ public class CollectCoalFromLocomotive : MonoBehaviour
         if (playerRef == null) return;
         if (!playerRef.CanInteract) return;
 
-        if (!playerRef.Inventory.HasCoal && coalBrain.CoalCollector.HasCoal)
+        if (!playerRef.Inventory.HasCoal && coalBrain.HasCoal)
         {
             playerRef.Inventory.CollectCoal();
             EventBus.Publish(new OnTakeCoalEvent());
@@ -62,7 +66,7 @@ public class CollectCoalFromLocomotive : MonoBehaviour
 
         playerIn = true;
 
-        if (coalBrain.CoalCollector.HasCoal)
+        if (coalBrain.HasCoal)
         {
             EventBus.Publish(new OnShowInteractEvent());
             if (objectT != null)

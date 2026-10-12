@@ -12,10 +12,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
     [SerializeField] private Renderer shieldsRenderer;
 
-    [Header("UI")]
-
-    [SerializeField] private TextMeshProUGUI currentCoalUI;
-
     [Header("Cinematic")]
     [SerializeField] private string locomotiveAnchorKey = "Locomotive";
     [SerializeField] private GameObject locomotiveBase;
@@ -47,7 +43,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     void Awake()
     {
         var dataRef = ServiceLocator.Get<TrainData>();
-        coalCollector = new CoalCollector(currentCoalUI);
         dataRef.SetCoalBox(coalBox);
         stats = RunManager.Instance.StatSystem;
         flash = GetComponent<DamageFlash>();
