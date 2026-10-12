@@ -28,7 +28,7 @@ public class EnemyData : ScriptableObject
     public SkinnedMeshRenderer horseMesh;
 
     [Header("New single-prefab visual approach")]
-    public EnemyVisualSO visual;
+    public GameObject visualPrefab;
 
     public Material[] material;
 

@@ -4,15 +4,15 @@ using UnityEngine;
 public class EnemyAnimationSO : ScriptableObject
 {
     [Header("Cowboy states")]
-    public string positiveZIdle = "Cowboy_1|L_Idle";
-    public string positiveZAttack = "Cowboy_1|L_Aim";
-    public string positiveZDeath = "Cowboy_1|L_Death";
-    public string negativeZIdle = "Cowboy_1|R_Idle";
-    public string negativeZAttack = "Cowboy_1|R_Aim 0";
-    public string negativeZDeath = "Cowboy_1|R_Death";
+    public string positiveZIdle = "Recluta|L_CB_Revolver_Idle";
+    public string positiveZAttack = "Recluta|L_CB_Revolver_Aim";
+    public string positiveZDeath = "Recluta|L_CB_Revolver_Death";
+    public string negativeZIdle = "Recluta|R_CB_Revolver_Idle";
+    public string negativeZAttack = "Recluta|R_CB_Revolver_Aim";
+    public string negativeZDeath = "Recluta|R_CB_Revolver_Death";
     public float attackDuration = 0.8f;
     public float deathDuration = 1f;
 
     [Header("Horse states")]
-    public string horseIdle = "Horse|Idle";
+    public string horseIdle = "Recluta_Horse|Idle";
 }

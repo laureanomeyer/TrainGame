@@ -8,7 +8,6 @@ public class EnemyAttackSO : ScriptableObject
     {
         RangedAttack(enemy);
     }
-
     public void Skill(Enemy enemy)
     {
         if (enemy.TargetWagon == null) return;
@@ -28,9 +27,9 @@ public class EnemyAttackSO : ScriptableObject
 
         if (IsTargetInRange(enemy))
         {
-            enemy.PlayAttackAnimation();
             if (enemy.TargetWagon == null) return;
 
+            enemy.PlayAttackAnimation();
             enemy.Weapon.Execute(enemy.TargetWagon, enemy.Damage);
             enemy.ResetAttackCooldown(enemy.Cooldown);
 
