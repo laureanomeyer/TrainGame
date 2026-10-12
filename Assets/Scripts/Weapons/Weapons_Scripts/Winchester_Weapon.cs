@@ -24,9 +24,6 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     [Header("Legado Bullet data")]
     [SerializeField] private BulletTypeScriptable legadoBulletData;
 
-    [Header("Point to unlock legado")]
-    [SerializeField] private int PointToUnlockLegado = 100;
-
     private BulletTypeScriptable currentBulletUse;
 
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
@@ -78,12 +75,9 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         }
         else
         {
-            if(playerData.unlockedLegado.LeftWinchesterPoints == -1)
-            {
-                playerData.unlockedLegado.LeftWinchesterPoints = PointToUnlockLegado;
-            }
             currentBulletUse = bulletData;
         }
+        Debug.Log(playerData.unlockedLegado.LeftWinchesterPoints);
 
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
@@ -141,6 +135,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         if (CurrentAmmunition == 0)
         {
             IsReloading = true;
+            AudioManager.Instance.Play($"SFXReloadMusket");
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }
@@ -200,6 +195,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     {
         currentBulletUse = legadoBulletData;
         sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
+        Debug.Log("legado desbloqueado de winchester");
     }
 
     public void UpdateStats(OnStatChangedEvent @event)

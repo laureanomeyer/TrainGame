@@ -226,6 +226,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         if (CurrentAmmunition == 0)
         {
             IsReloading = true;
+            AudioManager.Instance.Play($"SFXReloadMusket");
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }
@@ -252,6 +253,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         if (CurrentAmmunition == 0)
         {
             IsReloading = true;
+            AudioManager.Instance.Play($"SFXReloadMusket");
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }

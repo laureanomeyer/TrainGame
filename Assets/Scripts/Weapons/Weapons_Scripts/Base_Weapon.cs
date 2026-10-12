@@ -108,6 +108,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         if (CurrentAmmunition == 0)
         {
             IsReloading = true;
+            AudioManager.Instance.Play($"SFXReloadMusket");
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }

@@ -183,6 +183,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
             }
 
             IsReloading = true;
+            AudioManager.Instance.Play($"SFXReloadMusket");
             EventBus.Publish(new OnReloadEvent(reloadTime));
         }
     }

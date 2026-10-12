@@ -54,7 +54,7 @@ public class OnReloadEvent : IGameEvent
     public OnReloadEvent(float reloadTime)
     {
         ReloadTimer = reloadTime;
-        AudioManager.Instance.Play($"SFXReloadMusket");
+        //AudioManager.Instance.Play($"SFXReloadMusket");
     }
 }
 

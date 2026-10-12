@@ -11,6 +11,10 @@ public class MotivationalSideTurret : MonoBehaviour
     [SerializeField] private float range = 12f;
     [SerializeField] private float shootAngle = 35f;
 
+    [Header("Detección")]
+    [SerializeField] private LayerMask enemyLayer;      // Layer de los enemigos
+    [SerializeField] private int maxDetected = 32;      // Tamaño del buffer
+
     [Header("Escopeta")]
     [Tooltip("Cantidad de perdigones por disparo")]
     [SerializeField, Min(1)] private int pelletCount = 5;
@@ -31,6 +35,8 @@ public class MotivationalSideTurret : MonoBehaviour
     private bool isInitialized;
     private float cooldownTimer;
     private float reloadTimer;
+
+    private Collider[] hitsBuffer;
 
     public BulletPool bulletPool;
 
@@ -66,6 +72,11 @@ public class MotivationalSideTurret : MonoBehaviour
     }
     public int CurrentAmmo => currentAmmo;
     public bool IsReloading => isReloading;
+
+    void Awake()
+    {
+        hitsBuffer = new Collider[maxDetected];
+    }
 
     public void Initialize(float damage, float fireCooldown, int magazineSize, float reloadTime)
     {
@@ -109,18 +120,16 @@ public class MotivationalSideTurret : MonoBehaviour
 
         if (cooldownTimer > 0f) return;
 
+        // Solo se busca cuando realmente puede disparar
         Enemy target = FindTargetInCone();
 
-        if (target != null)
+        if (target != null && Shoot(target))
         {
-            if (Shoot(target))
-            {
-                cooldownTimer = fireCooldown;
+            cooldownTimer = fireCooldown;
 
-                if (currentAmmo <= 0)
-                {
-                    StartReload();
-                }
+            if (currentAmmo <= 0)
+            {
+                StartReload();
             }
         }
     }
@@ -190,30 +199,33 @@ public class MotivationalSideTurret : MonoBehaviour
     {
         if (detectPoint == null) return null;
 
-        Enemy[] enemies = FindObjectsByType<Enemy>(FindObjectsSortMode.None);
+        int count = Physics.OverlapSphereNonAlloc(
+            detectPoint.position,
+            range,
+            hitsBuffer,
+            enemyLayer,
+            QueryTriggerInteraction.Collide);
 
         Enemy bestTarget = null;
-        float closestDistance = Mathf.Infinity;
+        float bestSqrDistance = Mathf.Infinity;
 
-        foreach (Enemy enemy in enemies)
+        for (int i = 0; i < count; i++)
         {
+            Enemy enemy = hitsBuffer[i].GetComponentInParent<Enemy>();
             if (enemy == null) continue;
 
             Vector3 toEnemy = enemy.transform.position - detectPoint.position;
             toEnemy.y = 0f;
 
-            float distance = toEnemy.magnitude;
-            if (distance > range) continue;
-            if (distance <= 0.01f) continue;
+            float sqrDistance = toEnemy.sqrMagnitude;
+            if (sqrDistance <= 0.0001f) continue;
+            if (sqrDistance >= bestSqrDistance) continue;
 
-            float angle = Vector3.Angle(detectPoint.forward, toEnemy.normalized);
+            float angle = Vector3.Angle(detectPoint.forward, toEnemy);
             if (angle > shootAngle) continue;
 
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                bestTarget = enemy;
-            }
+            bestSqrDistance = sqrDistance;
+            bestTarget = enemy;
         }
 
         return bestTarget;

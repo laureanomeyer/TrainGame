@@ -456,6 +456,8 @@ MonoBehaviour:
   turrets:
   - {fileID: 2765749237097656151}
   - {fileID: 3644062954500194812}
+  defaultCapacity: 10
+  maxCapacity: 20
 --- !u!114 &2765749237097656151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -475,6 +477,12 @@ MonoBehaviour:
   range: 50
   fireCooldown: 3
   shootAngle: 30
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  maxDetected: 16
+  magazineSize: 10
+  reloadTime: 2
   defaultCapacity: 10
   maxSize: 30
   damage: 1
@@ -499,6 +507,12 @@ MonoBehaviour:
   range: 50
   fireCooldown: 3
   shootAngle: 30
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  maxDetected: 16
+  magazineSize: 10
+  reloadTime: 2
   defaultCapacity: 10
   maxSize: 30
   damage: 1
