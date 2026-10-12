@@ -28,8 +28,10 @@ public class EnemyAttackSO : ScriptableObject
 
         if (IsTargetInRange(enemy))
         {
+            enemy.PlayAttackAnimation();
             if (enemy.TargetWagon == null) return;
-            enemy.TryQueueRangedAttack(enemy.TargetWagon, enemy.Damage);
+
+            enemy.Weapon.Execute(enemy.TargetWagon, enemy.Damage);
             enemy.ResetAttackCooldown(enemy.Cooldown);
 
         }

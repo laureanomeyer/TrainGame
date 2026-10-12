@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1331722916345105708}
-  - component: {fileID: 929539715515346}
   m_Layer: 0
   m_Name: Visual_Sheriff
   m_TagString: Untagged
@@ -26,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 2516497555725294108}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: -21.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34,20 +33,6 @@ Transform:
   - {fileID: 1594704367051790941}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &929539715515346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2516497555725294108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82ab9325fc7a40c9ba4f2de11b8e2a2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyVisualAnimatorBindings
-  cowboyAnimator: {fileID: 641750617757165}
-  mountAnimator: {fileID: 760228748124143}
 --- !u!1001 &1273179838506581430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103,43 +88,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 4247d73ac1ef51a40afe44087907fedb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 760228748124143}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4247d73ac1ef51a40afe44087907fedb, type: 3}
 --- !u!4 &1594704367051790941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 4247d73ac1ef51a40afe44087907fedb, type: 3}
   m_PrefabInstance: {fileID: 1273179838506581430}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2119602784806535399 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 4247d73ac1ef51a40afe44087907fedb, type: 3}
-  m_PrefabInstance: {fileID: 1273179838506581430}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &760228748124143
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2119602784806535399}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c79eff00f07b8f249b3144f5509d4f87, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &8597588768468120463
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -195,40 +150,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 792e0cc70d077a649a4a91e69f55b154, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 641750617757165}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 792e0cc70d077a649a4a91e69f55b154, type: 3}
 --- !u!4 &8131948501099828324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 792e0cc70d077a649a4a91e69f55b154, type: 3}
   m_PrefabInstance: {fileID: 8597588768468120463}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8904087875455487710 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 792e0cc70d077a649a4a91e69f55b154, type: 3}
-  m_PrefabInstance: {fileID: 8597588768468120463}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &641750617757165
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8904087875455487710}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 8fb15c379b486054393da064edbb1151, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0

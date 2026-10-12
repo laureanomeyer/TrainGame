@@ -9,7 +9,6 @@ public class EnemyWeapon : MonoBehaviour
     bool canShoot = true;
 
     Camera Cam => Camera.main;
-    public bool CanShoot => canShoot;
 
     private void Awake()
     {
@@ -22,11 +21,11 @@ public class EnemyWeapon : MonoBehaviour
         EventBus.Unsubscribe<OnSetEnemiesFlags>(SetCanShoot);
     }
 
-    public bool Execute(IWagon target, float damage)
+    public void Execute(IWagon target, float damage)
     {
-        if (!canShoot) return false;
+        if (!canShoot) return;
 
-        return Shoot(target, damage);
+        Shoot(target, damage);
     }
 
     void SetCanShoot(OnSetEnemiesFlags ev)
@@ -34,24 +33,24 @@ public class EnemyWeapon : MonoBehaviour
         this.canShoot = ev.canAttack;
     }
 
-    public bool Shoot(IWagon target, float damage)
+    public void Shoot(IWagon target, float damage)
     {
         if (target == null ||
             (target is Object unityObject && unityObject == null) ||
             target.Head == null || target.Tail == null)
         {
-            return false;
+            return;
         }
         if (bulletType == null)
         {
             Debug.LogError($"Enemy weapon '{name}' has no bullet prefab.", this);
-            return false;
+            return;
         }
 
         if (bulletSpawn == null)
         {
             Debug.LogError($"Enemy weapon '{name}' has no bullet spawn transform.", this);
-            return false;
+            return;
         }
 
         Vector3 targetPosition = target.Middle;
@@ -65,14 +64,13 @@ public class EnemyWeapon : MonoBehaviour
         {
             Debug.LogError($"Enemy weapon '{name}' bullet prefab has no EnemyBullet component.", bulletGO);
             Destroy(bulletGO);
-            return false;
+            return;
         }
 
         bullet.Init(dir, damage);
         bool isOnScreen = CameraView.IsInsideCamera(transform.position,Cam);
 
         PlayAudio(isOnScreen);
-        return true;
 
     }
 

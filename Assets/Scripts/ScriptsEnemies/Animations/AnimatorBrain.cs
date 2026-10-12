@@ -1,52 +1,32 @@
 using UnityEngine;
 
+// TO FIX :
+// LOOP FROM ANIMATIONSTAE DOESN�T WORK
+
 public class AnimatorBrain
 {
     private Animator animator;
+
     private AnimationState current;
+
     private bool locked;
+
     private AnimationState idleAnimation;
-    private int layerIndex;
 
     public AnimationState Current => current;
 
-    public float CurrentNormalizedTime
-    {
-        get
-        {
-            return current.FullPathHash != 0 &&
-                TryGetCurrentStateInfo(out AnimatorStateInfo info) &&
-                info.fullPathHash == current.FullPathHash
-                ? info.normalizedTime
-                : -1f;
-        }
-    }
-
-    public void Init(Animator animator, int layerIndex = 0)
+    public void Init(Animator animator)
     {
         this.animator = animator;
-        this.layerIndex = layerIndex;
-        current = default;
-        locked = false;
 
-        if (animator == null)
+        if (this.animator == null)
         {
             return;
         }
 
-        if (!IsValidLayer())
+        if (idleAnimation.Hash != 0)
         {
-            Debug.LogError($"AnimatorBrain cannot use layer {layerIndex} on animator '{animator.name}'.", animator);
-            this.animator = null;
-            return;
-        }
-
-        animator.speed = 1f;
-        if (idleAnimation.FullPathHash != 0)
-        {
-            current = idleAnimation;
-            animator.speed = idleAnimation.Speed;
-            animator.Play(idleAnimation.FullPathHash, layerIndex, 0f);
+            this.animator.Play(idleAnimation.Hash, 0, 0f);
         }
     }
 
@@ -57,7 +37,7 @@ public class AnimatorBrain
 
     public bool Play(AnimationState next, bool lockAnimation = false, bool overrideLock = false, float fade = 0.1f, float? speed = null)
     {
-        if (!IsValidLayer() || next.FullPathHash == 0)
+        if (animator == null || next.Hash == 0)
         {
             return false;
         }
@@ -67,7 +47,7 @@ public class AnimatorBrain
             return false;
         }
 
-        if (!overrideLock && current.FullPathHash == next.FullPathHash)
+        if (!overrideLock && current.Hash == next.Hash)
         {
             return false;
         }
@@ -76,7 +56,7 @@ public class AnimatorBrain
         locked = lockAnimation;
 
         animator.speed = speed ?? next.Speed;
-        animator.CrossFade(next.FullPathHash, fade, layerIndex, 0f);
+        animator.CrossFade(next.Hash, fade, 0, 0f);
 
         return true;
     }
@@ -86,15 +66,6 @@ public class AnimatorBrain
         locked = false;
     }
 
-    public void ReturnToIdle()
-    {
-        locked = false;
-        if (idleAnimation.FullPathHash != 0)
-        {
-            Play(idleAnimation, overrideLock: true);
-        }
-    }
-
     public bool IsLocked()
     {
         return locked;
@@ -102,21 +73,18 @@ public class AnimatorBrain
 
     public bool IsPlaying(AnimationState state)
     {
-        return state.FullPathHash != 0 &&
-            TryGetCurrentStateInfo(out AnimatorStateInfo info) &&
-            info.fullPathHash == state.FullPathHash;
+        return state.Hash != 0 && animator != null && animator.GetCurrentAnimatorStateInfo(0).shortNameHash == state.Hash;
     }
 
     public bool Finished()
     {
-        if (current.FullPathHash == 0 || current.Loop)
+        if (animator == null || current.Hash == 0 || current.Loop)
         {
             return false;
         }
 
-        return TryGetCurrentStateInfo(out AnimatorStateInfo info) &&
-            info.fullPathHash == current.FullPathHash &&
-            info.normalizedTime >= 1f;
+        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+        return info.shortNameHash == current.Hash && info.normalizedTime >= 1f;
     }
 
     public void SetPlaybackSpeed(float speed)
@@ -137,7 +105,7 @@ public class AnimatorBrain
 
     public void Tick()
     {
-        if (!IsValidLayer() || !locked || current.FullPathHash == 0)
+        if (animator == null || !locked || current.Hash == 0)
         {
             return;
         }
@@ -151,27 +119,10 @@ public class AnimatorBrain
         {
             locked = false;
 
-            if (idleAnimation.FullPathHash != 0 && idleAnimation.FullPathHash != current.FullPathHash)
+            if (idleAnimation.Hash != 0 && idleAnimation.Hash != current.Hash)
             {
                 Play(idleAnimation, overrideLock: true);
             }
         }
-    }
-
-    private bool IsValidLayer()
-    {
-        return animator != null && layerIndex >= 0 && layerIndex < animator.layerCount;
-    }
-
-    private bool TryGetCurrentStateInfo(out AnimatorStateInfo info)
-    {
-        if (!IsValidLayer())
-        {
-            info = default;
-            return false;
-        }
-
-        info = animator.GetCurrentAnimatorStateInfo(layerIndex);
-        return true;
     }
 }
