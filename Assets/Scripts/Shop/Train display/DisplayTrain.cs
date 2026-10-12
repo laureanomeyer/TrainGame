@@ -2,14 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-/// <summary>
-/// Display del tren en la tienda.
-/// - Los slots son una List<ShopWagonData> (índice = slot) en vez de un Dictionary<int, ShopWagonData>:
-///   agregar/vender/reordenar ya no crea diccionarios nuevos ni usa LINQ.
-/// - ComputeLayout reutiliza un buffer en vez de alocar un Vector3[] en cada ApplyLayout.
-/// - Todos los tweens llevan SetLink(gameObject).
-/// InstantiatedWagonReferences sigue soportando .Count y [slot].
-/// </summary>
+
 public class DisplayTrain : MonoBehaviour
 {
     [SerializeField] private Transform currentTail;
@@ -44,7 +37,7 @@ public class DisplayTrain : MonoBehaviour
 
     private LinkedList<IWagonID> wagonList;
 
-    // Índice de la lista = slot visual.
+
     private readonly List<ShopWagonData> slots = new();
 
     private ICinematicActorRegistry cinematicActorRegistry;
@@ -70,7 +63,7 @@ public class DisplayTrain : MonoBehaviour
 
     #region Init
 
-    public void Initialize()
+    public void Initialize(IEnumerable<IWagonID> wagonsInTrain)
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
 
@@ -111,8 +104,9 @@ public class DisplayTrain : MonoBehaviour
         layoutRot = currentTail.rotation;
         layoutOrigin = currentTail.position - LayoutForward * wagonGap;
 
-        var trainData = ServiceLocator.Get<TrainData>();
-        wagonList = new LinkedList<IWagonID>(trainData.WagonsIDList);
+        wagonList = wagonsInTrain != null
+            ? new LinkedList<IWagonID>(wagonsInTrain)
+            : new LinkedList<IWagonID>();
 
         foreach (var wagon in wagonList)
         {
@@ -222,7 +216,6 @@ public class DisplayTrain : MonoBehaviour
         var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName, wagonID.Price);
         var newWagonData = SpawnWagon(wagonID.shopModel, newWag);
 
-        // Antes: Dictionary nuevo reindexando todo. Insert(0) corre los índices solo.
         slots.Insert(0, newWagonData);
         wagonList.AddFirst(newWag);
 
@@ -410,6 +403,5 @@ public class DisplayTrain : MonoBehaviour
 
     #endregion
 
-    // Antes: wagonList.ToList() (LINQ).
     public List<IWagonID> ChangeWagonIDList() => new List<IWagonID>(wagonList);
 }
