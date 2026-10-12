@@ -26,6 +26,7 @@ public class StatSystem
     public void RemoveModifiersFromSource(object source)
     {
         int removed = modifiers.RemoveAll(m => m.Source == source);
+
         if (removed > 0) RecalculateAll();
     }
 

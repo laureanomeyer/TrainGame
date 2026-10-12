@@ -31,7 +31,7 @@ public class GameSession
 
     public void RebuildStatsSystem()
     {
-        _StatSystem = new StatSystem(baseStats, _TrainData);
+        _StatSystem.RecalculateAll();
         EventBus.Publish(new OnStatChangedEvent());
     }
 

@@ -36,6 +36,7 @@ public class UIPlayerManager : MonoBehaviour
 
     private LocomotiveBrain locomotive;
     private WagonHP goldenWagonHpController;
+    PlayerInventory inventory;
     private float lerpedShield = 1;
     private float lerpedFuel = 1f;
     private float lerpedCapacity = 1f;
@@ -49,6 +50,7 @@ public class UIPlayerManager : MonoBehaviour
             lowFuel.SetActive(false);
         if (bellImage) bellImage.SetActive(false);
         SetLevelText();
+        inventory = player.Inventory;
     }
     private void OnEnable()
     {
@@ -155,8 +157,6 @@ public class UIPlayerManager : MonoBehaviour
 
     void UpdateInventoryUI()
     {
-        PlayerInventory inventory = player.Inventory;
-
         if (inventory != null)
         {
             if (inventory.HasCoal)
