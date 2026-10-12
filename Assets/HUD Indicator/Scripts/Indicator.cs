@@ -5,7 +5,6 @@ using UnityEngine;
 
 
 namespace HUDIndicator {
-
     public abstract class Indicator : MonoBehaviour {
 
         public bool visible = true;

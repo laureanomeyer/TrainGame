@@ -11,10 +11,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private LocomotiveStatsSO baseStats;
     [SerializeField] private LocomotiveStatsSO baseMultStats;
 
-    [SerializeField] private int lastStation = 6;
 
     [Header("Stations")]
     [SerializeField] private StationRouteSO stationRoute;
+
+    private int lastStation;
 
     [Header("Cursor")]
     [SerializeField] private Texture2D cursorTexture;
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
         stateAfterTransition = GameState.Menu;
 
         Session = new GameSession(baseStats, baseMultStats);
+        lastStation = stationRoute.StationCount;
 
         EventBus.Subscribe<OnShowCursorEvent>(ChangeCursorEvent);
 
@@ -88,23 +90,6 @@ public class GameManager : MonoBehaviour
             return Session._SessionConfig.CurrentLevel;
         }
         return 1;
-    }
-
-    public string GetCurrentStationName() //STATIONNAMES
-    {
-        if (stationRoute == null)
-        {
-            return "Unknown station";
-        }
-
-        int currentLevel = 1;
-
-        if (Session != null && Session._SessionConfig != null)
-        {
-            currentLevel = Session._SessionConfig.CurrentLevel;
-        }
-
-        return stationRoute.GetStationNameByLevel(currentLevel);
     }
 
     public string GetStationNameByLevel(int level)
@@ -170,8 +155,6 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        Session.RebuildStatsSystem();
-
         ChangeScene(SceneTutorial, SceneTransitionType.Generic, GameState.Tutorial, CursorType.HiddenAndFrozen);
     }
 
@@ -190,7 +173,6 @@ public class GameManager : MonoBehaviour
 
     public void Victory()
     {
-        if (isChangingScene) return;
         if (gameEnded) return;
 
         gameEnded = true;
@@ -213,8 +195,6 @@ public class GameManager : MonoBehaviour
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        Session.Reset();
-        Session.RebuildStatsSystem();
         Session = new GameSession(baseStats, baseMultStats);
 
         if (PlayerPrefs.GetInt("TutorialCompleted") != 0) GoToRun();
@@ -223,12 +203,9 @@ public class GameManager : MonoBehaviour
 
     public void EndSession()
     {
-
         gameEnded = false;
         LastRunResult = RunResult.None;
 
-        Session.Reset();
-        Session.RebuildStatsSystem();
         Session = new GameSession(baseStats, baseMultStats);
     }
 
