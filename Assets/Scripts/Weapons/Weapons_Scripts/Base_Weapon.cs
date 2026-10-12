@@ -99,7 +99,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         bulletData.Damage = damage;
 
-        BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
+        bulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
         sequenceController.Play("shotParticles");
 
@@ -150,7 +150,6 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
     public void ResetWaitToFire()
     {
-        //EventBus.Publish(new OnShootEvent(rateOfFire));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
         waitToFire = 0;
     }
@@ -194,28 +193,42 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     public void BufferRoF(float buffer)
     {
         rateOfFireBuff += buffer;
-        rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
+        rateOfFire = baseRateOfFire * (1f - rateOfFireBuff / 100f);
         Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void DebuffRoF(float buffer)
     {
         rateOfFireBuff -= buffer;
-        rateOfFire = baseRateOfFire;
+        if (rateOfFireBuff > 0)
+        {
+            rateOfFire = baseRateOfFire * (1f - rateOfFireBuff / 100f);
+        }
+        else
+        {
+            rateOfFire = baseRateOfFire;
+        }
         Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
     }
 
     public void BufferDamage(float buffer)
     {
         damageBuff += buffer;
-        damage = damage * (1f + damageBuff / 100f);
+        damage = baseDamage * (1f + damageBuff / 100f);
         Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
     }
 
     public void DebuffDamage(float buffer)
     {
         damageBuff -= buffer;
-        damage = baseDamage;
+        if (damageBuff > 0)
+        {
+            damage = baseDamage * (1f + damageBuff / 100f);
+        }
+        else
+        {
+            damage = baseDamage;
+        }
         Debug.Log("Weapon debuff Damage updated " + gameObject.name + "; Weapon damage: " + damage);
     }
 }

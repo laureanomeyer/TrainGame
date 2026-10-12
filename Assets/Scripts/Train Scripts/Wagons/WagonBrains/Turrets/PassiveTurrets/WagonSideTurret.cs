@@ -11,8 +11,12 @@ public class WagonFixedTurret : MonoBehaviour
 
     [Header("Ataque")]
     [SerializeField] private float range = 12f;
-    [SerializeField] private float fireCooldown = 1f;
+    [SerializeField] private float fireCooldown = 1f;   // Tiempo entre disparo y disparo
     [SerializeField] private float shootAngle = 35f;
+
+    [Header("Cargador")]
+    [SerializeField] private int magazineSize = 10;     // Balas por cargador
+    [SerializeField] private float reloadTime = 2f;     // Segundos de recarga
 
     [Header("Pool")]
     [SerializeField] private int defaultCapacity = 10;
@@ -22,82 +26,78 @@ public class WagonFixedTurret : MonoBehaviour
     [SerializeField] private float damage = 1;
     private float currentDamage;
 
+    public bool isAlive = true;
+
     private float cooldownTimer;
-    private IObjectPool<GameObject> bulletPool;
+    private int currentAmmo;
+    private bool isReloading;
+    private float reloadTimer;
+
+    public BulletPool bulletPool;
 
     Camera Cam => Camera.main;
     bool isOnScreen;
 
-    void Awake()
+    // Para mostrar en UI si lo necesitás
+    public int CurrentAmmo => currentAmmo;
+    public int MagazineSize => magazineSize;
+    public bool IsReloading => isReloading;
+
+    void Start()
     {
-        bulletPool = new ObjectPool<GameObject>(
-            CreateBullet,
-            OnTakeBulletFromPool,
-            OnReturnBulletToPool,
-            OnDestroyBullet,
-            true,
-            defaultCapacity,
-            maxSize
-        );
-        WarmUp(defaultCapacity);
+        currentAmmo = magazineSize;
+    }
+
+    void OnDisable()
+    {
+        // Si se desactiva en medio de una recarga, la cancelamos
+        isReloading = false;
+        reloadTimer = 0f;
     }
 
     void Update()
     {
+        if (!isAlive) return;
+
+        // Manejo de la recarga
+        if (isReloading)
+        {
+            reloadTimer -= Time.deltaTime;
+
+            if (reloadTimer <= 0f)
+            {
+                FinishReload();
+            }
+
+            return; // Mientras recarga, no dispara
+        }
+
         cooldownTimer -= Time.deltaTime;
+
+        if (cooldownTimer > 0f) return;
 
         Enemy target = FindTargetInCone();
 
-        if (target != null && cooldownTimer <= 0f)
+        if (target != null)
         {
+            if (Shoot(target))
+            {
+                cooldownTimer = fireCooldown;
 
-            //Debug.Log("Shooting at target");
-            Shoot(target);
-            cooldownTimer = fireCooldown;
+                if (currentAmmo <= 0)
+                {
+                    StartReload();
+                }
+            }
         }
     }
 
-    private GameObject CreateBullet()
+    private bool Shoot(Enemy target)
     {
-        GameObject bulletGO = Instantiate(bulletPrefab);
-
-        IBullet bullet = bulletGO.GetComponent<IBullet>();
-        if (bullet != null)
-        {
-            bullet.BulletPool = bulletPool;
-        }
-
-        bulletGO.SetActive(false);
-        return bulletGO;
-    }
-
-    private void OnTakeBulletFromPool(GameObject bulletGO)
-    {
-        bulletGO.SetActive(true);
-    }
-
-    private void OnReturnBulletToPool(GameObject bulletGO)
-    {
-        bulletGO.SetActive(false);
-    }
-
-    private void OnDestroyBullet(GameObject bulletGO)
-    {
-        Destroy(bulletGO);
-    }
-    private void WarmUp(int count)
-    {
-        var prewarm = new GameObject[count];
-        for (int i = 0; i < count; i++) prewarm[i] = bulletPool.Get();
-        for (int i = 0; i < count; ++i) bulletPool.Release(prewarm[i]);
-    }
-    private void Shoot(Enemy target)
-    {
-        if (target == null) return;
-        if (firePoint == null) return;
-
-        GameObject bulletGO = bulletPool.Get();
-        bulletGO.transform.position = firePoint.position;
+        if (!isAlive) return false;
+        if (target == null) return false;
+        if (firePoint == null) return false;
+        if (currentAmmo <= 0) return false;
 
         Vector3 direction = target.transform.position - firePoint.position;
         direction.y = 0f;
@@ -107,18 +107,29 @@ public class WagonFixedTurret : MonoBehaviour
             direction = firePoint.forward;
         }
 
-        bulletGO.transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        bulletType.Damage = damage;
+        bulletPool.ShootObject(firePoint.position, Quaternion.LookRotation(direction.normalized, Vector3.up), bulletType);
 
-        IBullet bullet = bulletGO.GetComponent<IBullet>();
-        if (bullet != null)
-        {
-            bulletType.Damage = damage;
-            bullet.ResetState(bulletType);
-        }
+        currentAmmo--;
 
         isOnScreen = CameraView.IsInsideCamera(transform.position, Cam);
         AudioManager.Instance.PlayOnScreen("SFXTico&TacoShoot", isOnScreen);
 
+        return true;
+    }
+
+    private void StartReload()
+    {
+        isReloading = true;
+        reloadTimer = reloadTime;
+        // Acá podés disparar un sonido o animación de recarga
+    }
+
+    private void FinishReload()
+    {
+        currentAmmo = magazineSize;
+        isReloading = false;
+        cooldownTimer = 0f;
     }
 
     private Enemy FindTargetInCone()
@@ -156,6 +167,7 @@ public class WagonFixedTurret : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        if (!isAlive) return;
         if (detectPoint == null) return;
 
         Gizmos.color = Color.cyan;

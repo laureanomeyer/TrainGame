@@ -13,17 +13,17 @@ public class FastDrumBrain : WagonBrain
     private void Awake()
     {
         WagonType = WagonType.Passive;
-        EventBus.Subscribe<OnFinishPlayerInitialize>(SearchForWagons);
+        EventBus.Subscribe<OnFinishPlayerInitialize>(SearchForPlayer);
     }
 
     public override void OnDestroy()
     {
         base.OnDestroy();
-        EventBus.Unsubscribe<OnFinishPlayerInitialize>(SearchForWagons);
+        EventBus.Unsubscribe<OnFinishPlayerInitialize>(SearchForPlayer);
         Debug.Log("Eventos desuscripto de FastDrum");
     }
 
-    private void SearchForWagons(OnFinishPlayerInitialize trainEvent)
+    private void SearchForPlayer(OnFinishPlayerInitialize trainEvent)
     {
         playerWeapon = GameObject.FindWithTag("Player").GetComponent<PlayerBrain>().PlayerAttackController.Weapon;
 

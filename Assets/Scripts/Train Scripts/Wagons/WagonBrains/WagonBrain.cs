@@ -71,7 +71,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public Camera Cam => Camera.main;
 
-    public WagonType WagonType {protected set; get;}
+    [SerializeField] private WagonType wagonType;
+    public WagonType WagonType {protected set => wagonType = value; get => wagonType;}
 
 
     bool isOnScreen; 

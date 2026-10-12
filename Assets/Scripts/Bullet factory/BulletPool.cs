@@ -12,17 +12,29 @@ public class BulletPool : MonoBehaviour
 
     private bool collectionCheck = true;
 
-    private int defaultCapacity = 10;
-    private int maxCapacity = 50;
+    [SerializeField] private int defaultCapacity = 10;
+    [SerializeField] private int maxCapacity = 50;
 
-    public int DefaultCapacity { set => defaultCapacity = value; }
-    public int MaxCapacity { set => maxCapacity = value; }
-
-    private void Start()
+    private void Awake()
     {
+        ServiceLocator.Register(this);
+        Debug.Log("BulletPool registered in ServiceLocator.");
+    }
+
+    public void InitializePool(int addDefaultCapacity = 0, int addMaxCapacity = 0)
+    {
+        defaultCapacity += addDefaultCapacity;
+        maxCapacity += addMaxCapacity;
+
         factory = GetComponent<BulletFactory>();
         bulletPool = new ObjectPool<GameObject>(CreateProjectile, OnGetFromPool, OnReleaseToPool, OnDestroyPoolObject, collectionCheck, defaultCapacity, maxCapacity);
         WarmUp(defaultCapacity);
+    }
+
+    private void OnDestroy()
+    {
+        ServiceLocator.Unregister<BulletPool>();
+        Debug.Log("BulletPool destroyed and unregistered from ServiceLocator.");
     }
 
     private GameObject CreateProjectile() //Functions as internal Awake()
