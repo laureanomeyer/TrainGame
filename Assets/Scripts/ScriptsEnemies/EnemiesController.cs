@@ -15,6 +15,7 @@ public class EnemiesController : MonoBehaviour
     private readonly HashSet<Enemy> activeEnemySet = new();
     private ReadOnlyCollection<Enemy> readOnlyActiveEnemies;
     private readonly List<EnemyData> spawnPool = new();
+    private readonly List<(SpawnEntryByTime entry, TimedSpawnSchedule schedule)> timedSpawnSchedules = new();
     private readonly TrainRanges trainRanges = new();
 
     private SpawnController spawnController;
@@ -59,6 +60,7 @@ public class EnemiesController : MonoBehaviour
         isInitialized = false;
         timer = 0f;
         spawnPool.Clear();
+        timedSpawnSchedules.Clear();
         enemyCounts.Clear();
         hasReportedAutomaticSpawnError = false;
     }
@@ -83,17 +85,20 @@ public class EnemiesController : MonoBehaviour
         if (spawnInterval <= 0f)
         {
             ReportAutomaticSpawnError("Enemy spawn interval must be greater than zero.");
-            return;
+        }
+        else
+        {
+            timer += Time.deltaTime;
+            if (timer >= spawnInterval)
+            {
+                if (spawnPool.Count > 0 && activeEnemies.Count < maxAliveEnemies)
+                    TrySpawnHorde();
+
+                timer = 0f;
+            }
         }
 
-        timer += Time.deltaTime;
-        if (timer < spawnInterval)
-            return;
-
-        if (spawnPool.Count > 0 && activeEnemies.Count < maxAliveEnemies)
-            TrySpawnHorde();
-
-        timer = 0f;
+        UpdateTimedSpawns(Time.deltaTime);
     }
 
     public void RegisterEnemy(Enemy enemy)
@@ -206,6 +211,7 @@ public class EnemiesController : MonoBehaviour
         spawnInterval = Mathf.Max(0f, currentLevelData.spawnInterval);
         maxAliveEnemies = Mathf.Max(0, currentLevelData.maxAliveEnemies);
         BuildSpawnPool();
+        BuildTimedSpawnSchedules();
         cam = Camera.main;
         isTutorialRun = GameManager.Instance != null && GameManager.Instance.IsTutorial;
         isInitialized = true;
@@ -226,6 +232,42 @@ public class EnemiesController : MonoBehaviour
         }
     }
 
+    private void BuildTimedSpawnSchedules()
+    {
+        timedSpawnSchedules.Clear();
+        if (currentLevelData.spawneablesByTime == null) return;
+
+        foreach (SpawnEntryByTime entry in currentLevelData.spawneablesByTime)
+        {
+            if (entry == null || entry.enemyData == null) continue;
+            if (entry.spawnInterval <= 0f || float.IsNaN(entry.spawnInterval) || float.IsInfinity(entry.spawnInterval))
+            {
+                ReportAutomaticSpawnError("Timed enemy spawn intervals must be greater than zero.");
+                continue;
+            }
+
+            timedSpawnSchedules.Add((entry, new TimedSpawnSchedule(entry.spawnInterval, entry.onlyOnce)));
+        }
+    }
+
+    private void UpdateTimedSpawns(float deltaTime)
+    {
+        foreach ((SpawnEntryByTime entry, TimedSpawnSchedule schedule) in timedSpawnSchedules)
+        {
+            if (!schedule.Advance(deltaTime) || activeEnemies.Count >= maxAliveEnemies)
+                continue;
+
+            if (!TryGetAutomaticSpawnRanges(out float positive, out float negative))
+                continue;
+
+            if (!TryGetAutomaticSpawnPosition(positive, negative, out Vector3 spawnPosition))
+                continue;
+
+            if (SpawnEnemy(entry.enemyData, spawnPosition, false) != null)
+                schedule.MarkSpawned();
+        }
+    }
+
     private void TrySpawnHorde()
     {
         if (!EnsureInitialized() || currentLevelData.MaxHordeSpawn <= 0 || activeEnemies.Count >= maxAliveEnemies)
@@ -243,32 +285,47 @@ public class EnemiesController : MonoBehaviour
             return;
         }
 
-        if (spawnZone == null)
-        {
-            ReportAutomaticSpawnError("EnemiesController requires a SpawnZone for automatic waves.");
+        if (!TryGetAutomaticSpawnRanges(out float positive, out float negative))
             return;
-        }
 
-        if (cam == null)
-        {
-           cam = Camera.main;
-        }
-        if (cam == null)
-        {
-            ReportAutomaticSpawnError("EnemiesController requires a MainCamera for automatic waves.");
-            return;
-        }
-
-        (float positive, float negative) = trainRanges.SetRanges(50f, Vector3.zero);
         Vector3 spawnPosition = spawnZone.GetRandomPoint(positive, negative);
-
         for (int i = 0; i < currentLevelData.MaxHordeSpawn && activeEnemies.Count < maxAliveEnemies; i++)
         {
             if (CameraView.IsOutsideCamera(spawnPosition, cam))
-                SpawnWeightedEnemy(spawnPosition); 
+                SpawnWeightedEnemy(spawnPosition);
 
             spawnPosition = spawnZone.GetRandomPoint(positive, negative);
         }
+    }
+
+    private bool TryGetAutomaticSpawnRanges(out float positive, out float negative)
+    {
+        if (spawnZone == null)
+        {
+            ReportAutomaticSpawnError("EnemiesController requires a SpawnZone for automatic waves.");
+            positive = 0f;
+            negative = 0f;
+            return false;
+        }
+
+        if (cam == null)
+            cam = Camera.main;
+        if (cam == null)
+        {
+            ReportAutomaticSpawnError("EnemiesController requires a MainCamera for automatic waves.");
+            positive = 0f;
+            negative = 0f;
+            return false;
+        }
+
+        (positive, negative) = trainRanges.SetRanges(50f, Vector3.zero);
+        return true;
+    }
+
+    private bool TryGetAutomaticSpawnPosition(float positive, float negative, out Vector3 spawnPosition)
+    {
+        spawnPosition = spawnZone.GetRandomPoint(positive, negative);
+        return CameraView.IsOutsideCamera(spawnPosition, cam);
     }
 
     private void SpawnWeightedEnemy(Vector3 position)
@@ -342,5 +399,35 @@ public class EnemiesController : MonoBehaviour
 
         hasReportedAutomaticSpawnError = true;
         Debug.LogError(message, this);
+    }
+}
+
+internal sealed class TimedSpawnSchedule
+{
+    private readonly float interval;
+    private readonly bool onlyOnce;
+    private float elapsed;
+    private bool completed;
+
+    internal TimedSpawnSchedule(float interval, bool onlyOnce)
+    {
+        this.interval = interval;
+        this.onlyOnce = onlyOnce;
+    }
+
+    internal bool Advance(float deltaTime)
+    {
+        if (completed) return false;
+
+        elapsed += deltaTime;
+        return elapsed >= interval;
+    }
+
+    internal void MarkSpawned()
+    {
+        if (onlyOnce)
+            completed = true;
+        else
+            elapsed = 0f;
     }
 }

@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
-    private DamageFlash flash;
+    //private DamageFlash flash;
     private int activeCowboyLayer;
     private Coroutine attackRoutine;
     private TrainRanges trainRanges;
@@ -182,12 +182,12 @@ public class Enemy : MonoBehaviour
 
         PlayIdleAnimation();
 
-        flash = GetComponent<DamageFlash>();
-        flash.SetRenderers(activeVisualRoot != null
-            ? activeVisualRoot.GetComponentsInChildren<Renderer>(true)
-            : new Renderer[0]);
-        flash.StopCoroutine();
-        flash.SetMaterialArray(0, data.material);
+        //flash = GetComponent<DamageFlash>();
+        //flash.SetRenderers(activeVisualRoot != null
+        //    ? activeVisualRoot.GetComponentsInChildren<Renderer>(true)
+        //    : new Renderer[0]);
+        //flash.StopCoroutine();
+        //flash.SetMaterialArray(0, data.material);
 
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
@@ -395,7 +395,7 @@ public class Enemy : MonoBehaviour
 
         if (healthBar != null)
         { healthBar.Hide(); }
-        flash.ResetMaterials();
+        //flash.ResetMaterials();
         SpawnDrop();
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop, data.dropAmount));
         EventBus.Publish(new OnEnemyKilledEvent());
@@ -430,7 +430,7 @@ public class Enemy : MonoBehaviour
 
         if (healthBar != null)
             healthBar.Hide();
-        flash?.ResetMaterials();
+        //flash?.ResetMaterials();
 
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
