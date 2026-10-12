@@ -66,9 +66,11 @@ public class TrainManager : MonoBehaviour
 
         if(wagonBrain.WagonType == WagonType.PassiveTorret)
         {
-            addDefaultCapacityToPool += 10;
-            addMaxCapacityToPool += 20;
-            Debug.Log("Capacidad de la pool aumentada");
+            IWagonPoolData poolData = (IWagonPoolData)wagonBrain;
+
+            addDefaultCapacityToPool += poolData.DefaultCapacity;
+            addMaxCapacityToPool += poolData.MaxCapacity;
+            Debug.Log(poolData.DefaultCapacity + " | " + poolData.MaxCapacity);
         }
 
         wagonsCreated.Add(wagonBrain);

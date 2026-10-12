@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MotivationalBrain : WagonBrain, IWeaponBuffer
+public class MotivationalBrain : WagonBrain, IWeaponBuffer, IWagonPoolData
 {
     [SerializeField] private MotivationalSideTurret[] turrets;
 
@@ -18,6 +18,14 @@ public class MotivationalBrain : WagonBrain, IWeaponBuffer
     [Tooltip("Tiempo en segundos que tarda en recargar")]
     private float baseAmmunition;
     [SerializeField, Min(0f)] private float reloadTime = 2.5f;
+
+    [Header("Pool")]
+    [SerializeField] private int defaultCapacity = 20;
+    [SerializeField] private int maxCapacity = 30;
+
+    public int DefaultCapacity { get => defaultCapacity; set => defaultCapacity = value; }
+    public int MaxCapacity { get => maxCapacity; set => maxCapacity = value; }
+
     private float baseReloadTime;
 
     private void Awake()
@@ -50,6 +58,11 @@ public class MotivationalBrain : WagonBrain, IWeaponBuffer
     {
         rofBuff += buffer;
         rofTime = baseRoFTime * (1f - rofBuff / 100f);
+
+        foreach (var turret in turrets)
+        {
+            turret.FireCooldown = rofTime;
+        }
     }
 
     public void DebuffRoF(float buffer)
@@ -63,12 +76,22 @@ public class MotivationalBrain : WagonBrain, IWeaponBuffer
         {
             rofTime = baseRoFTime;
         }
+
+        foreach (var turret in turrets)
+        {
+            turret.FireCooldown = rofTime;
+        }
     }
 
     public void BufferDamage(float buffer)
     {
         damageBuff += buffer;
         damage = baseDamage * (1f + damageBuff / 100f);
+
+        foreach (var turret in turrets)
+        {
+            turret.Damage = damage;
+        }
     }
 
     public void DebuffDamage(float buffer)
@@ -81,6 +104,11 @@ public class MotivationalBrain : WagonBrain, IWeaponBuffer
         else
         {
             damage = baseDamage;
+        }
+
+        foreach (var turret in turrets)
+        {
+            turret.Damage = damage;
         }
     }
 }

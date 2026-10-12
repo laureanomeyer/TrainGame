@@ -496,9 +496,11 @@ MonoBehaviour:
   - {fileID: 8274717099562439315}
   - {fileID: 549604328282728005}
   damage: 1
-  rofTime: 1.5
-  ammunition: 6
-  reloadTime: 2.5
+  rofTime: 0.01
+  ammunition: 2
+  reloadTime: 5
+  defaultCapacity: 20
+  maxCapacity: 30
 --- !u!114 &8274717099562439315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -518,8 +520,6 @@ MonoBehaviour:
   shootAngle: 35
   pelletCount: 5
   spreadAngle: 30
-  defaultCapacity: 10
-  maxSize: 30
   isAlive: 1
   currentAmmo: 0
   isReloading: 0
@@ -543,8 +543,6 @@ MonoBehaviour:
   shootAngle: 35
   pelletCount: 5
   spreadAngle: 30
-  defaultCapacity: 10
-  maxSize: 30
   isAlive: 1
   currentAmmo: 0
   isReloading: 0

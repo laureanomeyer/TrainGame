@@ -29,7 +29,7 @@ public class InspiringBrain : WagonBrain
 
         if (index > 0)
         {
-            if (trainEvent.wagonBrains[index - 1] is MotivationalBrain and IWeaponBuffer weaponBuffer)
+            if (trainEvent.wagonBrains[index - 1] is (MotivationalBrain or SpeachBrain) and IWeaponBuffer weaponBuffer)
             {
                 previousWagon = trainEvent.wagonBrains[index - 1];
                 weaponBuffer.BufferRoF(rofUpgrade);
@@ -39,7 +39,7 @@ public class InspiringBrain : WagonBrain
 
         if (index < trainEvent.wagonBrains.Count - 1)
         {
-            if (trainEvent.wagonBrains[index + 1] is MotivationalBrain and IWeaponBuffer weaponBuffer)
+            if (trainEvent.wagonBrains[index + 1] is (MotivationalBrain or SpeachBrain) and IWeaponBuffer weaponBuffer)
             {
                 nextWagon = trainEvent.wagonBrains[index + 1];
                 weaponBuffer.BufferRoF(rofUpgrade);
