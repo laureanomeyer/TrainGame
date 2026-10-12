@@ -1,22 +1,23 @@
 using TMPro;
 using UnityEngine;
 
+
 public class ReorderHUD : MonoBehaviour
 {
     public enum Option { Move = 0, Upgrade = 1, Sell = 2 }
 
     [Header("Canvas")]
-    [SerializeField] private RectTransform canvasRect;   // RectTransform del Canvas
-    [SerializeField] private Camera uiCamera;            // null si el Canvas es Screen Space - Overlay
-    [SerializeField] private Camera worldCamera;         // null = Camera.main
+    [SerializeField] private RectTransform canvasRect;
+    [SerializeField] private Camera uiCamera;           
+    [SerializeField] private Camera worldCamera;         
 
     [Header("Sign")]
-    [SerializeField] private RectTransform signRoot;     // pivot (0.5, 0): la punta del cartel apunta al vagón
+    [SerializeField] private RectTransform signRoot;
     [SerializeField] private TextMeshProUGUI nameText;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private GameObject optionsRow;
-    [SerializeField] private GameObject[] optionHighlights = new GameObject[3]; // marcos blancos: Move, Upgrade, Sell
-    [SerializeField] private CanvasGroup upgradeOptionGroup;                     // para atenuar Upgrade
+    [SerializeField] private GameObject[] optionHighlights = new GameObject[3];
+    [SerializeField] private CanvasGroup upgradeOptionGroup;
     [SerializeField] private float signWorldOffsetY = 0.5f;
     [SerializeField, Range(0f, 1f)] private float disabledAlpha = 0.4f;
 
@@ -41,9 +42,35 @@ public class ReorderHUD : MonoBehaviour
 
     private static readonly Vector3[] cornersBuffer = new Vector3[4];
 
+
+    private const float PosEpsilonSqr = 0.000001f;
+    private const float RotDotEpsilon = 0.999999f;
+
+
+    private int forcedRefreshFrames;
+
+    private Transform lastTargetTransform;
+    private Vector3 lastTargetPos;
+    private Quaternion lastTargetRot;
+    private Vector3 lastTargetScale;
+    private Vector3 lastCamPos;
+    private Quaternion lastCamRot;
+    private float lastCamFov;
+    private int lastScreenW;
+    private int lastScreenH;
+
+    private Camera cachedMainCamera;
+
+    private string affordHex;
+    private string cantAffordHex;
+
     private void Awake()
     {
         ServiceLocator.Register(this);
+
+        affordHex = ColorUtility.ToHtmlStringRGB(affordColor);
+        cantAffordHex = ColorUtility.ToHtmlStringRGB(cantAffordColor);
+
         ApplyMode(Mode.Hidden);
     }
 
@@ -54,22 +81,31 @@ public class ReorderHUD : MonoBehaviour
     public void ShowHover(ShopWagonData wagon, string wagonName, string description)
     {
         target = wagon;
-        nameText.text = wagonName;
-        descriptionText.text = description;
+        SetTextIfChanged(nameText, wagonName);
+        SetTextIfChanged(descriptionText, description);
         ApplyMode(Mode.Hover);
     }
 
     public void ShowPanel(ShopWagonData wagon, string wagonName, Option selected, string description, bool upgradeEnabled)
     {
         target = wagon;
-        nameText.text = wagonName;
-        descriptionText.text = description;
+        SetTextIfChanged(nameText, wagonName);
+        SetTextIfChanged(descriptionText, description);
 
         for (int i = 0; i < optionHighlights.Length; i++)
-            if (optionHighlights[i] != null) optionHighlights[i].SetActive(i == (int)selected);
+        {
+            GameObject highlight = optionHighlights[i];
+            if (highlight == null) continue;
+
+            bool active = i == (int)selected;
+            if (highlight.activeSelf != active) highlight.SetActive(active);
+        }
 
         if (upgradeOptionGroup != null)
-            upgradeOptionGroup.alpha = upgradeEnabled ? 1f : disabledAlpha;
+        {
+            float alpha = upgradeEnabled ? 1f : disabledAlpha;
+            if (!Mathf.Approximately(upgradeOptionGroup.alpha, alpha)) upgradeOptionGroup.alpha = alpha;
+        }
 
         ApplyMode(Mode.Panel);
     }
@@ -88,8 +124,7 @@ public class ReorderHUD : MonoBehaviour
 
     public string FormatMoney(float amount, bool affordable)
     {
-        string hex = ColorUtility.ToHtmlStringRGB(affordable ? affordColor : cantAffordColor);
-        return $"<color=#{hex}>${amount}</color>";
+        return "<color=#" + (affordable ? affordHex : cantAffordHex) + ">$" + amount + "</color>";
     }
 
     #endregion
@@ -101,43 +136,103 @@ public class ReorderHUD : MonoBehaviour
         bool showSign = mode == Mode.Hover || mode == Mode.Panel;
         bool showArrows = mode == Mode.Hover || mode == Mode.Drag;
 
-        signRoot.gameObject.SetActive(showSign);
-        optionsRow.SetActive(mode == Mode.Panel);
-        leftArrow.gameObject.SetActive(showArrows);
-        rightArrow.gameObject.SetActive(showArrows);
+        SetActiveIfChanged(signRoot.gameObject, showSign);
+        SetActiveIfChanged(optionsRow, mode == Mode.Panel);
+        SetActiveIfChanged(leftArrow.gameObject, showArrows);
+        SetActiveIfChanged(rightArrow.gameObject, showArrows);
+        SetActiveIfChanged(hintText.gameObject, mode != Mode.Hidden);
 
-        hintText.gameObject.SetActive(mode != Mode.Hidden);
-        hintText.text = mode switch
+        SetTextIfChanged(hintText, mode switch
         {
             Mode.Hover => hoverHint,
             Mode.Panel => panelHint,
             Mode.Drag => dragHint,
             _ => string.Empty
-        };
+        });
+
+        forcedRefreshFrames = 2;
+        UpdatePositions();
+    }
+
+    private void LateUpdate()
+    {
+        if (mode == Mode.Hidden || target == null) return;
+
+        Camera cam = GetWorldCamera();
+        if (cam == null) return;
+
+        bool forced = forcedRefreshFrames > 0;
+        if (forced) forcedRefreshFrames--;
+
+        if (!forced && !HasViewChanged(cam)) return;
 
         UpdatePositions();
     }
 
-    // LateUpdate: los vagones se mueven con tweens, la UI los sigue cada frame
-    private void LateUpdate() => UpdatePositions();
+    private Camera GetWorldCamera()
+    {
+        if (worldCamera != null) return worldCamera;
+        if (cachedMainCamera == null) cachedMainCamera = Camera.main;
+        return cachedMainCamera;
+    }
+
+    private bool HasViewChanged(Camera cam)
+    {
+        Transform t = target.transform;
+        Transform camT = cam.transform;
+
+        t.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
+        Vector3 scale = t.lossyScale;
+        camT.GetPositionAndRotation(out Vector3 camPos, out Quaternion camRot);
+        float fov = cam.fieldOfView;
+
+        bool changed =
+            t != lastTargetTransform ||
+            (pos - lastTargetPos).sqrMagnitude > PosEpsilonSqr ||
+            (scale - lastTargetScale).sqrMagnitude > PosEpsilonSqr ||
+            Mathf.Abs(Quaternion.Dot(rot, lastTargetRot)) < RotDotEpsilon ||
+            (camPos - lastCamPos).sqrMagnitude > PosEpsilonSqr ||
+            Mathf.Abs(Quaternion.Dot(camRot, lastCamRot)) < RotDotEpsilon ||
+            !Mathf.Approximately(fov, lastCamFov) ||
+            Screen.width != lastScreenW ||
+            Screen.height != lastScreenH;
+
+        if (changed)
+        {
+            lastTargetTransform = t;
+            lastTargetPos = pos;
+            lastTargetRot = rot;
+            lastTargetScale = scale;
+            lastCamPos = camPos;
+            lastCamRot = camRot;
+            lastCamFov = fov;
+            lastScreenW = Screen.width;
+            lastScreenH = Screen.height;
+        }
+
+        return changed;
+    }
 
     private void UpdatePositions()
     {
         if (mode == Mode.Hidden || target == null) return;
 
+        Camera cam = GetWorldCamera();
+        if (cam == null) return;
+
         Bounds b = target.GetWorldBounds();
 
         if (mode == Mode.Drag)
         {
-            if (TryGetCanvasRect(b, out Rect wagonRect))
+            if (TryGetCanvasRect(cam, b, out Rect wagonRect))
                 PlaceArrows(wagonRect.center.y, wagonRect.xMin, wagonRect.xMax);
             return;
         }
 
         Vector3 top = new(b.center.x, b.max.y + signWorldOffsetY, b.center.z);
-        if (!WorldToCanvasLocal(top, out Vector2 local)) return;
+        if (!WorldToCanvasLocal(cam, top, out Vector2 local)) return;
 
-        signRoot.position = canvasRect.TransformPoint(local);
+        SetPositionIfChanged(signRoot, canvasRect.TransformPoint(local));
 
         if (mode == Mode.Hover)
         {
@@ -148,36 +243,59 @@ public class ReorderHUD : MonoBehaviour
 
     private void PlaceArrows(float y, float xMin, float xMax)
     {
-        leftArrow.position = canvasRect.TransformPoint(new Vector3(xMin - arrowPadding, y, 0f));
-        rightArrow.position = canvasRect.TransformPoint(new Vector3(xMax + arrowPadding, y, 0f));
+        SetPositionIfChanged(leftArrow, canvasRect.TransformPoint(new Vector3(xMin - arrowPadding, y, 0f)));
+        SetPositionIfChanged(rightArrow, canvasRect.TransformPoint(new Vector3(xMax + arrowPadding, y, 0f)));
     }
+
+    #region Helpers sin escrituras innecesarias
+
+    private static void SetPositionIfChanged(RectTransform rt, Vector3 worldPos)
+    {
+        if ((rt.position - worldPos).sqrMagnitude > PosEpsilonSqr)
+            rt.position = worldPos;
+    }
+
+    private static void SetTextIfChanged(TMP_Text text, string value)
+    {
+        if (text == null) return;
+        value ??= string.Empty;
+        if (text.text != value) text.text = value;
+    }
+
+    private static void SetActiveIfChanged(GameObject go, bool active)
+    {
+        if (go != null && go.activeSelf != active) go.SetActive(active);
+    }
+
+    #endregion
 
     #region Conversiones mundo / canvas
 
-    private bool WorldToCanvasLocal(Vector3 world, out Vector2 local)
+    private bool WorldToCanvasLocal(Camera cam, Vector3 world, out Vector2 local)
     {
-        var cam = worldCamera != null ? worldCamera : Camera.main;
         Vector3 screen = cam.WorldToScreenPoint(world);
 
-        if (screen.z < 0f) { local = default; return false; } // detrás de la cámara
+        if (screen.z < 0f) { local = default; return false; }
         return RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screen, uiCamera, out local);
     }
 
-    // Proyecta los 8 vértices del bounds y devuelve su rectángulo en espacio del canvas
-    private bool TryGetCanvasRect(Bounds b, out Rect rect)
+    private bool TryGetCanvasRect(Camera cam, Bounds b, out Rect rect)
     {
         Vector2 min = new(float.MaxValue, float.MaxValue);
         Vector2 max = new(float.MinValue, float.MinValue);
         bool any = false;
 
+        Vector3 bMin = b.min;
+        Vector3 bMax = b.max;
+
         for (int i = 0; i < 8; i++)
         {
             Vector3 corner = new(
-                (i & 1) == 0 ? b.min.x : b.max.x,
-                (i & 2) == 0 ? b.min.y : b.max.y,
-                (i & 4) == 0 ? b.min.z : b.max.z);
+                (i & 1) == 0 ? bMin.x : bMax.x,
+                (i & 2) == 0 ? bMin.y : bMax.y,
+                (i & 4) == 0 ? bMin.z : bMax.z);
 
-            if (!WorldToCanvasLocal(corner, out Vector2 p)) continue;
+            if (!WorldToCanvasLocal(cam, corner, out Vector2 p)) continue;
             min = Vector2.Min(min, p);
             max = Vector2.Max(max, p);
             any = true;
@@ -193,9 +311,9 @@ public class ReorderHUD : MonoBehaviour
         Vector2 min = new(float.MaxValue, float.MaxValue);
         Vector2 max = new(float.MinValue, float.MinValue);
 
-        foreach (var c in cornersBuffer)
+        for (int i = 0; i < cornersBuffer.Length; i++)
         {
-            Vector2 p = canvasRect.InverseTransformPoint(c);
+            Vector2 p = canvasRect.InverseTransformPoint(cornersBuffer[i]);
             min = Vector2.Min(min, p);
             max = Vector2.Max(max, p);
         }

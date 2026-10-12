@@ -26,6 +26,15 @@ public class ReorderManager : MonoBehaviour
 
     private const int OptionCount = 3;
 
+    private int outlineLayer;
+    private int whiteOutlineLayer;
+
+    private void Awake()
+    {
+        outlineLayer = LayerMask.NameToLayer("Outline");
+        whiteOutlineLayer = LayerMask.NameToLayer("WhiteOutline");
+    }
+
     #region Lifecycle
 
     private void OnEnable()
@@ -159,11 +168,13 @@ public class ReorderManager : MonoBehaviour
 
     private void SetHovered(int slot, bool moveCamera)
     {
-        if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+        var newRef = trainDisplayRef.InstantiatedWagonReferences[slot];
+
+        if (cacheRef != null && cacheRef != newRef) cacheRef.SetLayer(outlineLayer);
 
         hoveredSlot = slot;
-        cacheRef = trainDisplayRef.InstantiatedWagonReferences[slot];
-        SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("WhiteOutline"));
+        cacheRef = newRef;
+        cacheRef.SetLayer(whiteOutlineLayer);
 
         if (moveCamera) reorderCameraRef?.SetTarget(cacheRef.transform);
     }
@@ -297,7 +308,7 @@ public class ReorderManager : MonoBehaviour
         else
         {
             if (state == State.Dragging) trainDisplayRef.CancelDrag();
-            if (cacheRef != null) SetLayerRecursively(cacheRef.gameObject, LayerMask.NameToLayer("Outline"));
+            if (cacheRef != null) cacheRef.SetLayer(outlineLayer);
 
             state = State.Hovering;
             hudRef?.Hide();
@@ -311,10 +322,4 @@ public class ReorderManager : MonoBehaviour
     }
 
     #endregion
-
-    private void SetLayerRecursively(GameObject obj, int layer)
-    {
-        foreach (Transform t in obj.GetComponentsInChildren<Transform>(true))
-            t.gameObject.layer = layer;
-    }
 }

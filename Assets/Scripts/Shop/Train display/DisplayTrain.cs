@@ -1,8 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 
+/// <summary>
+/// Display del tren en la tienda.
+/// - Los slots son una List<ShopWagonData> (índice = slot) en vez de un Dictionary<int, ShopWagonData>:
+///   agregar/vender/reordenar ya no crea diccionarios nuevos ni usa LINQ.
+/// - ComputeLayout reutiliza un buffer en vez de alocar un Vector3[] en cada ApplyLayout.
+/// - Todos los tweens llevan SetLink(gameObject).
+/// InstantiatedWagonReferences sigue soportando .Count y [slot].
+/// </summary>
 public class DisplayTrain : MonoBehaviour
 {
     [SerializeField] private Transform currentTail;
@@ -36,17 +43,19 @@ public class DisplayTrain : MonoBehaviour
     private Dictionary<string, WagonInStockSO> soLookup;
 
     private LinkedList<IWagonID> wagonList;
-    private Dictionary<int, ShopWagonData> instantiatedWagonReferences;
+
+    // Índice de la lista = slot visual.
+    private readonly List<ShopWagonData> slots = new();
 
     private ICinematicActorRegistry cinematicActorRegistry;
     private readonly List<string> registeredKeys = new();
     private int wagonCounter;
 
-
-    private Vector3 layoutOrigin;     
-    private Quaternion layoutRot;        
+    private Vector3 layoutOrigin;
+    private Quaternion layoutRot;
     private Vector3 LayoutForward => layoutRot * Vector3.forward;
 
+    private readonly List<Vector3> layoutBuffer = new();
 
     private readonly Dictionary<Transform, Tween> moveTweens = new();
     private readonly Dictionary<Transform, Tween> rotTweens = new();
@@ -55,20 +64,20 @@ public class DisplayTrain : MonoBehaviour
     private int dragOriginSlot = -1;
     private ShopWagonData draggedWagon;
 
-    public Dictionary<int, ShopWagonData> InstantiatedWagonReferences => instantiatedWagonReferences;
+    public IReadOnlyList<ShopWagonData> InstantiatedWagonReferences => slots;
     public int DraggedSlot => draggedSlot;
     public ShopWagonData DraggedWagon => draggedWagon;
 
     #region Init
 
-    public void Initialize(List<IWagonID> wagonsInTrain)
+    public void Initialize()
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
 
         wagonAssetsReference = new Dictionary<string, GameObject>();
         upgradeLookup = new Dictionary<string, (WagonUpgradePathSO, int)>();
         soLookup = new Dictionary<string, WagonInStockSO>();
-        instantiatedWagonReferences = new Dictionary<int, ShopWagonData>();
+        slots.Clear();
 
         foreach (var asset in wagonAssets)
         {
@@ -102,21 +111,18 @@ public class DisplayTrain : MonoBehaviour
         layoutRot = currentTail.rotation;
         layoutOrigin = currentTail.position - LayoutForward * wagonGap;
 
-        wagonList = new LinkedList<IWagonID>();
-        foreach (var wagon in wagonsInTrain)
-            wagonList.AddLast(wagon);
+        var trainData = ServiceLocator.Get<TrainData>();
+        wagonList = new LinkedList<IWagonID>(trainData.WagonsIDList);
 
-        int slot = 0;
         foreach (var wagon in wagonList)
         {
             if (!wagonAssetsReference.TryGetValue(wagon.WagonName, out var model) || model == null)
             {
-                
                 Debug.LogError($"[DisplayTrain] '{wagon.WagonName}' no está en wagonAssets ni en upgradePaths. Se omite del display.", this);
                 continue;
             }
 
-            instantiatedWagonReferences[slot++] = SpawnWagon(model, wagon);
+            slots.Add(SpawnWagon(model, wagon));
         }
 
         ApplyLayout(0f, shiftEase);
@@ -147,33 +153,30 @@ public class DisplayTrain : MonoBehaviour
 
     private Vector3 StepOf(ShopWagonData w) => LayoutForward * (w.LocalFootprint.z - wagonGap);
 
-    private Vector3[] ComputeLayout()
+    private void ComputeLayout()
     {
-        int count = instantiatedWagonReferences.Count;
-        var positions = new Vector3[count];
+        layoutBuffer.Clear();
         Vector3 cursor = layoutOrigin;
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < slots.Count; i++)
         {
-            positions[i] = cursor;
-            cursor += StepOf(instantiatedWagonReferences[i]);
+            layoutBuffer.Add(cursor);
+            cursor += StepOf(slots[i]);
         }
-
-        return positions;
     }
-
 
     private void ApplyLayout(float duration, Ease ease, int liftedSlot = -1, ShopWagonData snapWagon = null)
     {
-        var positions = ComputeLayout();
+        ComputeLayout();
 
-        foreach (var kvp in instantiatedWagonReferences)
+        for (int i = 0; i < slots.Count; i++)
         {
-            Vector3 target = positions[kvp.Key];
-            if (kvp.Key == liftedSlot) target += Vector3.up * dragLiftHeight;
+            ShopWagonData wagon = slots[i];
+            Vector3 target = layoutBuffer[i];
+            if (i == liftedSlot) target += Vector3.up * dragLiftHeight;
 
-            bool snap = duration <= 0f || kvp.Value == snapWagon;
-            MoveWagon(kvp.Value.transform, target, snap ? 0f : duration, ease);
+            bool snap = duration <= 0f || wagon == snapWagon;
+            MoveWagon(wagon.transform, target, snap ? 0f : duration, ease);
         }
     }
 
@@ -187,8 +190,9 @@ public class DisplayTrain : MonoBehaviour
             return;
         }
 
-        moveTweens[t] = t.DOMove(pos, duration).SetEase(ease);
-        rotTweens[t] = t.DORotateQuaternion(layoutRot, duration).SetEase(ease);
+        GameObject go = t.gameObject;
+        moveTweens[t] = t.DOMove(pos, duration).SetEase(ease).SetLink(go);
+        rotTweens[t] = t.DORotateQuaternion(layoutRot, duration).SetEase(ease).SetLink(go);
     }
 
     private void KillLayoutTweens(Transform t)
@@ -207,7 +211,6 @@ public class DisplayTrain : MonoBehaviour
         Destroy(w.gameObject);
     }
 
-
     public void CacheSlotLayout() { }
 
     #endregion
@@ -219,12 +222,8 @@ public class DisplayTrain : MonoBehaviour
         var newWag = new WagonStore(wagonID.Wagon, wagonID.wagonName, wagonID.Price);
         var newWagonData = SpawnWagon(wagonID.shopModel, newWag);
 
-
-        var reindexed = new Dictionary<int, ShopWagonData> { [0] = newWagonData };
-        foreach (var kvp in instantiatedWagonReferences)
-            reindexed[kvp.Key + 1] = kvp.Value;
-        instantiatedWagonReferences = reindexed;
-
+        // Antes: Dictionary nuevo reindexando todo. Insert(0) corre los índices solo.
+        slots.Insert(0, newWagonData);
         wagonList.AddFirst(newWag);
 
         ApplyLayout(shiftDuration, shiftEase, snapWagon: newWagonData);
@@ -232,9 +231,12 @@ public class DisplayTrain : MonoBehaviour
         var newWagon = newWagonData.gameObject;
         Vector3 finalScale = newWagon.transform.localScale;
         newWagon.transform.localScale = Vector3.zero;
-        newWagon.transform.DOScale(finalScale, popInDuration).SetEase(popInEase).SetDelay(popInDelay);
+        newWagon.transform.DOScale(finalScale, popInDuration)
+            .SetEase(popInEase)
+            .SetDelay(popInDelay)
+            .SetLink(newWagon);
 
-        string key = $"shop_wagon_{wagonCounter++}";
+        string key = "shop_wagon_" + wagonCounter++;
         registeredKeys.Add(key);
         newWagonData.CinematicKey = key;
 
@@ -250,8 +252,9 @@ public class DisplayTrain : MonoBehaviour
 
     public ShopWagonData SellWagon(int slotIndex)
     {
-        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagonData)) return null;
+        if (!IsValidSlot(slotIndex)) return null;
 
+        var wagonData = slots[slotIndex];
         wagonList.Remove(wagonData.IDReference);
 
         if (!string.IsNullOrEmpty(wagonData.CinematicKey))
@@ -260,18 +263,12 @@ public class DisplayTrain : MonoBehaviour
             registeredKeys.Remove(wagonData.CinematicKey);
         }
 
-        var reindexed = new Dictionary<int, ShopWagonData>();
-        foreach (var kvp in instantiatedWagonReferences)
-        {
-            if (kvp.Key == slotIndex) continue;
-            reindexed[kvp.Key > slotIndex ? kvp.Key - 1 : kvp.Key] = kvp.Value;
-        }
-        instantiatedWagonReferences = reindexed;
+        slots.RemoveAt(slotIndex);
 
         DestroyWagon(wagonData);
         ApplyLayout(shiftDuration, shiftEase);
 
-        return wagonData; 
+        return wagonData;
     }
 
     #endregion
@@ -280,11 +277,11 @@ public class DisplayTrain : MonoBehaviour
 
     public void BeginDrag(int slotIndex)
     {
-        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagon)) return;
+        if (!IsValidSlot(slotIndex)) return;
 
         draggedSlot = slotIndex;
         dragOriginSlot = slotIndex;
-        draggedWagon = wagon;
+        draggedWagon = slots[slotIndex];
 
         ApplyLayout(dragMoveDuration, dragMoveEase, liftedSlot: draggedSlot);
     }
@@ -294,10 +291,10 @@ public class DisplayTrain : MonoBehaviour
         if (draggedWagon == null) return false;
 
         int targetSlot = draggedSlot - direction;
-        if (targetSlot < 0 || targetSlot >= instantiatedWagonReferences.Count) return false;
+        if (!IsValidSlot(targetSlot)) return false;
 
-        instantiatedWagonReferences[draggedSlot] = instantiatedWagonReferences[targetSlot];
-        instantiatedWagonReferences[targetSlot] = draggedWagon;
+        slots[draggedSlot] = slots[targetSlot];
+        slots[targetSlot] = draggedWagon;
         draggedSlot = targetSlot;
 
         ApplyLayout(dragMoveDuration, dragMoveEase, liftedSlot: draggedSlot);
@@ -311,9 +308,7 @@ public class DisplayTrain : MonoBehaviour
         ApplyLayout(dragMoveDuration, dragMoveEase);
         SyncWagonListFromSlots();
 
-        draggedWagon = null;
-        draggedSlot = -1;
-        dragOriginSlot = -1;
+        ClearDragState();
     }
 
     public int CancelDrag()
@@ -322,29 +317,30 @@ public class DisplayTrain : MonoBehaviour
 
         int origin = dragOriginSlot;
 
-        var ordered = instantiatedWagonReferences.OrderBy(k => k.Key).Select(k => k.Value).ToList();
-        ordered.Remove(draggedWagon);
-        ordered.Insert(origin, draggedWagon);
-
-        instantiatedWagonReferences = new Dictionary<int, ShopWagonData>();
-        for (int i = 0; i < ordered.Count; i++)
-            instantiatedWagonReferences[i] = ordered[i];
+        slots.RemoveAt(draggedSlot);
+        slots.Insert(Mathf.Clamp(origin, 0, slots.Count), draggedWagon);
 
         ApplyLayout(dragMoveDuration, dragMoveEase);
 
+        ClearDragState();
+        return origin;
+    }
+
+    private void ClearDragState()
+    {
         draggedWagon = null;
         draggedSlot = -1;
         dragOriginSlot = -1;
-
-        return origin;
     }
 
     private void SyncWagonListFromSlots()
     {
         wagonList.Clear();
-        foreach (var kvp in instantiatedWagonReferences.OrderBy(k => k.Key))
-            wagonList.AddLast(kvp.Value.IDReference);
+        for (int i = 0; i < slots.Count; i++)
+            wagonList.AddLast(slots[i].IDReference);
     }
+
+    private bool IsValidSlot(int slot) => slot >= 0 && slot < slots.Count;
 
     #endregion
 
@@ -352,14 +348,14 @@ public class DisplayTrain : MonoBehaviour
 
     public int GetWagonLevel(int slotIndex)
     {
-        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var w)) return 0;
-        return upgradeLookup.TryGetValue(w.IDReference.WagonName, out var e) ? e.level + 1 : 0;
+        if (!IsValidSlot(slotIndex)) return 0;
+        return upgradeLookup.TryGetValue(slots[slotIndex].IDReference.WagonName, out var e) ? e.level + 1 : 0;
     }
 
     public WagonInStockSO GetWagonSO(int slotIndex)
     {
-        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var w)) return null;
-        return soLookup.TryGetValue(w.IDReference.WagonName, out var so) ? so : null;
+        if (!IsValidSlot(slotIndex)) return null;
+        return soLookup.TryGetValue(slots[slotIndex].IDReference.WagonName, out var so) ? so : null;
     }
 
     public bool TryGetUpgradeInfo(int slotIndex, out WagonInStockSO next, out float cost)
@@ -367,8 +363,8 @@ public class DisplayTrain : MonoBehaviour
         next = null;
         cost = 0f;
 
-        if (!instantiatedWagonReferences.TryGetValue(slotIndex, out var wagon)) return false;
-        if (!upgradeLookup.TryGetValue(wagon.IDReference.WagonName, out var entry)) return false;
+        if (!IsValidSlot(slotIndex)) return false;
+        if (!upgradeLookup.TryGetValue(slots[slotIndex].IDReference.WagonName, out var entry)) return false;
 
         int nextIndex = entry.level + 1;
         if (nextIndex >= entry.path.levels.Length) return false;
@@ -384,7 +380,7 @@ public class DisplayTrain : MonoBehaviour
     {
         if (!TryGetUpgradeInfo(slotIndex, out var next, out _)) return null;
 
-        var oldWagon = instantiatedWagonReferences[slotIndex];
+        var oldWagon = slots[slotIndex];
 
         var newID = new WagonStore(next.Wagon, next.wagonName, next.Price);
         var node = wagonList.Find(oldWagon.IDReference);
@@ -400,17 +396,20 @@ public class DisplayTrain : MonoBehaviour
             newWagon.CinematicKey = oldWagon.CinematicKey;
         }
 
-        instantiatedWagonReferences[slotIndex] = newWagon;
+        slots[slotIndex] = newWagon;
         DestroyWagon(oldWagon);
 
         ApplyLayout(shiftDuration, shiftEase, snapWagon: newWagon);
 
-        newWagon.transform.DOPunchScale(Vector3.one * upgradePunchScale, upgradePunchDuration, 6, 0.5f);
+        newWagon.transform
+            .DOPunchScale(Vector3.one * upgradePunchScale, upgradePunchDuration, 6, 0.5f)
+            .SetLink(newWagon.gameObject);
 
         return newWagon;
     }
 
     #endregion
 
-    public List<IWagonID> ChangeWagonIDList() => wagonList.ToList();
+    // Antes: wagonList.ToList() (LINQ).
+    public List<IWagonID> ChangeWagonIDList() => new List<IWagonID>(wagonList);
 }
