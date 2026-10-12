@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,24 @@ public class DamageFlash : MonoBehaviour
 
     void Awake()
     {
+        SetRenderers(rend);
+    }
+
+    public void SetRenderers(Renderer[] renderers)
+    {
+        List<Renderer> validRenderers = new List<Renderer>();
+        if (renderers != null)
+        {
+            foreach (Renderer renderer in renderers)
+            {
+                if (renderer != null)
+                {
+                    validRenderers.Add(renderer);
+                }
+            }
+        }
+
+        rend = validRenderers.ToArray();
         originalMaterials = new Material[rend.Length][];
         for (int i = 0; i < rend.Length; i++)
             originalMaterials[i] = rend[i].materials;
@@ -21,6 +40,11 @@ public class DamageFlash : MonoBehaviour
     {
         for (int i = 0; i < rend.Length; i++)
         {
+            if (rend[i] == null)
+            {
+                continue;
+            }
+
             Material[] flashArray = new Material[rend[i].materials.Length];
             for (int j = 0; j < flashArray.Length; j++)
                 flashArray[j] = flashMaterial;
@@ -46,7 +70,8 @@ public class DamageFlash : MonoBehaviour
 
     public void SetMaterialSingle(Material material)
     {
-        originalMaterials[0][0] = material;
+        if (originalMaterials.Length > 0 && originalMaterials[0].Length > 0)
+            originalMaterials[0][0] = material;
     }
     public void SetMaterialArray(int rendererIndex, Material[] materials)
     {
@@ -56,6 +81,9 @@ public class DamageFlash : MonoBehaviour
     public void ResetMaterials()
     {
         for (int i = 0; i < rend.Length; i++)
-            rend[i].materials = originalMaterials[i];
+        {
+            if (rend[i] != null)
+                rend[i].materials = originalMaterials[i];
+        }
     }
 }

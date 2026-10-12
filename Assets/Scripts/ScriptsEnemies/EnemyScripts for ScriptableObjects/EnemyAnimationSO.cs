@@ -4,15 +4,22 @@ using UnityEngine;
 public class EnemyAnimationSO : ScriptableObject
 {
     [Header("Cowboy states")]
-    public string positiveZIdle = "Cowboy_1|L_Idle";
-    public string positiveZAttack = "Cowboy_1|L_Aim";
-    public string positiveZDeath = "Cowboy_1|L_Death";
-    public string negativeZIdle = "Cowboy_1|R_Idle";
-    public string negativeZAttack = "Cowboy_1|R_Aim 0";
-    public string negativeZDeath = "Cowboy_1|R_Death";
-    public float attackDuration = 0.8f;
-    public float deathDuration = 1f;
+    public AnimationState positiveZIdle = new AnimationState("Left Layer.Bandido|L_CB_Revolver_Idle", true);
+    public AnimationState positiveZAttack = new AnimationState("Left Layer.Bandido|L_CB_Revolver_Aim");
+    public AnimationState positiveZDeath = new AnimationState("Left Layer.Bandido|L_CB_Revolver_Death");
+    public AnimationState negativeZIdle = new AnimationState("Right Layer.Bandido|R_CB_Revolver_Idle", true);
+    public AnimationState negativeZAttack = new AnimationState("Right Layer.Bandido|R_CB_Revolver_Aim");
+    public AnimationState negativeZDeath = new AnimationState("Right Layer.Bandido|R_CB_Revolver_Death");
+    [Range(0f, 1f)]
+    public float firingNormalizedTime = 0.5f;
 
     [Header("Horse states")]
-    public string horseIdle = "Horse|Idle";
+    public AnimationState horseIdle = new AnimationState("Base Layer.Bandido_Horse|Idle", true);
+
+    private void OnValidate()
+    {
+        firingNormalizedTime = float.IsNaN(firingNormalizedTime)
+            ? 0f
+            : Mathf.Clamp01(firingNormalizedTime);
+    }
 }

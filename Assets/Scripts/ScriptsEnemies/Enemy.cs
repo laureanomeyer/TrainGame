@@ -44,6 +44,18 @@ public class Enemy : MonoBehaviour
     [Header("Animators")]
     [SerializeField] Animator cowboyAnimator;
     [SerializeField] Animator horseAnimator;
+    private AnimatorBrain leftCowboyBrain = new AnimatorBrain();
+    private AnimatorBrain rightCowboyBrain = new AnimatorBrain();
+    private AnimatorBrain horseBrain = new AnimatorBrain();
+    private EnemyAnimationSO animationData;
+    private AnimatorBrain pendingAttackBrain;
+    private IWagon pendingAttackTarget;
+    private float pendingAttackDamage;
+    private float pendingAttackFiringTime;
+    private bool hasPendingAttack;
+    private AnimatorBrain deathBrain;
+    private bool deathAnimationRunning;
+    private bool returnedToPool;
     [Header("Debug")]
     [SerializeField] private EnemyMovementSO endMovement;
     public EnemyWeapon Weapon;
@@ -106,8 +118,8 @@ public class Enemy : MonoBehaviour
         rb != null && rb.position.z < 0f;
     public Camera Cam => Camera.main;
     public bool IsTutorialEnemy { get; private set; }
-    int rightLayerIndex;
-    int leftLayerIndex;
+    int rightLayerIndex = -1;
+    int leftLayerIndex = -1;
     #endregion
 
     public Transform VisualAnchor => visualAnchor;
@@ -118,12 +130,6 @@ public class Enemy : MonoBehaviour
         Weapon = GetComponentInChildren<EnemyWeapon>();
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
-
-        if (cowboyAnimator != null)
-        {
-            rightLayerIndex = cowboyAnimator.GetLayerIndex("Right Layer");
-            leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
-        }
 
         EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Subscribe<OnWagonDestroyedEvent>(RetargetWagon);
@@ -141,6 +147,10 @@ public class Enemy : MonoBehaviour
     {
         StopAllCoroutines();
         attackRoutine = null;
+        CancelPendingAttack();
+        deathBrain = null;
+        deathAnimationRunning = false;
+        returnedToPool = false;
 
         ChangeState(EnemyHealthState.Normal);
         ChangeState(EnemyMovementState.Moving);
@@ -160,10 +170,7 @@ public class Enemy : MonoBehaviour
 
         dataName = data.name;
 
-        activeVisualInstance = Instantiate(DefaultVisualPrefab, visualAnchor);
-        activeVisualInstance.SetActive(false);
-
-        InitializeVisuals();
+        ApplyVisual(data.visual);
 
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
         healthBar.ShowArmor(HealthState == EnemyHealthState.Armored);
@@ -218,9 +225,17 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
-        if (healthState == EnemyHealthState.Dead) return;
+        RefreshCowboyLayerWeights();
+        if (healthState == EnemyHealthState.Dead)
+        {
+            UpdateDeathAnimation();
+            return;
+        }
+
         attackCooldownTimer -= Time.deltaTime;
         skillCooldownTimer -= Time.deltaTime;
+        AdvancePendingAttack();
+        TickAnimationBrains();
         Attack?.Attack(this);
         Attack?.Skill(this);
     }
@@ -285,14 +300,20 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         if (HealthState == EnemyHealthState.Dead) return;
+        CancelPendingAttack();
         ChangeState(EnemyHealthState.Dead);
         PublishBecameInactive();
         PlayDeathSound();
         if (healthBar != null)
         { healthBar.Hide(); }
-        flash.ResetMaterials();
+        flash?.ResetMaterials();
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop, data.dropAmount));
         EventBus.Publish(new OnEnemyKilledEvent());
+
+        if (!StartDeathAnimation())
+        {
+            ReturnToPoolOnce();
+        }
     }
     void PlayDeathSound()
     {
@@ -306,13 +327,16 @@ public class Enemy : MonoBehaviour
         ChangeState(EnemyHealthState.Dead);
         StopAllCoroutines();
         attackRoutine = null;
+        CancelPendingAttack();
+        deathAnimationRunning = false;
+        deathBrain = null;
         PublishBecameInactive();
 
         if (healthBar != null)
             healthBar.Hide();
         flash?.ResetMaterials();
 
-        ObjectPoolManager.ReturnObjectToPool(gameObject);
+        ReturnToPoolOnce();
     }
 
     private void PublishBecameInactive()
@@ -335,11 +359,69 @@ public class Enemy : MonoBehaviour
 
     public void InitializeVisuals()
     {
-        GameObject prefab = data.visual.visualPrefab;
+        if (data == null || data.visual == null)
+        {
+            Debug.LogError($"Enemy visual data is missing for {name}.", this);
+            return;
+        }
+
+        SelectVisual(data.visual.visualPrefab);
+    }
+
+    private void ApplyVisual(EnemyVisualSO visual)
+    {
+        ResetAnimationBindings();
+
+        if (visual == null)
+        {
+            Debug.LogError($"Enemy visual definition is missing for {name}.", this);
+            return;
+        }
+
+        if (!SelectVisual(visual.visualPrefab))
+        {
+            return;
+        }
+
+        flash = GetComponent<DamageFlash>();
+        if (flash != null)
+        {
+            flash.StopCoroutine();
+            flash.SetRenderers(activeVisualInstance.GetComponentsInChildren<Renderer>(true));
+        }
+
+        InitializeAnimations(visual);
+    }
+
+    private void ResetAnimationBindings()
+    {
+        CancelPendingAttack();
+        deathBrain = null;
+        deathAnimationRunning = false;
+        animationData = null;
+        cowboyAnimator = null;
+        horseAnimator = null;
+        leftLayerIndex = -1;
+        rightLayerIndex = -1;
+        leftCowboyBrain.SetIdle(default);
+        rightCowboyBrain.SetIdle(default);
+        horseBrain.SetIdle(default);
+        leftCowboyBrain.Init(null);
+        rightCowboyBrain.Init(null);
+        horseBrain.Init(null);
+    }
+
+    private bool SelectVisual(GameObject prefab)
+    {
         if (prefab == null)
         {
             Debug.LogError($"Enemy visual prefab is missing for {name}.", this);
-            return;
+            return false;
+        }
+
+        if (visualAnchor == null)
+        {
+            visualAnchor = transform;
         }
 
         if (activeVisualInstance != null)
@@ -354,17 +436,338 @@ public class Enemy : MonoBehaviour
         }
 
         activeVisualInstance.SetActive(true);
+        return true;
     }
+
     public void InitializeAnimations()
     {
-        if (cowboyAnimator != null && data.visual.cowboyAnimatorOverride != null)
+        if (data == null)
         {
-            cowboyAnimator.runtimeAnimatorController = data.visual.cowboyAnimatorOverride;
+            Debug.LogError($"Enemy animation data is missing for {name}.", this);
+            return;
         }
-        if (horseAnimator != null && data.visual.mountAnimatorOverride != null)
+
+        InitializeAnimations(data.visual);
+    }
+
+    private void InitializeAnimations(EnemyVisualSO visual)
+    {
+        if (activeVisualInstance == null)
         {
-            horseAnimator.runtimeAnimatorController = data.visual.mountAnimatorOverride;
+            Debug.LogError($"Enemy visual instance is missing for {name}.", this);
+            return;
         }
+
+        EnemyVisualAnimatorBindings bindings = activeVisualInstance.GetComponent<EnemyVisualAnimatorBindings>();
+        if (bindings == null)
+        {
+            Debug.LogError($"Enemy visual '{activeVisualInstance.name}' is missing EnemyVisualAnimatorBindings.", this);
+            return;
+        }
+
+        cowboyAnimator = bindings.CowboyAnimator;
+        horseAnimator = bindings.MountAnimator;
+        if (cowboyAnimator == null || horseAnimator == null)
+        {
+            Debug.LogError($"Enemy visual '{activeVisualInstance.name}' has a missing cowboy or mount Animator binding.", this);
+            return;
+        }
+
+        ApplyAnimatorOverrides(
+            cowboyAnimator,
+            visual.cowboyAnimatorOverride,
+            visual.cowboyClipOverrides,
+            "cowboy");
+        ApplyAnimatorOverrides(
+            horseAnimator,
+            visual.mountAnimatorOverride,
+            visual.mountClipOverrides,
+            "mount");
+
+        leftLayerIndex = cowboyAnimator.GetLayerIndex("Left Layer");
+        rightLayerIndex = cowboyAnimator.GetLayerIndex("Right Layer");
+        if (leftLayerIndex < 0 || rightLayerIndex < 0)
+        {
+            Debug.LogError($"Enemy visual '{activeVisualInstance.name}' cowboy Animator is missing the Left Layer or Right Layer.", this);
+            return;
+        }
+
+        if (visual.animations == null)
+        {
+            Debug.LogError($"Enemy visual '{activeVisualInstance.name}' is missing animation data.", this);
+            return;
+        }
+
+        animationData = visual.animations;
+        if (!HasRequiredState(cowboyAnimator, leftLayerIndex, visual.animations.positiveZIdle, "positive-Z idle", visual) ||
+            !HasRequiredState(cowboyAnimator, leftLayerIndex, visual.animations.positiveZAttack, "positive-Z attack", visual) ||
+            !HasRequiredState(cowboyAnimator, leftLayerIndex, visual.animations.positiveZDeath, "positive-Z death", visual) ||
+            !HasRequiredState(cowboyAnimator, rightLayerIndex, visual.animations.negativeZIdle, "negative-Z idle", visual) ||
+            !HasRequiredState(cowboyAnimator, rightLayerIndex, visual.animations.negativeZAttack, "negative-Z attack", visual) ||
+            !HasRequiredState(cowboyAnimator, rightLayerIndex, visual.animations.negativeZDeath, "negative-Z death", visual) ||
+            !HasRequiredState(horseAnimator, 0, visual.animations.horseIdle, "horse idle", visual))
+        {
+            return;
+        }
+
+        leftCowboyBrain.SetIdle(visual.animations.positiveZIdle);
+        rightCowboyBrain.SetIdle(visual.animations.negativeZIdle);
+        horseBrain.SetIdle(visual.animations.horseIdle);
+        leftCowboyBrain.Init(cowboyAnimator, leftLayerIndex);
+        rightCowboyBrain.Init(cowboyAnimator, rightLayerIndex);
+        horseBrain.Init(horseAnimator);
+        RefreshCowboyLayerWeights();
+    }
+
+    private bool HasRequiredState(Animator animator, int layerIndex, AnimationState state, string description, EnemyVisualSO visual)
+    {
+        if (animator != null && layerIndex >= 0 &&
+            state.FullPathHash != 0 && animator.HasState(layerIndex, state.FullPathHash))
+        {
+            return true;
+        }
+
+        Debug.LogError($"Enemy animation '{description}' state path is missing in '{visual.name}'.", this);
+        return false;
+    }
+
+    private bool StartDeathAnimation()
+    {
+        if (animationData == null || cowboyAnimator == null)
+        {
+            Debug.LogError($"Enemy death animation data or cowboy Animator is missing for {name}.", this);
+            return false;
+        }
+
+        bool positiveZSide = IsOnPositiveZSide;
+        AnimationState death = positiveZSide
+            ? animationData.positiveZDeath
+            : animationData.negativeZDeath;
+        int layerIndex = positiveZSide ? leftLayerIndex : rightLayerIndex;
+        if (death.FullPathHash == 0 || layerIndex < 0 ||
+            !cowboyAnimator.HasState(layerIndex, death.FullPathHash))
+        {
+            string side = positiveZSide ? "positive-Z" : "negative-Z";
+            Debug.LogError($"Enemy animation '{side} death' state path is missing for {name}.", this);
+            return false;
+        }
+
+        deathBrain = positiveZSide ? leftCowboyBrain : rightCowboyBrain;
+        if (!deathBrain.Play(death, lockAnimation: true, overrideLock: true))
+        {
+            Debug.LogError($"Enemy death animation could not start for {name}.", this);
+            deathBrain = null;
+            return false;
+        }
+
+        deathAnimationRunning = true;
+        return true;
+    }
+
+    private void UpdateDeathAnimation()
+    {
+        if (!deathAnimationRunning || deathBrain == null)
+        {
+            ReturnToPoolOnce();
+            return;
+        }
+
+        if (deathBrain.Finished())
+        {
+            deathAnimationRunning = false;
+            ReturnToPoolOnce();
+            return;
+        }
+
+        TickAnimationBrains();
+    }
+
+    private void ReturnToPoolOnce()
+    {
+        if (returnedToPool || !gameObject.activeSelf)
+        {
+            return;
+        }
+
+        returnedToPool = true;
+        ObjectPoolManager.ReturnObjectToPool(gameObject);
+    }
+
+    public bool TryQueueRangedAttack(IWagon target, float damage)
+    {
+        if (!IsWagonAvailable(target) || hasPendingAttack)
+        {
+            return false;
+        }
+
+        if (Weapon == null)
+        {
+            Debug.LogError($"Enemy weapon is missing for ranged attack on {name}.", this);
+            return false;
+        }
+
+        if (!Weapon.CanShoot)
+        {
+            return false;
+        }
+
+        if (animationData == null)
+        {
+            Debug.LogError($"Enemy animation data is missing for ranged attack on {name}.", this);
+            return false;
+        }
+
+        AnimatorBrain brain = IsOnPositiveZSide ? leftCowboyBrain : rightCowboyBrain;
+        AnimationState attack = IsOnPositiveZSide
+            ? animationData.positiveZAttack
+            : animationData.negativeZAttack;
+        int layerIndex = IsOnPositiveZSide ? leftLayerIndex : rightLayerIndex;
+        if (cowboyAnimator == null || layerIndex < 0 ||
+            !cowboyAnimator.HasState(layerIndex, attack.FullPathHash))
+        {
+            Debug.LogError($"Enemy ranged attack animation state is missing for {name}.", this);
+            return false;
+        }
+
+        if (!brain.Play(attack, lockAnimation: true))
+        {
+            return false;
+        }
+
+        pendingAttackBrain = brain;
+        pendingAttackTarget = target;
+        pendingAttackDamage = damage;
+        pendingAttackFiringTime = Mathf.Clamp01(animationData.firingNormalizedTime);
+        hasPendingAttack = true;
+        return true;
+    }
+
+    public void AdvancePendingAttack()
+    {
+        if (!hasPendingAttack)
+        {
+            return;
+        }
+
+        if (Weapon == null || !Weapon.CanShoot ||
+            !IsWagonAvailable(pendingAttackTarget) ||
+            pendingAttackTarget != targetWagon || !IsWagonAvailable(targetWagon) ||
+            pendingAttackBrain == null)
+        {
+            AbortPendingAttack();
+            return;
+        }
+
+        float normalizedTime = pendingAttackBrain.CurrentNormalizedTime;
+        if (normalizedTime < pendingAttackFiringTime)
+        {
+            return;
+        }
+
+        IWagon target = pendingAttackTarget;
+        float damage = pendingAttackDamage;
+        CancelPendingAttack();
+        Weapon.Execute(target, damage);
+    }
+
+    private static bool IsWagonAvailable(IWagon wagon)
+    {
+        if (wagon == null || (wagon is Object unityObject && unityObject == null))
+        {
+            return false;
+        }
+
+        return wagon.Head != null && wagon.Tail != null;
+    }
+
+    public void CancelPendingAttack()
+    {
+        hasPendingAttack = false;
+        pendingAttackBrain = null;
+        pendingAttackTarget = null;
+        pendingAttackDamage = 0f;
+        pendingAttackFiringTime = 0f;
+    }
+
+    private void AbortPendingAttack()
+    {
+        AnimatorBrain brain = pendingAttackBrain;
+        CancelPendingAttack();
+        brain?.ReturnToIdle();
+    }
+
+    private void TickAnimationBrains()
+    {
+        leftCowboyBrain.Tick();
+        rightCowboyBrain.Tick();
+        horseBrain.Tick();
+    }
+
+    private void ApplyAnimatorOverrides(
+        Animator animator,
+        AnimatorOverrideController sourceOverride,
+        AnimationClipOverride[] clipOverrides,
+        string animatorDescription)
+    {
+        if (sourceOverride != null)
+        {
+            animator.runtimeAnimatorController = sourceOverride;
+        }
+
+        if (clipOverrides == null || clipOverrides.Length == 0)
+        {
+            if (animator.runtimeAnimatorController == null)
+            {
+                Debug.LogError($"Enemy visual '{activeVisualInstance.name}' has no controller for its {animatorDescription} Animator.", this);
+            }
+
+            return;
+        }
+
+        if (animator.runtimeAnimatorController == null)
+        {
+            Debug.LogError($"Enemy visual '{activeVisualInstance.name}' has no controller for its {animatorDescription} Animator.", this);
+            return;
+        }
+
+        AnimatorOverrideController instanceOverride = new AnimatorOverrideController(animator.runtimeAnimatorController);
+        List<KeyValuePair<AnimationClip, AnimationClip>> overrides = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+        instanceOverride.GetOverrides(overrides);
+
+        foreach (AnimationClipOverride clipOverride in clipOverrides)
+        {
+            if (clipOverride == null || clipOverride.baseClip == null || clipOverride.replacementClip == null)
+            {
+                Debug.LogError($"Enemy visual '{activeVisualInstance.name}' has an incomplete {animatorDescription} clip override.", this);
+                continue;
+            }
+
+            int index = overrides.FindIndex(entry => entry.Key == clipOverride.baseClip);
+            if (index < 0)
+            {
+                Debug.LogError($"Enemy visual '{activeVisualInstance.name}' cannot find base clip '{clipOverride.baseClip.name}' in its {animatorDescription} controller.", this);
+                continue;
+            }
+
+            overrides[index] = new KeyValuePair<AnimationClip, AnimationClip>(clipOverride.baseClip, clipOverride.replacementClip);
+        }
+
+        instanceOverride.ApplyOverrides(overrides);
+        animator.runtimeAnimatorController = instanceOverride;
+    }
+
+    private void RefreshCowboyLayerWeights()
+    {
+        if (cowboyAnimator == null || rb == null ||
+            leftLayerIndex < 0 || rightLayerIndex < 0 ||
+            leftLayerIndex >= cowboyAnimator.layerCount || rightLayerIndex >= cowboyAnimator.layerCount)
+        {
+            return;
+        }
+
+        bool positiveZSide = IsOnPositiveZSide;
+        cowboyAnimator.SetLayerWeight(leftLayerIndex, positiveZSide ? 1f : 0f);
+        cowboyAnimator.SetLayerWeight(rightLayerIndex, positiveZSide ? 0f : 1f);
     }
 
     #endregion

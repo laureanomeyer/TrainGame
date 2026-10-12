@@ -1,12 +1,15 @@
-public readonly struct AnimationState
+[System.Serializable]
+public struct AnimationState
 {
-    public readonly int FullPathHash;
-    public readonly bool Loop;
-    public readonly float Speed;
+    public string StatePath;
+    public bool Loop;
+    public float Speed;
 
-    public AnimationState(int fullPathHash, bool loop = false, float speed = 1f)
+    public int FullPathHash => string.IsNullOrWhiteSpace(StatePath) ? 0 : UnityEngine.Animator.StringToHash(StatePath);
+
+    public AnimationState(string statePath, bool loop = false, float speed = 1f)
     {
-        FullPathHash = fullPathHash;
+        StatePath = statePath;
         Loop = loop;
         Speed = speed;
     }

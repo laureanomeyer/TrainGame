@@ -1,32 +1,52 @@
 using UnityEngine;
 
-// TO FIX :
-// LOOP FROM ANIMATIONSTAE DOESN�T WORK
-
 public class AnimatorBrain
 {
     private Animator animator;
-
     private AnimationState current;
-
     private bool locked;
-
     private AnimationState idleAnimation;
+    private int layerIndex;
 
     public AnimationState Current => current;
 
-    public void Init(Animator animator)
+    public float CurrentNormalizedTime
+    {
+        get
+        {
+            return current.FullPathHash != 0 &&
+                TryGetCurrentStateInfo(out AnimatorStateInfo info) &&
+                info.fullPathHash == current.FullPathHash
+                ? info.normalizedTime
+                : -1f;
+        }
+    }
+
+    public void Init(Animator animator, int layerIndex = 0)
     {
         this.animator = animator;
+        this.layerIndex = layerIndex;
+        current = default;
+        locked = false;
 
-        if (this.animator == null)
+        if (animator == null)
         {
             return;
         }
 
+        if (!IsValidLayer())
+        {
+            Debug.LogError($"AnimatorBrain cannot use layer {layerIndex} on animator '{animator.name}'.", animator);
+            this.animator = null;
+            return;
+        }
+
+        animator.speed = 1f;
         if (idleAnimation.FullPathHash != 0)
         {
-            this.animator.Play(idleAnimation.FullPathHash, 0, 0f);
+            current = idleAnimation;
+            animator.speed = idleAnimation.Speed;
+            animator.Play(idleAnimation.FullPathHash, layerIndex, 0f);
         }
     }
 
@@ -37,7 +57,7 @@ public class AnimatorBrain
 
     public bool Play(AnimationState next, bool lockAnimation = false, bool overrideLock = false, float fade = 0.1f, float? speed = null)
     {
-        if (animator == null || next.FullPathHash == 0)
+        if (!IsValidLayer() || next.FullPathHash == 0)
         {
             return false;
         }
@@ -56,7 +76,7 @@ public class AnimatorBrain
         locked = lockAnimation;
 
         animator.speed = speed ?? next.Speed;
-        animator.CrossFade(next.FullPathHash, fade, 0, 0f);
+        animator.CrossFade(next.FullPathHash, fade, layerIndex, 0f);
 
         return true;
     }
@@ -66,6 +86,15 @@ public class AnimatorBrain
         locked = false;
     }
 
+    public void ReturnToIdle()
+    {
+        locked = false;
+        if (idleAnimation.FullPathHash != 0)
+        {
+            Play(idleAnimation, overrideLock: true);
+        }
+    }
+
     public bool IsLocked()
     {
         return locked;
@@ -73,18 +102,21 @@ public class AnimatorBrain
 
     public bool IsPlaying(AnimationState state)
     {
-        return state.FullPathHash != 0 && animator != null && animator.GetCurrentAnimatorStateInfo(0).fullPathHash == state.FullPathHash;
+        return state.FullPathHash != 0 &&
+            TryGetCurrentStateInfo(out AnimatorStateInfo info) &&
+            info.fullPathHash == state.FullPathHash;
     }
 
     public bool Finished()
     {
-        if (animator == null || current.FullPathHash == 0 || current.Loop)
+        if (current.FullPathHash == 0 || current.Loop)
         {
             return false;
         }
 
-        AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
-        return info.fullPathHash == current.FullPathHash && info.normalizedTime >= 1f;
+        return TryGetCurrentStateInfo(out AnimatorStateInfo info) &&
+            info.fullPathHash == current.FullPathHash &&
+            info.normalizedTime >= 1f;
     }
 
     public void SetPlaybackSpeed(float speed)
@@ -105,7 +137,7 @@ public class AnimatorBrain
 
     public void Tick()
     {
-        if (animator == null || !locked || current.FullPathHash == 0)
+        if (!IsValidLayer() || !locked || current.FullPathHash == 0)
         {
             return;
         }
@@ -124,5 +156,22 @@ public class AnimatorBrain
                 Play(idleAnimation, overrideLock: true);
             }
         }
+    }
+
+    private bool IsValidLayer()
+    {
+        return animator != null && layerIndex >= 0 && layerIndex < animator.layerCount;
+    }
+
+    private bool TryGetCurrentStateInfo(out AnimatorStateInfo info)
+    {
+        if (!IsValidLayer())
+        {
+            info = default;
+            return false;
+        }
+
+        info = animator.GetCurrentAnimatorStateInfo(layerIndex);
+        return true;
     }
 }

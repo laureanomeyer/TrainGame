@@ -9,6 +9,7 @@ public class EnemyWeapon : MonoBehaviour
     bool canShoot = true;
 
     Camera Cam => Camera.main;
+    public bool CanShoot => canShoot;
 
     private void Awake()
     {
@@ -21,11 +22,11 @@ public class EnemyWeapon : MonoBehaviour
         EventBus.Unsubscribe<OnSetEnemiesFlags>(SetCanShoot);
     }
 
-    public void Execute(IWagon target, float damage)
+    public bool Execute(IWagon target, float damage)
     {
-        if (!canShoot) return;
+        if (!canShoot) return false;
 
-        Shoot(target, damage);
+        return Shoot(target, damage);
     }
 
     void SetCanShoot(OnSetEnemiesFlags ev)
@@ -33,9 +34,25 @@ public class EnemyWeapon : MonoBehaviour
         this.canShoot = ev.canAttack;
     }
 
-    public void Shoot(IWagon target, float damage)
+    public bool Shoot(IWagon target, float damage)
     {
-        if (target == null || target.Head == null || target.Tail == null) return;
+        if (target == null ||
+            (target is Object unityObject && unityObject == null) ||
+            target.Head == null || target.Tail == null)
+        {
+            return false;
+        }
+        if (bulletType == null)
+        {
+            Debug.LogError($"Enemy weapon '{name}' has no bullet prefab.", this);
+            return false;
+        }
+
+        if (bulletSpawn == null)
+        {
+            Debug.LogError($"Enemy weapon '{name}' has no bullet spawn transform.", this);
+            return false;
+        }
 
         Vector3 targetPosition = target.Middle;
         Vector3 dir = (targetPosition - bulletSpawn.position).normalized;
@@ -44,10 +61,18 @@ public class EnemyWeapon : MonoBehaviour
         GameObject bulletGO = Instantiate(bulletType, bulletSpawn.position, Quaternion.LookRotation(dir));
 
         EnemyBullet bullet = bulletGO.GetComponent<EnemyBullet>();
+        if (bullet == null)
+        {
+            Debug.LogError($"Enemy weapon '{name}' bullet prefab has no EnemyBullet component.", bulletGO);
+            Destroy(bulletGO);
+            return false;
+        }
+
         bullet.Init(dir, damage);
         bool isOnScreen = CameraView.IsInsideCamera(transform.position,Cam);
 
         PlayAudio(isOnScreen);
+        return true;
 
     }
 

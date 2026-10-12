@@ -12,12 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8695cbc94b859024490a8c314eff87d7, type: 3}
   m_Name: AnimEnemies
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationSO
-  positiveZIdle: Cowboy_1|L_Idle
-  positiveZAttack: Cowboy_1|L_Aim
-  positiveZDeath: Cowboy_1|L_Death
-  negativeZIdle: Cowboy_1|R_Idle
-  negativeZAttack: Cowboy_1|R_Aim 0
-  negativeZDeath: Cowboy_1|R_Death
-  attackDuration: 0.8
-  deathDuration: 1
-  horseIdle: Horse|Idle
+  positiveZIdle:
+    StatePath: Left Layer.Bandido|L_CB_Revolver_Idle
+    Loop: 1
+    Speed: 1
+  positiveZAttack:
+    StatePath: Left Layer.Bandido|L_CB_Revolver_Aim
+    Loop: 0
+    Speed: 1
+  positiveZDeath:
+    StatePath: Left Layer.Bandido|L_CB_Revolver_Death
+    Loop: 0
+    Speed: 1
+  negativeZIdle:
+    StatePath: Right Layer.Bandido|R_CB_Revolver_Idle
+    Loop: 1
+    Speed: 1
+  negativeZAttack:
+    StatePath: Right Layer.Bandido|R_CB_Revolver_Aim
+    Loop: 0
+    Speed: 1
+  negativeZDeath:
+    StatePath: Right Layer.Bandido|R_CB_Revolver_Death
+    Loop: 0
+    Speed: 1
+  firingNormalizedTime: 0.5
+  horseIdle:
+    StatePath: Base Layer.Bandido_Horse|Idle
+    Loop: 1
+    Speed: 1
