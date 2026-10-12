@@ -1,4 +1,4 @@
-using NUnit.Framework.Internal;
+
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -19,14 +19,13 @@ public class BulletScript : MonoBehaviour, IBullet
 
     public BulletTypeScriptable bulletType;
 
+    [SerializeField] private LayerMask enemyLayerDetection;
+
     private Rigidbody rb;
     private BoxCollider bc;
     private MeshFilter meshFilter;
     private Renderer render;
     private TrailRenderer tr;
-
-    private TrainData dataRef;
-    private StatSystem stats;
 
     private bool isActive = true;
     private float currentLife;
@@ -38,9 +37,6 @@ public class BulletScript : MonoBehaviour, IBullet
         bc = GetComponent<BoxCollider>();
         render = GetComponent<Renderer>();
         tr = GetComponent<TrailRenderer>();
-
-        stats = ServiceLocator.Get<StatSystem>();
-        dataRef = ServiceLocator.Get<TrainData>();
     }
 
     void Update()
@@ -112,7 +108,7 @@ public class BulletScript : MonoBehaviour, IBullet
             }
         }
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if (enemyLayerDetection.value == (1 << other.gameObject.layer))
         {
             Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
             if (collisionEnemy.HealthState == EnemyHealthState.Dead) return;

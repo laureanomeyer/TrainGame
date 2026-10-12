@@ -43,6 +43,7 @@ public class GoldenWagonBrain : WagonBrain
     public override void OnDestroy()
     {
         base.OnDestroy();
+        EventBus.Unsubscribe<OnActivateGoldWagon>(ActivateGoldWagon);
         collector.ActivateOnDestroy();
     }
 

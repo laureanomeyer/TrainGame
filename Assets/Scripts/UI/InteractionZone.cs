@@ -22,12 +22,17 @@ public class InteractionZone : MonoBehaviour
 
     private bool isOpen = false;
 
+    private void Start()
+    {
+        pauseAction = InputSystem.actions.FindAction("Pause");
+    }
+
     private void OnEnable()
     {
         EventBus.Subscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
         EventBus.Subscribe<OnForceCloseAllUI>(ForceCloseUI);
 
-        pauseAction = InputSystem.actions.FindAction("Pause");
+        //pauseAction = InputSystem.actions.FindAction("Pause");
 
         if (pauseAction != null)
         {
@@ -36,14 +41,13 @@ public class InteractionZone : MonoBehaviour
     }
     private void OnDisable()
     {
+        EventBus.Unsubscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
+        EventBus.Unsubscribe<OnForceCloseAllUI>(ForceCloseUI);
+
         if (pauseAction != null)
         {
             pauseAction.performed -= OnPausePressed;
         }
-    }
-    private void OnDestroy()
-    {
-        EventBus.Unsubscribe<OnInteractPressedEvent>(CallOnPlayerInteractEvent);
     }
 
     private int LayerMaskToLayer(LayerMask mask)

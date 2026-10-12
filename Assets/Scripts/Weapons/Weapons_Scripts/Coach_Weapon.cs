@@ -130,7 +130,6 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
                 if (playerAtkReference.IsAttacking == true)
                 {
                     currentCoachCharge += Time.deltaTime;
-                    Debug.Log(currentCoachCharge);
                 }
                 else if(playerAtkReference.IsAttacking == false && currentCoachCharge > 0)
                 {
