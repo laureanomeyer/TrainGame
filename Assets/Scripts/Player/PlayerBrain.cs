@@ -234,7 +234,7 @@ public class PlayerBrain : MonoBehaviour
 
     public void ChangeWeapon(GameObject weapon)
     {
-        playerAttackController.SetWeapon(weapon);
+        playerAttackController.ChangeWeapon(weapon);
     }
 
     private void ShowInteract(OnShowInteractEvent showInteractEvent)
