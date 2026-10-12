@@ -15,6 +15,15 @@ public class RepairIconTutorial : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (GameManager.Instance.IsTutorial)
+        {
+            EventBus.Unsubscribe<OnSetRepairIconEnabledEvent>(SetCanShow);
+            EventBus.Unsubscribe<OnShowRepairIconEvent>(HandleVisibility);
+        }
+    }
+
     private void SetCanShow(OnSetRepairIconEnabledEvent ev)
     {
         canShow = ev.Enabled;

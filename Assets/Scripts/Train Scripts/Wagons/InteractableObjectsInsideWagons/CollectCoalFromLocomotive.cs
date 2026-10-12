@@ -39,6 +39,7 @@ public class CollectCoalFromLocomotive : MonoBehaviour
     private void OnDestroy()
     {
         EventBus.Unsubscribe<OnEnableCoalBoxEvent>(Activate);
+        coalBrain.ActivateOnDestroy();
         inputHandler.Dispose();
     }
 

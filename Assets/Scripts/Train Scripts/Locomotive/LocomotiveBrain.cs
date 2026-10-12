@@ -32,9 +32,6 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     private StatSystem stats;
     private bool started = false;
 
-    private CoalCollector coalCollector;
-    public CoalCollector CoalCollector => coalCollector;
-
     public float CurrentShield => fuelController.CurrentShield;
     public float MaxShield => fuelController.MaxShield;
     public Transform Head => transform;
