@@ -123,6 +123,8 @@ public class CinematicSystem : MonoBehaviour
 
         if (sequence.returnToOrigin)
             cinematicCinemachineCamera.Priority = 0;
+        else if (sequence.trackTarget)
+            StartCoroutine(KeepTracking(camT, target, sequence)); 
 
         isPlaying = false;
         OnCinematicFinished?.Invoke();
@@ -145,6 +147,16 @@ public class CinematicSystem : MonoBehaviour
             Vector3 targetPos = new(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
             victoryThreshold.position = Vector3.Lerp(startPos, targetPos, t);
 
+            yield return null;
+        }
+    }
+
+    private IEnumerator KeepTracking(Transform camT, Transform target, CameraTravelSequenceSO sequence)
+    {
+        while (target != null)
+        {
+            Vector3 desired = target.position + sequence.worldOffsetFromTarget;
+            camT.position = CameraTravel.ApplyAxes(camT.position, desired, sequence.travelAxes);
             yield return null;
         }
     }
