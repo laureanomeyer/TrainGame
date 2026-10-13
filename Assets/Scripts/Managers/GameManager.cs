@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -215,6 +216,9 @@ public class GameManager : MonoBehaviour
 
         stateAfterTransition = nextState;
         CurrentState = GameState.Transition;
+
+        Resources.UnloadUnusedAssets();
+        GC.Collect();
 
         SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType, nextSceneCursor);    
     }
