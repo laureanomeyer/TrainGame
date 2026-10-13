@@ -338,7 +338,8 @@ public class EnemiesController : MonoBehaviour
 
     private void SpawnRequestedEnemy(OnSpawnEnemyEvent spawnEvent)
     {
-        if (spawnEvent == null || !EnsureInitialized()) return;
+        //if (spawnEvent == null || !EnsureInitialized()) return;
+        if (!EnsureInitialized()) return;
 
         Enemy enemy = SpawnEnemy(spawnEvent.Enemy, spawnEvent.Position, true);
         if (enemy == null) return;
