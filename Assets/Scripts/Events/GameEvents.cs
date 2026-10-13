@@ -2,32 +2,31 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OnGoldEarnedEvent : IGameEvent 
+public readonly struct OnGoldEarnedEvent : IGameEvent
 {
-    public float Amount; 
+    public readonly float Amount;
 
-    public OnGoldEarnedEvent(float amount) 
-    { 
+    public OnGoldEarnedEvent(float amount)
+    {
         Amount = amount;
     }
 }
 
-public class OnCoalEarnedEvent : IGameEvent
+public readonly struct OnCoalEarnedEvent : IGameEvent
 {
-    public float Amount;
-    public bool Set;
+    public readonly float Amount;
+    public readonly bool Set;
 
     public OnCoalEarnedEvent(float amount, bool Set = false)
     {
         Amount = amount;
         this.Set = Set;
     }
-
 }
 
-public class OnGoldBoxChangedEvent : IGameEvent
+public readonly struct OnGoldBoxChangedEvent : IGameEvent
 {
-    public float CurrentGold;
+    public readonly float CurrentGold;
 
     public OnGoldBoxChangedEvent(float gold)
     {
@@ -35,10 +34,10 @@ public class OnGoldBoxChangedEvent : IGameEvent
     }
 }
 
-public class OnShootEvent : IGameEvent
+public readonly struct OnShootEvent : IGameEvent
 {
-    public float RateOfFire;
-    public float ShotStrenght;
+    public readonly float RateOfFire;
+    public readonly float ShotStrenght;
 
     public OnShootEvent(float rateOfFire, float shotStrenght = 1)
     {
@@ -47,9 +46,9 @@ public class OnShootEvent : IGameEvent
     }
 }
 
-public class OnReloadEvent : IGameEvent
+public readonly struct OnReloadEvent : IGameEvent
 {
-    public float ReloadTimer;
+    public readonly float ReloadTimer;
 
     public OnReloadEvent(float reloadTime)
     {
@@ -58,9 +57,9 @@ public class OnReloadEvent : IGameEvent
     }
 }
 
-public class OnAmmoChangedEvent : IGameEvent
+public readonly struct OnAmmoChangedEvent : IGameEvent
 {
-    public float Ammunition;
+    public readonly float Ammunition;
 
     public OnAmmoChangedEvent(float ammunition)
     {
@@ -68,33 +67,26 @@ public class OnAmmoChangedEvent : IGameEvent
     }
 }
 
-public class OnShieldsBrokenEvent : IGameEvent
+public readonly struct OnShieldsBrokenEvent : IGameEvent { }
+
+public readonly struct OnCoalEmptyEvent : IGameEvent { }
+
+public readonly struct OnWagonDestroyedEvent : IGameEvent
 {
-    public OnShieldsBrokenEvent()
+    public readonly IWagon WagonInstance;
+
+    public OnWagonDestroyedEvent(IWagon wagonInstance)
     {
-        
+        WagonInstance = wagonInstance;
     }
 }
 
-public class OnCoalEmptyEvent : IGameEvent
+public readonly struct OnEnemyDeathEvent : IGameEvent
 {
-    public OnCoalEmptyEvent(){}
-}
+    public readonly UnityEngine.Vector3 Position;
+    public readonly DropType DropType;
+    public readonly float DropAmount;
 
-public class OnWagonDestroyedEvent : IGameEvent
-{
-    public IWagon WagonInstance;
-    public OnWagonDestroyedEvent(IWagon wagonInstance) 
-    {
-        this.WagonInstance = wagonInstance;
-    }
-}
-
-public class OnEnemyDeathEvent : IGameEvent
-{
-    public UnityEngine.Vector3 Position;
-    public DropType DropType;
-    public float DropAmount;
     public OnEnemyDeathEvent(UnityEngine.Vector3 position, DropType dropType, float dropAmount)
     {
         Position = position;
@@ -103,9 +95,9 @@ public class OnEnemyDeathEvent : IGameEvent
     }
 }
 
-public class OnEnemyBecameInactiveEvent : IGameEvent
+public readonly struct OnEnemyBecameInactiveEvent : IGameEvent
 {
-    public Enemy Enemy;
+    public readonly Enemy Enemy;
 
     public OnEnemyBecameInactiveEvent(Enemy enemy)
     {
@@ -113,9 +105,9 @@ public class OnEnemyBecameInactiveEvent : IGameEvent
     }
 }
 
-public class OnArcMotionEnded : IGameEvent
+public readonly struct OnArcMotionEnded : IGameEvent
 {
-    public ArcMotion ArcMotion;
+    public readonly ArcMotion ArcMotion;
 
     public OnArcMotionEnded(ArcMotion arcMotion)
     {
@@ -123,18 +115,19 @@ public class OnArcMotionEnded : IGameEvent
     }
 }
 
-public class OnGoldenWagonIsRepairedEvent : IGameEvent
+public readonly struct OnGoldenWagonIsRepairedEvent : IGameEvent
 {
-    public IWagon goldenWagonInstance;
+    public readonly IWagon goldenWagonInstance;
+
     public OnGoldenWagonIsRepairedEvent(IWagon goldenWagonInstance)
     {
         this.goldenWagonInstance = goldenWagonInstance;
     }
 }
 
-public class OnEnemyHitEvent : IGameEvent
+public readonly struct OnEnemyHitEvent : IGameEvent
 {
-    public UnityEngine.Vector3 Position;
+    public readonly UnityEngine.Vector3 Position;
 
     public OnEnemyHitEvent(UnityEngine.Vector3 position)
     {
@@ -142,9 +135,9 @@ public class OnEnemyHitEvent : IGameEvent
     }
 }
 
-public class OnActivateUiEvent : IGameEvent
+public readonly struct OnActivateUiEvent : IGameEvent
 {
-    public bool Activated;
+    public readonly bool Activated;
 
     /// <summary>
     /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
@@ -154,9 +147,10 @@ public class OnActivateUiEvent : IGameEvent
         Activated = activated;
     }
 }
-public class OnFreezePlayerEvent : IGameEvent
+
+public readonly struct OnFreezePlayerEvent : IGameEvent
 {
-    public bool Activated;
+    public readonly bool Activated;
 
     /// <summary>
     /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
@@ -167,9 +161,9 @@ public class OnFreezePlayerEvent : IGameEvent
     }
 }
 
-public class OnActivateNonPausableUI : IGameEvent
+public readonly struct OnActivateNonPausableUI : IGameEvent
 {
-    public bool Activated;
+    public readonly bool Activated;
 
     /// <summary>
     /// Poner falso para desactivar movimiento y CanAttack del jugador (por alguna razon)
@@ -180,21 +174,14 @@ public class OnActivateNonPausableUI : IGameEvent
     }
 }
 
-public class OnForceCloseAllUI : IGameEvent
+/// <summary>
+/// Fuerza cerrar todas las Ui correctamente
+/// </summary>
+public readonly struct OnForceCloseAllUI : IGameEvent { }
+
+public readonly struct OnShowCursorEvent : IGameEvent
 {
-    ///<summary>
-    ///fuerza cerrar todas las Ui correctamente
-    ///</summary>
-
-    public OnForceCloseAllUI()
-    {
-
-    }
-}
-
-public class OnShowCursorEvent : IGameEvent
-{
-    public CursorType Cursor;
+    public readonly CursorType Cursor;
 
     public OnShowCursorEvent(CursorType cursor)
     {
@@ -202,9 +189,9 @@ public class OnShowCursorEvent : IGameEvent
     }
 }
 
-public class OnShowGameplayCursorEvent : IGameEvent
+public readonly struct OnShowGameplayCursorEvent : IGameEvent
 {
-    public bool Show;
+    public readonly bool Show;
 
     public OnShowGameplayCursorEvent(bool show)
     {
@@ -212,56 +199,41 @@ public class OnShowGameplayCursorEvent : IGameEvent
     }
 }
 
-public class OnShowInteractEvent : IGameEvent
-{
-    public OnShowInteractEvent() { }
-}
+public readonly struct OnShowInteractEvent : IGameEvent { }
 
-public class OnHideInteractEvent : IGameEvent
-{
-    public OnHideInteractEvent() { }
-}
+public readonly struct OnHideInteractEvent : IGameEvent { }
 
-public class OnTakeFuelEvent : IGameEvent
-{
-    public OnTakeFuelEvent() { }
-}
+public readonly struct OnTakeFuelEvent : IGameEvent { }
 
-public class OnTakeGoldEvent : IGameEvent
-{
-    public OnTakeGoldEvent() { }
-}
+public readonly struct OnTakeGoldEvent : IGameEvent { }
 
-public class OnTakeCoalEvent : IGameEvent
-{
-    public OnTakeCoalEvent() { }
-}
+public readonly struct OnTakeCoalEvent : IGameEvent { }
 
-public class OnSetCoalWaypoint : IGameEvent
+public readonly struct OnSetCoalWaypoint : IGameEvent
 {
-    public bool Show;
+    public readonly bool Show;
 
     public OnSetCoalWaypoint(bool show)
     {
         Show = show;
     }
 }
-public class OnDeactivateFuelChargerWaypoint : IGameEvent
+
+public readonly struct OnDeactivateFuelChargerWaypoint : IGameEvent { }
+
+public readonly struct OnSetGoldWaypoint : IGameEvent
 {
-    public OnDeactivateFuelChargerWaypoint() { }
-}
-public class OnSetGoldWaypoint : IGameEvent
-{
-    public bool Show;
+    public readonly bool Show;
 
     public OnSetGoldWaypoint(bool show)
     {
         Show = show;
     }
 }
-public class OnSetGoldWagonWaypoint : IGameEvent
+
+public readonly struct OnSetGoldWagonWaypoint : IGameEvent
 {
-    public bool Show;
+    public readonly bool Show;
 
     public OnSetGoldWagonWaypoint(bool show)
     {
@@ -269,42 +241,31 @@ public class OnSetGoldWagonWaypoint : IGameEvent
     }
 }
 
-public class OnDropFuelEvent : IGameEvent
-{
-    public OnDropFuelEvent() { }
-}
+public readonly struct OnDropFuelEvent : IGameEvent { }
 
-public class OnDropGoldEvent : IGameEvent
-{
-    public OnDropGoldEvent() { }
-}
+public readonly struct OnDropGoldEvent : IGameEvent { }
 
-public class OnInteractPressedEvent : IGameEvent
-{
-    public OnInteractPressedEvent() { }
-}
+public readonly struct OnInteractPressedEvent : IGameEvent { }
 
-public class OnStatChangedEvent : IGameEvent
-{
-    public OnStatChangedEvent() { }
-}
+public readonly struct OnStatChangedEvent : IGameEvent { }
 
-public class OnSpawnEnemyEvent : IGameEvent
+public readonly struct OnSpawnEnemyEvent : IGameEvent
 {
-    public Vector3 Position;
-    public List<IWagon> List;
-    public EnemyData Enemy;
+    public readonly Vector3 Position;
+    public readonly List<IWagon> List; // En el original nunca se asignaba (siempre null). Si no lo usas en ningun lado, borralo.
+    public readonly EnemyData Enemy;
 
-    public OnSpawnEnemyEvent(Vector3 position, EnemyData enemy) 
+    public OnSpawnEnemyEvent(Vector3 position, EnemyData enemy)
     {
         Position = position;
+        List = null; // los structs obligan a asignar todos los campos en el constructor
         Enemy = enemy;
     }
 }
 
-public class OnSetAttackEnabledEvent : IGameEvent
+public readonly struct OnSetAttackEnabledEvent : IGameEvent
 {
-    public bool Can;
+    public readonly bool Can;
 
     public OnSetAttackEnabledEvent(bool can)
     {
@@ -312,9 +273,9 @@ public class OnSetAttackEnabledEvent : IGameEvent
     }
 }
 
-public class OnEnableCoalBoxEvent : IGameEvent
+public readonly struct OnEnableCoalBoxEvent : IGameEvent
 {
-    public bool Enable;
+    public readonly bool Enable;
 
     public OnEnableCoalBoxEvent(bool enable)
     {
@@ -322,9 +283,9 @@ public class OnEnableCoalBoxEvent : IGameEvent
     }
 }
 
-public class OnEnableGoldBoxEvent : IGameEvent
+public readonly struct OnEnableGoldBoxEvent : IGameEvent
 {
-    public bool Enable;
+    public readonly bool Enable;
 
     public OnEnableGoldBoxEvent(bool enable)
     {
@@ -332,14 +293,11 @@ public class OnEnableGoldBoxEvent : IGameEvent
     }
 }
 
-public class OnStartFuelUseEvent : IGameEvent
-{
-    public OnStartFuelUseEvent() { }
-}
+public readonly struct OnStartFuelUseEvent : IGameEvent { }
 
-public class OnSetCanConsumeEvent : IGameEvent
+public readonly struct OnSetCanConsumeEvent : IGameEvent
 {
-    public bool Can;
+    public readonly bool Can;
 
     public OnSetCanConsumeEvent(bool can)
     {
@@ -347,9 +305,9 @@ public class OnSetCanConsumeEvent : IGameEvent
     }
 }
 
-public class OnStartSpawningEnemiesEvent : IGameEvent
+public readonly struct OnStartSpawningEnemiesEvent : IGameEvent
 {
-    public bool Can;
+    public readonly bool Can;
 
     public OnStartSpawningEnemiesEvent(bool can)
     {
@@ -357,9 +315,9 @@ public class OnStartSpawningEnemiesEvent : IGameEvent
     }
 }
 
-public class OnSetTimerStartedEvent : IGameEvent
+public readonly struct OnSetTimerStartedEvent : IGameEvent
 {
-    public bool Can;
+    public readonly bool Can;
 
     public OnSetTimerStartedEvent(bool can)
     {
@@ -367,9 +325,9 @@ public class OnSetTimerStartedEvent : IGameEvent
     }
 }
 
-public class OnSetTutorialTextEvent : IGameEvent
+public readonly struct OnSetTutorialTextEvent : IGameEvent
 {
-    public string Text;
+    public readonly string Text;
 
     public OnSetTutorialTextEvent(string text)
     {
@@ -377,14 +335,11 @@ public class OnSetTutorialTextEvent : IGameEvent
     }
 }
 
-public class OnEnemyKilledEvent : IGameEvent
-{
-    public OnEnemyKilledEvent() { }
-}
+public readonly struct OnEnemyKilledEvent : IGameEvent { }
 
-public class OnSetTutorialVisibleEvent : IGameEvent
+public readonly struct OnSetTutorialVisibleEvent : IGameEvent
 {
-    public bool Show;
+    public readonly bool Show;
 
     public OnSetTutorialVisibleEvent(bool show)
     {
@@ -392,10 +347,11 @@ public class OnSetTutorialVisibleEvent : IGameEvent
     }
 }
 
-public class OnRunEndedEvent : IGameEvent
+public readonly struct OnRunEndedEvent : IGameEvent
 {
-    public RunResult Result;
-    public OnRunEndedEvent(RunResult result) 
+    public readonly RunResult Result;
+
+    public OnRunEndedEvent(RunResult result)
     {
         Debug.Log($"Run ended with result: {result}");
         Result = result;
@@ -404,13 +360,11 @@ public class OnRunEndedEvent : IGameEvent
 
 #region Tutorial Events
 
-public class OnShowCoalWaypointEvent: IGameEvent
+public readonly struct OnShowCoalWaypointEvent : IGameEvent { }
+
+public readonly struct OnSetTutorialEnemyTarget : IGameEvent
 {
-    public OnShowCoalWaypointEvent() { }
-}
-public class OnSetTutorialEnemyTarget : IGameEvent
-{
-    public int index;
+    public readonly int index;
 
     public OnSetTutorialEnemyTarget(int index)
     {
@@ -418,10 +372,11 @@ public class OnSetTutorialEnemyTarget : IGameEvent
     }
 }
 
-public class OnSetEnemiesFlags : IGameEvent
+public readonly struct OnSetEnemiesFlags : IGameEvent
 {
-    public bool canAttack;
-    public bool canMove;
+    public readonly bool canAttack;
+    public readonly bool canMove;
+
     public OnSetEnemiesFlags(bool canAttack = false, bool canMove = false)
     {
         this.canAttack = canAttack;
@@ -429,9 +384,9 @@ public class OnSetEnemiesFlags : IGameEvent
     }
 }
 
-public class OnSetShieldsActiveEvent: IGameEvent
+public readonly struct OnSetShieldsActiveEvent : IGameEvent
 {
-    public bool active;
+    public readonly bool active;
 
     public OnSetShieldsActiveEvent(bool active)
     {
@@ -439,35 +394,17 @@ public class OnSetShieldsActiveEvent: IGameEvent
     }
 }
 
-public class OnActivateGoldWagon: IGameEvent
-{
-    public OnActivateGoldWagon() { }
-}
-public class OnAdvanceTutorialStepByClick : IGameEvent
-{
-    public OnAdvanceTutorialStepByClick()
-    {
+public readonly struct OnActivateGoldWagon : IGameEvent { }
 
-    }
-}
-public class OnAdvanceTutorialStep : IGameEvent
-{
-    public OnAdvanceTutorialStep()
-    {
+public readonly struct OnAdvanceTutorialStepByClick : IGameEvent { }
 
-    }
-}
-public class OnSkipTutorial : IGameEvent
-{
-    public OnSkipTutorial()
-    {
+public readonly struct OnAdvanceTutorialStep : IGameEvent { }
 
-    }
-}
+public readonly struct OnSkipTutorial : IGameEvent { }
 
-public class OnSetFirstHeal: IGameEvent
+public readonly struct OnSetFirstHeal : IGameEvent
 {
-    public bool active;
+    public readonly bool active;
 
     public OnSetFirstHeal(bool active)
     {
@@ -475,42 +412,41 @@ public class OnSetFirstHeal: IGameEvent
     }
 }
 
-public class OnShowArrowImage : IGameEvent
+public readonly struct OnShowArrowImage : IGameEvent
 {
-    public bool show;
+    public readonly bool show;
+
     public OnShowArrowImage(bool show)
     {
         this.show = show;
     }
 }
-public class OnShowClickImage : IGameEvent
+
+public readonly struct OnShowClickImage : IGameEvent
 {
-    public bool show;
+    public readonly bool show;
+
     public OnShowClickImage(bool show)
     {
         this.show = show;
     }
 }
 
-public class OnTutorialTextRevealStateEvent : IGameEvent
+public readonly struct OnTutorialTextRevealStateEvent : IGameEvent
 {
-    public bool Revealing;
+    public readonly bool Revealing;
 
     public OnTutorialTextRevealStateEvent(bool revealing)
     {
         Revealing = revealing;
     }
 }
-public class OnCompleteTutorialTextEvent : IGameEvent
-{
-    public OnCompleteTutorialTextEvent()
-    {
-    }
-}
 
-public class OnSetRepairGoldWagonWaypoint : IGameEvent
+public readonly struct OnCompleteTutorialTextEvent : IGameEvent { }
+
+public readonly struct OnSetRepairGoldWagonWaypoint : IGameEvent
 {
-    public bool Show;
+    public readonly bool Show;
 
     public OnSetRepairGoldWagonWaypoint(bool show)
     {
@@ -518,170 +454,133 @@ public class OnSetRepairGoldWagonWaypoint : IGameEvent
     }
 }
 
-public class OnSetRepairIconEnabledEvent : IGameEvent
+public readonly struct OnSetRepairIconEnabledEvent : IGameEvent
 {
-    public bool Enabled;
+    public readonly bool Enabled;
 
     public OnSetRepairIconEnabledEvent(bool enabled)
     {
         Enabled = enabled;
     }
 }
-public class OnShowRepairIconEvent : IGameEvent
+
+public readonly struct OnShowRepairIconEvent : IGameEvent
 {
-    public bool Show;
+    public readonly bool Show;
 
     public OnShowRepairIconEvent(bool enabled)
     {
         Show = enabled;
     }
 }
-public class OnSetTutorialFinished : IGameEvent
-{
-    public OnSetTutorialFinished()
-    {
-    }
-}
 
-
+public readonly struct OnSetTutorialFinished : IGameEvent { }
 
 #endregion
 
 #region Player Events
-public class OnFinishPlayerInitialize : IGameEvent
-{
-    public OnFinishPlayerInitialize(){}
-}
+
+public readonly struct OnFinishPlayerInitialize : IGameEvent { }
+
 #endregion
 
 #region Weapons Events
 
 #region Wichester Events
-public class OnUpdateEnemiesDamage : IGameEvent
-{
-    public List<Enemy> Enemies;
 
-    public OnUpdateEnemiesDamage (List<Enemy> enemies)
+public readonly struct OnUpdateEnemiesDamage : IGameEvent
+{
+    public readonly List<Enemy> Enemies;
+
+    public OnUpdateEnemiesDamage(List<Enemy> enemies)
     {
-        this.Enemies = enemies;
+        Enemies = enemies;
     }
 }
 
-public class OnUpdateWinchesterLegadoLeftPoint : IGameEvent
+public readonly struct OnUpdateWinchesterLegadoLeftPoint : IGameEvent
 {
-    public int point;
+    public readonly int point;
 
     public OnUpdateWinchesterLegadoLeftPoint(int point)
     {
         this.point = point;
     }
 }
-public class OnUnlockWinchesterLegado : IGameEvent
-{
-    public OnUnlockWinchesterLegado()
-    {
-    }
-}
 
-public class OnWinchesterDetectedDeadEnemy : IGameEvent
-{
-    public OnWinchesterDetectedDeadEnemy()
-    {
-    }
-}
+public readonly struct OnUnlockWinchesterLegado : IGameEvent { }
 
+public readonly struct OnWinchesterDetectedDeadEnemy : IGameEvent { }
 
 #endregion
 
 #region Spencer Events
 
-public class OnSpencerDetectedDeadEnemy : IGameEvent
-{
-    public OnSpencerDetectedDeadEnemy()
-    {
-    }
-}
+public readonly struct OnSpencerDetectedDeadEnemy : IGameEvent { }
 
-public class OnUpdatedSpencerLegado : IGameEvent
-{
-    public OnUpdatedSpencerLegado()
-    {
-    }
-}
+public readonly struct OnUpdatedSpencerLegado : IGameEvent { }
 
-public class OnUnlockSpencerLegado : IGameEvent
-{
-    public OnUnlockSpencerLegado()
-    {
-    }
-}
+public readonly struct OnUnlockSpencerLegado : IGameEvent { }
 
 #endregion
 
 #region Coach Events
 
-public class OnCoachDetectedDeadEnemy : IGameEvent
+public readonly struct OnCoachDetectedDeadEnemy : IGameEvent
 {
-    public int point;
+    public readonly int point;
+
     public OnCoachDetectedDeadEnemy(int point)
     {
         this.point = point;
     }
 }
 
-public class OnUpdatedCoachLegado : IGameEvent
-{
-    public OnUpdatedCoachLegado()
-    {
-    }
-}
+public readonly struct OnUpdatedCoachLegado : IGameEvent { }
 
-public class OnUnlockCoachLegado : IGameEvent
-{
-    public OnUnlockCoachLegado()
-    {
-    }
-}
+public readonly struct OnUnlockCoachLegado : IGameEvent { }
 
 #endregion
 
 #region Colt Events
 
-public class OnColtDetectedDeadEnemy : IGameEvent
+public readonly struct OnColtDetectedDeadEnemy : IGameEvent
 {
-    public int point;
+    public readonly int point;
+
     public OnColtDetectedDeadEnemy(int point)
     {
         this.point = point;
     }
 }
 
-public class OnUpdatedColtLegado : IGameEvent
-{
-    public OnUpdatedColtLegado()
-    {
-    }
-}
+public readonly struct OnUpdatedColtLegado : IGameEvent { }
 
-public class OnUnlockColtLegado : IGameEvent
-{
-    public OnUnlockColtLegado()
-    {
-    }
-}
+public readonly struct OnUnlockColtLegado : IGameEvent { }
 
 #endregion
 
 #endregion
 
 #region Wagon Events
-public class OnFinishBuildTrain : IGameEvent
+
+public readonly struct OnFinishBuildTrain : IGameEvent
 {
-    public List<WagonBrain> wagonBrains;
+    public readonly List<WagonBrain> wagonBrains;
 
     public OnFinishBuildTrain(List<WagonBrain> wagonBrains)
     {
         this.wagonBrains = wagonBrains;
     }
 }
+
 #endregion
+
+public readonly struct OnWagonAddedToDisplayEvent : IGameEvent
+{
+    public readonly string AnchorKey;
+    public OnWagonAddedToDisplayEvent(string anchorKey)
+    {
+        AnchorKey = anchorKey;
+    }
+}

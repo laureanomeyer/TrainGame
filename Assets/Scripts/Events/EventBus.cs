@@ -1,41 +1,78 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
+public interface IGameEvent { }
 public static class EventBus
 {
-    private static readonly Dictionary<Type, List<Delegate>> subs = new();
+    public static void Subscribe<T>(Action<T> handler) where T : struct, IGameEvent
+        => EventBus<T>.Subscribe(handler);
 
-    public static void Subscribe<T>(Action<T> handler) where T : IGameEvent
+    public static void Unsubscribe<T>(Action<T> handler) where T : struct, IGameEvent
+        => EventBus<T>.Unsubscribe(handler);
+
+    public static void Publish<T>(in T ev) where T : struct, IGameEvent
+        => EventBus<T>.Publish(in ev);
+
+    // Para limpiar entre sesiones de Play (si tienes Domain Reload desactivado)
+    internal static readonly List<Action> clearActions = new();
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetAll()
     {
-       Type t = typeof(T);
-       if (!subs.TryGetValue(t, out List<Delegate> list))
-       {
-            list = new();
-            subs[t] = list;
-       }
-       list.Add(handler);
+        foreach (var clear in clearActions) clear();
+    }
+}
+
+internal static class EventBus<T> where T : struct, IGameEvent
+{
+    private static readonly List<Action<T>> handlers = new();
+    private static int publishDepth;
+    private static bool hasNulls;
+
+    static EventBus()
+    {
+        EventBus.clearActions.Add(() =>
+        {
+            handlers.Clear();
+            publishDepth = 0;
+            hasNulls = false;
+        });
     }
 
-    public static void Unsubscribe<T>(Action<T> handler) where T : IGameEvent
+    public static void Subscribe(Action<T> handler) => handlers.Add(handler);
+
+    public static void Unsubscribe(Action<T> handler)
     {
-        Type t = typeof(T);
-        if (subs.TryGetValue(t, out List<Delegate> list))
+        int i = handlers.IndexOf(handler);
+        if (i < 0) return;
+
+        if (publishDepth > 0)
         {
-            list.Remove(handler);
-            if (list.Count == 0) subs.Remove(t);
+            handlers[i] = null;   // no alteramos índices mientras se itera
+            hasNulls = true;
+        }
+        else
+        {
+            handlers.RemoveAt(i);
         }
     }
 
-    public static void Publish<T>(T ev) where T : IGameEvent 
+    public static void Publish(in T ev)
     {
-        Type t = typeof(T);
-        if(subs.TryGetValue(t,out List<Delegate> list))
+        publishDepth++;
+        int count = handlers.Count; // los que se suscriban durante el Publish no se disparan en este
+        for (int i = 0; i < count; i++)
         {
-            Delegate[] copy = list.ToArray();
-            foreach (var d in copy)
-            {
-                ((Action<T>)d)(ev);
-            }
+            try { handlers[i]?.Invoke(ev); }
+            catch (Exception e) { Debug.LogException(e); }
+        }
+        publishDepth--;
+
+        if (publishDepth == 0 && hasNulls)
+        {
+            handlers.RemoveAll(h => h == null);
+            hasNulls = false;
         }
     }
 }

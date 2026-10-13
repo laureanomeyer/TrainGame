@@ -6,57 +6,56 @@ public static class ServiceLocator
 {
     private static Dictionary<Type, object> services = new();
 
-    public static void Register<T>(T service)
+    public static void Register<T>(T service) where T : class
     {
-        Type type = typeof(T);
-
-        if (services.ContainsKey(type))
-        {
-            services[type] = service;
-            return;
-        }
-
-        services.Add(type, service);
+        services[typeof(T)] = service;
     }
 
-    public static T Get<T>()
+    public static T Get<T>() where T : class
     {
-        Type type = typeof(T);
+        if (TryGet(out T service))
+            return service;
 
-        if (services.TryGetValue(type, out object service))
-        {
-            return (T)service;
-        }
-
-        throw new Exception($"Service of type {type} not registered.");
+        throw new Exception($"Service of type {typeof(T)} not registered (or was destroyed).");
     }
 
-    public static bool TryGet<T>(out T service)
+    public static bool TryGet<T>(out T service) where T : class
     {
         Type type = typeof(T);
 
-        if (services.TryGetValue(type, out object foundService))
+        if (services.TryGetValue(type, out object found))
         {
-            service = (T)foundService;
+            // Detecta "fake null" de objetos de Unity destruidos
+            if (found is UnityEngine.Object unityObj && unityObj == null)
+            {
+                services.Remove(type);
+                service = null;
+                return false;
+            }
+
+            service = (T)found;
             return true;
         }
 
-        service = default;
+        service = null;
         return false;
     }
 
-    public static void Unregister<T>()
+    public static void Unregister<T>() where T : class
+    {
+        services.Remove(typeof(T));
+    }
+
+    public static void Unregister<T>(T service) where T : class
     {
         Type type = typeof(T);
 
-        if (services.ContainsKey(type))
-        {
+        if (services.TryGetValue(type, out object current) && ReferenceEquals(current, service))
             services.Remove(type);
-        }
     }
 
     public static void Clear()
     {
-        services = new Dictionary<Type, object>();
+        services.Clear();
     }
 }
