@@ -13,6 +13,12 @@ public static class CameraTravel
         );
     }
 
+    public static float Duration(float distance, float speed, float min, float max)
+    {
+        if (speed <= 0f) return max;
+        return Mathf.Clamp(distance / speed, min, max);
+    }
+
     public static IEnumerator Move(
         Transform camT,
         Vector3 fromPos,
@@ -24,31 +30,94 @@ public static class CameraTravel
         TravelAxis axes,
         Action<float> onTick = null)
     {
-        Vector3 destination = ApplyAxes(fromPos, destinationProvider(), axes);
-        Quaternion destinationRot = rotationProvider();
-
-        float elapsed = 0f;
-
-        while (elapsed < duration)
+        if (duration > 0f)
         {
-            elapsed += Time.deltaTime;
+            float elapsed = 0f;
 
-            float t = curve.Evaluate(Mathf.Clamp01(elapsed / duration));
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
 
-            destination = ApplyAxes(fromPos, destinationProvider(), axes);
-            destinationRot = rotationProvider();
+                float raw = Mathf.Clamp01(elapsed / duration);
+                float t = curve != null ? curve.Evaluate(raw) : raw;
 
-            camT.SetPositionAndRotation(
-                Vector3.Lerp(fromPos, destination, t),
-                Quaternion.Slerp(fromRot, destinationRot, t)
-            );
+                Vector3 destination = ApplyAxes(fromPos, destinationProvider(), axes);
+                Quaternion destinationRot = rotationProvider();
 
-            onTick?.Invoke(t);
+                camT.SetPositionAndRotation(
+                    Vector3.Lerp(fromPos, destination, t),
+                    Quaternion.Slerp(fromRot, destinationRot, t));
 
-            yield return null;
+                onTick?.Invoke(t);
+                yield return null;
+            }
         }
 
-        camT.SetPositionAndRotation(destination, destinationRot);
+        camT.SetPositionAndRotation(ApplyAxes(fromPos, destinationProvider(), axes), rotationProvider());
         onTick?.Invoke(1f);
+    }
+
+    public static IEnumerator PlaySequence(
+        Transform camT,
+        CameraTravelSequenceSO seq,
+        Transform target,
+        Transform returnTo,
+        Action<float> approachTick = null,
+        Action<float> returnTick = null)
+    {
+        Vector3 fromPos = camT.position;
+        Quaternion fromRot = camT.rotation;
+
+        Vector3 fixedDest = target.position + seq.worldOffsetFromTarget;
+
+        Func<Vector3> destination = seq.trackTarget
+            ? () => target != null ? target.position + seq.worldOffsetFromTarget : fixedDest
+            : () => fixedDest;
+
+        Func<Quaternion> rotation = BuildRotation(seq, target, camT, fromRot);
+
+        float approachDistance = Vector3.Distance(fromPos, ApplyAxes(fromPos, fixedDest, seq.travelAxes));
+        float approachDuration = Duration(approachDistance, seq.travelSpeed, seq.minTravelDuration, seq.maxTravelDuration);
+
+        yield return Move(camT, fromPos, fromRot, destination, rotation,
+            approachDuration, seq.travelCurve, seq.travelAxes, approachTick);
+
+        if (seq.holdDuration > 0f)
+            yield return new WaitForSeconds(seq.holdDuration);
+
+        if (!seq.returnToOrigin || returnTo == null) yield break;
+
+        Vector3 holdPos = camT.position;
+        Quaternion holdRot = camT.rotation;
+
+        float returnDistance = Vector3.Distance(holdPos, returnTo.position);
+        float returnDuration = Duration(returnDistance, seq.returnSpeed, seq.minReturnDuration, seq.maxReturnDuration);
+
+
+        yield return Move(camT, holdPos, holdRot,
+            () => returnTo.position, () => returnTo.rotation,
+            returnDuration, seq.returnCurve, TravelAxis.All, returnTick);
+    }
+
+    private static Func<Quaternion> BuildRotation(
+        CameraTravelSequenceSO seq, Transform target, Transform camT, Quaternion fallback)
+    {
+        if (seq.useFixedRotation)
+        {
+            Quaternion fixedRot = Quaternion.Euler(seq.fixedEulerRotation);
+            return () => fixedRot;
+        }
+
+        if (seq.lookAtTarget)
+        {
+            return () =>
+            {
+                if (target == null) return camT.rotation;
+                Vector3 dir = target.position - camT.position;
+                return dir.sqrMagnitude > 0.0001f ? Quaternion.LookRotation(dir) : camT.rotation;
+            };
+        }
+
+        return () => fallback;
     }
 }

@@ -28,11 +28,7 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private float thresholdTailOffset = 200f;
     [SerializeField] private float thresholdRetreatDuration = 2f;
 
-
-
     private ICinematicActorRegistry registry;
-    private Transform cinematicTransform;
-    private Coroutine activeRoutine;
     private bool isPlaying;
 
     private void Awake()
@@ -43,35 +39,23 @@ public class CinematicSystem : MonoBehaviour
             gameplayCinemachineCamera.Priority = gameplayPriority;
 
         if (cinematicCinemachineCamera != null)
-        {
             cinematicCinemachineCamera.Priority = 0;
-            cinematicTransform = cinematicCinemachineCamera.transform;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (activeRoutine != null)
-            StopCoroutine(activeRoutine);
     }
 
     public void CinematicPlay(RunResult result)
     {
         if (isPlaying) return;
 
-        CameraTravelSequenceSO sequence =
-            result == RunResult.Defeat ? defeatSequence : victorySequence;
-
+        CameraTravelSequenceSO sequence = result == RunResult.Defeat ? defeatSequence : victorySequence;
         string anchorKey = result == RunResult.Defeat ? locomotiveAnchorKey : tailAnchorKey;
 
         if (!TryValidate(sequence, anchorKey, out Transform target))
         {
-
             OnCinematicFinished?.Invoke();
             return;
         }
 
-        activeRoutine = StartCoroutine(CinematicRoutine(sequence, target, result));
+        StartCoroutine(CinematicRoutine(sequence, target, result));
     }
 
     private bool TryValidate(CameraTravelSequenceSO sequence, string anchorKey, out Transform target)
@@ -93,7 +77,6 @@ public class CinematicSystem : MonoBehaviour
         if (registry != null && registry.TryResolveDynamic(anchorKey, out target))
             return true;
 
-   
         if (anchorKey == tailAnchorKey && RunManager.Instance != null && RunManager.Instance.TrainTail != null)
         {
             target = RunManager.Instance.TrainTail;
@@ -109,114 +92,57 @@ public class CinematicSystem : MonoBehaviour
         isPlaying = true;
 
         if (result == RunResult.Victory && victoryThreshold != null)
-        {
             StartCoroutine(ThresholdRetreat(target));
-        }
 
-        Transform mainCameraTransform = Camera.main.transform;
-        cinematicTransform.SetPositionAndRotation(
-            mainCameraTransform.position,
-            mainCameraTransform.rotation);
+        Transform camT = cinematicCinemachineCamera.transform;
+        Transform live = Camera.main != null ? Camera.main.transform : gameplayCinemachineCamera.transform;
+        camT.SetPositionAndRotation(live.position, live.rotation);
 
-        Vector3 originPos = cinematicTransform.position;
-        Quaternion originRot = cinematicTransform.rotation;
 
-        Vector3 fixedDestination = target.position + sequence.worldOffsetFromTarget;
+        float gameplayFov = gameplayCinemachineCamera.Lens.FieldOfView;
+        cinematicCinemachineCamera.Lens.FieldOfView = gameplayFov;
 
-        Func<Vector3> destinationProvider = sequence.trackTarget
-            ? () => target.position + sequence.worldOffsetFromTarget
-            : () => fixedDestination;
+        Action<float> approachTick = null;
+        Action<float> returnTick = null;
 
-        Func<Quaternion> rotationProvider;
-
-        if (sequence.useFixedRotation)
+        if (sequence.useFOVZoom)
         {
-            Quaternion fixedRot = Quaternion.Euler(sequence.fixedEulerRotation);
-            rotationProvider = () => fixedRot;
-        }
-        else if (sequence.lookAtTarget)
-        {
-            rotationProvider = () => Quaternion.LookRotation(target.position - cinematicTransform.position);
-        }
-        else
-        {
-            rotationProvider = () => originRot;
-        }
+            approachTick = t => cinematicCinemachineCamera.Lens.FieldOfView =
+                Mathf.Lerp(gameplayFov, sequence.endFov, t);
 
-        float distance = Vector3.Distance(
-            originPos,
-            CameraTravel.ApplyAxes(originPos, fixedDestination, sequence.travelAxes));
-
-        float travelDuration = Mathf.Clamp(
-            distance / sequence.travelSpeed,
-            sequence.minTravelDuration,
-            sequence.maxTravelDuration);
+            returnTick = t => cinematicCinemachineCamera.Lens.FieldOfView =
+                Mathf.Lerp(sequence.endFov, gameplayCinemachineCamera.Lens.FieldOfView, t);
+        }
 
         cinematicCinemachineCamera.Priority = cinematicPriority;
 
-        Action<float> fovTick = null;
-        if (sequence.useFOVZoom)
-        {
-            float actualStartFOV = gameplayCinemachineCamera.Lens.FieldOfView; 
-            cinematicCinemachineCamera.Lens.FieldOfView = actualStartFOV;
-            fovTick = t => cinematicCinemachineCamera.Lens.FieldOfView =
-                Mathf.Lerp(actualStartFOV, sequence.endFov, t);
-        }
-
-        yield return CameraTravel.Move(
-            cinematicTransform, originPos, originRot,
-            destinationProvider, rotationProvider,
-            travelDuration, sequence.travelCurve, sequence.travelAxes, fovTick);
-
-        
-
-        if (sequence.holdDuration > 0f)
-            yield return new WaitForSeconds(sequence.holdDuration);
+        yield return CameraTravel.PlaySequence(
+            camT, sequence, target, gameplayCinemachineCamera.transform, approachTick, returnTick);
 
         if (sequence.returnToOrigin)
-        {
-            Vector3 currentPos = cinematicTransform.position;
-            Quaternion currentRot = cinematicTransform.rotation;
-
-            yield return CameraTravel.Move(
-                cinematicTransform, currentPos, currentRot,
-                () => originPos, () => originRot,
-                travelDuration, sequence.returnCurve, TravelAxis.All);
-
             cinematicCinemachineCamera.Priority = 0;
-        }
 
         isPlaying = false;
-        activeRoutine = null;
-
         OnCinematicFinished?.Invoke();
     }
 
     private IEnumerator ThresholdRetreat(Transform tailTarget)
     {
         Vector3 startPos = victoryThreshold.position;
-
         float timer = 0f;
-        while (timer < thresholdRetreatDuration)
+
+        while (timer < thresholdRetreatDuration && tailTarget != null)
         {
             timer += Time.deltaTime;
-            float t = timer / thresholdRetreatDuration;
+            float t = Mathf.Clamp01(timer / thresholdRetreatDuration);
 
-            Vector3 currentTargetPos = new Vector3(
-                tailTarget.position.x - thresholdTailOffset,
-                startPos.y,
-                startPos.z);
-
-            victoryThreshold.position = Vector3.Lerp(startPos, currentTargetPos, t);
+            Vector3 targetPos = new(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
+            victoryThreshold.position = Vector3.Lerp(startPos, targetPos, t);
 
             yield return null;
         }
 
-        Vector3 finalTargetPos = new Vector3(
-            tailTarget.position.x - thresholdTailOffset,
-            startPos.y,
-            startPos.z);
-
-        victoryThreshold.position = finalTargetPos;
+        if (tailTarget != null)
+            victoryThreshold.position = new Vector3(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
     }
 }

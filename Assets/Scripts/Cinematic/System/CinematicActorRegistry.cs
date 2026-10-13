@@ -7,7 +7,14 @@ public class CinematicActorRegistry : ICinematicActorRegistry
 
     public void RegisterDynamic(string key, Transform actor) => _dynamicActors[key] = actor;
     public void UnregisterDynamic(string key) => _dynamicActors.Remove(key);
-    public bool TryResolveDynamic(string key, out Transform actor) => _dynamicActors.TryGetValue(key, out actor);
 
+    public bool TryResolveDynamic(string key, out Transform actor)
+    {
+        if (_dynamicActors.TryGetValue(key, out actor) && actor != null)
+            return true;
 
+        _dynamicActors.Remove(key);
+        actor = null;
+        return false;
+    }
 }
