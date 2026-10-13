@@ -27,6 +27,8 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private Transform victoryThreshold;
     [SerializeField] private float thresholdTailOffset = 200f;
     [SerializeField] private float thresholdRetreatDuration = 2f;
+    [Tooltip("Scripts que mueven el threshold durante la run. Se desactivan al empezar la cinemática de victoria.")]
+    [SerializeField] private Behaviour[] thresholdMoversToDisable;
 
     private ICinematicActorRegistry registry;
     private bool isPlaying;
@@ -128,21 +130,22 @@ public class CinematicSystem : MonoBehaviour
 
     private IEnumerator ThresholdRetreat(Transform tailTarget)
     {
+
+        foreach (var mover in thresholdMoversToDisable)
+            if (mover != null) mover.enabled = false;
+
         Vector3 startPos = victoryThreshold.position;
         float timer = 0f;
 
-        while (timer < thresholdRetreatDuration && tailTarget != null)
+        while (tailTarget != null)
         {
             timer += Time.deltaTime;
-            float t = Mathf.Clamp01(timer / thresholdRetreatDuration);
+            float t = thresholdRetreatDuration > 0f ? Mathf.Clamp01(timer / thresholdRetreatDuration) : 1f;
 
             Vector3 targetPos = new(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
             victoryThreshold.position = Vector3.Lerp(startPos, targetPos, t);
 
             yield return null;
         }
-
-        if (tailTarget != null)
-            victoryThreshold.position = new Vector3(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
     }
 }

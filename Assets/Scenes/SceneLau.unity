@@ -238,7 +238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5cb8c07da99fa6f4d9e617b30ae15612, type: 3}
       propertyPath: m_Name
-      value: Intervalo_Separado
+      value: WinThreshold
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5cb8c07da99fa6f4d9e617b30ae15612, type: 3}
       propertyPath: m_Layer
@@ -614,7 +614,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 70
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -640,8 +640,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 498928606}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5811235, y: 0, z: 0, w: 0.8138154}
-  m_LocalPosition: {x: -19.640001, y: 48.5, z: -22.86}
+  m_LocalRotation: {x: -0.2122156, y: -0.18399742, z: 0.040745944, w: -0.9588792}
+  m_LocalPosition: {x: 60.149643, y: 183.95714, z: -252.10251}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1569,6 +1569,7 @@ MonoBehaviour:
   victoryThreshold: {fileID: 149905227}
   thresholdTailOffset: 200
   thresholdRetreatDuration: 3
+  thresholdMoversToDisable: []
 --- !u!4 &995500814
 Transform:
   m_ObjectHideFlags: 0
