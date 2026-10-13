@@ -3,14 +3,6 @@ using UnityEngine;
 
 #region EnemyStates
 
-public enum EnemyState
-{
-    EnemyHealthState,
-    EnemyMovementState,
-    EnemyAttackState
-
-}
-
 public enum EnemyHealthState
 {
     Normal,
@@ -69,7 +61,7 @@ public class Enemy : MonoBehaviour
     public Rigidbody rb;
     public float Speed => data.movement.speed;
     public float MaxHealth => data.health;
-    public float Damage => data.damage;
+    public float Damage {get ; private set;}
     public float Cooldown => data.attackCooldown;
     public DropType Drop => data.drop;
     public IWagon TargetWagon => targetWagon;
@@ -167,6 +159,7 @@ public class Enemy : MonoBehaviour
         currentHealth = MaxHealth;
         skillCooldownTimer = Skill.Cooldown;
         attackCooldownTimer = data.attackCooldown;
+        Damage = data.damage;
 
         Movement.Begin(this);
 
@@ -179,6 +172,7 @@ public class Enemy : MonoBehaviour
         if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
 
         healthBar.ShowArmor(HealthState == EnemyHealthState.Armored);
+        healthBar.ShowBuff(AttackState == EnemyAttackState.Buffed);
 
         PlayIdleAnimation();
 
@@ -230,27 +224,21 @@ public class Enemy : MonoBehaviour
     public void SetAtTarget(bool atTarget)
     {
         if (movementState == EnemyMovementState.Losing) return;
-
         ChangeState(atTarget ? EnemyMovementState.Waiting : EnemyMovementState.Moving);
     }
 
-    public void BeginLosing()
+    public void AddDamage(float damageIncrease)
     {
-        ChangeState(EnemyMovementState.Losing);
+        Damage =+ damageIncrease;
     }
-
     void Update()
     {
         if (healthState == EnemyHealthState.Dead) return;
-
-
         attackCooldownTimer -= Time.deltaTime;
         skillCooldownTimer -= Time.deltaTime;
         Attack?.Attack(this);
         Attack?.Skill(this);
-
     }
-
     void FixedUpdate()
     {
         if (HealthState == EnemyHealthState.Dead) return;
@@ -275,13 +263,10 @@ public class Enemy : MonoBehaviour
             targetWagon = Brain.ReTarget(ev.WagonInstance);
         }
     }
-
     public void ChangeMovement(OnRunEndedEvent ev)
     {
         Movement = endMovement;
     }
-
-
     #endregion
 
     #region Animations
@@ -396,22 +381,10 @@ public class Enemy : MonoBehaviour
         if (healthBar != null)
         { healthBar.Hide(); }
         //flash.ResetMaterials();
-        SpawnDrop();
+        Skill.Stop(this);
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop, data.dropAmount));
         EventBus.Publish(new OnEnemyKilledEvent());
         StartCoroutine(ReturnAfterDeathAnimation());
-    }
-
-    void SpawnDrop()
-    {
-        if (Drop == DropType.Coal)
-        {
-            EventBus.Publish(new OnCoalEarnedEvent(data.dropAmount));
-        }
-        else if (Drop == DropType.Gold)
-        {
-            EventBus.Publish(new OnGoldEarnedEvent(data.dropAmount));
-        }
     }
 
     void PlayDeathSound()

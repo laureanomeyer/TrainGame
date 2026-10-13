@@ -54,10 +54,8 @@ public  class EnemyBrainSO : ScriptableObject
     {
         if (wagon == null || wagon.Head == null)
             return false;
-
         if (wagon is WagonBrain wagonBrain && wagonBrain.HPController != null)
             return !wagonBrain.HPController.IsBroken;
-
         return true;
     }
 
@@ -71,4 +69,19 @@ public  class EnemyBrainSO : ScriptableObject
         enemy.HealthBar.ShowArmor(true);
         enemy.ChangeState(EnemyHealthState.Armored);
     }
+
+    public void AddBuff(Enemy enemy, float buffAmount)
+    {
+        enemy.HealthBar.ShowBuff(true);
+        enemy.ChangeState(EnemyAttackState.Buffed);
+        enemy.AddDamage(buffAmount);
+    }
+
+    public void DeBuff(Enemy enemy, float buffDecrease)
+    {
+        enemy.HealthBar.ShowBuff(false);
+        enemy.ChangeState(EnemyAttackState.Normal);
+        enemy.AddDamage(-buffDecrease);
+    }
+
 }

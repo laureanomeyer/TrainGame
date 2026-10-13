@@ -5,6 +5,7 @@ public enum SkillType
     None,
     Dynamite,
     Armor,
+    LeaderBuff
 }
 
 [CreateAssetMenu(fileName = "EnemySkillSO", menuName = "Enemy/Skill")]
@@ -35,6 +36,10 @@ public class EnemySkillSO : ScriptableObject
             case SkillType.Armor:
                 if (!(skill is ArmorSkill))
                     skill = new ArmorSkill();
+                break;
+            case SkillType.LeaderBuff:
+                if (!(skill is LeaderBuff))
+                    skill = new LeaderBuff();
                 break;
         }
     }

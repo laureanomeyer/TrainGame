@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 560399c98d2792940b934d1bf9b3106b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationsContainer
-  cowboyAnimator: {fileID: 0}
-  horseAnimator: {fileID: 0}
+  cowboyAnimator: {fileID: 5421122026223429388}
+  horseAnimator: {fileID: 5421122026223429388}
 --- !u!1001 &8757854831218653497
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -102,8 +102,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 524971aed225333428d36aca768740c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5421122026223429388}
   m_SourcePrefab: {fileID: 100100000, guid: 524971aed225333428d36aca768740c8, type: 3}
+--- !u!1 &8451936264222196840 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 524971aed225333428d36aca768740c8, type: 3}
+  m_PrefabInstance: {fileID: 8757854831218653497}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5421122026223429388
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451936264222196840}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 92e3a00db82e81d46b8a9ae3c5c8377b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &9079432685268803282 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 524971aed225333428d36aca768740c8, type: 3}

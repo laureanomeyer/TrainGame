@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5efb091a6448a70488ed797db4b66b21, type: 3}
+  m_Name: dataLeader
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyData
+  health: 10
+  damage: 0
+  attackCooldown: 1e+16
+  rangeType: 35
+  targetPreference: 0
+  drop: 0
+  dropAmount: 5
+  enemyMesh: {fileID: 0}
+  horseMesh: {fileID: 0}
+  visualPrefab: {fileID: 5113390066783062618, guid: a151beaff4d813644b23b6b1e105b379, type: 3}
+  material:
+  - {fileID: 2100000, guid: 45ca166e52e773448b94efd5439a1b2d, type: 2}
+  attack: {fileID: 11400000, guid: 0b5dd61ef6313854a8982fc85535fdc8, type: 2}
+  brain: {fileID: 11400000, guid: e7a7801ad1a79d04e968e81d22d36bf0, type: 2}
+  movement: {fileID: 11400000, guid: 1f2d9c8cb5a71704fb12a4c0c7ecfac8, type: 2}
+  skill: {fileID: 11400000, guid: ca36a41144e1f7d4aa2d1e9bc1cf1ece, type: 2}
+  animation: {fileID: 11400000, guid: 7a7b69b07cb8a004c98093a04c19385d, type: 2}

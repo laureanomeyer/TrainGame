@@ -5,6 +5,7 @@ public class EnemyUIHpBar : MonoBehaviour
 {
     [SerializeField] private Image hpBarFill;
     [SerializeField] private Image ArmorBarFill;
+    [SerializeField] private Image BuffIcon;
 
     [SerializeField] private Canvas canvas;
 
@@ -39,6 +40,13 @@ public class EnemyUIHpBar : MonoBehaviour
         if (ArmorBarFill != null)
         {
             ArmorBarFill.enabled = show;
+        }
+    }
+    public void ShowBuff(bool show)
+    {
+        if (BuffIcon != null)
+        {
+            BuffIcon.enabled = show;
         }
     }
 
