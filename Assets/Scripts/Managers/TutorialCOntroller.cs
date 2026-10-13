@@ -306,6 +306,7 @@ public class TutorialController : MonoBehaviour
     private void FinishTutorial()
     {
         if (finished) return;
+        if(GameManager.Instance.IsTransitioning) return;
         finished = true;
 
         EventBus.Publish(new OnFreezePlayerEvent(true));
