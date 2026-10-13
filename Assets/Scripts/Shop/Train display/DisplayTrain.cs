@@ -1,11 +1,20 @@
-﻿using System.Collections.Generic;
-using DG.Tweening;
+﻿using DG.Tweening;
+using System.Collections.Generic;
+using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class DisplayTrain : MonoBehaviour
 {
     [SerializeField] private Transform currentTail;
+
+    [Header("Spawning Floor")]
+    [SerializeField] private GameObject floorTile;
+    [SerializeField] private Transform lastEndTileConector;
+    [SerializeField] private int numOfWagonsPerTile = 4;
+    private List<GameObject> floorTiles;
+    private int numberOfTiles = 0;
 
     [Header("Wagon Spacing")]
     [SerializeField] private float wagonGap = -0.6f;
@@ -36,7 +45,6 @@ public class DisplayTrain : MonoBehaviour
     private Dictionary<string, WagonInStockSO> soLookup;
 
     private LinkedList<IWagonID> wagonList;
-
 
     private readonly List<ShopWagonData> slots = new();
 
@@ -404,4 +412,22 @@ public class DisplayTrain : MonoBehaviour
     #endregion
 
     public List<IWagonID> ChangeWagonIDList() => new List<IWagonID>(wagonList);
+
+    private void SpawnTile()
+    {
+        GameObject spawnTile = Instantiate(floorTile, lastEndTileConector.position, lastEndTileConector.rotation);
+
+        lastEndTileConector = spawnTile.GetComponent<ShopTileData>().endingPoint;
+
+        floorTiles.Add(spawnTile);
+
+        numberOfTiles++;
+
+        Debug.Log("Spawn Tile");
+    }
+
+    private void CalculateTilesToSpawn(int numberOfWagons)
+    {
+
+    }
 }
