@@ -5,4 +5,5 @@ public static class ParticleGroups
     public const string Locomotive2Destroy = "locomotive2Destroy";
     public const string ChimneySound = "ChimneySound";
     public const string LegacyUnlocked = "LegacyUnlocked";
+    public const string ShootParticles = "shootParticles";
 }

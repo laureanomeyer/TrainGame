@@ -80,7 +80,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParticleSequenceController
   particles:
   - id: shotParticles
-    group: 
+    group: shootParticles
     particle: {fileID: 0}
     visualEffect: {fileID: 7506581323540731194}
     delay: 0
@@ -102,7 +102,14 @@ MonoBehaviour:
             m_StringArgument: SFXDefaultShot
             m_BoolArgument: 0
           m_CallState: 2
-  groups: []
+  groups:
+  - group: shootParticles
+    staggerInterval: 0
+    delayBeforeGroup: 0
+    onGroupStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    nextGroup: 
 --- !u!1 &7521964503697339604
 GameObject:
   m_ObjectHideFlags: 0
@@ -212,7 +219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.size
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.size
@@ -220,15 +227,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Name
-      value: DragForImpact
+      value: MaxParticleSpeed
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[1].m_Name
-      value: Amount
+      value: DragForImpact
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[2].m_Name
-      value: MaxParticleSpeed
+      value: Amount
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[3].m_Name
+      value: Direction
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Name
+      value: Radius
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[5].m_Name
+      value: Spread
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Value
@@ -236,11 +255,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[1].m_Value
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[2].m_Value
-      value: 7
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[3].m_Value
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Value
+      value: 0.009
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[5].m_Value
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[0].m_Overridden
@@ -252,6 +283,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[2].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[3].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[4].m_Overridden
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
+      propertyPath: m_PropertySheet.m_Float.m_Array.Array.data[5].m_Overridden
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
@@ -280,31 +323,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[0].time
-      value: 0.054660797
+      value: 0.020145416
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[1].time
-      value: 1.0083313
+      value: 0.9847752
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[0].value
-      value: 1.0009842
+      value: 0.48756027
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[1].value
-      value: 0.0071411133
+      value: 0.019715797
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[0].inSlope
-      value: -1.0421242
+      value: -0.484999
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[1].inSlope
-      value: -1.0421242
+      value: -0.484999
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[0].outSlope
-      value: -1.0421242
+      value: -0.484999
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[1].inWeight
@@ -312,7 +355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[1].outSlope
-      value: -1.0421242
+      value: -0.484999
       objectReference: {fileID: 0}
     - target: {fileID: 5362511054453071082, guid: cda6ce138aee90c40892024d7a2a32db, type: 3}
       propertyPath: m_PropertySheet.m_AnimationCurve.m_Array.Array.data[0].m_Value.m_Curve.Array.data[0].outWeight

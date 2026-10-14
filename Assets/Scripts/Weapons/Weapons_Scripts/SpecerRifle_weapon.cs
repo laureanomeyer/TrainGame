@@ -127,7 +127,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         currentBulletUse.Damage = damage;
         BulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, currentBulletUse);
 
-        sequenceController.Play("shotParticles");
+        sequenceController.PlayGroup(ParticleGroups.ShootParticles);
 
         CurrentAmmunition -= 1;
 

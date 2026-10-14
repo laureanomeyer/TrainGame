@@ -101,7 +101,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         bulletPool.ShootObject(weaponSpawnPoint.position, weaponSpawnPoint.rotation, bulletData);
 
-        sequenceController.Play("shotParticles");
+        sequenceController.PlayGroup(ParticleGroups.ShootParticles);
 
         CurrentAmmunition -= 1;
 
