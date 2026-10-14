@@ -13,8 +13,7 @@ public class DisplayTrain : MonoBehaviour
     [SerializeField] private GameObject floorTile;
     [SerializeField] private Transform lastEndTileConector;
     [SerializeField] private int numOfWagonsPerTile = 4;
-    private List<GameObject> floorTiles;
-    private int numberOfTiles = 0;
+    private List<GameObject> floorTiles = new List<GameObject>();
 
     [Header("Wagon Spacing")]
     [SerializeField] private float wagonGap = -0.6f;
@@ -130,6 +129,8 @@ public class DisplayTrain : MonoBehaviour
         ApplyLayout(0f, shiftEase);
 
         ServiceLocator.Register(this);
+
+        CalculateTilesToSpawn();
     }
 
     private void OnDestroy()
@@ -243,6 +244,8 @@ public class DisplayTrain : MonoBehaviour
 
         cinematicActorRegistry.RegisterDynamic(key, newWagon.transform);
         EventBus.Publish(new OnWagonAddedToDisplayEvent(key));
+
+        CalculateTilesToSpawn();
 
         return newWagon;
     }
@@ -421,13 +424,16 @@ public class DisplayTrain : MonoBehaviour
 
         floorTiles.Add(spawnTile);
 
-        numberOfTiles++;
-
         Debug.Log("Spawn Tile");
     }
 
-    private void CalculateTilesToSpawn(int numberOfWagons)
+    private void CalculateTilesToSpawn()
     {
+        int tilesToMake = wagonList.Count / numOfWagonsPerTile;
 
+        while (floorTiles.Count < tilesToMake)
+        {
+            SpawnTile();
+        }
     }
 }
