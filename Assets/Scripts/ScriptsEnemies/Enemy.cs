@@ -164,7 +164,10 @@ public class Enemy : MonoBehaviour
         Movement.Begin(this);
 
         dataName = data.name;
+
+
         SetAnimators();
+        SetNewCollider();
 
         if (enemyRend && data.enemyMesh) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
         if (horseRend && data.horseMesh) horseRend.sharedMesh = data.horseMesh.sharedMesh;
@@ -176,13 +179,6 @@ public class Enemy : MonoBehaviour
 
         PlayIdleAnimation();
 
-        //flash = GetComponent<DamageFlash>();
-        //flash.SetRenderers(activeVisualRoot != null
-        //    ? activeVisualRoot.GetComponentsInChildren<Renderer>(true)
-        //    : new Renderer[0]);
-        //flash.StopCoroutine();
-        //flash.SetMaterialArray(0, data.material);
-
         trainRanges = new();
         limits = trainRanges.SetRanges(Range, Vector3.zero);
 
@@ -190,6 +186,36 @@ public class Enemy : MonoBehaviour
         { 
             targetWagon = Brain.GetPreference(data.targetPreference);
         }
+    }
+
+    public void SetNewCollider()
+    {
+        BoxCollider visualCollider =
+            activeVisualRoot.GetComponent<BoxCollider>();
+
+        if (visualCollider == null || boxCollider == null)
+            return;
+
+        // Límites globales del collider visual.
+        Bounds worldBounds = visualCollider.bounds;
+
+        // Convertir el centro al espacio local del collider original.
+        Vector3 localCenter =
+            boxCollider.transform.InverseTransformPoint(worldBounds.center);
+
+        // Convertir el tamaño global a tamaño local.
+        Vector3 worldSize = worldBounds.size;
+
+        Vector3 localSize = new Vector3(
+            worldSize.x / boxCollider.transform.lossyScale.x,
+            worldSize.y / boxCollider.transform.lossyScale.y,
+            worldSize.z / boxCollider.transform.lossyScale.z
+        );
+
+        boxCollider.center = localCenter;
+        boxCollider.size = localSize;
+
+        visualCollider.enabled = false;
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -380,7 +406,6 @@ public class Enemy : MonoBehaviour
 
         if (healthBar != null)
         { healthBar.Hide(); }
-        //flash.ResetMaterials();
         Skill.Stop(this);
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop, data.dropAmount));
         EventBus.Publish(new OnEnemyKilledEvent());

@@ -464,7 +464,6 @@ GameObject:
   - component: {fileID: 5280124775881410462}
   - component: {fileID: 4339743586411859866}
   - component: {fileID: -3826095390640366561}
-  - component: {fileID: -4315775013427048892}
   - component: {fileID: 7048911700517366137}
   m_Layer: 7
   m_Name: Enemy
@@ -538,23 +537,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &-4315775013427048892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8924080553250581591}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7996dc902bd639940b02db76cf4f629c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DamageFlash
-  rend:
-  - {fileID: 0}
-  - {fileID: 0}
-  flashMaterial: {fileID: 2100000, guid: 90697fa2e87819b44a64f50217f75c8e, type: 2}
-  flashDuration: 0.1
 --- !u!65 &7048911700517366137
 BoxCollider:
   m_ObjectHideFlags: 0
