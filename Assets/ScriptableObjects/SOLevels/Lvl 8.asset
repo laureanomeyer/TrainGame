@@ -20,9 +20,11 @@ MonoBehaviour:
   - enemyData: {fileID: 11400000, guid: b1e578024c60b2b4087abb5d7b34adf0, type: 2}
     weight: 3
   - enemyData: {fileID: 11400000, guid: f9c9e6b3e9a1c8840aa8ff1ea568f260, type: 2}
-    weight: 2
+    weight: 3
+  spawneablesByTime:
   - enemyData: {fileID: 11400000, guid: 61bb6a3655a73f746971a1ef877c2ff1, type: 2}
-    weight: 1
+    onlyOnce: 0
+    spawnInterval: 10
   prefab: {fileID: 8924080553250581591, guid: 869fb216be036d24faea33e54b95e234, type: 3}
   maxAliveEnemies: 100
   spawnInterval: 4
