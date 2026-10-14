@@ -151,7 +151,8 @@ public class MotivationalSideTurret : MonoBehaviour
 
         Quaternion baseRotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
 
-        bulletType.Damage = damage;
+        var statsRef = ServiceLocator.Get<StatSystem>();
+        bulletType.Damage = damage * statsRef.GetStat(StatType.DamageMultiplier);
 
         float angleStep = pelletCount > 1 ? spreadAngle / (pelletCount - 1) : 0f;
         float startAngle = -spreadAngle / 2f;

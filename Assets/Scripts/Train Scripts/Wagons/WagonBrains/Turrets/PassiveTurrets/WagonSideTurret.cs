@@ -116,7 +116,8 @@ public class WagonFixedTurret : MonoBehaviour
             direction = firePoint.forward;
         }
 
-        bulletType.Damage = damage;
+        var statsRef = ServiceLocator.Get<StatSystem>();
+        bulletType.Damage = damage * statsRef.GetStat(StatType.DamageMultiplier);
         bulletPool.ShootObject(firePoint.position, Quaternion.LookRotation(direction.normalized, Vector3.up), bulletType);
 
         currentAmmo--;

@@ -109,7 +109,8 @@ public class WagonTurret : MonoBehaviour
 
         if (bulletGO.TryGetComponent(out IBullet bullet))
         {
-            bulletType.Damage = damage;
+            var statsRef = ServiceLocator.Get<StatSystem>();
+            bulletType.Damage = damage * statsRef.GetStat(StatType.DamageMultiplier);
             bullet.ResetState(bulletType);
         }
 
