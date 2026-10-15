@@ -31,6 +31,7 @@ public class ReorderHUD : MonoBehaviour
     [SerializeField] private string hoverHint = "A/D: Move     F: Select     esc: Cancel";
     [SerializeField] private string panelHint = "F: Select     esc: Cancel";
     [SerializeField] private string dragHint = "A/D: Move     F: Confirm     esc: Cancel";
+    [SerializeField] private CanvasGroup hintTexts;
 
     [Header("Money colors")]
     [SerializeField] private Color affordColor = new(0.11f, 0.73f, 0.33f);
