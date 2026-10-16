@@ -80,14 +80,17 @@ public class TutorialTextUI : MonoBehaviour
     private void SetText(string text)
     {
         revealTween?.Kill();
-        bounceActive = false; // new text regenerates the mesh, so no cleanup needed
         SetRevealing(false);
 
+        // Limpia el mesh con offsets ANTES de cambiar el texto
+        StopBounce();
+
+        tutorialText.text = null;       
         tutorialText.text = text;
         tutorialText.maxVisibleCharacters = 0;
+        tutorialText.ForceMeshUpdate(); // regenera el mesh limpio ya mismo
         textRevealed = false;
 
-        // If the box is hidden, wait: the reveal starts when it becomes visible.
         if (isVisible) StartReveal();
     }
 
@@ -187,7 +190,7 @@ public class TutorialTextUI : MonoBehaviour
                 vertices[ch.vertexIndex + k].y += offset;
         }
 
-        for (int m = 0; m < info.meshInfo.Length; m++)
+        for (int m = 0; m < info.materialCount; m++) 
         {
             info.meshInfo[m].mesh.vertices = info.meshInfo[m].vertices;
             tutorialText.UpdateGeometry(info.meshInfo[m].mesh, m);
