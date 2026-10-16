@@ -308,7 +308,6 @@ public readonly struct OnSetCanConsumeEvent : IGameEvent
 public readonly struct OnStartSpawningEnemiesEvent : IGameEvent
 {
     public readonly bool Can;
-
     public OnStartSpawningEnemiesEvent(bool can)
     {
         Can = can;

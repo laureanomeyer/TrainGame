@@ -7,13 +7,16 @@ public enum EnemyHealthState
 {
     Normal,
     Armored,
+    Grace,
     Dead
+
 }
 public enum EnemyMovementState
 {
     Moving,
     Losing,
-    Waiting
+    Waiting,
+    Ended
 }
 
 public enum EnemyAttackState
@@ -50,7 +53,6 @@ public class Enemy : MonoBehaviour
     private TrainRanges trainRanges;
     private (float, float) limits;
     public (float, float) Limits => limits;
-
     public EnemyUIHpBar HealthBar => healthBar;
     private EnemyAnimationSO ActiveAnimation => data.animation;
 
@@ -165,7 +167,6 @@ public class Enemy : MonoBehaviour
 
         dataName = data.name;
 
-
         SetAnimators();
         SetNewCollider();
 
@@ -196,14 +197,13 @@ public class Enemy : MonoBehaviour
         if (visualCollider == null || boxCollider == null)
             return;
 
-        // Límites globales del collider visual.
         Bounds worldBounds = visualCollider.bounds;
 
         // Convertir el centro al espacio local del collider original.
         Vector3 localCenter =
             boxCollider.transform.InverseTransformPoint(worldBounds.center);
 
-        // Convertir el tamaño global a tamaño local.
+        // Convertir el tamaño global a tamaño local
         Vector3 worldSize = worldBounds.size;
 
         Vector3 localSize = new Vector3(
@@ -239,7 +239,13 @@ public class Enemy : MonoBehaviour
 
         movementState = state;
         if (state == EnemyMovementState.Waiting)
+        {
             timeAtTarget = Time.time;
+        }
+        if (state == EnemyMovementState.Ended)
+        {
+            Movement = endMovement;
+        }
     }
 
     public void ChangeState(EnemyAttackState state)
@@ -247,7 +253,7 @@ public class Enemy : MonoBehaviour
         attackState = state;
     }
 
-    public void SetAtTarget(bool atTarget)
+    public void SetAtTarget(bool atTarget) // revisar
     {
         if (movementState == EnemyMovementState.Losing) return;
         ChangeState(atTarget ? EnemyMovementState.Waiting : EnemyMovementState.Moving);
@@ -259,16 +265,27 @@ public class Enemy : MonoBehaviour
     }
     void Update()
     {
-        if (healthState == EnemyHealthState.Dead) return;
-        attackCooldownTimer -= Time.deltaTime;
-        skillCooldownTimer -= Time.deltaTime;
-        Attack?.Attack(this);
-        Attack?.Skill(this);
+        if (healthState == EnemyHealthState.Grace && movementState == EnemyMovementState.Ended && CameraView.IsOutsideCamera(transform.position, Cam))
+        {
+            Despawn();
+        }
+        else if (healthState == EnemyHealthState.Dead)
+        {
+            return;
+        }
+        else
+        {
+            attackCooldownTimer -= Time.deltaTime;
+            skillCooldownTimer -= Time.deltaTime;
+            Attack?.Attack(this);
+            Attack?.Skill(this);
+        }
+
     }
     void FixedUpdate()
     {
-        if (HealthState == EnemyHealthState.Dead) return;
 
+        if (HealthState == EnemyHealthState.Dead) return;
         Movement?.Move(this);
     }
 
@@ -357,8 +374,8 @@ public class Enemy : MonoBehaviour
     private System.Collections.IEnumerator ReturnAfterDeathAnimation()
     {
         yield return new WaitForSeconds(ActiveAnimation?.deathDuration ?? 1f);
-        Destroy(activeVisualRoot);
-        ObjectPoolManager.ReturnObjectToPool(gameObject);
+        ChangeState(EnemyMovementState.Ended);
+        animations.CowboyAnimator.gameObject.SetActive(false);
     }
     #endregion
     public bool TakeDamage(float damage)
@@ -391,11 +408,11 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
             Die();
     }
-    private void Die()
+    private void Die() //publica eventos y animaciones
     {
         if (HealthState == EnemyHealthState.Dead) return;
 
-        ChangeState(EnemyHealthState.Dead);
+        ChangeState(EnemyHealthState.Grace);
         PublishBecameInactive();
         PlayDeathSound();
         PlayCowboyAnimation(GetAnimationName(
@@ -409,9 +426,8 @@ public class Enemy : MonoBehaviour
         Skill.Stop(this);
         EventBus.Publish(new OnEnemyDeathEvent(transform.position, data.drop, data.dropAmount));
         EventBus.Publish(new OnEnemyKilledEvent());
-        StartCoroutine(ReturnAfterDeathAnimation());
+        StartCoroutine(ReturnAfterDeathAnimation()); //termina animacion y empieza a perder
     }
-
     void PlayDeathSound()
     {
         int soundNumber = Random.Range(1, 1001) == 1000 ? 4 : Random.Range(1, 4);
@@ -419,7 +435,6 @@ public class Enemy : MonoBehaviour
     }
     public void Despawn()
     {
-        if (HealthState == EnemyHealthState.Dead || !gameObject.activeSelf) return;
 
         ChangeState(EnemyHealthState.Dead);
         StopAllCoroutines();
@@ -428,10 +443,11 @@ public class Enemy : MonoBehaviour
 
         if (healthBar != null)
             healthBar.Hide();
-        //flash?.ResetMaterials();
-
+        Destroy(activeVisualRoot);
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
+
+
 
     private void PublishBecameInactive()
     {
@@ -445,8 +461,6 @@ public class Enemy : MonoBehaviour
     {
         IsTutorialEnemy = true;
     }
-
-
     //---------------------GIZMOS-------------------------
     void OnDrawGizmosSelected()
     {
