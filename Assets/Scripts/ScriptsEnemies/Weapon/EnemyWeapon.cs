@@ -8,6 +8,8 @@ public class EnemyWeapon : MonoBehaviour
     Transform bulletSpawn;
     bool canShoot = true;
 
+    public bool CanShoot => canShoot;
+
     Camera Cam => Camera.main;
 
     private void Awake()

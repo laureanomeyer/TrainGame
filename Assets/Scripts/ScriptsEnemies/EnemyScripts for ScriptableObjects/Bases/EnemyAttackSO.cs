@@ -27,7 +27,7 @@ public class EnemyAttackSO : ScriptableObject
 
         if (IsTargetInRange(enemy))
         {
-            if (enemy.TargetWagon == null) return;
+            if (enemy.TargetWagon == null && enemy.Weapon.CanShoot) return;
 
             enemy.PlayAttackAnimation();
             enemy.Weapon.Execute(enemy.TargetWagon, enemy.Damage);

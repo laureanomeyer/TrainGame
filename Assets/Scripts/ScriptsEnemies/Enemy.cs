@@ -269,7 +269,7 @@ public class Enemy : MonoBehaviour
         {
             Despawn();
         }
-        else if (healthState == EnemyHealthState.Dead)
+        else if (healthState == EnemyHealthState.Dead || healthState == EnemyHealthState.Grace)
         {
             return;
         }

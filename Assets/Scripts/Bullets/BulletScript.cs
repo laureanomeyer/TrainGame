@@ -28,6 +28,7 @@ public class BulletScript : MonoBehaviour, IBullet
     private TrailRenderer tr;
 
     private bool isActive = true;
+    private bool hasHit;
     private float currentLife;
 
     void Awake()
@@ -61,6 +62,7 @@ public class BulletScript : MonoBehaviour, IBullet
         tr.material = bulletType.trailMaterial;
         tr.emitting = true;
         isActive = true;
+        hasHit = false;
     }
 
     public void Movement()
@@ -92,6 +94,8 @@ public class BulletScript : MonoBehaviour, IBullet
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!isActive) return;
+
         if (other.gameObject.CompareTag("deadWall"))
         {
             Deactivate();
@@ -104,15 +108,18 @@ public class BulletScript : MonoBehaviour, IBullet
             reactive.OnDamage();
             if (destroyOnEnemy)
             {
+                hasHit = true;
                 Deactivate();
+                return;
             }
         }
 
         if (enemyLayerDetection.value == (1 << other.gameObject.layer))
         {
             Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
-            if (collisionEnemy.HealthState == EnemyHealthState.Dead) return;
+            if (collisionEnemy.HealthState == EnemyHealthState.Dead || collisionEnemy.HealthState == EnemyHealthState.Grace) return;
             bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
+            if (destroyOnEnemy) hasHit = true;
         }
     }
 
