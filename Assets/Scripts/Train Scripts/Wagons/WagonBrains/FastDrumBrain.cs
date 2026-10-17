@@ -31,27 +31,6 @@ public class FastDrumBrain : WagonBrain
         {
             weaponBuffer.BufferRoF(rofUpgrade);
         }
-
-        /*
-        //Codigo para inspiring
-        WagonBrain previousWagon;
-        WagonBrain nextWagon;
-
-        int index = trainEvent.wagonBrains.IndexOf(this);
-        if (index == -1) return;
-
-        if (index > 0)
-        {
-            previousWagon = trainEvent.wagonBrains[index - 1];
-            Debug.Log(previousWagon.ToString());
-        }
-
-        if (index < trainEvent.wagonBrains.Count - 1)
-        {
-            nextWagon = trainEvent.wagonBrains[index + 1];
-            Debug.Log(nextWagon.ToString());
-        }
-        */
     }
 
     public override void Break()

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
+public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 {
     [Header("Name")]
     [SerializeField] private string weaponName;
@@ -45,6 +45,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     private float waitToFire = 0;
 
     private float rateOfFire;
+    private float baseRateOfFire;
     public float RateOfFire { get => rateOfFire; }
 
     private float currentReloadTime = 0;
@@ -53,6 +54,12 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
     public float ReloadTime { get => reloadTime; }
 
     private float damage;
+    private float baseDamage;
+
+    //Buff stats
+
+    private float rateOfFireBuff;
+    private float damageBuff;
 
     //Referencia a la pool de balas
     private BulletPool bulletPool;
@@ -65,14 +72,22 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         bulletPool = pool;
         playerAtkReference = playerAttack;
 
+        var statsRef = ServiceLocator.Get<StatSystem>();
+
+        //Rate of fire set up
+        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        baseRateOfFire = rateOfFire;
+
+        //Reload time set up
+        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+
+        //Damage set up
+        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+        baseDamage = damage;
+
         EventBus.Subscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Subscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
         EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
-
-        var statsRef = ServiceLocator.Get<StatSystem>();
-        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
-        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
-        damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -97,6 +112,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
         EventBus.Unsubscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Unsubscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
         EventBus.Unsubscribe<OnStatChangedEvent>(UpdateStats);
+
         Debug.Log("Desuscribi evento " + gameObject.name);
     }
 
@@ -227,13 +243,67 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons
 
         //Rate of fire set up
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        baseRateOfFire = rateOfFire;
+
+        if (rateOfFireBuff > 0)
+        {
+            rateOfFire = rateOfFire * (1f - rateOfFireBuff / 100f);
+        }
 
         //Reload time set up
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
 
         //Damage set up
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+        baseDamage = damage;
+
+        if (damageBuff > 0)
+        {
+            damage = damage * (1f + damageBuff / 100f);
+        }
 
         Debug.Log("Stats actualizadas");
+    }
+
+    public void BufferRoF(float buffer)
+    {
+        rateOfFireBuff += buffer;
+        rateOfFire = baseRateOfFire * (1f - rateOfFireBuff / 100f);
+        Debug.Log("Weapon buff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
+    }
+
+    public void DebuffRoF(float buffer)
+    {
+        rateOfFireBuff -= buffer;
+        if (rateOfFireBuff > 0)
+        {
+            rateOfFire = baseRateOfFire * (1f - rateOfFireBuff / 100f);
+        }
+        else
+        {
+            rateOfFire = baseRateOfFire;
+        }
+        Debug.Log("Weapon debuff updated " + gameObject.name + "; Weapon ROF: " + rateOfFire);
+    }
+
+    public void BufferDamage(float buffer)
+    {
+        damageBuff += buffer;
+        damage = baseDamage * (1f + damageBuff / 100f);
+        Debug.Log("Weapon buff Damage updated " + gameObject.name + "; Weapon Damage: " + damage);
+    }
+
+    public void DebuffDamage(float buffer)
+    {
+        damageBuff -= buffer;
+        if (damageBuff > 0)
+        {
+            damage = baseDamage * (1f + damageBuff / 100f);
+        }
+        else
+        {
+            damage = baseDamage;
+        }
+        Debug.Log("Weapon debuff Damage updated " + gameObject.name + "; Weapon damage: " + damage);
     }
 }
