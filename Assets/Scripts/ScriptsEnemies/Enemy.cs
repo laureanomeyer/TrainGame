@@ -135,7 +135,7 @@ public class Enemy : MonoBehaviour
         EventBus.Subscribe<OnWagonDestroyedEvent>(RetargetWagon);
         EventBus.Subscribe<OnRunEndedEvent>(ChangeMovement);
     }
-    void OnDestroy()
+    void OnDisable()
     {
         EventBus.Unsubscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Unsubscribe<OnWagonDestroyedEvent>(RetargetWagon);
