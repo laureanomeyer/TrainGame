@@ -136,16 +136,17 @@ public class Enemy : MonoBehaviour
             leftLayerIndex = animations.CowboyAnimator.GetLayerIndex("Left Layer");
         }
 
+
+    }
+    void OnEnable()
+    {
         EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Subscribe<OnWagonDestroyedEvent>(RetargetWagon);
-        //EventBus.Subscribe<OnRunEndedEvent>(ChangeMovement);
     }
     void OnDisable()
     {
         EventBus.Unsubscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Unsubscribe<OnWagonDestroyedEvent>(RetargetWagon);
-        //EventBus.Unsubscribe<OnRunEndedEvent>(ChangeMovement);
-
     }
 
     public void Initialize(EnemyData data)
@@ -252,6 +253,7 @@ public class Enemy : MonoBehaviour
         {
             Movement = endMovement;
         }
+        Movement.Begin(this);
         movementName = Movement.name;
         MovementStateName = movementState.ToString(); 
     }

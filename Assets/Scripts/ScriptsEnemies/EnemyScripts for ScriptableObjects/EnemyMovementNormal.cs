@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Movement/Normal")]
 public class EnemyMovementNormal : EnemyMovementSO
 {
-    public override void Move(Enemy enemy)
+    protected override void MoveBehaviour(Enemy enemy)
     {
         Vector3 train = enemy.TargetWagon.Middle;
 
@@ -45,6 +45,8 @@ public class EnemyMovementNormal : EnemyMovementSO
 
             Vector3 nextPos = pos + lateralDir * enemy.Speed * Time.deltaTime;
 
+            nextPos += GetAvoidanceOffset(enemy);
+            
             enemy.rb.MovePosition(nextPos);
         }
     }
