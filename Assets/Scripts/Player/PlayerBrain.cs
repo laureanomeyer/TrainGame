@@ -16,6 +16,7 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private CanvasGroup interactImage;
     [SerializeField] private CanvasGroup arrowsImage;
     [SerializeField] private CanvasGroup clickImage;
+    [SerializeField] public ParticleSequenceController sequenceController;
 
     [Header("Bullets")]
     [SerializeField] private Transform spawnPoint;
