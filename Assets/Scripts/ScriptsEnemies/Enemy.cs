@@ -44,6 +44,11 @@ public class Enemy : MonoBehaviour
     BoxCollider boxCollider;
     public string TargetWagonName;
     public string dataName;
+    public string movementName;
+    public string MovementStateName; 
+    public string AttackStateName;
+    public string HealthStateName;
+
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
@@ -133,13 +138,13 @@ public class Enemy : MonoBehaviour
 
         EventBus.Subscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Subscribe<OnWagonDestroyedEvent>(RetargetWagon);
-        EventBus.Subscribe<OnRunEndedEvent>(ChangeMovement);
+        //EventBus.Subscribe<OnRunEndedEvent>(ChangeMovement);
     }
     void OnDisable()
     {
         EventBus.Unsubscribe<OnSetTutorialEnemyTarget>(SetSingleTargetByEvent);
         EventBus.Unsubscribe<OnWagonDestroyedEvent>(RetargetWagon);
-        EventBus.Unsubscribe<OnRunEndedEvent>(ChangeMovement);
+        //EventBus.Unsubscribe<OnRunEndedEvent>(ChangeMovement);
 
     }
 
@@ -231,6 +236,7 @@ public class Enemy : MonoBehaviour
     public void ChangeState(EnemyHealthState state)
     {
         healthState = state;
+        HealthStateName = healthState.ToString();
     }
 
     public void ChangeState(EnemyMovementState state)
@@ -246,11 +252,14 @@ public class Enemy : MonoBehaviour
         {
             Movement = endMovement;
         }
+        movementName = Movement.name;
+        MovementStateName = movementState.ToString(); 
     }
 
     public void ChangeState(EnemyAttackState state)
     {
         attackState = state;
+        AttackStateName = attackState.ToString();
     }
 
     public void SetAtTarget(bool atTarget) // revisar
@@ -306,10 +315,7 @@ public class Enemy : MonoBehaviour
             targetWagon = Brain.ReTarget(ev.WagonInstance);
         }
     }
-    public void ChangeMovement(OnRunEndedEvent ev)
-    {
-        Movement = endMovement;
-    }
+
     #endregion
 
     #region Animations
