@@ -78,11 +78,12 @@ public class ReorderHUD : MonoBehaviour
 
     #region API
 
-    public void ShowHover(ShopWagonData wagon, string wagonName, string description)
+    public void ShowHover(ShopWagonData wagon, string wagonName, string description, bool upgradeEnabled)
     {
         target = wagon;
         SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
+        SetOptions(-1, upgradeEnabled);
         ApplyMode(Mode.Hover);
     }
 
@@ -90,20 +91,25 @@ public class ReorderHUD : MonoBehaviour
     {
         target = wagon;
 
-        // En Upgrade solo se muestra la mejora y el precio
+
         SetName(selected == Option.Upgrade ? null : wagonName);
         SetTextIfChanged(descriptionText, description);
+        SetOptions((int)selected, upgradeEnabled);
 
+        ApplyMode(Mode.Panel);
+    }
+
+
+    private void SetOptions(int selectedIndex, bool upgradeEnabled)
+    {
         for (int i = 0; i < optionHighlights.Length; i++)
-            SetActiveIfChanged(optionHighlights[i], i == (int)selected);
+            SetActiveIfChanged(optionHighlights[i], i == selectedIndex);
 
         if (upgradeOptionGroup != null)
         {
             float alpha = upgradeEnabled ? 1f : disabledAlpha;
             if (!Mathf.Approximately(upgradeOptionGroup.alpha, alpha)) upgradeOptionGroup.alpha = alpha;
         }
-
-        ApplyMode(Mode.Panel);
     }
 
     public void ShowDrag(ShopWagonData wagon)
@@ -133,7 +139,7 @@ public class ReorderHUD : MonoBehaviour
         bool showArrows = mode == Mode.Hover || mode == Mode.Drag;
 
         SetActiveIfChanged(signRoot.gameObject, showSign);
-        SetActiveIfChanged(optionsRow, mode == Mode.Panel);
+        SetActiveIfChanged(optionsRow, mode == Mode.Hover || mode == Mode.Panel);
         SetActiveIfChanged(leftArrow.gameObject, showArrows);
         SetActiveIfChanged(rightArrow.gameObject, showArrows);
         SetActiveIfChanged(hintText.gameObject, mode != Mode.Hidden);
@@ -146,8 +152,6 @@ public class ReorderHUD : MonoBehaviour
             _ => string.Empty
         });
 
-        // El Content Size Fitter recalcula el tamaño del cartel al final del frame:
-        // se fuerzan 2 refrescos para que cartel y flechas tomen el tamaño nuevo.
         forcedRefreshFrames = 2;
         UpdatePositions();
     }

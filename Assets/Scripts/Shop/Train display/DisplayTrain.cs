@@ -442,6 +442,20 @@ public class DisplayTrain : MonoBehaviour
         return newWagon;
     }
 
+    public WagonInStockSO GetBaseWagonSO(int slotIndex)
+    {
+        if (!IsValidSlot(slotIndex)) return null;
+
+        string wagonName = slots[slotIndex].IDReference.WagonName;
+
+        if (upgradeLookup.TryGetValue(wagonName, out var entry)
+            && entry.path.levels.Length > 0
+            && entry.path.levels[0].wagon != null)
+            return entry.path.levels[0].wagon;
+
+        return soLookup.TryGetValue(wagonName, out var so) ? so : null;
+    }
+
     #endregion
 
     public List<IWagonID> ChangeWagonIDList() => new List<IWagonID>(wagonList);
