@@ -50,9 +50,9 @@ public class WeaponCardAnimations : MonoBehaviour, IPointerDownHandler, IPointer
 
         Sequence seq = DOTween.Sequence();
 
-        seq.Append(card.transform.DORotate(new Vector3(midY, 0f, 0f), animHalfTime));
+        seq.Append(card.transform.DORotate(new Vector3(0f, midY, 0f), animHalfTime));
         seq.AppendCallback(() => SetSide(!isFrontShowing));
-        seq.Append(card.transform.DORotate(new Vector3(endY, 0f, 0f), animHalfTime));
+        seq.Append(card.transform.DORotate(new Vector3(0f, endY, 0f), animHalfTime));
         seq.OnComplete(() => canInteract = true);
     }
 

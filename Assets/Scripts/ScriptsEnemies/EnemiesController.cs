@@ -17,7 +17,7 @@ public class EnemiesController : MonoBehaviour
     private readonly List<EnemyData> spawnPool = new();
     private readonly List<(SpawnEntryByTime entry, TimedSpawnSchedule schedule)> timedSpawnSchedules = new();
     private readonly TrainRanges trainRanges = new();
-
+    
     private SpawnController spawnController;
     private SessionConfig sessionConfig;
     private LevelSpawnsData currentLevelData;
@@ -45,17 +45,18 @@ public class EnemiesController : MonoBehaviour
         EventBus.Subscribe<OnSpawnEnemyEvent>(SpawnRequestedEnemy);
         EventBus.Subscribe<OnStartSpawningEnemiesEvent>(SetSpawningState);
         EventBus.Subscribe<OnSetTutorialFinished>(ClearTutorial);
+        EventBus.Subscribe<OnRunEndedEvent>(ChangeMovement);
         StartCoroutine(InitializeAfterEnable());
     }
 
     private void OnDisable()
     {
-        StopWaves();
         DespawnAll();
         EventBus.Unsubscribe<OnEnemyBecameInactiveEvent>(OnEnemyBecameInactive);
         EventBus.Unsubscribe<OnSpawnEnemyEvent>(SpawnRequestedEnemy);
         EventBus.Unsubscribe<OnStartSpawningEnemiesEvent>(SetSpawningState);
         EventBus.Unsubscribe<OnSetTutorialFinished>(ClearTutorial);
+        EventBus.Unsubscribe<OnRunEndedEvent>(ChangeMovement);
         ServiceLocator.Unregister<EnemiesController>();
         isInitialized = false;
         timer = 0f;
@@ -383,7 +384,7 @@ public class EnemiesController : MonoBehaviour
         var summary = enemyCounts.Select(kvp =>
             $"{kvp.Key.name}: active={kvp.Value.quantActive}, spawned={kvp.Value.quantSpawned}");
 
-        Debug.Log($"Spawned {data.name}. Enemy counts: {string.Join(", ", summary)}");
+        //Debug.Log($"Spawned {data.name}. Enemy counts: {string.Join(", ", summary)}");
     }
 
     private void SetSpawningState(OnStartSpawningEnemiesEvent spawnEvent)
@@ -400,6 +401,19 @@ public class EnemiesController : MonoBehaviour
 
         hasReportedAutomaticSpawnError = true;
         Debug.LogError(message, this);
+    }
+        public void ChangeMovement(OnRunEndedEvent ev)
+    {
+        if (ev.Result != RunResult.None)
+        {
+            StopWaves();
+            foreach(Enemy e in activeEnemies)
+            {
+                e.ChangeState(EnemyMovementState.Ended);
+                Debug.Log($"movement speed: {e.Movement.speed}\n movement tile speed : {RunManager.Instance.TrainSpeed}");
+            }
+            
+        }
     }
 }
 

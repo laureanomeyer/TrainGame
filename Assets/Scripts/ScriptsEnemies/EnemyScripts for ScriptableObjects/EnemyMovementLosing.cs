@@ -7,7 +7,7 @@ public class EnemyMovementLosing : EnemyMovementSO
     [SerializeField] float timeBeforeLosing = 5f;
     [SerializeField] float losingSpeed;
 
-    public override void Move(Enemy enemy)
+    protected override void MoveBehaviour(Enemy enemy)
     {
         Vector3 pos = enemy.rb.position;
         if (enemy.MovementState == EnemyMovementState.Losing)
@@ -43,7 +43,9 @@ public class EnemyMovementLosing : EnemyMovementSO
         if (!insideLane)
         {
             Vector3 dir = (train - pos).normalized;
-            enemy.rb.MovePosition(pos + dir * speed * Time.deltaTime);
+            Vector3 nextPos = pos + dir * speed * Time.deltaTime;
+            nextPos += GetAvoidanceOffset(enemy);
+            enemy.rb.MovePosition(nextPos);
             return;
         }
         else
@@ -52,6 +54,7 @@ public class EnemyMovementLosing : EnemyMovementSO
 
             Vector3 lateralDir = pos.x < targetX ? Vector3.right : Vector3.left;
             Vector3 nextPos = pos + lateralDir * speed * Time.deltaTime;
+            nextPos += GetAvoidanceOffset(enemy);
             enemy.rb.MovePosition(nextPos);
             
         }
@@ -59,6 +62,8 @@ public class EnemyMovementLosing : EnemyMovementSO
     private void MoveLosing(Enemy enemy, Vector3 pos)
     {
         Vector3 losingPos = new Vector3(pos.x - losingSpeed * Time.deltaTime, pos.y, pos.z);
+        losingPos += GetAvoidanceOffset(enemy);
+
         enemy.rb.MovePosition(losingPos);
     }
 

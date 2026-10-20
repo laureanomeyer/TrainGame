@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +25,7 @@ public class PlayerInteractions
     private InputAction repairAction;
     private bool buttonIsHold = false;
     private bool isUsingTurret = false;
+    private bool activateOnceParticle = true;
 
     public PlayerInteractions (PlayerBrain playerBrain, PlayerMovementController playerMovementController, LookObjectToMouse lookObjectToMouse, InteractionUIManager interactionUIManager, float repairCapacity)
     {
@@ -53,8 +55,34 @@ public class PlayerInteractions
     }
     public void Update()
     {
+        if (!buttonIsHold && !activateOnceParticle)
+        {
+            Debug.Log("entre" + activateOnceParticle);
+            activateOnceParticle = true;
+            playerBrain.sequenceController.StopGroup(ParticleGroups.RepairParticles);
+        }
         Repair();
         HandleTurretUse();
+    }
+
+    void Repair()
+    {
+        if (isUsingTurret) return;
+        if (!playerBrain.CanRepair) return;
+
+        if (buttonIsHold && currentWagon != null && currentWagon.CanBeRepaired)
+        {
+            currentWagon.Repair(repairCapacity);
+            playerBrain.SetIsRepairing(true);
+            playerMovementController.SetCanMove(false);
+            playerMovementController.SetCanRotate(false);
+            if (activateOnceParticle)
+            {
+                playerBrain.sequenceController.PlayGroup(ParticleGroups.RepairParticles);
+                activateOnceParticle = false;
+                Debug.Log("Me apagué" + activateOnceParticle);
+            }
+        }
     }
 
     public void OnTriggerEnter(Collider other)
@@ -254,20 +282,6 @@ public class PlayerInteractions
         buttonIsHold = false;
         if (!playerBrain.IsRepairing) return;
         playerBrain.TryRegainMovementAfterRepairing();
-    }
-
-    void Repair()
-    {
-        if (isUsingTurret) return;
-        if(!playerBrain.CanRepair) return;
-
-        if (buttonIsHold && currentWagon != null && currentWagon.CanBeRepaired)
-        {
-            currentWagon.Repair(repairCapacity);
-            playerBrain.SetIsRepairing(true);
-            playerMovementController.SetCanMove(false);
-            playerMovementController.SetCanRotate(false);
-        }
     }
 
     public void OnOpenMainMenu()

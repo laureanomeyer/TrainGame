@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy/Movement/Slow")]
 public class EnemyMovementSlow : EnemyMovementSO
 {
-    public override void Move(Enemy enemy)
+    protected override void MoveBehaviour(Enemy enemy)
     {
         Vector3 pos = enemy.rb.position;
         Vector3 nextPos = pos;
@@ -28,6 +28,8 @@ public class EnemyMovementSlow : EnemyMovementSO
                 nextPos = Vector3.MoveTowards(pos, targetWithoutPositiveX, speed * Time.deltaTime);
             }
         }
+
+        nextPos += GetAvoidanceOffset(enemy);
 
         nextPos.x -= speed * Time.deltaTime;
         enemy.rb.MovePosition(nextPos);

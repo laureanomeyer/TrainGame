@@ -183,11 +183,21 @@ public class ReorderManager : MonoBehaviour
     {
         if (hudRef == null || cacheRef == null) return;
 
-        var so = trainDisplayRef.GetWagonSO(hoveredSlot);
-        string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
-        string description = so != null ? so.Description : string.Empty;
+        var so = trainDisplayRef.GetWagonSO(hoveredSlot);          // nivel actual ? nombre
+        var baseSo = trainDisplayRef.GetBaseWagonSO(hoveredSlot);  // nivel 1 ? descripción
 
-        hudRef.ShowHover(cacheRef, wagonName, description);
+        string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
+        string description = baseSo != null ? baseSo.Description : string.Empty;
+
+        GetUpgradeState(out _, out _, out bool canAfford);
+        hudRef.ShowHover(cacheRef, wagonName, description, canAfford);
+    }
+
+    private bool GetUpgradeState(out WagonInStockSO next, out float cost, out bool canAfford)
+    {
+        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out next, out cost);
+        canAfford = hasUpgrade && storeManagerRef.GetGold() >= cost;
+        return hasUpgrade;
     }
 
     #endregion
@@ -201,17 +211,23 @@ public class ReorderManager : MonoBehaviour
         var so = trainDisplayRef.GetWagonSO(hoveredSlot);
         string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
 
-        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out _, out float cost);
-        bool canAfford = hasUpgrade && storeManagerRef.GetGold() >= cost;
+        bool hasUpgrade = GetUpgradeState(out var next, out float cost, out bool canAfford);
 
         string description = selectedOption switch
         {
             ReorderHUD.Option.Move => moveDescription,
-            ReorderHUD.Option.Upgrade => hasUpgrade ? $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}" : maxLevelDescription,
+            ReorderHUD.Option.Upgrade => hasUpgrade ? BuildUpgradeText(next, cost, canAfford) : maxLevelDescription,
             _ => $"Sell for {hudRef.FormatMoney(GetSellValue(cacheRef), true)}"
         };
 
         hudRef.ShowPanel(cacheRef, wagonName, selectedOption, description, canAfford);
+    }
+    private string BuildUpgradeText(WagonInStockSO next, float cost, bool canAfford)
+    {
+        string price = $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}";
+        return string.IsNullOrEmpty(next.Description)
+            ? price
+            : $"{next.Description}\n<b>{price}</b>";
     }
 
     private void ExecuteSelectedOption()

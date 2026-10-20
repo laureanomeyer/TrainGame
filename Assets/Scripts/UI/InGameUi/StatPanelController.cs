@@ -13,7 +13,7 @@ public class StatPanelController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI shieldsText;
     [SerializeField] private TextMeshProUGUI damageText;
     [SerializeField] private TextMeshProUGUI attackSpeedText;
-    [SerializeField] private TextMeshProUGUI bonusGoldText;
+    //[SerializeField] private TextMeshProUGUI bonusGoldText;
 
     private InputAction toggleAction;
     private StatSystem statsSystemRef;
@@ -63,7 +63,7 @@ public class StatPanelController : MonoBehaviour
         shieldsText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.Defense) + 1);
         damageText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.DamageMultiplier));
         attackSpeedText.text = "x " + FormatStat(statsSystemRef.GetStat(StatType.AttackSpeed));
-        bonusGoldText.text = "MAX. " + FormatStat(statsSystemRef.GetStat(StatType.GoldMultiplier));
+        //bonusGoldText.text = "MAX. " + FormatStat(statsSystemRef.GetStat(StatType.GoldMultiplier));
     }
     private string FormatStat(float value)
     {

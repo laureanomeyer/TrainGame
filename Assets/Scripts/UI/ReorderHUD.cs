@@ -1,6 +1,5 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-
 
 public class ReorderHUD : MonoBehaviour
 {
@@ -8,12 +7,14 @@ public class ReorderHUD : MonoBehaviour
 
     [Header("Canvas")]
     [SerializeField] private RectTransform canvasRect;
-    [SerializeField] private Camera uiCamera;           
-    [SerializeField] private Camera worldCamera;         
+    [SerializeField] private Camera uiCamera;
+    [SerializeField] private Camera worldCamera;
 
     [Header("Sign")]
     [SerializeField] private RectTransform signRoot;
     [SerializeField] private TextMeshProUGUI nameText;
+    [Tooltip("Objeto que se oculta junto con el nombre (ej: NameBox). Si está vacío, se oculta solo el texto.")]
+    [SerializeField] private GameObject nameRoot;
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private GameObject optionsRow;
     [SerializeField] private GameObject[] optionHighlights = new GameObject[3];
@@ -43,10 +44,8 @@ public class ReorderHUD : MonoBehaviour
 
     private static readonly Vector3[] cornersBuffer = new Vector3[4];
 
-
     private const float PosEpsilonSqr = 0.000001f;
     private const float RotDotEpsilon = 0.999999f;
-
 
     private int forcedRefreshFrames;
 
@@ -79,36 +78,38 @@ public class ReorderHUD : MonoBehaviour
 
     #region API
 
-    public void ShowHover(ShopWagonData wagon, string wagonName, string description)
+    public void ShowHover(ShopWagonData wagon, string wagonName, string description, bool upgradeEnabled)
     {
         target = wagon;
-        SetTextIfChanged(nameText, wagonName);
+        SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
+        SetOptions(-1, upgradeEnabled);
         ApplyMode(Mode.Hover);
     }
 
     public void ShowPanel(ShopWagonData wagon, string wagonName, Option selected, string description, bool upgradeEnabled)
     {
         target = wagon;
-        SetTextIfChanged(nameText, wagonName);
+
+
+        SetName(selected == Option.Upgrade ? null : wagonName);
         SetTextIfChanged(descriptionText, description);
+        SetOptions((int)selected, upgradeEnabled);
 
+        ApplyMode(Mode.Panel);
+    }
+
+
+    private void SetOptions(int selectedIndex, bool upgradeEnabled)
+    {
         for (int i = 0; i < optionHighlights.Length; i++)
-        {
-            GameObject highlight = optionHighlights[i];
-            if (highlight == null) continue;
-
-            bool active = i == (int)selected;
-            if (highlight.activeSelf != active) highlight.SetActive(active);
-        }
+            SetActiveIfChanged(optionHighlights[i], i == selectedIndex);
 
         if (upgradeOptionGroup != null)
         {
             float alpha = upgradeEnabled ? 1f : disabledAlpha;
             if (!Mathf.Approximately(upgradeOptionGroup.alpha, alpha)) upgradeOptionGroup.alpha = alpha;
         }
-
-        ApplyMode(Mode.Panel);
     }
 
     public void ShowDrag(ShopWagonData wagon)
@@ -138,7 +139,7 @@ public class ReorderHUD : MonoBehaviour
         bool showArrows = mode == Mode.Hover || mode == Mode.Drag;
 
         SetActiveIfChanged(signRoot.gameObject, showSign);
-        SetActiveIfChanged(optionsRow, mode == Mode.Panel);
+        SetActiveIfChanged(optionsRow, mode == Mode.Hover || mode == Mode.Panel);
         SetActiveIfChanged(leftArrow.gameObject, showArrows);
         SetActiveIfChanged(rightArrow.gameObject, showArrows);
         SetActiveIfChanged(hintText.gameObject, mode != Mode.Hidden);
@@ -246,6 +247,16 @@ public class ReorderHUD : MonoBehaviour
     {
         SetPositionIfChanged(leftArrow, canvasRect.TransformPoint(new Vector3(xMin - arrowPadding, y, 0f)));
         SetPositionIfChanged(rightArrow, canvasRect.TransformPoint(new Vector3(xMax + arrowPadding, y, 0f)));
+    }
+
+    // null o vacío → oculta el nombre (y su caja si nameRoot está asignado)
+    private void SetName(string wagonName)
+    {
+        bool show = !string.IsNullOrEmpty(wagonName);
+        GameObject root = nameRoot != null ? nameRoot : nameText.gameObject;
+
+        SetActiveIfChanged(root, show);
+        if (show) SetTextIfChanged(nameText, wagonName);
     }
 
     #region Helpers sin escrituras innecesarias
