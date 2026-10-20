@@ -201,17 +201,24 @@ public class ReorderManager : MonoBehaviour
         var so = trainDisplayRef.GetWagonSO(hoveredSlot);
         string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
 
-        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out _, out float cost);
+        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out var next, out float cost);
         bool canAfford = hasUpgrade && storeManagerRef.GetGold() >= cost;
 
         string description = selectedOption switch
         {
             ReorderHUD.Option.Move => moveDescription,
-            ReorderHUD.Option.Upgrade => hasUpgrade ? $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}" : maxLevelDescription,
+            ReorderHUD.Option.Upgrade => hasUpgrade ? BuildUpgradeText(next, cost, canAfford) : maxLevelDescription,
             _ => $"Sell for {hudRef.FormatMoney(GetSellValue(cacheRef), true)}"
         };
 
         hudRef.ShowPanel(cacheRef, wagonName, selectedOption, description, canAfford);
+    }
+    private string BuildUpgradeText(WagonInStockSO next, float cost, bool canAfford)
+    {
+        string price = $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}";
+        return string.IsNullOrEmpty(next.Description)
+            ? price
+            : $"{next.Description}\n<b>{price}</b>";
     }
 
     private void ExecuteSelectedOption()
