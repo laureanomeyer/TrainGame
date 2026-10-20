@@ -1,4 +1,4 @@
-
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,10 +16,11 @@ public class WagonShopManager : MonoBehaviour
     [SerializeField] public Button rerollButton;
     [SerializeField] public Button closeButton;
 
+    private Tweener shakeTween;
+    private Vector2 buyButtonBasePos;
+
     private int currentLevel;
     public int Level => currentLevel;
-
-    //[SerializeField] public int maxLevel;
 
     [SerializeField] public TextMeshProUGUI nameTextUI;
     [SerializeField] public TextMeshProUGUI descriptionTextUI;
@@ -60,5 +61,21 @@ public class WagonShopManager : MonoBehaviour
         buyButton.interactable = false;
         rerollButton.interactable = false;
     }
+    public void ShakeBuyButton(float distance, float duration, int vibrato)
+    {
+        Debug.Log("Shakeo " + distance);
+        var rect = (RectTransform)buyButton.transform;
 
+        if (shakeTween.IsActive())
+        {
+            shakeTween.Kill();
+            rect.anchoredPosition = buyButtonBasePos;
+        }
+        else
+        {
+            buyButtonBasePos = rect.anchoredPosition;
+        }
+
+        shakeTween = rect.DOShakeAnchorPos(duration, new Vector2(distance, 0f), vibrato, 0f, false, true).SetUpdate(true).SetLink(gameObject).OnKill(() => rect.anchoredPosition = buyButtonBasePos);
+    }
 }

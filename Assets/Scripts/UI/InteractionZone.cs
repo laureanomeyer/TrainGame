@@ -143,9 +143,9 @@ public class InteractionZone : MonoBehaviour
             }
 
             if (zoneType == ZoneType.Text)
-                ui.ShowText(textToShow);
+                ui.ShowWagons(textToShow);
             else if (zoneType == ZoneType.Buttons)
-                ui.ShowButtons();
+                ui.ShowWeapons();
 
             if (optionalPanel != null)
                 optionalPanel.SetActive(true);
@@ -174,9 +174,9 @@ public class InteractionZone : MonoBehaviour
             }
 
             if (zoneType == ZoneType.Text)
-                ui.ShowText(textToShow);
+                ui.ShowWagons(textToShow);
             else if (zoneType == ZoneType.Buttons)
-                ui.ShowButtons();
+                ui.ShowWeapons();
 
             if (optionalPanel != null)
                 optionalPanel.SetActive(true);

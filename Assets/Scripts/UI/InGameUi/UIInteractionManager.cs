@@ -1,24 +1,22 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class InteractionUIManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private GameObject textPanel;
     [SerializeField] private TMP_Text infoText;
     [SerializeField] private TMP_Text spacialText;
-    [SerializeField] private GameObject buttonsPanel;
+    [SerializeField] private GameObject wagonsPanel;
+    [SerializeField] private GameObject weaponsPanel;
     [SerializeField] private GameObject UpgradesObject;
-
     [SerializeField] private StationRouteSO stationRoute;
 
     private void Start()
     {
         HideAll();
+
         var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
-        
+
         string stationName = stationRoute != null ? stationRoute.GetStationNameByLevel(sessionConfigRef.CurrentLevel) : "Unknown Station";
 
         spacialText.text = stationName;
@@ -30,24 +28,30 @@ public class InteractionUIManager : MonoBehaviour
         GameManager.Instance.ChangeGameState(GameState.UI);
     }
 
-    public void ShowText(string message)
+
+    public void ShowWagons(string message)
     {
-        textPanel.SetActive(true);
-        buttonsPanel.SetActive(false);
+        wagonsPanel.SetActive(true);
+
+        weaponsPanel.SetActive(false);
+
         infoText.text = message;
     }
 
 
-    public void ShowButtons()
+    public void ShowWeapons()
     {
-        textPanel.SetActive(false);
-        buttonsPanel.SetActive(true);
+        wagonsPanel.SetActive(false);
+
+        weaponsPanel.SetActive(true);
+
     }
 
     public void HideAll()
     {
-        textPanel.SetActive(false);
-        buttonsPanel.SetActive(false);
+        wagonsPanel.SetActive(false);
+
+        weaponsPanel.SetActive(false);
     }
 
 }

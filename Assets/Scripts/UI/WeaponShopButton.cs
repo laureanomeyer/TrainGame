@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -35,6 +36,12 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
     [SerializeField] private Button buyButton;
 
+    [Header("Shake Feedback")]
+    [SerializeField] private float shakeDistance = 15f;
+    [SerializeField] private float shakeDuration = 0.3f;
+    [SerializeField] private int shakeCount = 10;
+
+
     public PlayerBrain PlayerReference { get => playerReference; set => playerReference = value; }
     public WeaponShopButtonManager ButtonManager { get => buttonManager; set => buttonManager = value; }
     private WeaponShopButtonManager buttonManager;
@@ -45,6 +52,9 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
     private Dictionary<int, WeaponInStocSO[]> weaponCollections = new Dictionary<int, WeaponInStocSO[]>();
     private WeaponInStocSO[] currentCollection;
+
+    private Tweener shakeTween;
+    private Vector2 buyButtonBasePos;
 
     private void Awake()
     {
@@ -126,7 +136,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     {
         if (!buttonManager.TryConsumeGold(currentWeaponprice))
         {
-            Debug.Log("No se posee el dinero suficiente");
+            ShakeBuyButton(shakeDistance, shakeDuration, shakeCount);
         }
         else
         {
@@ -215,5 +225,23 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     private string FormatStat(float value)
     {
         return (value % 1 == 0) ? value.ToString("F0") : value.ToString("F1");
+    }
+
+    public void ShakeBuyButton(float distance, float duration, int vibrato)
+    {
+        Debug.Log("Shakeo " + distance);
+        var rect = (RectTransform)buyButton.transform;
+
+        if (shakeTween.IsActive())
+        {
+            shakeTween.Kill();
+            rect.anchoredPosition = buyButtonBasePos;
+        }
+        else
+        {
+            buyButtonBasePos = rect.anchoredPosition;
+        }
+
+        shakeTween = rect.DOShakeAnchorPos(duration, new Vector2(distance, 0f), vibrato, 0f, false, true).SetUpdate(true).SetLink(gameObject).OnKill(() => rect.anchoredPosition = buyButtonBasePos);
     }
 }

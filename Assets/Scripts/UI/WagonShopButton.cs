@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class WagonShopButton : MonoBehaviour
 {
@@ -16,9 +17,6 @@ public class WagonShopButton : MonoBehaviour
     public DisplayTrain displayTrain;
 
     public Button buyButton;
-
-    private RectTransform buyButtonRect;
-    private Vector2 buttonOriginalPos;
 
     private WagonInStockSO[] wagonsInStock;
 
@@ -63,18 +61,13 @@ public class WagonShopButton : MonoBehaviour
     [Header("Shake Feedback")]
     [SerializeField] private float shakeDistance = 15f;
     [SerializeField] private float shakeDuration = 0.3f;
-    [SerializeField] private int shakeCount = 3;
-
-    private Coroutine shakeCoroutine;
+    [SerializeField] private int shakeCount = 10;
 
     public void Initialize()
     {
         nameTextUI = storeManager.nameTextUI;
         descriptionTextUI = storeManager.descriptionTextUI;
         priceTextUI = storeManager.priceTextUI;
-
-        buyButtonRect = buyButton.GetComponent<RectTransform>();
-        buttonOriginalPos = buyButtonRect.anchoredPosition;
 
         interacZone = GetComponent<InteractionZone>();
 
@@ -140,7 +133,7 @@ public class WagonShopButton : MonoBehaviour
 
     private void SetWagonInStock(bool notRepeat)
     {
-        if(modelReference != null)
+        if (modelReference != null)
         {
             Destroy(modelReference);
         }
@@ -152,7 +145,7 @@ public class WagonShopButton : MonoBehaviour
         descriptionText = (currentWagonInStock.Description);
         descriptionTextUI.text = descriptionText;
 
-        priceTextUI.text = "$" + currentWagonInStock.Price.ToString() ;
+        priceTextUI.text = "$" + currentWagonInStock.Price.ToString();
 
         modelReference = Instantiate(currentWagonInStock.shopModel, spawnWagonPoint.position, spawnWagonPoint.rotation);
     }
@@ -164,7 +157,7 @@ public class WagonShopButton : MonoBehaviour
 
         if (notRepeat)
         {
-            if(wagonsInStock.Length > 1)
+            if (wagonsInStock.Length > 1)
             {
                 if (currentWagonInStock == wagonSelected)
                 {
@@ -257,60 +250,7 @@ public class WagonShopButton : MonoBehaviour
 
     private void PlayShake()
     {
-        if (buyButtonRect == null) return;
-
-        if (shakeCoroutine != null)
-        {
-            StopCoroutine(shakeCoroutine);
-            // solo restauramos si había un shake en curso
-            buyButtonRect.anchoredPosition = buttonOriginalPos;
-        }
-        else
-        {
-            // no hay shake activo: la posición actual es la buena
-            buttonOriginalPos = buyButtonRect.anchoredPosition;
-        }
-
-        shakeCoroutine = StartCoroutine(ShakeRoutine());
-    }
-
-    private void ResetShake()
-    {
-        if (shakeCoroutine != null)
-        {
-            StopCoroutine(shakeCoroutine);
-            shakeCoroutine = null;
-        }
-
-        if (buyButtonRect != null)
-        {
-            buyButtonRect.anchoredPosition = buttonOriginalPos;
-        }
-    }
-
-    private IEnumerator ShakeRoutine()
-    {
-        float elapsed = 0f;
-
-        while (elapsed < shakeDuration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            float t = elapsed / shakeDuration;
-
-            // Oscila izquierda-derecha y la amplitud baja a 0, así termina en el centro
-            float offset = Mathf.Sin(t * shakeCount * Mathf.PI * 2f) * shakeDistance * (1f - t);
-            buyButtonRect.anchoredPosition = buttonOriginalPos + new Vector2(offset, 0f);
-
-            yield return null;
-        }
-
-        buyButtonRect.anchoredPosition = buttonOriginalPos;
-        shakeCoroutine = null;
-    }
-
-    private void OnDisable()
-    {
-        ResetShake();
+        storeManager.ShakeBuyButton(shakeDistance, shakeDuration, shakeCount);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -332,8 +272,6 @@ public class WagonShopButton : MonoBehaviour
             storeManager.buyButton.onClick.RemoveListener(Interact);
 
             storeManager.closeButton.onClick.RemoveListener(CloseFuction);
-
-            ResetShake();
         }
     }
 

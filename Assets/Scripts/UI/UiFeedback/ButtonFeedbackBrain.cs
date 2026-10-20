@@ -6,13 +6,14 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private Button button;
-    private bool isPressed;
     [SerializeField] private float animTime = 0.25f;
     [SerializeField, Range (1f, 1.2f)] private float size = 1.1f;
     [SerializeField, Range (0.1f, 1f)] private float smallSize = 0.87f;
     [SerializeField] private Ease ease = Ease.OutQuart;
+    private Button button;
+    private bool isPressed;
     private Vector3 initialScale;
+    private Tween scaleTween;
 
     private void Awake()
     {
@@ -30,13 +31,15 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void OnDisable()
     {
-        transform.DOKill();
+        if (button != null)
+            button.onClick.RemoveListener(PlayPressSound);
+
+        scaleTween.Kill();
     }
 
     private void OnDestroy()
     {
-        button.onClick.RemoveListener(PlayPressSound);
-        transform.DOKill();
+        scaleTween.Kill();
     }
 
     public void OnPointerEnter(PointerEventData data)
@@ -84,22 +87,24 @@ public class ButtonFeedbackBrain : MonoBehaviour, IPointerEnterHandler, IPointer
             AudioManager.Instance.Play("SFXButtonPressed");
         }
     }
+    private void AnimateScale(Vector3 target, float time, Ease easeType)
+    {
+        scaleTween.Kill();
+        scaleTween = transform.DOScale(target, time).SetEase(easeType).SetUpdate(true);
+    }
 
     private void PlayHoverAnimation()
     {
-        transform.DOKill();
-        transform.DOScale(initialScale * size, animTime).SetEase(ease).SetUpdate(true);
+        AnimateScale(initialScale * size, animTime, ease);
     }
 
     private void ReverseHoverAnimation(float animTime)
     {
-        transform.DOKill();
-        transform.DOScale(initialScale, animTime).SetEase(ease).SetUpdate(true);
+        AnimateScale(initialScale, animTime, ease);
     }
 
     private void PlayPressedAnimation(float animTime)
     {
-        transform.DOKill();
-        transform.DOScale(initialScale * smallSize, animTime).SetEase(Ease.InOutBack).SetUpdate(true);
+        AnimateScale(initialScale * smallSize, animTime, Ease.InOutBack);
     }
 }

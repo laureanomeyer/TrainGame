@@ -20,6 +20,7 @@ public class StatPanelController : MonoBehaviour
 
     void Awake()
     {
+        stats.alpha = 0f;
         toggleAction = inputActions.FindAction("CallUi");
         toggleAction.Enable();
         toggleAction.performed += OnToggleStats;

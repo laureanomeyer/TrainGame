@@ -119,7 +119,7 @@ public class PlayerInteractions
 
             if (!isUsingTurret && currentTurret != null && interactionUIManager != null)
             {
-                interactionUIManager.ShowText("Usar torreta");
+                interactionUIManager.ShowWagons("Usar torreta");
             }
         }
     }
@@ -218,7 +218,7 @@ public class PlayerInteractions
 
         if (interactionUIManager != null)
         {
-            interactionUIManager.ShowText("Salir de torreta");
+            interactionUIManager.ShowWagons("Salir de torreta");
         }
     }
 
