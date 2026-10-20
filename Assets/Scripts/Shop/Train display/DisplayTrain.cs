@@ -37,6 +37,12 @@ public class DisplayTrain : MonoBehaviour
     [SerializeField] private float upgradePunchScale = 0.15f;
     [SerializeField] private float upgradePunchDuration = 0.35f;
 
+    [Header("Gold Wagon")]
+    [Tooltip("Shop model del vagón de oro")]
+    [SerializeField] private GameObject goldWagonShopModel;
+
+    private ShopWagonData goldWagon;
+
     [SerializeField] private List<WagonInStockSO> wagonAssets;
 
     private Dictionary<string, GameObject> wagonAssetsReference;
@@ -126,6 +132,7 @@ public class DisplayTrain : MonoBehaviour
             slots.Add(SpawnWagon(model, wagon));
         }
 
+        SpawnGoldWagon();
         ApplyLayout(0f, shiftEase);
 
         ServiceLocator.Register(this);
@@ -150,13 +157,31 @@ public class DisplayTrain : MonoBehaviour
         return data;
     }
 
+    private void SpawnGoldWagon()
+    {
+        if (goldWagonShopModel == null)
+        {
+            Debug.LogWarning("[DisplayTrain] 'goldWagonShopModel' sin asignar: el vagón de oro no se muestra en la tienda.", this);
+            return;
+        }
+
+        GameObject go = Instantiate(goldWagonShopModel, layoutOrigin, layoutRot);
+        goldWagon = go.GetComponent<ShopWagonData>();
+
+        if (goldWagon == null)
+        {
+            Debug.LogError("[DisplayTrain] El shop model del vagón de oro no tiene ShopWagonData en la raíz.", go);
+            Destroy(go);
+        }
+    }
+
     #endregion
 
     #region Layout
 
     private Vector3 StepOf(ShopWagonData w) => LayoutForward * (w.LocalFootprint.z - wagonGap);
 
-    private void ComputeLayout()
+    private List<Vector3> ComputeLayout(out Vector3 endCursor)
     {
         layoutBuffer.Clear();
         Vector3 cursor = layoutOrigin;
@@ -166,21 +191,26 @@ public class DisplayTrain : MonoBehaviour
             layoutBuffer.Add(cursor);
             cursor += StepOf(slots[i]);
         }
+
+        endCursor = cursor;
+        return layoutBuffer;
     }
 
     private void ApplyLayout(float duration, Ease ease, int liftedSlot = -1, ShopWagonData snapWagon = null)
     {
-        ComputeLayout();
+        var positions = ComputeLayout(out Vector3 goldPos);
 
         for (int i = 0; i < slots.Count; i++)
         {
-            ShopWagonData wagon = slots[i];
-            Vector3 target = layoutBuffer[i];
+            Vector3 target = positions[i];
             if (i == liftedSlot) target += Vector3.up * dragLiftHeight;
 
-            bool snap = duration <= 0f || wagon == snapWagon;
-            MoveWagon(wagon.transform, target, snap ? 0f : duration, ease);
+            bool snap = duration <= 0f || slots[i] == snapWagon;
+            MoveWagon(slots[i].transform, target, snap ? 0f : duration, ease);
         }
+
+        if (goldWagon != null)
+            MoveWagon(goldWagon.transform, goldPos, duration, ease);
     }
 
     private void MoveWagon(Transform t, Vector3 pos, float duration, Ease ease)
