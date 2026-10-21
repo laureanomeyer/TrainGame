@@ -10,7 +10,10 @@ public class PauseMenuManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button resumeButton;
+    [SerializeField] private Button optionsButton;
     [SerializeField] private Button menuButton;
+
+    [SerializeField] private SettingsPanel settingsPanel;
 
     private string[] pausableScenes = { "SceneLau", "SceneShop", "SceneTutorial" };
 
@@ -54,6 +57,11 @@ public class PauseMenuManager : MonoBehaviour
             menuButton.onClick.AddListener(QuitToMainMenu);
         }
 
+        if (optionsButton != null)
+        {
+            optionsButton.onClick.AddListener(settingsPanel.Open);
+        }
+
         if (pauseAction != null)
         {
             pauseAction.performed += OnPausePressed;
@@ -66,11 +74,16 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (resumeButton != null)
         {
-            resumeButton.onClick.RemoveAllListeners();
+            resumeButton.onClick.RemoveListener(ResumeGame);
         }
         if (menuButton != null)
         {
-            menuButton.onClick.RemoveAllListeners();
+            menuButton.onClick.RemoveListener(QuitToMainMenu);
+        }
+
+        if (optionsButton != null)
+        {
+            optionsButton.onClick.RemoveListener(settingsPanel.Open);
         }
 
         if (pauseAction != null)
@@ -158,6 +171,11 @@ public class PauseMenuManager : MonoBehaviour
         Cursor.visible = true;
 
         MusicManager.Instance.SetMenuMusic();
+    }
+
+    public void ToggleOptions()
+    {
+
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

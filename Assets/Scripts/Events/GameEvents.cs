@@ -67,6 +67,16 @@ public readonly struct OnAmmoChangedEvent : IGameEvent
     }
 }
 
+public readonly struct OnWeaponChangedEvent : IGameEvent
+{
+    public readonly Sprite sprite;
+
+    public OnWeaponChangedEvent(Sprite sp)
+    {
+        sprite = sp;
+    }
+}
+
 public readonly struct OnShieldsBrokenEvent : IGameEvent { }
 
 public readonly struct OnCoalEmptyEvent : IGameEvent { }

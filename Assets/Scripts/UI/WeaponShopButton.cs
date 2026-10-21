@@ -8,8 +8,8 @@ using UnityEngine.UI;
 public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 {
     private PlayerBrain playerReference;
-    private int level;
     private PlayerData playerDataRef;
+    private int level;
 
     private int selectedWeapon;
     private GameObject currentWeapon;
@@ -140,12 +140,13 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         }
         else
         {
+            Sprite boughtWeaponSprite = currentCollection[selectedWeapon].WeaponSprite;
+
             playerDataRef.ChangeWeaponData(currentWeapon);
             playerReference.ChangeWeapon(currentWeapon);
             buttonManager.UpdateButtons(this);
-
+            EventBus.Publish(new OnWeaponChangedEvent(boughtWeaponSprite));
             DeactivateButton();
-            //SetWeapon();
         }
     }
 

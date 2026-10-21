@@ -7,99 +7,27 @@ public class MainMenuButtons : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private Button settingsButton;
-    [SerializeField] private Button closeSettingsButton;
 
-    [Header("Settings Panel")]
-    [SerializeField] private GameObject settingsPanel;
-
-    [Header("Audio Settings")]
-    [SerializeField] private Slider masterVolumeSlider;
-    [SerializeField] private Slider musicVolumeSlider;
-    [SerializeField] private Slider SFXVolumeSlider;
+    [Header("References")]
+    [SerializeField] private SettingsPanel settingsPanel;
 
     private void Start()
     {
-        startButton.onClick.AddListener(GameManager.Instance.StartNewSession);
+        startButton.onClick.AddListener(StartGame);
         quitButton.onClick.AddListener(Quit);
-
-        settingsButton.onClick.AddListener(OpenSettings);
-        closeSettingsButton.onClick.AddListener(CloseSettings);
-
-        float savedMasterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.2f);
-        float savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
-        float savedSFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
-
-        masterVolumeSlider.value = savedMasterVolume;
-        musicVolumeSlider.value = savedMusicVolume;
-        SFXVolumeSlider.value = savedSFXVolume;
-
-
-        SetMasterVolume(savedMasterVolume);
-        SetMusicVolume(savedMusicVolume);
-        SetSFXVolume(savedSFXVolume);
-
-        masterVolumeSlider.onValueChanged.AddListener(SetMasterVolume);
-        musicVolumeSlider.onValueChanged.AddListener(SetMusicVolume);
-        SFXVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
-
-
-        settingsPanel.SetActive(false);
-    }
-
-    private void OpenSettings()
-    {
-        settingsPanel.SetActive(true);
-    }
-
-    private void CloseSettings()
-    {
-        settingsPanel.SetActive(false);
-    }
-
-    private void SetMasterVolume(float volume)
-    {
-        volume = Mathf.Clamp01(volume);
-        AudioListener.volume = volume;
-
-        PlayerPrefs.SetFloat("MasterVolume", volume);
-        PlayerPrefs.Save();
-    }
-
-    private void SetMusicVolume(float volume)
-    {
-        volume = Mathf.Clamp01(volume);
-
-        if (MusicManager.Instance != null)
-        {
-            MusicManager.Instance.SetVolume(volume);
-        }
-
-        PlayerPrefs.SetFloat("MusicVolume", volume);
-        PlayerPrefs.Save();
-    }
-
-    private void SetSFXVolume(float volume)
-    {
-        volume = Mathf.Clamp01(volume);
-
-        if (AudioManager.Instance != null)
-        {
-            AudioManager.Instance.SetSFXVolume(volume);
-        }
-
-        PlayerPrefs.SetFloat("SFXVolume", volume);
-        PlayerPrefs.Save();
+        settingsButton.onClick.AddListener(settingsPanel.Open);
     }
 
     private void OnDestroy()
     {
-        startButton.onClick.RemoveAllListeners();
-        quitButton.onClick.RemoveAllListeners();
-        settingsButton.onClick.RemoveAllListeners();
-        closeSettingsButton.onClick.RemoveAllListeners();
+        startButton.onClick.RemoveListener(StartGame);
+        quitButton.onClick.RemoveListener(Quit);
+        settingsButton.onClick.RemoveListener(settingsPanel.Open);
+    }
 
-        masterVolumeSlider.onValueChanged.RemoveAllListeners();
-        musicVolumeSlider.onValueChanged.RemoveAllListeners();
+    private void StartGame()
+    {
+        GameManager.Instance.StartNewSession();
     }
 
     private void Quit()

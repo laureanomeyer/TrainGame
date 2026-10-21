@@ -278,15 +278,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 2100000, guid: 4d834927333282746b657433a99ff267, type: 2}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Material: {fileID: 2100000, guid: 491bb6432e1e1ea4080d79a024414848, type: 2}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: da70e82af2aeeef43a28c1d5c2a2216b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a70614878d15f64489b75698ba032b6a, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -408,7 +408,6 @@ GameObject:
   - component: {fileID: 5405415855480793203}
   - component: {fileID: 7116384346465008739}
   - component: {fileID: 1735930275029825393}
-  - component: {fileID: 5294515609832197679}
   - component: {fileID: 7087322724317171990}
   - component: {fileID: 6141529215911279321}
   - component: {fileID: 3614128780033504794}
@@ -544,25 +543,6 @@ MonoBehaviour:
   weaponItem: {fileID: 3090599529195725496, guid: f3402dc33c3a9ca4288ccc9583eb12e7, type: 3}
   canAttack: 1
   higherLevelFrozen: 0
---- !u!114 &5294515609832197679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6058667659620982090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 955bbc189c5bb5942a20e4c487e87705, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatPanelController
-  stats: {fileID: 0}
-  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  hpText: {fileID: 0}
-  shieldsText: {fileID: 0}
-  damageText: {fileID: 0}
-  attackSpeedText: {fileID: 0}
-  bonusGoldText: {fileID: 0}
 --- !u!198 &7087322724317171990
 ParticleSystem:
   m_ObjectHideFlags: 0
