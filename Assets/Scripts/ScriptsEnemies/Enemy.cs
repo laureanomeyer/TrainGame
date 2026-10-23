@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -243,7 +244,6 @@ public class Enemy : MonoBehaviour
     public void ChangeState(EnemyMovementState state)
     {
         if (movementState == state) return;
-
         movementState = state;
         if (state == EnemyMovementState.Waiting)
         {
@@ -295,8 +295,11 @@ public class Enemy : MonoBehaviour
     }
     void FixedUpdate()
     {
-
         if (HealthState == EnemyHealthState.Dead) return;
+        if (healthState == EnemyHealthState.Grace)
+        {
+            animations.ActivateCowboyOffset();
+        }
         Movement?.Move(this);
     }
 
@@ -323,11 +326,19 @@ public class Enemy : MonoBehaviour
     #region Animations
 
     EnemyAnimationsContainer animations;
+    [SerializeField] private VisualsFactory visualsFactory;
     private void SetAnimators()
     {
-        activeVisualRoot = Instantiate(data.visualPrefab, visualAnchor);
+        activeVisualRoot = visualsFactory.GetVisual(
+            data.visualType,
+            visualAnchor
+        );
 
-        animations = activeVisualRoot.GetComponentInChildren<EnemyAnimationsContainer>(true);
+        if (activeVisualRoot == null)
+            return;
+
+        animations = activeVisualRoot
+            .GetComponentInChildren<EnemyAnimationsContainer>(true);
     }
     public void PlayIdleAnimation()
     {
@@ -353,7 +364,7 @@ public class Enemy : MonoBehaviour
         return string.IsNullOrEmpty(configuredName) ? defaultName : configuredName;
     }
 
-    private System.Collections.IEnumerator ReturnToIdleAfterAttack()
+    private IEnumerator ReturnToIdleAfterAttack()
     {
         yield return new WaitForSeconds(ActiveAnimation?.attackDuration ?? 0.8f);
 
@@ -379,11 +390,10 @@ public class Enemy : MonoBehaviour
 
         animations.HorseAnimator.Play(stateName, 0, 0f);
     }
-    private System.Collections.IEnumerator ReturnAfterDeathAnimation()
+    private IEnumerator ReturnAfterDeathAnimation()
     {
-        yield return new WaitForSeconds(ActiveAnimation?.deathDuration ?? 1f);
+        yield return new WaitForSeconds(ActiveAnimation?.deathDuration ?? 0.983f);
         ChangeState(EnemyMovementState.Ended);
-        animations.CowboyAnimator.gameObject.SetActive(false);
     }
     #endregion
     public bool TakeDamage(float damage)
@@ -451,7 +461,14 @@ public class Enemy : MonoBehaviour
 
         if (healthBar != null)
             healthBar.Hide();
-        Destroy(activeVisualRoot);
+        
+        if (activeVisualRoot != null)
+        {
+            visualsFactory.ReturnVisual(activeVisualRoot);
+            activeVisualRoot = null;
+            animations = null;
+        }
+
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
 

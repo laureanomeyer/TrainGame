@@ -27,7 +27,7 @@ public class EnemyAttackSO : ScriptableObject
 
         if (IsTargetInRange(enemy))
         {
-            if (enemy.TargetWagon == null && enemy.Weapon.CanShoot) return;
+            if (enemy.TargetWagon == null || !enemy.Weapon.CanShoot) return;
 
             enemy.PlayAttackAnimation();
             enemy.Weapon.Execute(enemy.TargetWagon, enemy.Damage);
@@ -43,6 +43,5 @@ public class EnemyAttackSO : ScriptableObject
         float dist = Vector3.Distance(enemy.transform.position, enemy.TargetWagon.Middle);
         return dist <= enemy.Range + 5;
     }
-
 
 }

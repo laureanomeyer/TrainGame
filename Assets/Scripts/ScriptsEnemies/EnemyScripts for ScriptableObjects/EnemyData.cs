@@ -9,6 +9,16 @@ public enum RangeType
     Long = 35
 }
 
+public enum EnemyVisualID 
+{
+    Carbonero,Recluta,Bandido,
+    Sheriff,Juggernaut,SharpShooter,
+    Blindador,Dinamitero,Stunner,
+    Magnet,Pistolero,SandMan,
+    KuChau,OreThief,Welder,
+    Leader,Kamikaze,OilPourer
+}
+
 public enum DropType {Gold, Coal}
 
 [CreateAssetMenu(menuName = "Enemy/Data")]
@@ -28,7 +38,7 @@ public class EnemyData : ScriptableObject
     public SkinnedMeshRenderer horseMesh;
 
     [Header("New single-prefab visual approach")]
-    public GameObject visualPrefab;
+    public EnemyVisualID visualType;
 
     public Material[] material;
 
