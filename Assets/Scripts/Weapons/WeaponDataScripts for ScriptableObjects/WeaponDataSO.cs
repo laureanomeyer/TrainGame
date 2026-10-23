@@ -12,6 +12,9 @@ public class WeaponDataSO : ScriptableObject
     [Header("Rate of fire")]
     [SerializeField] public float rateOfFire;
 
+    [Header("Shot Strenght")]
+    [SerializeField] public float shotStrenght = 1;
+
     [Header("Reload time")]
     [SerializeField] public float reloadTime;
 

@@ -46,6 +46,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
     private float rateOfFire;
     private float baseRateOfFire;
+    private float shotStrenght;
     public float RateOfFire { get => rateOfFire; }
 
     private float currentReloadTime = 0;
@@ -84,6 +85,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         //Damage set up
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
         baseDamage = damage;
+        shotStrenght = WeaponData.shotStrenght;
 
         EventBus.Subscribe<OnSpencerDetectedDeadEnemy>(CheckEnemiesDefetead);
         EventBus.Subscribe<OnUnlockSpencerLegado>(UpdateCurrentBullet);
@@ -167,7 +169,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
             if (IsReloading) return;
 
             Shoot();
-            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
         }
@@ -192,7 +194,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     }
     public void ResetWaitToFire()
     {
-        EventBus.Publish(new OnShootEvent(rateOfFire));
+        EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
         waitToFire = 0;
     }

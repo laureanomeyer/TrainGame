@@ -37,6 +37,8 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     private float waitToFire = 0;
 
     private float rateOfFire;
+
+    private float shotStrenght;
     public float RateOfFire { get => rateOfFire; }
 
     private float currentReloadTime = 0;
@@ -65,6 +67,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+        shotStrenght = WeaponData.shotStrenght;
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
@@ -107,7 +110,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
             if (IsReloading) return;
 
             Shoot();
-            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
         }
@@ -165,7 +168,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
     }
     public void ResetWaitToFire()
     {
-        EventBus.Publish(new OnShootEvent(rateOfFire));
+        EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
         waitToFire = 0;
     }

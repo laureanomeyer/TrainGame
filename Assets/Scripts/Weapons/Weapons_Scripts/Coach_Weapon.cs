@@ -44,6 +44,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
     [SerializeField] private float maxDamageMult = 3f;
 
     private float currentCoachCharge = 0f;
+    private float shotStrenght;
 
     public WeaponDataSO WeaponData { get => weaponData; set => weaponData = value; }
 
@@ -81,6 +82,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+        shotStrenght = WeaponData.shotStrenght;
 
         EventBus.Subscribe<OnCoachDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockCoachLegado>(UpdateCurrentBullet);
@@ -134,7 +136,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
                 else if(playerAtkReference.IsAttacking == false && currentCoachCharge > 0)
                 {
                     CalculateChargeAttack();
-                    EventBus.Publish(new OnShootEvent(rateOfFire));
+                    EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
                     EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
                     waitToFire = 0;
                 }
@@ -177,7 +179,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
             if (IsReloading) return;
 
             Shoot();
-            EventBus.Publish(new OnShootEvent(rateOfFire, 10));
+            EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
         }
@@ -286,7 +288,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
 
     public void ResetWaitToFire()
     {
-        EventBus.Publish(new OnShootEvent(rateOfFire));
+        EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
         waitToFire = 0;
     }

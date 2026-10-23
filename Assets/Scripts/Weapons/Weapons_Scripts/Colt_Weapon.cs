@@ -49,6 +49,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private float baseDamage;
     private float damage;
     private float damageBuff = 0;
+    private float shotStrenght;
 
     [Header("Delay between shoots")]
     [SerializeField] private float delayBetweenShots = 0.05f; // segundos entre bala 1 y bala 2
@@ -85,6 +86,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         //Damage set up
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
         baseDamage = damage;
+        shotStrenght = WeaponData.shotStrenght;
 
         EventBus.Subscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockColtLegado>(UpdateCurrentBullet);
@@ -126,7 +128,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         if (waitToFire > rateOfFire)
         {
             Shoot();
-            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnShootEvent(rateOfFire, shotStrenght));
             // ya NO reiniciamos waitToFire aquí
         }
     }

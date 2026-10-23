@@ -48,6 +48,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
     private float baseDamage;
     private float damage;
     private float damageBuff = 0;
+    private float shotStrengh;
 
     //Referencia a la pool de balas
     private BulletPool bulletPool;
@@ -70,6 +71,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         //Damage set up
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
+        shotStrengh = weaponData.shotStrenght;
         baseDamage = damage;
 
         EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
@@ -125,7 +127,7 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
             if (IsReloading) return;
 
             Shoot();
-            EventBus.Publish(new OnShootEvent(rateOfFire));
+            EventBus.Publish(new OnShootEvent(rateOfFire, shotStrengh));
             EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
             waitToFire = 0;
         }
