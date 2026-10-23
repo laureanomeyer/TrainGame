@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,11 @@ public class StatPanelController : MonoBehaviour
     [Header("Object References")]
     [SerializeField] private CanvasGroup stats;
     [SerializeField] private InputActionAsset inputActions;
+
+    [Header("Slide Animation")]
+    [SerializeField] private float slideDuration = 0.4f;
+    [SerializeField] private Ease showEase = Ease.OutBack;
+    [SerializeField] private Ease hideEase = Ease.InBack;
 
     [Header("Stats")]
     [SerializeField] private TextMeshProUGUI hpText;
@@ -20,9 +26,16 @@ public class StatPanelController : MonoBehaviour
     private InputAction toggleAction;
     private StatSystem statsSystemRef;
 
+    private RectTransform statsRect;
+    private Vector2 shownPosition;
+    private Vector2 hiddenPosition;
+    private bool isVisible;
+    private Tween slideTween;
+
     void Awake()
     {
-        stats.alpha = 0f;
+        SetupSlide();
+
         toggleAction = inputActions.FindAction("CallUi");
         toggleAction.Enable();
         toggleAction.performed += OnToggleStats;
@@ -36,6 +49,7 @@ public class StatPanelController : MonoBehaviour
 
     void OnDestroy()
     {
+        slideTween?.Kill();
         toggleAction.performed -= OnToggleStats;
         toggleAction.Disable();
         EventBus.Unsubscribe<OnStatChangedEvent>(CallSetUpTextEvent);
@@ -43,20 +57,51 @@ public class StatPanelController : MonoBehaviour
         EventBus.Unsubscribe<OnWeaponChangedEvent>(SetWeaponImage);
     }
 
+    private void SetupSlide()
+    {
+        statsRect = stats.GetComponent<RectTransform>();
+
+        shownPosition = statsRect.anchoredPosition;
+
+        RectTransform canvasRect = stats.GetComponentInParent<Canvas>().rootCanvas.GetComponent<RectTransform>();
+        hiddenPosition = shownPosition + Vector2.left * canvasRect.rect.width;
+
+        statsRect.anchoredPosition = hiddenPosition;
+        stats.alpha = 0f;
+        isVisible = false;
+    }
+
     private void OnToggleStats(InputAction.CallbackContext ctx)
     {
-        if (stats)
+        if (!stats)
         {
-            if (stats.alpha != 0)
-            {
-                stats.alpha = 0;
-            }
-            else
-            {
-                stats.alpha = 1;
-            }
+            Debug.Log("No stats");
+            return;
         }
-        else Debug.Log("No stats");
+
+        if (isVisible) HidePanel();
+        else ShowPanel();
+    }
+
+    private void ShowPanel()
+    {
+        isVisible = true;
+        slideTween?.Kill();
+
+        stats.alpha = 1f;
+        slideTween = statsRect.DOAnchorPos(shownPosition, slideDuration).SetEase(showEase).SetUpdate(true);
+    }
+
+    private void HidePanel()
+    {
+        isVisible = false;
+        slideTween?.Kill();
+
+        slideTween = statsRect
+            .DOAnchorPos(hiddenPosition, slideDuration)
+            .SetEase(hideEase)
+            .SetUpdate(true)
+            .OnComplete(() => stats.alpha = 0f);
     }
 
     private void CallSetUpTextEvent(OnStatChangedEvent statsChagedEvent)
@@ -84,7 +129,7 @@ public class StatPanelController : MonoBehaviour
 
     public void SetWeaponImage(OnWeaponChangedEvent ev)
     {
-        if (weaponSprite != null) 
-        weaponSprite.sprite = ev.sprite;
+        if (weaponSprite != null)
+            weaponSprite.sprite = ev.sprite;
     }
 }

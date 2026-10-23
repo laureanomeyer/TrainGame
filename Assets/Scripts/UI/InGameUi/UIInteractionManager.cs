@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -10,6 +11,36 @@ public class InteractionUIManager : MonoBehaviour
     [SerializeField] private GameObject weaponsPanel;
     [SerializeField] private GameObject UpgradesObject;
     [SerializeField] private StationRouteSO stationRoute;
+
+    [Header("Wagons Panel Animation (slide from right)")]
+    [SerializeField] private float wagonsSlideDuration = 0.4f;
+    [Tooltip("Distancia hacia la derecha desde donde arranca. Tiene que alcanzar para quedar fuera de pantalla.")]
+    [SerializeField] private float wagonsSlideOffset = 1500f;
+    [SerializeField] private Ease wagonsSlideEase = Ease.OutBack;
+
+    [Header("Weapons Panel Animation (slide from left)")]
+    [SerializeField] private float weaponsSlideDuration = 0.4f;
+    [Tooltip("Distancia hacia la izquierda desde donde arranca. Tiene que alcanzar para quedar fuera de pantalla.")]
+    [SerializeField] private float weaponsSlideOffset = 1500f;
+    [SerializeField] private Ease weaponsSlideEase = Ease.OutBack;
+
+    private RectTransform wagonsRect;
+    private RectTransform weaponsRect;
+
+    private Vector2 wagonsOriginalPos;
+    private Vector2 weaponsOriginalPos;
+
+    private Tween wagonsTween;
+    private Tween weaponsTween;
+
+    private void Awake()
+    {
+        wagonsRect = wagonsPanel.GetComponent<RectTransform>();
+        weaponsRect = weaponsPanel.GetComponent<RectTransform>();
+
+        wagonsOriginalPos = wagonsRect.anchoredPosition;
+        weaponsOriginalPos = weaponsRect.anchoredPosition;
+    }
 
     private void Start()
     {
@@ -28,30 +59,56 @@ public class InteractionUIManager : MonoBehaviour
         GameManager.Instance.ChangeGameState(GameState.UI);
     }
 
-
     public void ShowWagons(string message)
     {
-        wagonsPanel.SetActive(true);
-
-        weaponsPanel.SetActive(false);
+        HideWeaponsPanel();
 
         infoText.text = message;
-    }
 
+        if (wagonsPanel.activeSelf)
+            return;
+
+        wagonsTween.Kill();
+
+        wagonsRect.anchoredPosition = wagonsOriginalPos + Vector2.right * wagonsSlideOffset;
+        wagonsPanel.SetActive(true);
+
+        wagonsTween = wagonsRect.DOAnchorPos(wagonsOriginalPos, wagonsSlideDuration).SetEase(wagonsSlideEase).SetUpdate(true).SetLink(gameObject);
+    }
 
     public void ShowWeapons()
     {
-        wagonsPanel.SetActive(false);
+        HideWagonsPanel();
 
+        if (weaponsPanel.activeSelf)
+            return;
+
+        weaponsTween.Kill();
+
+        weaponsRect.anchoredPosition = weaponsOriginalPos + Vector2.left * weaponsSlideOffset;
         weaponsPanel.SetActive(true);
 
+        weaponsTween = weaponsRect.DOAnchorPos(weaponsOriginalPos, weaponsSlideDuration).SetEase(weaponsSlideEase).SetUpdate(true).SetLink(gameObject);
     }
 
     public void HideAll()
     {
-        wagonsPanel.SetActive(false);
-
-        weaponsPanel.SetActive(false);
+        if (wagonsRect == null || weaponsRect == null || wagonsOriginalPos == null || weaponsOriginalPos == null) return;
+        HideWagonsPanel();
+        HideWeaponsPanel();
     }
 
+    private void HideWagonsPanel()
+    {
+        wagonsTween.Kill();
+        wagonsRect.anchoredPosition = wagonsOriginalPos;
+        wagonsPanel.SetActive(false);
+    }
+
+    private void HideWeaponsPanel()
+    {
+        weaponsTween.Kill();
+        weaponsRect.anchoredPosition = weaponsOriginalPos;
+        weaponsPanel.SetActive(false);
+    }
 }
