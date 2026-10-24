@@ -16,6 +16,9 @@ public class GoldenWagonBrain : WagonBrain
     [SerializeField] private GameObject[] goldCoins;
     [SerializeField] private Transform backDoor;
 
+    [Header("Particles")]
+    [SerializeField] private ParticleSequenceController sequenceController;
+
     private float closedRotation;
     private float openRotation;
     private float fixedY;
@@ -72,6 +75,7 @@ public class GoldenWagonBrain : WagonBrain
         if (hpController.CurrentHp <= 0 && hpController != null)
         {
             collector.EmptyGold();
+            sequenceController.PlayGroup(ParticleGroups.DoorSparks);
         }
     }
 
@@ -80,6 +84,7 @@ public class GoldenWagonBrain : WagonBrain
         if (hpController.IsBroken == true && hpController.CurrentHp > 0)
         {
             hpController.IsBroken = false;
+            sequenceController.StopGroup(ParticleGroups.DoorSparks);
             EventBus.Publish(new OnGoldenWagonIsRepairedEvent(this));
         }
     }

@@ -500,7 +500,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3278793636719384009}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.2995129, z: 0.12464142}
   m_LocalScale: {x: 8.846498, y: 8.846498, z: 8.846498}
   m_ConstrainProportionsScale: 0
@@ -931,6 +931,7 @@ GameObject:
   - component: {fileID: 2708095789307227240}
   - component: {fileID: 8917325899051679857}
   - component: {fileID: 2798357014514839596}
+  - component: {fileID: 6144139703690914568}
   m_Layer: 3
   m_Name: GoldWagonPrefab
   m_TagString: Train
@@ -960,6 +961,8 @@ Transform:
   - {fileID: 2530411987354750211}
   - {fileID: 6754433987052940207}
   - {fileID: 8175948748930698241}
+  - {fileID: 8555737946487804558}
+  - {fileID: 8748799125052372342}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!65 &3365280954454563693
@@ -1009,6 +1012,7 @@ MonoBehaviour:
   WagonsDestroyed: []
   wagonTopRender: {fileID: 2772469842101243607}
   wagonTopMeshFilter: {fileID: 4922087848568009192}
+  wagonType: 0
   storageCapacity: 40
   currentGoldUI: {fileID: 2262378321072960923}
   goldBox: {fileID: 6163634403516150076}
@@ -1058,6 +1062,49 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6144139703690914568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189475862246834822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e737a52e461896d42ad18f05c3f50d17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParticleSequenceController
+  particles:
+  - id: Spark1
+    group: DoorSparks
+    particle: {fileID: 0}
+    visualEffect: {fileID: 5179078618173110573}
+    delay: 0
+    useUnscaledTime: 0
+    activateObjectOnPlay: 1
+    clearOnStop: 0
+    onPlayed:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: Spark2
+    group: DoorSparks
+    particle: {fileID: 0}
+    visualEffect: {fileID: 5191001885880196821}
+    delay: 0
+    useUnscaledTime: 0
+    activateObjectOnPlay: 1
+    clearOnStop: 0
+    onPlayed:
+      m_PersistentCalls:
+        m_Calls: []
+  groups:
+  - group: DoorSparks
+    staggerInterval: 0
+    delayBeforeGroup: 0
+    onGroupStarted:
+      m_PersistentCalls:
+        m_Calls: []
+    nextGroup: 
 --- !u!1 &5242113389524262358
 GameObject:
   m_ObjectHideFlags: 0
@@ -6695,3 +6742,169 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.02965301, y: 0.046236128, z: 0.017368898}
   m_Center: {x: 0.004826507, y: -0.00060008885, z: 0.002582042}
+--- !u!1001 &2658687056451796049
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7431592220043553176}
+    m_Modifications:
+    - target: {fileID: 71376197681215901, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_Name
+      value: GoldDoorSparks (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 71376197681215901, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 714086401216329038, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.82
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.599
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 22.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+--- !u!2083052967 &5191001885880196821 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 7849679029546869380, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+  m_PrefabInstance: {fileID: 2658687056451796049}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8748799125052372342 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+  m_PrefabInstance: {fileID: 2658687056451796049}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3112095012393720745
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7431592220043553176}
+    m_Modifications:
+    - target: {fileID: 71376197681215901, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_Name
+      value: GoldDoorSparks
+      objectReference: {fileID: 0}
+    - target: {fileID: 71376197681215901, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 714086401216329038, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.99999976
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.99999976
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.599
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 22.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+--- !u!2083052967 &5179078618173110573 stripped
+VisualEffect:
+  m_CorrespondingSourceObject: {fileID: 7849679029546869380, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+  m_PrefabInstance: {fileID: 3112095012393720745}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8555737946487804558 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6740894382397999399, guid: 6801731ef31a3f5499304b19eb14b433, type: 3}
+  m_PrefabInstance: {fileID: 3112095012393720745}
+  m_PrefabAsset: {fileID: 0}
