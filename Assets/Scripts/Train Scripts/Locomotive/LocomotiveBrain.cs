@@ -133,6 +133,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
     public void AddFuel()
     {
         particleSequence?.PlayGroup(ParticleGroups.ChimneySound);
+        particleSequence?.PlayGroup(ParticleGroups.CoalFire);
         fuelController.AddFuel();
     }
 
