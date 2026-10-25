@@ -36,9 +36,9 @@ public class ReorderHUD : MonoBehaviour
     [Tooltip("Objeto que se muestra/oculta entero (ej: la barra con fondo). Si está vacío, se usa Hint Text.")]
     [SerializeField] private GameObject hintRoot;
     [SerializeField] private TextMeshProUGUI hintText;
-    [SerializeField] private string hoverHint = "A/D: Move     SPACE: Select     esc: Cancel";
-    [SerializeField] private string panelHint = "SPACE: Select     esc: Cancel";
-    [SerializeField] private string dragHint = "A/D: Move     SPACE: Confirm     esc: Cancel";
+    [SerializeField] private string hoverHint = "A/D: Move     F: Select     esc: Cancel";
+    [SerializeField] private string panelHint = "F: Select     esc: Cancel";
+    [SerializeField] private string dragHint = "A/D: Move     F: Confirm     esc: Cancel";
 
     [Header("Option tint (mouse y teclado)")]
     [SerializeField] private Color optionNormalColor = Color.white;
