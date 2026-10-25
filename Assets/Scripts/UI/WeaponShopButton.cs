@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -144,9 +145,10 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
 
             playerDataRef.ChangeWeaponData(currentWeapon);
             playerReference.ChangeWeapon(currentWeapon);
-            buttonManager.UpdateButtons(this);
             EventBus.Publish(new OnWeaponChangedEvent(boughtWeaponSprite));
             DeactivateButton();
+
+            MoveOutOfView();
         }
     }
 
@@ -244,5 +246,29 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         }
 
         shakeTween = rect.DOShakeAnchorPos(duration, new Vector2(distance, 0f), vibrato, 0f, false, true).SetUpdate(true).SetLink(gameObject).OnKill(() => rect.anchoredPosition = buyButtonBasePos);
+    }
+
+    public void MoveOutOfView()
+    {
+        StartCoroutine(MoverRoutine());
+    }
+
+    private IEnumerator MoverRoutine()
+    {
+        RectTransform rect = (RectTransform)transform;
+        Vector2 start = rect.anchoredPosition;
+        Vector2 outPosition = new Vector2(start.x - 2000f, start.y); // ajusta según tu canvas
+
+        float t = 0f;
+        float duration = 0.4f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            rect.anchoredPosition = Vector2.Lerp(start, outPosition, t);
+            yield return null; // espera al siguiente frame
+        }
+
+        rect.anchoredPosition = outPosition;
     }
 }

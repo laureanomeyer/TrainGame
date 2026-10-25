@@ -60,7 +60,8 @@ public class BulletScript : MonoBehaviour, IBullet
         destroyOnEnemy = bulletType.destroyOnEnemy;
         render.material = bulletType.bulletMaterial;
         tr.material = bulletType.trailMaterial;
-        tr.emitting = true;
+        tr.time = bulletType.trailDuration;
+        tr.emitting = bulletType.haveTail;
         isActive = true;
         hasHit = false;
     }

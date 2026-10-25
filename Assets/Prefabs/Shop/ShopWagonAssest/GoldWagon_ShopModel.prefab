@@ -582,6 +582,8 @@ GameObject:
   - component: {fileID: 7431592220043553176}
   - component: {fileID: 2798357014514839596}
   - component: {fileID: 3354671028390297117}
+  - component: {fileID: 5257676610845279138}
+  - component: {fileID: 1292945785421053141}
   m_Layer: 3
   m_Name: GoldWagon_ShopModel
   m_TagString: Untagged
@@ -641,6 +643,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopWagonData
   tail: {fileID: 8663742170297892083}
   CinematicKey: 
+--- !u!114 &5257676610845279138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189475862246834822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d719b10a1cd57ea48a2058245ab13b6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonReaction
+--- !u!65 &1292945785421053141
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5189475862246834822}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6.781169, y: 9.29611, z: 18.447163}
+  m_Center: {x: -0.20883703, y: 1.9849098, z: 8.723581}
 --- !u!1 &6168073675385837385
 GameObject:
   m_ObjectHideFlags: 0

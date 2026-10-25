@@ -3,7 +3,12 @@ using System.Collections.Generic;
 
 public class MapManager : MonoBehaviour
 {
-    [SerializeField] private GameObject tilePrefab;
+    [Header("Floor tiles config")]
+    [SerializeField] int maxLevelWithDesert = 10;
+    [SerializeField] private GameObject desertTilePrefab;
+    [SerializeField] private GameObject grassTilePrefab;
+    private GameObject currentTile;
+
     [SerializeField] private Transform endLocation;
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
@@ -20,6 +25,18 @@ public class MapManager : MonoBehaviour
 
         endLocation = RunManager.Instance.TrainTail;
 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        int level = sessionConfigRef.CurrentLevel;
+
+        if(level <= maxLevelWithDesert)
+        {
+            currentTile = desertTilePrefab;
+        }
+        else
+        {
+            currentTile = grassTilePrefab;
+        }
+
         for (int i = 0; i < RunManager.Instance.ActiveWagons.Count + 3; i++)
         {
             GenerateMap();
@@ -29,7 +46,10 @@ public class MapManager : MonoBehaviour
         {
             if (!tilesMap[i].IsMapHead)
             {
-                tilesMap[i].SetUpWithMesh(tilesMap[i - 1].Tail, variatons[Random.Range(0, variatons.Length)]);
+                if (currentTile == desertTilePrefab)
+                {
+                    tilesMap[i].SetUpWithMesh(tilesMap[i - 1].Tail, variatons[Random.Range(0, variatons.Length)]);
+                }
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
         }
@@ -84,7 +104,7 @@ public class MapManager : MonoBehaviour
         Quaternion rotation = Quaternion.Euler(0f, 90f, 0f);
         
 
-        GameObject tile = Instantiate(tilePrefab, spawnPosition, rotation);
+        GameObject tile = Instantiate(currentTile, spawnPosition, rotation);
         MapTile mapTile = tile.GetComponent<MapTile>();
 
         if (tilesMap.Count == 0)

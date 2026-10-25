@@ -26,4 +26,8 @@ public class BulletTypeScriptable : ScriptableObject
 
     [Header("DestroyOnCollsion")]
     [SerializeField] public bool destroyOnEnemy;
+
+    [Header("Bullet trail config")]
+    [SerializeField] public float trailDuration = 0.2f;
+    [SerializeField] public bool haveTail = true;
 }
