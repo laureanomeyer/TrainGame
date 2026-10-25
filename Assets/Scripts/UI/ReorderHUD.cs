@@ -33,10 +33,17 @@ public class ReorderHUD : MonoBehaviour
     [SerializeField] private float arrowPadding = 40f;
 
     [Header("Hints")]
+    [Tooltip("Objeto que se muestra/oculta entero (ej: la barra con fondo). Si está vacío, se usa Hint Text.")]
+    [SerializeField] private GameObject hintRoot;
     [SerializeField] private TextMeshProUGUI hintText;
-    [SerializeField] private string hoverHint = "A/D: Move     F: Select     esc: Cancel";
-    [SerializeField] private string panelHint = "F: Select     esc: Cancel";
-    [SerializeField] private string dragHint = "A/D: Move     F: Confirm     esc: Cancel";
+    [SerializeField] private string hoverHint = "A/D: Move     SPACE: Select     esc: Cancel";
+    [SerializeField] private string panelHint = "SPACE: Select     esc: Cancel";
+    [SerializeField] private string dragHint = "A/D: Move     SPACE: Confirm     esc: Cancel";
+
+    [Header("Option tint (mouse y teclado)")]
+    [SerializeField] private Color optionNormalColor = Color.white;
+    [SerializeField] private Color optionHoverColor = new(0.85f, 0.85f, 0.85f);
+    [SerializeField] private float optionTintDuration = 0.08f;
 
     [Header("Money colors")]
     [SerializeField] private Color affordColor = new(0.11f, 0.73f, 0.33f);
@@ -96,6 +103,9 @@ public class ReorderHUD : MonoBehaviour
     private string affordHex;
     private string cantAffordHex;
 
+    private Graphic[] optionGraphics;
+    private int tintedIndex = int.MinValue;
+
     #region Lifecycle
 
     private void Awake()
@@ -107,6 +117,7 @@ public class ReorderHUD : MonoBehaviour
 
         CacheGroups();
         WireButtons();
+        TintOptions(-1, instant: true);
 
         ApplyMode(Mode.Hidden);
     }
@@ -119,7 +130,7 @@ public class ReorderHUD : MonoBehaviour
         optionsGroup = GetOrAddGroup(optionsRow);
         leftArrowGroup = GetOrAddGroup(leftArrow.gameObject);
         rightArrowGroup = GetOrAddGroup(rightArrow.gameObject);
-        hintGroup = GetOrAddGroup(hintText.gameObject);
+        hintGroup = GetOrAddGroup(hintRoot != null ? hintRoot : hintText.gameObject);
 
         GameObject nameGo = nameRoot != null ? nameRoot : nameText.gameObject;
         nameGroup = GetOrAddGroup(nameGo);
@@ -128,6 +139,13 @@ public class ReorderHUD : MonoBehaviour
         highlightGroups = new CanvasGroup[optionHighlights.Length];
         for (int i = 0; i < optionHighlights.Length; i++)
             highlightGroups[i] = optionHighlights[i] != null ? GetOrAddGroup(optionHighlights[i]) : null;
+
+        optionGraphics = new Graphic[]
+        {
+            moveButton    != null ? moveButton.targetGraphic    : null,
+            upgradeButton != null ? upgradeButton.targetGraphic : null,
+            sellButton    != null ? sellButton.targetGraphic    : null,
+        };
     }
 
     private static CanvasGroup GetOrAddGroup(GameObject go)
@@ -224,8 +242,9 @@ public class ReorderHUD : MonoBehaviour
         for (int i = 0; i < highlightGroups.Length; i++)
             SetAlpha(highlightGroups[i], i == selectedIndex ? 1f : 0f);
 
-
         SetAlpha(upgradeOptionGroup, upgradeEnabled ? 1f : disabledAlpha);
+
+        TintOptions(selectedIndex, instant: false);
     }
 
 
@@ -237,6 +256,23 @@ public class ReorderHUD : MonoBehaviour
         if (nameLayout.ignoreLayout == show) nameLayout.ignoreLayout = !show;
 
         if (show) SetTextIfChanged(nameText, wagonName);
+    }
+
+    private void TintOptions(int selectedIndex, bool instant)
+    {
+        if (selectedIndex == tintedIndex) return;
+        tintedIndex = selectedIndex;
+
+        float duration = instant ? 0f : optionTintDuration;
+
+        for (int i = 0; i < optionGraphics.Length; i++)
+        {
+            Graphic g = optionGraphics[i];
+            if (g == null) continue;
+
+            Color c = i == selectedIndex ? optionHoverColor : optionNormalColor;
+            g.CrossFadeColor(c, duration, true, false);
+        }
     }
 
     #endregion

@@ -1690,6 +1690,7 @@ MonoBehaviour:
   worldCamera: {fileID: 0}
   signRoot: {fileID: 2051248044774213231}
   nameText: {fileID: 2963716711985896374}
+  nameRoot: {fileID: 0}
   descriptionText: {fileID: 8584503680169027882}
   optionsRow: {fileID: 1634404533154971444}
   optionHighlights:
@@ -1699,6 +1700,7 @@ MonoBehaviour:
   upgradeOptionGroup: {fileID: 6766221612769379680}
   signWorldOffsetY: 5
   disabledAlpha: 0.4
+  signFollowsWagon: 0
   leftArrow: {fileID: 63986277371572501}
   rightArrow: {fileID: 489544419504528057}
   arrowPadding: 100
@@ -1706,9 +1708,15 @@ MonoBehaviour:
   hoverHint: 'A/D: Move     Space: Select     esc: Cancel'
   panelHint: 'Space: Select     esc: Cancel'
   dragHint: 'A/D: Move     Space: Confirm     esc: Cancel'
-  hintTexts: {fileID: 0}
   affordColor: {r: 0.11, g: 0.73, b: 0.33, a: 1}
   cantAffordColor: {r: 0.85, g: 0.2, b: 0.2, a: 1}
+  moveButton: {fileID: 0}
+  upgradeButton: {fileID: 0}
+  sellButton: {fileID: 0}
+  leftArrowButton: {fileID: 0}
+  rightArrowButton: {fileID: 0}
+  confirmButton: {fileID: 0}
+  cancelButton: {fileID: 0}
 --- !u!1 &3947337279069940519
 GameObject:
   m_ObjectHideFlags: 0
@@ -1877,8 +1885,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8081203973473042719}
   - {fileID: 2282040856039817362}
+  - {fileID: 8081203973473042719}
   m_Father: {fileID: 2051248044774213231}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
