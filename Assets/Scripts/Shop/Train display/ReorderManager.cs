@@ -11,10 +11,14 @@ public class ReorderManager : MonoBehaviour
     [SerializeField] private string moveDescription = "Change wagon order";
     [SerializeField] private string maxLevelDescription = "Max level";
 
+    [Header("Mouse")]
+    [SerializeField] private bool rightClickCancels = true;
+
     private DisplayTrain trainDisplayRef;
     private StoreUiInteracts UIRef;
     private ReorderCameraController reorderCameraRef;
     private ReorderHUD hudRef;
+    private bool hudSubscribed;
 
     private enum State { Hovering, Panel, Dragging }
     private State state = State.Hovering;
@@ -49,6 +53,7 @@ public class ReorderManager : MonoBehaviour
     private void OnDisable()
     {
         ServiceLocator.Unregister<ReorderManager>();
+        UnsubscribeHud();
 
         if (inputRef == null) return;
         inputRef.actions["Move"].performed -= OnMovePerformed;
@@ -62,19 +67,121 @@ public class ReorderManager : MonoBehaviour
         if (UIRef == null) ServiceLocator.TryGet(out UIRef);
         if (reorderCameraRef == null) ServiceLocator.TryGet(out reorderCameraRef);
         if (hudRef == null) ServiceLocator.TryGet(out hudRef);
+
+        if (hudRef != null && !hudSubscribed) SubscribeHud();
+    }
+
+    private void SubscribeHud()
+    {
+        hudRef.OptionHovered += OnHudOptionHovered;
+        hudRef.OptionClicked += OnHudOptionClicked;
+        hudRef.ArrowClicked += OnHudArrowClicked;
+        hudRef.ConfirmClicked += OnHudConfirm;
+        hudRef.CancelClicked += OnHudCancel;
+        hudRef.OptionUnhovered += OnHudOptionUnhovered;
+        hudSubscribed = true;
+    }
+
+    private void UnsubscribeHud()
+    {
+        if (!hudSubscribed || hudRef == null) return;
+
+        hudRef.OptionHovered -= OnHudOptionHovered;
+        hudRef.OptionClicked -= OnHudOptionClicked;
+        hudRef.ArrowClicked -= OnHudArrowClicked;
+        hudRef.ConfirmClicked -= OnHudConfirm;
+        hudRef.CancelClicked -= OnHudCancel;
+        hudRef.OptionUnhovered -= OnHudOptionUnhovered;
+        hudSubscribed = false;
+    }
+
+    private void Update()
+    {
+        if (!isInReorderMode || !rightClickCancels) return;
+
+        var mouse = Mouse.current;
+        if (mouse != null && mouse.rightButton.wasPressedThisFrame)
+            HandleCancel();
     }
 
     #endregion
 
-    #region Input
+    #region Teclado ? acciones
 
     private void OnMovePerformed(InputAction.CallbackContext ctx)
     {
         if (!isInReorderMode) return;
 
         int dir = Mathf.RoundToInt(ctx.ReadValue<Vector2>().x);
-        if (dir == 0) return;
+        if (dir != 0) HandleDirection(dir);
+    }
 
+    private void OnSelectPerformed(InputAction.CallbackContext ctx)
+    {
+        if (isInReorderMode) HandleSelect();
+    }
+
+    private void OnPausePerformed(InputAction.CallbackContext ctx)
+    {
+        if (isInReorderMode) HandleCancel();
+    }
+
+    #endregion
+
+    #region Mouse (HUD) ? acciones
+
+    private void OnHudOptionHovered(ReorderHUD.Option option)
+    {
+        if (!isInReorderMode || state == State.Dragging || cacheRef == null) return;
+
+        if (state == State.Panel)
+        {
+            selectedOption = option;
+            RefreshPanel();
+        }
+        else
+        {
+
+            PreviewOption(option);
+        }
+    }
+
+    private void OnHudOptionUnhovered(ReorderHUD.Option option)
+    {
+
+        if (isInReorderMode && state == State.Hovering) ShowHover();
+    }
+
+    private void OnHudOptionClicked(ReorderHUD.Option option)
+    {
+        if (!isInReorderMode || state == State.Dragging || cacheRef == null) return;
+
+
+        selectedOption = option;
+        ExecuteSelectedOption();
+    }
+
+    private void OnHudArrowClicked(int dir)
+    {
+        if (isInReorderMode) HandleDirection(dir);
+    }
+
+    private void OnHudConfirm()
+    {
+        if (isInReorderMode) HandleSelect();
+    }
+
+    private void OnHudCancel()
+    {
+        if (isInReorderMode) HandleCancel();
+    }
+
+    #endregion
+
+    #region Acciones compartidas
+
+    private void HandleDirection(int dir)
+    {
         ResolveRefs();
 
         switch (state)
@@ -98,9 +205,8 @@ public class ReorderManager : MonoBehaviour
         }
     }
 
-    private void OnSelectPerformed(InputAction.CallbackContext ctx)
+    private void HandleSelect()
     {
-        if (!isInReorderMode) return;
         ResolveRefs();
 
         switch (state)
@@ -124,9 +230,8 @@ public class ReorderManager : MonoBehaviour
         }
     }
 
-    private void OnPausePerformed(InputAction.CallbackContext ctx)
+    private void HandleCancel()
     {
-        if (!isInReorderMode) return;
         ResolveRefs();
 
         switch (state)
@@ -183,21 +288,14 @@ public class ReorderManager : MonoBehaviour
     {
         if (hudRef == null || cacheRef == null) return;
 
-        var so = trainDisplayRef.GetWagonSO(hoveredSlot);          // nivel actual ? nombre
-        var baseSo = trainDisplayRef.GetBaseWagonSO(hoveredSlot);  // nivel 1 ? descripción
+        var so = trainDisplayRef.GetWagonSO(hoveredSlot);       
+        var baseSo = trainDisplayRef.GetBaseWagonSO(hoveredSlot); 
 
         string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
         string description = baseSo != null ? baseSo.Description : string.Empty;
 
         GetUpgradeState(out _, out _, out bool canAfford);
         hudRef.ShowHover(cacheRef, wagonName, description, canAfford);
-    }
-
-    private bool GetUpgradeState(out WagonInStockSO next, out float cost, out bool canAfford)
-    {
-        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out next, out cost);
-        canAfford = hasUpgrade && storeManagerRef.GetGold() >= cost;
-        return hasUpgrade;
     }
 
     #endregion
@@ -208,26 +306,44 @@ public class ReorderManager : MonoBehaviour
     {
         if (hudRef == null || cacheRef == null) return;
 
+        string description = BuildOptionDescription(selectedOption, out string wagonName, out bool canAfford);
+        hudRef.ShowPanel(cacheRef, wagonName, selectedOption, description, canAfford);
+    }
+
+    private void PreviewOption(ReorderHUD.Option option)
+    {
+        if (hudRef == null || cacheRef == null) return;
+
+        string description = BuildOptionDescription(option, out string wagonName, out bool canAfford);
+        hudRef.PreviewOption(wagonName, option, description, canAfford);
+    }
+
+    private string BuildOptionDescription(ReorderHUD.Option option, out string wagonName, out bool canAfford)
+    {
         var so = trainDisplayRef.GetWagonSO(hoveredSlot);
-        string wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
+        wagonName = so != null ? so.wagonName : cacheRef.IDReference.WagonName;
 
-        bool hasUpgrade = GetUpgradeState(out var next, out float cost, out bool canAfford);
+        bool hasUpgrade = GetUpgradeState(out var next, out float cost, out canAfford);
 
-        string description = selectedOption switch
+        return option switch
         {
             ReorderHUD.Option.Move => moveDescription,
             ReorderHUD.Option.Upgrade => hasUpgrade ? BuildUpgradeText(next, cost, canAfford) : maxLevelDescription,
             _ => $"Sell for {hudRef.FormatMoney(GetSellValue(cacheRef), true)}"
         };
-
-        hudRef.ShowPanel(cacheRef, wagonName, selectedOption, description, canAfford);
     }
+
+    private bool GetUpgradeState(out WagonInStockSO next, out float cost, out bool canAfford)
+    {
+        bool hasUpgrade = trainDisplayRef.TryGetUpgradeInfo(hoveredSlot, out next, out cost);
+        canAfford = hasUpgrade && storeManagerRef.GetGold() >= cost;
+        return hasUpgrade;
+    }
+
     private string BuildUpgradeText(WagonInStockSO next, float cost, bool canAfford)
     {
         string price = $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}";
-        return string.IsNullOrEmpty(next.Description)
-            ? price
-            : $"{next.Description}\n<b>{price}</b>";
+        return string.IsNullOrEmpty(next.Description) ? price : $"{next.Description}\n<b>{price}</b>";
     }
 
     private void ExecuteSelectedOption()
@@ -235,7 +351,6 @@ public class ReorderManager : MonoBehaviour
         switch (selectedOption)
         {
             case ReorderHUD.Option.Move:
-                trainDisplayRef.CacheSlotLayout();
                 trainDisplayRef.BeginDrag(hoveredSlot);
                 state = State.Dragging;
                 hudRef?.ShowDrag(cacheRef);
@@ -259,11 +374,11 @@ public class ReorderManager : MonoBehaviour
         var upgraded = trainDisplayRef.UpgradeWagon(hoveredSlot);
         if (upgraded == null)
         {
-            storeManagerRef.AddGold(cost); // devolución por seguridad
+            storeManagerRef.AddGold(cost); 
             return;
         }
 
-        cacheRef = null; // el modelo viejo fue destruido
+        cacheRef = null; 
         SetHovered(hoveredSlot, moveCamera: true);
         state = State.Hovering;
         ShowHover();
@@ -309,14 +424,15 @@ public class ReorderManager : MonoBehaviour
             if (count <= 0) return;
 
             state = State.Hovering;
-            trainDisplayRef.CacheSlotLayout();
 
             int slot = (hoveredSlot < 0 || hoveredSlot >= count) ? 0 : hoveredSlot;
             SetHovered(slot, moveCamera: false);
             reorderCameraRef?.Activate(cacheRef.transform);
 
             UIRef?.HideUI();
-            EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
+
+            EventBus.Publish(new OnShowCursorEvent(CursorType.RealAndFrozen));
+
 
             isInReorderMode = true;
             ShowHover();

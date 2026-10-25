@@ -1,14 +1,17 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ReorderHUD : MonoBehaviour
 {
     public enum Option { Move = 0, Upgrade = 1, Sell = 2 }
 
     [Header("Canvas")]
-    [SerializeField] private RectTransform canvasRect;
-    [SerializeField] private Camera uiCamera;
-    [SerializeField] private Camera worldCamera;
+    [SerializeField] private RectTransform canvasRect; 
+    [SerializeField] private Camera uiCamera;         
+    [SerializeField] private Camera worldCamera;         
 
     [Header("Sign")]
     [SerializeField] private RectTransform signRoot;
@@ -21,6 +24,8 @@ public class ReorderHUD : MonoBehaviour
     [SerializeField] private CanvasGroup upgradeOptionGroup;
     [SerializeField] private float signWorldOffsetY = 0.5f;
     [SerializeField, Range(0f, 1f)] private float disabledAlpha = 0.4f;
+    [Tooltip("Off: el cartel queda fijo donde lo pongas en el Canvas. On: sigue la altura del vagón.")]
+    [SerializeField] private bool signFollowsWagon = false;
 
     [Header("Arrows")]
     [SerializeField] private RectTransform leftArrow;
@@ -32,15 +37,42 @@ public class ReorderHUD : MonoBehaviour
     [SerializeField] private string hoverHint = "A/D: Move     F: Select     esc: Cancel";
     [SerializeField] private string panelHint = "F: Select     esc: Cancel";
     [SerializeField] private string dragHint = "A/D: Move     F: Confirm     esc: Cancel";
-    [SerializeField] private CanvasGroup hintTexts;
 
     [Header("Money colors")]
     [SerializeField] private Color affordColor = new(0.11f, 0.73f, 0.33f);
     [SerializeField] private Color cantAffordColor = new(0.85f, 0.2f, 0.2f);
 
+    [Header("Clickable")]
+    [SerializeField] private Button moveButton;
+    [SerializeField] private Button upgradeButton;
+    [SerializeField] private Button sellButton;
+    [SerializeField] private Button leftArrowButton;
+    [SerializeField] private Button rightArrowButton;
+    [Tooltip("Opcional: equivale a F (Select / Confirm).")]
+    [SerializeField] private Button confirmButton;
+    [Tooltip("Opcional: equivale a esc (Cancel).")]
+    [SerializeField] private Button cancelButton;
+
+    public event Action<Option> OptionHovered;
+    public event Action<Option> OptionClicked;
+    public event Action<Option> OptionUnhovered;
+    public event Action<int> ArrowClicked;  
+    public event Action ConfirmClicked;
+    public event Action CancelClicked;
+
     private enum Mode { Hidden, Hover, Panel, Drag }
     private Mode mode = Mode.Hidden;
     private ShopWagonData target;
+
+
+    private CanvasGroup signGroup;
+    private CanvasGroup nameGroup;
+    private LayoutElement nameLayout;
+    private CanvasGroup optionsGroup;
+    private CanvasGroup leftArrowGroup;
+    private CanvasGroup rightArrowGroup;
+    private CanvasGroup hintGroup;
+    private CanvasGroup[] highlightGroups;
 
     private static readonly Vector3[] cornersBuffer = new Vector3[4];
 
@@ -64,6 +96,8 @@ public class ReorderHUD : MonoBehaviour
     private string affordHex;
     private string cantAffordHex;
 
+    #region Lifecycle
+
     private void Awake()
     {
         ServiceLocator.Register(this);
@@ -71,10 +105,39 @@ public class ReorderHUD : MonoBehaviour
         affordHex = ColorUtility.ToHtmlStringRGB(affordColor);
         cantAffordHex = ColorUtility.ToHtmlStringRGB(cantAffordColor);
 
+        CacheGroups();
+        WireButtons();
+
         ApplyMode(Mode.Hidden);
     }
 
     private void OnDestroy() => ServiceLocator.Unregister<ReorderHUD>();
+
+    private void CacheGroups()
+    {
+        signGroup = GetOrAddGroup(signRoot.gameObject);
+        optionsGroup = GetOrAddGroup(optionsRow);
+        leftArrowGroup = GetOrAddGroup(leftArrow.gameObject);
+        rightArrowGroup = GetOrAddGroup(rightArrow.gameObject);
+        hintGroup = GetOrAddGroup(hintText.gameObject);
+
+        GameObject nameGo = nameRoot != null ? nameRoot : nameText.gameObject;
+        nameGroup = GetOrAddGroup(nameGo);
+        nameLayout = nameGo.GetComponent<LayoutElement>() ?? nameGo.AddComponent<LayoutElement>();
+
+        highlightGroups = new CanvasGroup[optionHighlights.Length];
+        for (int i = 0; i < optionHighlights.Length; i++)
+            highlightGroups[i] = optionHighlights[i] != null ? GetOrAddGroup(optionHighlights[i]) : null;
+    }
+
+    private static CanvasGroup GetOrAddGroup(GameObject go)
+    {
+        if (go == null) return null;
+        var g = go.GetComponent<CanvasGroup>();
+        return g != null ? g : go.AddComponent<CanvasGroup>();
+    }
+
+    #endregion
 
     #region API
 
@@ -83,7 +146,7 @@ public class ReorderHUD : MonoBehaviour
         target = wagon;
         SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
-        SetOptions(-1, upgradeEnabled);
+        SetOptions(-1, upgradeEnabled); 
         ApplyMode(Mode.Hover);
     }
 
@@ -97,19 +160,6 @@ public class ReorderHUD : MonoBehaviour
         SetOptions((int)selected, upgradeEnabled);
 
         ApplyMode(Mode.Panel);
-    }
-
-
-    private void SetOptions(int selectedIndex, bool upgradeEnabled)
-    {
-        for (int i = 0; i < optionHighlights.Length; i++)
-            SetActiveIfChanged(optionHighlights[i], i == selectedIndex);
-
-        if (upgradeOptionGroup != null)
-        {
-            float alpha = upgradeEnabled ? 1f : disabledAlpha;
-            if (!Mathf.Approximately(upgradeOptionGroup.alpha, alpha)) upgradeOptionGroup.alpha = alpha;
-        }
     }
 
     public void ShowDrag(ShopWagonData wagon)
@@ -129,7 +179,18 @@ public class ReorderHUD : MonoBehaviour
         return "<color=#" + (affordable ? affordHex : cantAffordHex) + ">$" + amount + "</color>";
     }
 
+    public void PreviewOption(string wagonName, Option option, string description, bool upgradeEnabled)
+    {
+        SetName(option == Option.Upgrade ? null : wagonName);
+        SetTextIfChanged(descriptionText, description);
+        SetOptions((int)option, upgradeEnabled);
+
+        forcedRefreshFrames = 2; 
+    }
+
     #endregion
+
+    #region Modo y visibilidad
 
     private void ApplyMode(Mode newMode)
     {
@@ -138,11 +199,11 @@ public class ReorderHUD : MonoBehaviour
         bool showSign = mode == Mode.Hover || mode == Mode.Panel;
         bool showArrows = mode == Mode.Hover || mode == Mode.Drag;
 
-        SetActiveIfChanged(signRoot.gameObject, showSign);
-        SetActiveIfChanged(optionsRow, mode == Mode.Hover || mode == Mode.Panel);
-        SetActiveIfChanged(leftArrow.gameObject, showArrows);
-        SetActiveIfChanged(rightArrow.gameObject, showArrows);
-        SetActiveIfChanged(hintText.gameObject, mode != Mode.Hidden);
+        SetVisible(signGroup, showSign);
+        SetVisible(optionsGroup, showSign);
+        SetVisible(leftArrowGroup, showArrows);
+        SetVisible(rightArrowGroup, showArrows);
+        SetVisible(hintGroup, mode != Mode.Hidden);
 
         SetTextIfChanged(hintText, mode switch
         {
@@ -152,23 +213,67 @@ public class ReorderHUD : MonoBehaviour
             _ => string.Empty
         });
 
+
         forcedRefreshFrames = 2;
         UpdatePositions();
     }
+
+
+    private void SetOptions(int selectedIndex, bool upgradeEnabled)
+    {
+        for (int i = 0; i < highlightGroups.Length; i++)
+            SetAlpha(highlightGroups[i], i == selectedIndex ? 1f : 0f);
+
+
+        SetAlpha(upgradeOptionGroup, upgradeEnabled ? 1f : disabledAlpha);
+    }
+
+
+    private void SetName(string wagonName)
+    {
+        bool show = !string.IsNullOrEmpty(wagonName);
+
+        SetVisible(nameGroup, show);
+        if (nameLayout.ignoreLayout == show) nameLayout.ignoreLayout = !show;
+
+        if (show) SetTextIfChanged(nameText, wagonName);
+    }
+
+    #endregion
+
+    #region Posicionamiento
 
     private void LateUpdate()
     {
         if (mode == Mode.Hidden || target == null) return;
 
-        Camera cam = GetWorldCamera();
-        if (cam == null) return;
-
         bool forced = forcedRefreshFrames > 0;
         if (forced) forcedRefreshFrames--;
+
+
+        bool tracksWorld = mode == Mode.Drag || signFollowsWagon;
+
+        if (!tracksWorld)
+        {
+            if (forced || ScreenSizeChanged()) UpdatePositions();
+            return;
+        }
+
+        Camera cam = GetWorldCamera();
+        if (cam == null) return;
 
         if (!forced && !HasViewChanged(cam)) return;
 
         UpdatePositions();
+    }
+
+    private bool ScreenSizeChanged()
+    {
+        if (Screen.width == lastScreenW && Screen.height == lastScreenH) return false;
+
+        lastScreenW = Screen.width;
+        lastScreenH = Screen.height;
+        return true;
     }
 
     private Camera GetWorldCamera()
@@ -219,22 +324,28 @@ public class ReorderHUD : MonoBehaviour
     {
         if (mode == Mode.Hidden || target == null) return;
 
-        Camera cam = GetWorldCamera();
-        if (cam == null) return;
-
-        Bounds b = target.GetWorldBounds();
 
         if (mode == Mode.Drag)
         {
-            if (TryGetCanvasRect(cam, b, out Rect wagonRect))
+            Camera cam = GetWorldCamera();
+            if (cam != null && TryGetCanvasRect(cam, target.GetWorldBounds(), out Rect wagonRect))
                 PlaceArrows(wagonRect.center.y, wagonRect.xMin, wagonRect.xMax);
             return;
         }
 
-        Vector3 top = new(b.center.x, b.max.y + signWorldOffsetY, b.center.z);
-        if (!WorldToCanvasLocal(cam, top, out Vector2 local)) return;
 
-        SetPositionIfChanged(signRoot, canvasRect.TransformPoint(local));
+        if (signFollowsWagon)
+        {
+            Camera cam = GetWorldCamera();
+            if (cam == null) return;
+
+            Bounds b = target.GetWorldBounds();
+            Vector3 top = new(b.center.x, b.max.y + signWorldOffsetY, b.center.z);
+            if (!WorldToCanvasLocal(cam, top, out Vector2 local)) return;
+
+            SetPositionIfChanged(signRoot, canvasRect.TransformPoint(local));
+        }
+
 
         if (mode == Mode.Hover)
         {
@@ -249,17 +360,73 @@ public class ReorderHUD : MonoBehaviour
         SetPositionIfChanged(rightArrow, canvasRect.TransformPoint(new Vector3(xMax + arrowPadding, y, 0f)));
     }
 
-    // null o vacío → oculta el nombre (y su caja si nameRoot está asignado)
-    private void SetName(string wagonName)
-    {
-        bool show = !string.IsNullOrEmpty(wagonName);
-        GameObject root = nameRoot != null ? nameRoot : nameText.gameObject;
+    #endregion
 
-        SetActiveIfChanged(root, show);
-        if (show) SetTextIfChanged(nameText, wagonName);
+    #region Clicks
+
+    private void WireButtons()
+    {
+        WireOption(moveButton, Option.Move);
+        WireOption(upgradeButton, Option.Upgrade);
+        WireOption(sellButton, Option.Sell);
+        WireClick(leftArrowButton, () => ArrowClicked?.Invoke(-1));
+        WireClick(rightArrowButton, () => ArrowClicked?.Invoke(+1));
+        WireClick(confirmButton, () => ConfirmClicked?.Invoke());
+        WireClick(cancelButton, () => CancelClicked?.Invoke());
     }
 
+    private void WireOption(Button button, Option option)
+    {
+        if (button == null) return;
+
+        WireClick(button, () => OptionClicked?.Invoke(option));
+
+
+        var trigger = button.GetComponent<EventTrigger>();
+        if (trigger == null) trigger = button.gameObject.AddComponent<EventTrigger>();
+
+        var enter = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+        enter.callback.AddListener(_ => OptionHovered?.Invoke(option));
+        trigger.triggers.Add(enter);
+
+        var exit = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+        exit.callback.AddListener(_ => OptionUnhovered?.Invoke(option));
+        trigger.triggers.Add(exit);
+    }
+
+    private static void WireClick(Button button, Action action)
+    {
+        if (button == null) return;
+
+
+        button.navigation = new Navigation { mode = Navigation.Mode.None };
+
+        button.onClick.AddListener(() =>
+        {
+            if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+            action();
+        });
+    }
+
+    #endregion
+
     #region Helpers sin escrituras innecesarias
+
+
+    private static void SetVisible(CanvasGroup g, bool visible)
+    {
+        if (g == null) return;
+
+        float a = visible ? 1f : 0f;
+        if (g.alpha != a) g.alpha = a;
+        if (g.blocksRaycasts != visible) g.blocksRaycasts = visible;
+        if (g.interactable != visible) g.interactable = visible;
+    }
+
+    private static void SetAlpha(CanvasGroup g, float alpha)
+    {
+        if (g != null && !Mathf.Approximately(g.alpha, alpha)) g.alpha = alpha;
+    }
 
     private static void SetPositionIfChanged(RectTransform rt, Vector3 worldPos)
     {
@@ -272,11 +439,6 @@ public class ReorderHUD : MonoBehaviour
         if (text == null) return;
         value ??= string.Empty;
         if (text.text != value) text.text = value;
-    }
-
-    private static void SetActiveIfChanged(GameObject go, bool active)
-    {
-        if (go != null && go.activeSelf != active) go.SetActive(active);
     }
 
     #endregion

@@ -248,20 +248,18 @@ public class GameManager : MonoBehaviour
     {
         currentCursor = cursor;
 
-        switch (cursor) 
+        switch (cursor)
         {
-            case CursorType.Real: 
+            case CursorType.Real:
+            case CursorType.RealAndFrozen:
                 Cursor.visible = true;
                 EventBus.Publish(new OnShowGameplayCursorEvent(false));
                 break;
-            case CursorType.Gameplay: 
+            case CursorType.Gameplay:
                 Cursor.visible = false;
                 EventBus.Publish(new OnShowGameplayCursorEvent(true));
                 break;
-            case CursorType.HiddenAndFrozen: 
-                Cursor.visible = false;
-                EventBus.Publish(new OnShowGameplayCursorEvent(false));
-                break;
+            case CursorType.HiddenAndFrozen:
             case CursorType.HiddenAndMoveable:
                 Cursor.visible = false;
                 EventBus.Publish(new OnShowGameplayCursorEvent(false));

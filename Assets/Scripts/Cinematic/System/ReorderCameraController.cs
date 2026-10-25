@@ -7,15 +7,15 @@ public class ReorderCameraController : MonoBehaviour
     [SerializeField] private CinemachineCamera reorderCinemachineCamera;
 
     [Header("Priorities")]
-    [SerializeField] private int activePriority = 20;
+    [SerializeField] private int activePriority = 30;
     [SerializeField] private int inactivePriority = 0;
 
     [Header("Framing")]
-    [Tooltip("Offset en espacio del MUNDO desde el wagon hovereado (ej: 0,5,0 para quedar arriba).")]
-    [SerializeField] private Vector3 topOffset = new Vector3(0f, 5f, 0f);
+    [Tooltip("Offset en espacio del MUNDO desde el CENTRO del wagon hovereado.")]
+    [SerializeField] private Vector3 topOffset = new Vector3(0f, 30f, -15f);
 
-    [Tooltip("Rotación fija de la cámara en euler. No mira exacto al target, mantiene este ángulo siempre.")]
-    [SerializeField] private Vector3 fixedEulerRotation = new Vector3(35f, 0f, 0f);
+    [Tooltip("Rotación fija de la cámara en euler.")]
+    [SerializeField] private Vector3 fixedEulerRotation = new Vector3(50f, 0f, 0f);
 
     [Header("Follow Smoothing")]
     [Tooltip("Tiempo aproximado (seg) que tarda en alcanzar al target. Más bajo = más rápido/rígido.")]
@@ -23,6 +23,7 @@ public class ReorderCameraController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 8f;
 
     private Transform currentTarget;
+    private Vector3 focusOffset;  
     private Vector3 velocity;
     private bool isActive;
 
@@ -32,17 +33,17 @@ public class ReorderCameraController : MonoBehaviour
         ServiceLocator.Register(this);
     }
 
+    private void OnDestroy() => ServiceLocator.Unregister<ReorderCameraController>();
+
     public void Activate(Transform initialTarget)
     {
-        currentTarget = initialTarget;
+        SetTarget(initialTarget);
         isActive = true;
 
         if (currentTarget != null)
         {
             Transform camT = reorderCinemachineCamera.transform;
-            Vector3 snapPos = currentTarget.position + topOffset;
-            camT.position = snapPos;
-            camT.rotation = ComputeRotation();
+            camT.SetPositionAndRotation(FocusPoint() + topOffset, Quaternion.Euler(fixedEulerRotation));
             velocity = Vector3.zero;
         }
 
@@ -59,6 +60,7 @@ public class ReorderCameraController : MonoBehaviour
     public void SetTarget(Transform target)
     {
         currentTarget = target;
+        focusOffset = ComputeFocusOffset(target);
     }
 
     private void LateUpdate()
@@ -66,16 +68,26 @@ public class ReorderCameraController : MonoBehaviour
         if (!isActive || currentTarget == null) return;
 
         Transform camT = reorderCinemachineCamera.transform;
-        Vector3 desiredPos = currentTarget.position + topOffset;
+        Vector3 desiredPos = FocusPoint() + topOffset;
 
         camT.position = Vector3.SmoothDamp(camT.position, desiredPos, ref velocity, positionSmoothTime);
 
-        Quaternion desiredRot = ComputeRotation();
+        Quaternion desiredRot = Quaternion.Euler(fixedEulerRotation);
         camT.rotation = Quaternion.Slerp(camT.rotation, desiredRot, rotationSpeed * Time.deltaTime);
     }
 
-    private Quaternion ComputeRotation()
+
+    private Vector3 FocusPoint() => currentTarget.position + currentTarget.rotation * focusOffset;
+
+
+    private static Vector3 ComputeFocusOffset(Transform target)
     {
-        return Quaternion.Euler(fixedEulerRotation);
+        if (target == null) return Vector3.zero;
+
+        var data = target.GetComponent<ShopWagonData>();
+        if (data == null) return Vector3.zero;
+
+        Vector3 worldOffset = data.GetWorldBounds().center - target.position;
+        return Quaternion.Inverse(target.rotation) * worldOffset;
     }
 }
