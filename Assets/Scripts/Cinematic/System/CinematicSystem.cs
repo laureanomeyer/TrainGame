@@ -153,9 +153,11 @@ public class CinematicSystem : MonoBehaviour
 
     private IEnumerator KeepTracking(Transform camT, Transform target, CameraTravelSequenceSO sequence)
     {
+        Vector3 localAnchor = sequence.anchorToBoundsCenter ? CameraTravel.ComputeLocalAnchor(target) : Vector3.zero;
+
         while (target != null)
         {
-            Vector3 desired = target.position + sequence.worldOffsetFromTarget;
+            Vector3 desired = CameraTravel.ResolvePoint(target, localAnchor, sequence.offsetFromTarget, sequence.offsetSpace);
             camT.position = CameraTravel.ApplyAxes(camT.position, desired, sequence.travelAxes);
             yield return null;
         }

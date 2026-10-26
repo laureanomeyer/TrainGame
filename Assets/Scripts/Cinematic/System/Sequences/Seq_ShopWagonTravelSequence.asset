@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4e5f975edbd45243a3e05ce00286738, type: 3}
   m_Name: Seq_ShopWagonTravelSequence
   m_EditorClassIdentifier: Assembly-CSharp::CameraTravelSequenceSO
-  travelSpeed: 1
-  minTravelDuration: 1
-  maxTravelDuration: 1
-  returnSpeed: 40
-  minReturnDuration: 0.6
-  maxReturnDuration: 1.2
-  holdDuration: 0.5
+  travelSpeed: 40
+  minTravelDuration: 0.45
+  maxTravelDuration: 0.7
+  returnSpeed: 55
+  minReturnDuration: 0.4
+  maxReturnDuration: 0.8
+  holdDuration: 0.4
   travelCurve:
     serializedVersion: 2
     m_Curve:
@@ -79,10 +79,13 @@ MonoBehaviour:
   useFOVZoom: 0
   startFov: 40
   endFov: 18
-  worldOffsetFromTarget: {x: -10, y: 20, z: -20}
-  lookAtTarget: 0
-  useFixedRotation: 1
+  offsetSpace: 0
+  offsetFromTarget: {x: 6, y: 20, z: -22}
+  lookAtOffset: {x: 0, y: 0, z: 0}
+  lookAtTarget: 1
+  useFixedRotation: 0
   fixedEulerRotation: {x: 45, y: 0, z: 0}
   travelAxes: -1
   trackTarget: 0
   returnToOrigin: 1
+  anchorToBoundsCenter: 1

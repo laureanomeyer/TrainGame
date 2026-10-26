@@ -19,6 +19,48 @@ public static class CameraTravel
         return Mathf.Clamp(distance / speed, min, max);
     }
 
+    /// <summary>
+    /// Centro visual del target (bounds combinados de sus renderers), expresado en espacio local
+    /// del target sin escala. Devuelve Vector3.zero (= pivot) si no encuentra renderers.
+    /// </summary>
+    public static Vector3 ComputeLocalAnchor(Transform target)
+    {
+        if (target == null) return Vector3.zero;
+
+        Renderer[] renderers = target.GetComponentsInChildren<Renderer>();
+        bool hasBounds = false;
+        Bounds bounds = default;
+
+        foreach (Renderer r in renderers)
+        {
+            if (!r.enabled || r is ParticleSystemRenderer || r is TrailRenderer || r is LineRenderer)
+                continue;
+
+            if (!hasBounds) { bounds = r.bounds; hasBounds = true; }
+            else bounds.Encapsulate(r.bounds);
+        }
+
+        if (!hasBounds)
+        {
+            Debug.LogWarning($"[CameraTravel] '{target.name}' no tiene renderers; se usa el pivot como ancla.");
+            return Vector3.zero;
+        }
+
+        return Quaternion.Inverse(target.rotation) * (bounds.center - target.position);
+    }
+
+    /// <summary>Punto = ancla del target + offset, en espacio mundo o relativo a la rotación del target.</summary>
+    public static Vector3 ResolvePoint(Transform target, Vector3 localAnchor, Vector3 offset, OffsetSpace space)
+    {
+        Vector3 anchor = target.position + target.rotation * localAnchor;
+        return space == OffsetSpace.Target
+            ? anchor + target.rotation * offset
+            : anchor + offset;
+    }
+
+    public static Vector3 ResolvePoint(Transform target, Vector3 offset, OffsetSpace space)
+        => ResolvePoint(target, Vector3.zero, offset, space);
+
     public static IEnumerator Move(
         Transform camT,
         Vector3 fromPos,
@@ -45,8 +87,8 @@ public static class CameraTravel
                 Quaternion destinationRot = rotationProvider();
 
                 camT.SetPositionAndRotation(
-                    Vector3.Lerp(fromPos, destination, t),
-                    Quaternion.Slerp(fromRot, destinationRot, t));
+                    Vector3.LerpUnclamped(fromPos, destination, t),
+                    Quaternion.SlerpUnclamped(fromRot, destinationRot, t));
 
                 onTick?.Invoke(t);
                 yield return null;
@@ -68,15 +110,25 @@ public static class CameraTravel
         Vector3 fromPos = camT.position;
         Quaternion fromRot = camT.rotation;
 
-        Vector3 fixedDest = target.position + seq.worldOffsetFromTarget;
+        // Se calcula una sola vez: el vagón recién spawneado ya tiene sus bounds válidos.
+        Vector3 localAnchor = seq.anchorToBoundsCenter ? ComputeLocalAnchor(target) : Vector3.zero;
+
+        Vector3 fixedDest = ResolvePoint(target, localAnchor, seq.offsetFromTarget, seq.offsetSpace);
+        Vector3 fixedLook = ResolvePoint(target, localAnchor, seq.lookAtOffset, seq.offsetSpace);
 
         Func<Vector3> destination = seq.trackTarget
-            ? () => target != null ? target.position + seq.worldOffsetFromTarget : fixedDest
+            ? () => target != null ? ResolvePoint(target, localAnchor, seq.offsetFromTarget, seq.offsetSpace) : fixedDest
             : () => fixedDest;
 
-        Func<Quaternion> rotation = BuildRotation(seq, target, camT, fromRot);
+        Func<Vector3> lookPoint = seq.trackTarget
+            ? () => target != null ? ResolvePoint(target, localAnchor, seq.lookAtOffset, seq.offsetSpace) : fixedLook
+            : () => fixedLook;
 
-        float approachDistance = Vector3.Distance(fromPos, ApplyAxes(fromPos, fixedDest, seq.travelAxes));
+        // La rotación se calcula desde donde VA a estar la cámara, no desde donde está ahora.
+        Func<Vector3> finalCamPos = () => ApplyAxes(fromPos, destination(), seq.travelAxes);
+        Func<Quaternion> rotation = BuildRotation(seq, finalCamPos, lookPoint, fromRot);
+
+        float approachDistance = Vector3.Distance(fromPos, finalCamPos());
         float approachDuration = Duration(approachDistance, seq.travelSpeed, seq.minTravelDuration, seq.maxTravelDuration);
 
         yield return Move(camT, fromPos, fromRot, destination, rotation,
@@ -93,14 +145,16 @@ public static class CameraTravel
         float returnDistance = Vector3.Distance(holdPos, returnTo.position);
         float returnDuration = Duration(returnDistance, seq.returnSpeed, seq.minReturnDuration, seq.maxReturnDuration);
 
-
         yield return Move(camT, holdPos, holdRot,
             () => returnTo.position, () => returnTo.rotation,
             returnDuration, seq.returnCurve, TravelAxis.All, returnTick);
     }
 
     private static Func<Quaternion> BuildRotation(
-        CameraTravelSequenceSO seq, Transform target, Transform camT, Quaternion fallback)
+        CameraTravelSequenceSO seq,
+        Func<Vector3> camPosition,
+        Func<Vector3> lookPoint,
+        Quaternion fallback)
     {
         if (seq.useFixedRotation)
         {
@@ -110,11 +164,13 @@ public static class CameraTravel
 
         if (seq.lookAtTarget)
         {
+            Quaternion last = fallback;
             return () =>
             {
-                if (target == null) return camT.rotation;
-                Vector3 dir = target.position - camT.position;
-                return dir.sqrMagnitude > 0.0001f ? Quaternion.LookRotation(dir) : camT.rotation;
+                Vector3 dir = lookPoint() - camPosition();
+                if (dir.sqrMagnitude > 0.0001f)
+                    last = Quaternion.LookRotation(dir, Vector3.up);
+                return last;
             };
         }
 

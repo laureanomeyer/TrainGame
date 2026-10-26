@@ -1,4 +1,11 @@
 using UnityEngine;
+using UnityEngine.Serialization;
+
+public enum OffsetSpace
+{
+    World,
+    Target
+}
 
 [CreateAssetMenu(menuName = "Cinematic/System/Camera Travel Sequence")]
 public class CameraTravelSequenceSO : ScriptableObject
@@ -25,8 +32,15 @@ public class CameraTravelSequenceSO : ScriptableObject
     public float endFov = 18f;
 
     [Header("Framing")]
-    [Tooltip("Offset en espacio del MUNDO, no relativo a la rotación del target.")]
-    public Vector3 worldOffsetFromTarget = new Vector3(4f, 6f, -4f);
+    [Tooltip("World: offsets en ejes del mundo. Target: offsets relativos a la rotación del target (X = derecha, Z = forward del target).")]
+    public OffsetSpace offsetSpace = OffsetSpace.World;
+
+    [Tooltip("Posición de la cámara relativa al target.")]
+    [FormerlySerializedAs("worldOffsetFromTarget")]
+    public Vector3 offsetFromTarget = new Vector3(4f, 6f, -4f);
+
+    [Tooltip("Punto al que mira la cámara, relativo al target. Útil si el pivot del vagón no está en el centro.")]
+    public Vector3 lookAtOffset = Vector3.zero;
 
     public bool lookAtTarget = true;
 
@@ -46,4 +60,7 @@ public class CameraTravelSequenceSO : ScriptableObject
     [Tooltip("Al terminar, vuelve a la posición inicial y devuelve la prioridad. Off para cinemáticas de fin de run.")]
     public bool returnToOrigin = true;
 
+    [Tooltip("Usa el centro visual del target (bounds de sus renderers) como ancla en vez del pivot. " +
+         "Con lookAtTarget, deja el target centrado en pantalla. Los offsets se miden desde ese centro.")]
+    public bool anchorToBoundsCenter = false;
 }
