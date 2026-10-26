@@ -39,6 +39,8 @@ public class Enemy : MonoBehaviour
     SkinnedMeshRenderer horseRend;
     [Header("UI")]
     [SerializeField] private EnemyUIHpBar healthBar;
+    [SerializeField] private GameObject buffParticles;
+
     [Header("Debug")]
     [SerializeField] private EnemyMovementSO endMovement;
     public EnemyWeapon Weapon;
@@ -261,6 +263,14 @@ public class Enemy : MonoBehaviour
     public void ChangeState(EnemyAttackState state)
     {
         attackState = state;
+        if (attackState == EnemyAttackState.Buffed)
+        {
+            buffParticles.SetActive(true);
+        }
+        else
+        {
+            buffParticles.SetActive(false);
+        }
         AttackStateName = attackState.ToString();
     }
 
@@ -296,10 +306,6 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         if (HealthState == EnemyHealthState.Dead) return;
-        if (healthState == EnemyHealthState.Grace)
-        {
-            animations.ActivateCowboyOffset();
-        }
         Movement?.Move(this);
     }
 
@@ -368,7 +374,7 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(ActiveAnimation?.attackDuration ?? 0.8f);
 
-        if (HealthState != EnemyHealthState.Dead) PlayIdleAnimation();
+        if (HealthState != EnemyHealthState.Grace) PlayIdleAnimation();
         attackRoutine = null;
     }
 
@@ -438,7 +444,8 @@ public class Enemy : MonoBehaviour
             IsOnPositiveZSide
                 ? ActiveAnimation?.positiveZDeath
                 : ActiveAnimation?.negativeZDeath));
-
+        animations.ActivateCowboyOffset();
+        
         if (healthBar != null)
         { healthBar.Hide(); }
         Skill.Stop(this);

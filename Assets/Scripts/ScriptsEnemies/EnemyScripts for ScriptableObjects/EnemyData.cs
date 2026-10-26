@@ -5,8 +5,8 @@ public enum WagonType { Random, Passive, PassiveTorret, Active, ActiveTorret, Lo
 public enum RangeType
 {
     Close = 15,
-    Medium = 25,
-    Long = 35
+    Medium = 20,
+    Long = 30
 }
 
 public enum EnemyVisualID 
