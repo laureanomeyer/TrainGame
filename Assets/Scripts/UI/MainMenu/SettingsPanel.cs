@@ -1,11 +1,15 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using static UnityEngine.Timeline.DirectorControlPlayable;
 
 public class SettingsPanel : MonoBehaviour
 {
     private const string MasterKey = "MasterVolume";
     private const string MusicKey = "MusicVolume";
     private const string SFXKey = "SFXVolume";
+    private InputAction pauseAction;
+    private bool isOpen = false;
 
     [Header("Panel")]
     [SerializeField] private GameObject panel;
@@ -16,8 +20,11 @@ public class SettingsPanel : MonoBehaviour
     [SerializeField] private Slider musicVolumeSlider;
     [SerializeField] private Slider SFXVolumeSlider;
 
-    private void Start()
+
+    private void Awake()
     {
+        pauseAction = InputSystem.actions.FindAction("Pause");
+
         closeButton.onClick.AddListener(Close);
 
         float savedMaster = PlayerPrefs.GetFloat(MasterKey, 0.2f);
@@ -37,17 +44,49 @@ public class SettingsPanel : MonoBehaviour
         SFXVolumeSlider.onValueChanged.AddListener(SetSFXVolume);
 
         panel.SetActive(false);
+
+        if (pauseAction != null)
+        {
+            pauseAction.performed += Close;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        closeButton.onClick.RemoveListener(Close);
+
+        masterVolumeSlider.onValueChanged.RemoveListener(SetMasterVolume);
+        musicVolumeSlider.onValueChanged.RemoveListener(SetMusicVolume);
+        SFXVolumeSlider.onValueChanged.RemoveListener(SetSFXVolume);
+
+        if (pauseAction != null)
+        {
+            pauseAction.performed += Close;
+        }
+
+        PlayerPrefs.Save();
     }
 
     public void Open()
     {
         panel.SetActive(true);
+        isOpen = true;
     }
 
     public void Close()
     {
         panel.SetActive(false);
         PlayerPrefs.Save();
+        isOpen = false;
+    }
+    public void Close(InputAction.CallbackContext context)
+    {
+        if (!isOpen) return;
+
+        panel.SetActive(false);
+        PlayerPrefs.Save();
+
+        isOpen = false;
     }
 
     private void SetMasterVolume(float volume)
@@ -88,14 +127,5 @@ public class SettingsPanel : MonoBehaviour
             AudioManager.Instance.SetSFXVolume(volume);
     }
 
-    private void OnDestroy()
-    {
-        closeButton.onClick.RemoveListener(Close);
 
-        masterVolumeSlider.onValueChanged.RemoveListener(SetMasterVolume);
-        musicVolumeSlider.onValueChanged.RemoveListener(SetMusicVolume);
-        SFXVolumeSlider.onValueChanged.RemoveListener(SetSFXVolume);
-
-        PlayerPrefs.Save();
-    }
 }
