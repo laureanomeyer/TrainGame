@@ -257,7 +257,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
     {
         RectTransform rect = (RectTransform)transform;
         Vector2 start = rect.anchoredPosition;
-        Vector2 outPosition = new Vector2(start.x - 2000f, start.y); // ajusta según tu canvas
+        Vector2 outPosition = new Vector2(start.x - 2000f, start.y); 
 
         float t = 0f;
         float duration = 0.4f;
@@ -266,9 +266,10 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         {
             t += Time.deltaTime / duration;
             rect.anchoredPosition = Vector2.Lerp(start, outPosition, t);
-            yield return null; // espera al siguiente frame
+            yield return null; 
         }
 
         rect.anchoredPosition = outPosition;
+        gameObject.SetActive(false);
     }
 }
