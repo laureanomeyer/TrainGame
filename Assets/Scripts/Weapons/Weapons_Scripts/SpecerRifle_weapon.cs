@@ -99,7 +99,6 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         {
             currentBulletUse = legadoBulletData;
             unlockedLegado = true;
-            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {

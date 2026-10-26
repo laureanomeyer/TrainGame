@@ -74,7 +74,6 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         if (playerData.unlockedLegado.UnlockedWinchester)
         {
             currentBulletUse = legadoBulletData;
-            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {

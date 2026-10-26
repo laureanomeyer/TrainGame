@@ -94,7 +94,6 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
         {
             currentBulletUse = legadoBulletData;
             unlockedLegacy = true;
-            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
         else
         {

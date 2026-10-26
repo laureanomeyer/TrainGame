@@ -98,7 +98,6 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         {
             reloadTime = 0f;
             unlockedLegacy = true;
-            sequenceController.PlayGroup(ParticleGroups.LegacyUnlocked);
         }
 
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
