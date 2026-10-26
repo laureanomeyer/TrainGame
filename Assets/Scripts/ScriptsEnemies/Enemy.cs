@@ -173,7 +173,7 @@ public class Enemy : MonoBehaviour
         Damage = data.damage;
 
         Movement.Begin(this);
-
+        Skill.Begin(this);
         dataName = data.name;
 
         SetAnimators();
@@ -306,6 +306,10 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         if (HealthState == EnemyHealthState.Dead) return;
+        if (healthState == EnemyHealthState.Grace)
+        {
+            animations.ActivateCowboyOffset();
+        }
         Movement?.Move(this);
     }
 
@@ -444,7 +448,6 @@ public class Enemy : MonoBehaviour
             IsOnPositiveZSide
                 ? ActiveAnimation?.positiveZDeath
                 : ActiveAnimation?.negativeZDeath));
-        animations.ActivateCowboyOffset();
         
         if (healthBar != null)
         { healthBar.Hide(); }

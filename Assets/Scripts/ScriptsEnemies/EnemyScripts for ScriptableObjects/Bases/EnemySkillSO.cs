@@ -16,7 +16,7 @@ public class EnemySkillSO : ScriptableObject
     [SerializeReference] private EnemySkill skill;
 
     public float Cooldown => skill.cooldown;
-
+    public void Begin(Enemy enemy) => skill?.Begin(enemy);
     public void Play(Enemy enemy) => skill?.Play(enemy);
     public void Stop(Enemy enemy) => skill?.Stop(enemy);
 

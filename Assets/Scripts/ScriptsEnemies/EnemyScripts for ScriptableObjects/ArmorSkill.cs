@@ -103,4 +103,10 @@ public class ArmorSkill : EnemySkill
 
         enemy.Brain.AddArmor(enemy, 0);
     }
+
+    public override void Begin(Enemy enemy)
+    {
+        throw new NotImplementedException();
+    }
+
 }

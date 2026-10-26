@@ -4,6 +4,11 @@ using UnityEngine;
 [Serializable]
 public class NoneSkill : EnemySkill
 {
+    public override void Begin(Enemy enemy)
+    {
+        return;
+    }
+
 
     public override void Play(Enemy enemy)
     {

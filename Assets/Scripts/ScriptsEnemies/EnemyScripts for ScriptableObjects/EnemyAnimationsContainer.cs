@@ -23,32 +23,9 @@ public class EnemyAnimationsContainer : MonoBehaviour
 
     public void ActivateCowboyOffset()
     {
-        StartCoroutine(CowboyDisplacement());
+        cowboyAnimator.gameObject.transform.position -= Vector3.right;
     }
 
-    private IEnumerator CowboyDisplacement()
-    {
-        Transform cowboy = cowboyAnimator.transform;
 
-        Vector3 startPos = cowboy.position;
-        Vector3 targetPos = startPos + new Vector3(cowboyOffset, 0f, 0f);
-
-        float elapsed = 0f;
-
-        while (elapsed < displacementDuration)
-        {
-            elapsed += Time.deltaTime;
-
-            cowboy.position = Vector3.Lerp(
-                startPos,
-                targetPos,
-                elapsed / displacementDuration
-            );
-
-            yield return null;
-        }
-
-        cowboy.position = targetPos;
-    }
 
 }

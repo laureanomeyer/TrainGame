@@ -7,11 +7,18 @@ public class LeaderBuff : EnemySkill
 {
     public float damageIncrease;
     public GameObject LeaderParticles;
+    private GameObject CurrentParticles;
     private EnemiesController enemies;
     private bool isActive = false;
+    public override void Begin(Enemy enemy)
+    {
+        CurrentParticles = ObjectPoolManager.SpawnObject(LeaderParticles, enemy.transform.position, enemy.transform.rotation);
+        CurrentParticles.SetActive(true);
+    }
+
+
     public override void Play(Enemy enemy)
     {
-        LeaderParticles.SetActive(false);
         if (enemy.HealthState == EnemyHealthState.Dead) return;
         enemies = ServiceLocator.Get<EnemiesController>();
 
@@ -21,10 +28,8 @@ public class LeaderBuff : EnemySkill
             {
                 if (en != enemy)
                     en.Brain.AddBuff(en, damageIncrease);
-
             }
         }
-        LeaderParticles.SetActive(true);
     }
 
     public override void Stop(Enemy enemy)
@@ -34,6 +39,6 @@ public class LeaderBuff : EnemySkill
             if (en != enemy)
                 en.Brain.DeBuff(en, damageIncrease);
         }
-        LeaderParticles.SetActive(false);
+        CurrentParticles.SetActive(false);
     }
 }

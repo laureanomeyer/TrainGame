@@ -9,6 +9,12 @@ public class DynamiteSkill : EnemySkill
     public GameObject dynamitePrefab;
     private GameObject activeDynamite;
 
+    public override void Begin(Enemy enemy)
+    {
+        throw new NotImplementedException();
+    }
+
+
     public override void Play(Enemy enemy)
     {
         if (enemy.TargetWagon == null) return;
