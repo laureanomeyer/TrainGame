@@ -4,9 +4,11 @@ using System.Collections.Generic;
 public class MapManager : MonoBehaviour
 {
     [Header("Floor tiles config")]
-    [SerializeField] int maxLevelWithDesert = 10;
+    [SerializeField] int maxLevelWithDesert = 4;
+    [SerializeField] int maxLevelWithGrass = 8;
     [SerializeField] private GameObject desertTilePrefab;
     [SerializeField] private GameObject grassTilePrefab;
+    [SerializeField] private GameObject caveTilePrefab;
     private GameObject currentTile;
 
     [SerializeField] private Transform endLocation;
@@ -14,7 +16,6 @@ public class MapManager : MonoBehaviour
     [SerializeField] private List<MapTile> tilesMap;
     [SerializeField] private MapTile head;
     [SerializeField] private GameObject deathWall;
-    [SerializeField] private Mesh[] variatons;
 
     private bool initialized = false;
 
@@ -28,13 +29,19 @@ public class MapManager : MonoBehaviour
         var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
         int level = sessionConfigRef.CurrentLevel;
 
-        if(level <= maxLevelWithDesert)
+        
+
+        if (level <= maxLevelWithDesert)
         {
             currentTile = desertTilePrefab;
         }
-        else
+        else if(level > maxLevelWithDesert && level < maxLevelWithGrass)
         {
             currentTile = grassTilePrefab;
+        }
+        else
+        {
+            currentTile = caveTilePrefab;
         }
 
         for (int i = 0; i < RunManager.Instance.ActiveWagons.Count + 3; i++)
@@ -46,9 +53,9 @@ public class MapManager : MonoBehaviour
         {
             if (!tilesMap[i].IsMapHead)
             {
-                if (currentTile == desertTilePrefab)
+                if (tilesMap[i] is TileChange changingTale)
                 {
-                    tilesMap[i].SetUpWithMesh(tilesMap[i - 1].Tail, variatons[Random.Range(0, variatons.Length)]);
+                    changingTale.SetUpWithMesh(tilesMap[i - 1].Tail);
                 }
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
