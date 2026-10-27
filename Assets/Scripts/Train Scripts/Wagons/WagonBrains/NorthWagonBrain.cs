@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Burst;
 using UnityEngine;
 
 public class NorthWagonBrain : WagonBrain
@@ -10,9 +11,11 @@ public class NorthWagonBrain : WagonBrain
         WagonType = WagonType.Passive;
     }
 
-    public override IEnumerable<StatModifier> GetModifiers()
+    public override IEnumerable<List<StatModifier>> GetModifiers()
     {
-        yield return new StatModifier(StatType.DamageMultiplier, dmgBonus, ModifierType.Additive, this);
+        List<StatModifier> mods = new List<StatModifier>(); ;
+        mods.Add(new StatModifier(StatType.DamageMultiplier, dmgBonus, ModifierType.Additive, this));
+        yield return mods;
     }
 
 }

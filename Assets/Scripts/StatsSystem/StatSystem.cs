@@ -16,10 +16,13 @@ public class StatSystem
         this.trainData = trainData;
     }
 
-    public void AddModifier(StatModifier mod)
+    public void AddModifier(List<StatModifier> mod)
     {
-        modifiers.Add(mod);
-        OnStatChanged?.Invoke(mod.StatType, GetStat(mod.StatType));
+        foreach (StatModifier modifier in mod)
+        {
+            modifiers.Add(modifier);
+            OnStatChanged?.Invoke(modifier.StatType, GetStat(modifier.StatType));
+        }
         EventBus.Publish(new OnStatChangedEvent());
     }
 
@@ -45,10 +48,13 @@ public class StatSystem
                 if (mod.ModifierType == ModifierType.Additive)
                 {
                     extra += locoMultiplier * mod.Value;
+                    if(extra < 0.5f)
+                    {
+                        extra = 0.5f;
+                    }
                 }
             }
         }
-
         else
         {
             extra = locoMultiplier;
@@ -58,6 +64,10 @@ public class StatSystem
                 if (mod.ModifierType == ModifierType.Additive)
                 {
                     extra += extra * mod.Value;
+                    if (extra < 0.5f)
+                    {
+                        extra = 0.5f;
+                    }
                 }
             }
             return extra;

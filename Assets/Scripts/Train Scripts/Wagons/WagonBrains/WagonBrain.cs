@@ -18,6 +18,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     private StatSystem stats;
     private TrainData trainData;
+    //private List<StatModifier> statsModifiers;
 
     public Transform Head => transform;
     public Transform Tail => tail;
@@ -74,7 +75,6 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     [SerializeField] private WagonType wagonType;
     public WagonType WagonType {protected set => wagonType = value; get => wagonType;}
 
-
     bool isOnScreen; 
 
     public virtual void Start()
@@ -117,7 +117,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         wagonMovement.Initialize(target, transform);
     }
 
-    public virtual IEnumerable<StatModifier> GetModifiers()
+    public virtual IEnumerable<List<StatModifier>> GetModifiers()
     {
         yield break;
     }
@@ -223,6 +223,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     public virtual void OnDestroy()
     {
         stats.OnStatChanged -= OnStatChanged;
+        stats.RemoveModifiersFromSource(this);
     }
 
     public void ShowHpBar()

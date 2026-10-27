@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class LocomotiveFuel
@@ -23,6 +24,7 @@ public class LocomotiveFuel
     private float fuelCapacity;
     private float fuelMaxCapacity;
     private TrainData trainDataRef;
+    private StatSystem statSystem;
 
     private Renderer shieldsRenderer;
 
@@ -66,6 +68,10 @@ public class LocomotiveFuel
         shieldFirstDamage = !GameManager.Instance.IsTutorial;
 
         shieldsRenderer.material.SetFloat("_ShieldVisibility", 0);
+
+        statSystem = ServiceLocator.Get<StatSystem>();
+
+        fuelOptimizer = fuelOptimizer * statSystem.GetStat(StatType.FuelOptimizer);
     }
 
     public void Destroy()
@@ -136,7 +142,6 @@ public class LocomotiveFuel
             currentShield = 0;
             shieldsActive = false;
         }
-
     }
 
     private void UpdateSharedSpeed()

@@ -11,8 +11,12 @@ public class HighHeatBrain : WagonBrain
         WagonType = WagonType.Passive;
     }
 
-    public override IEnumerable<StatModifier> GetModifiers()
+    public override IEnumerable<List<StatModifier>> GetModifiers()
     {
-        yield return new StatModifier(StatType.DamageMultiplier, resBonus, ModifierType.Additive, this);
+        List<StatModifier> mods = new List<StatModifier>(); ;
+        mods.Add(new StatModifier(StatType.Defense, resBonus, ModifierType.Additive, this));
+        mods.Add(new StatModifier(StatType.FuelOptimizer, -optDebuff, ModifierType.Additive, this));
+
+        yield return mods;
     }
 }

@@ -10,8 +10,10 @@ public class LowHeatWagonBrain : WagonBrain
         WagonType = WagonType.Passive;
     }
 
-    public override IEnumerable<StatModifier> GetModifiers()
+    public override IEnumerable<List<StatModifier>> GetModifiers()
     {
-        yield return new StatModifier(StatType.FuelOptimizer, optimizer, ModifierType.Additive, this);
+        List<StatModifier> mods = new List<StatModifier>(); ;
+        mods.Add(new StatModifier(StatType.FuelOptimizer, optimizer, ModifierType.Additive, this));
+        yield return mods;
     }
 }

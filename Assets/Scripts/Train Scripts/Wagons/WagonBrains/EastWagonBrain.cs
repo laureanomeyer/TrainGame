@@ -12,9 +12,11 @@ namespace GGG.RTO.Wagons
             WagonType = WagonType.Passive;
         }
 
-        public override IEnumerable<StatModifier> GetModifiers()
+        public override IEnumerable<List<StatModifier>> GetModifiers()
         {
-            yield return new StatModifier(StatType.MaxHp, hpBonus, ModifierType.Additive, this);
+            List<StatModifier> mods = new List<StatModifier>(); ;
+            mods.Add(new StatModifier(StatType.MaxHp, hpBonus, ModifierType.Additive, this));
+            yield return mods;
         }
     }
 }
