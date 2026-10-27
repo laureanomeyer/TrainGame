@@ -17,7 +17,8 @@ public enum EnemyMovementState
     Moving,
     Losing,
     Waiting,
-    Ended
+    Ended,
+    RunEnd
 }
 
 public enum EnemyAttackState
@@ -41,9 +42,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private EnemyUIHpBar healthBar;
     [SerializeField] private GameObject buffParticles;
 
-    [Header("Debug")]
-    [SerializeField] private EnemyMovementSO endMovement;
-    public EnemyWeapon Weapon;
+    [SerializeField] private EnemyMovementSO deadMovement, endMovement;
+    public EnemyWeapon Weapon ;
     BoxCollider boxCollider;
     public string TargetWagonName;
     public string dataName;
@@ -55,7 +55,6 @@ public class Enemy : MonoBehaviour
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
-    //private DamageFlash flash;
     private int activeCowboyLayer;
     private Coroutine attackRoutine;
     private TrainRanges trainRanges;
@@ -253,6 +252,10 @@ public class Enemy : MonoBehaviour
         }
         if (state == EnemyMovementState.Ended)
         {
+            Movement = deadMovement;
+        }
+        if (state == EnemyMovementState.RunEnd)
+        {
             Movement = endMovement;
         }
         Movement.Begin(this);
@@ -306,7 +309,7 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         if (HealthState == EnemyHealthState.Dead) return;
-        if (healthState == EnemyHealthState.Grace)
+        if (movementState == EnemyMovementState.Ended && healthState == EnemyHealthState.Grace)
         {
             animations.ActivateCowboyOffset();
         }
@@ -402,7 +405,7 @@ public class Enemy : MonoBehaviour
     }
     private IEnumerator ReturnAfterDeathAnimation()
     {
-        yield return new WaitForSeconds(ActiveAnimation?.deathDuration ?? 0.983f);
+        yield return new WaitForSeconds(0.7f); //  
         ChangeState(EnemyMovementState.Ended);
     }
     #endregion
@@ -441,7 +444,6 @@ public class Enemy : MonoBehaviour
         if (HealthState == EnemyHealthState.Dead) return;
 
         ChangeState(EnemyHealthState.Grace);
-        PublishBecameInactive();
         PlayDeathSound();
         PlayCowboyAnimation(GetAnimationName(
             IsOnPositiveZSide ? "Cowboy_1|L_Death" : "Cowboy_1|R_Death",

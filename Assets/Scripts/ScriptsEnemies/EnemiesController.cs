@@ -409,8 +409,7 @@ public class EnemiesController : MonoBehaviour
             StopWaves();
             foreach(Enemy e in activeEnemies)
             {
-                e.ChangeState(EnemyMovementState.Ended);
-                Debug.Log($"movement speed: {e.Movement.speed}\n movement tile speed : {RunManager.Instance.TrainSpeed}");
+                e.ChangeState(EnemyMovementState.RunEnd);
             }
             
         }

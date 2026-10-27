@@ -23,9 +23,7 @@ public class EnemyAnimationsContainer : MonoBehaviour
 
     public void ActivateCowboyOffset()
     {
-        cowboyAnimator.gameObject.transform.position -= Vector3.right;
+        cowboyAnimator.gameObject.transform.position -= new Vector3(1,0,0);
     }
-
-
 
 }
