@@ -245,6 +245,7 @@ public class Enemy : MonoBehaviour
     public void ChangeState(EnemyMovementState state)
     {
         if (movementState == state) return;
+        if (movementState == EnemyMovementState.RunEnd)return;
         movementState = state;
         if (state == EnemyMovementState.Waiting)
         {
