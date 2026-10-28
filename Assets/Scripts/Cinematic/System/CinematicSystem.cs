@@ -5,6 +5,8 @@ using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 
+// Después de RunManager (-99) y antes de TrainManager (0), que inicializa el MapManager en su Awake.
+[DefaultExecutionOrder(-98)]
 public class CinematicSystem : MonoBehaviour
 {
     public event Action OnCinematicFinished;
@@ -24,58 +26,126 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private int gameplayPriority = 10;
     [SerializeField] private int cinematicPriority = 20;
 
-    [Header("Level End (Victory)")]
+    [Header("Level End Transitions")]
+    [Tooltip("Transición de los niveles que no están en la lista.")]
+    [SerializeField] private LevelEndTransition defaultTransition = LevelEndTransition.WoodenThreshold;
+    [Tooltip("Transición por nivel. Si un nivel aparece repetido, gana la primera entrada.")]
+    [SerializeField] private LevelTransitionEntry[] levelTransitions;
+
+    [Header("Transition Configs")]
+    [SerializeField] private LevelEndTransitionConfig desertToDesert = new(LevelEndStyle.PassThrough, TileBiome.Desert);
+    [SerializeField] private LevelEndTransitionConfig desertToGrass = new(LevelEndStyle.PassThrough, TileBiome.Grass);
+    [SerializeField] private LevelEndTransitionConfig grassToGrass = new(LevelEndStyle.PassThrough, TileBiome.Grass);
+    [SerializeField] private LevelEndTransitionConfig grassToCave = new(LevelEndStyle.EnterTunnel, TileBiome.Cave);
+    [SerializeField] private LevelEndTransitionConfig caveToCave = new(LevelEndStyle.EnterTunnel, TileBiome.Cave);
+
+    [Header("Pass Through")]
+    [Tooltip("Segundos desde que la cola de la locomotora cruza el Entrance hasta pasar a la estación.")]
+    [SerializeField] private float holdAfterPassThrough = 1.5f;
+
+    [Header("Objetos que viajan con el tren")]
+    [Tooltip("Objetos de la escena que se mueven junto al tren en la cinemática (ej. el root del personaje).")]
+    [SerializeField] private Transform[] extraTransformsToMove;
+
+    [Header("Level End Transfer (todas las transiciones con tile)")]
     [Tooltip("Dirección en la que avanza el tren. Los tiles se mueven en sentido contrario.")]
     [SerializeField] private Vector3 trainForward = Vector3.right;
     [Tooltip("Distancia antes de la trompa a la que el mapa empieza a frenar y el tren a avanzar. 0 = justo en la trompa.")]
     [SerializeField] private float transferLeadDistance = 0f;
     [Tooltip("Segundos en los que el mapa frena y el tren acelera (movimiento relativo constante).")]
     [SerializeField] private float transferDuration = 0.5f;
-    [Tooltip("Segundos que se sigue mostrando la entrada después de que la locomotora desaparece.")]
-    [SerializeField] private float holdAfterLocomotiveHidden = 1f;
-    [Tooltip("Desliza la cámara solo sobre el eje de la vía (sin rotar ni cambiar altura) para centrar la boca.")]
+    [Tooltip("Túnel: segundos desde que la locomotora desaparece hasta pasar a la estación.")]
+    [SerializeField] private float holdAfterLocomotiveHidden = 2f;
+    [Tooltip("Desliza la cámara solo sobre el eje de la vía (sin rotar ni cambiar altura) para centrar el Entrance.")]
     [SerializeField] private bool centerEntranceOnScreen = true;
     [SerializeField] private float centerPanDuration = 0.8f;
-    [Tooltip("Si la montaña no llega en este tiempo, la cinemática termina igual.")]
+    [Tooltip("Aleja la cámara sobre su eje de visión (sin rotar). Sube y amplía el encuadre manteniendo centrado el Entrance.")]
+    [SerializeField] private float cameraPullBack = 15f;
+    [Tooltip("Altura extra en Y del mundo. Sube la cámara, el Entrance baja en pantalla.")]
+    [SerializeField] private float cameraExtraHeight = 0f;
+    [Tooltip("Si el tile de fin no llega en este tiempo, la cinemática termina igual.")]
     [SerializeField] private float levelEndTimeout = 20f;
 
-    [Header("Victory Threshold")]
+    [Header("Victory Threshold (intervalo de madera)")]
     [SerializeField] private Transform victoryThreshold;
     [SerializeField] private float thresholdTailOffset = 200f;
     [SerializeField] private float thresholdRetreatDuration = 2f;
+    [Tooltip("Segundos de hold en la victoria cuando la transición del nivel es el intervalo de madera.")]
+    [SerializeField] private float woodenThresholdHoldDuration = 2f;
     [Tooltip("Scripts que mueven el threshold durante la run. Se desactivan al empezar la cinemática de victoria.")]
     [SerializeField] private Behaviour[] thresholdMoversToDisable;
 
-    [Tooltip("Aleja la cámara sobre su eje de visión (sin rotar). Sube y amplía el encuadre manteniendo centrada la boca.")]
-    [SerializeField] private float cameraPullBack = 15f;
-    [Tooltip("Altura extra en Y del mundo. Sube la cámara, la cueva baja en pantalla.")]
-    [SerializeField] private float cameraExtraHeight = 0f;
-
     private ICinematicActorRegistry registry;
     private bool isPlaying;
-    private bool thresholdVisibilityApplied;
+    private LevelEndTransition currentTransition;
+
+    public LevelEndTransition CurrentTransition => currentTransition;
+
+    private Vector3 Forward => trainForward.sqrMagnitude > 0f ? trainForward.normalized : Vector3.right;
 
     private void Awake()
     {
         registry = ServiceLocator.Get<ICinematicActorRegistry>();
+        ServiceLocator.Register<CinematicSystem>(this);
 
         if (gameplayCinemachineCamera != null)
             gameplayCinemachineCamera.Priority = gameplayPriority;
 
         if (cinematicCinemachineCamera != null)
             cinematicCinemachineCamera.Priority = 0;
+
+        var sessionConfig = ServiceLocator.Get<SessionConfig>();
+        int level = sessionConfig != null ? sessionConfig.CurrentLevel : 1;
+        currentTransition = ResolveTransition(level);
+
+        if (victoryThreshold != null)
+            victoryThreshold.gameObject.SetActive(currentTransition == LevelEndTransition.WoodenThreshold);
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (thresholdVisibilityApplied || victoryThreshold == null) return;
-
-        MapManager map = RunManager.Instance != null ? RunManager.Instance.MapManager : null;
-        if (map == null || !map.IsInitialized) return;
-
-        thresholdVisibilityApplied = true;
-        victoryThreshold.gameObject.SetActive(map.ShowVictoryThreshold);
+        ServiceLocator.Unregister<CinematicSystem>();
     }
+
+    // ---------- Configuración de transiciones ----------
+
+    /// <summary>Config del nivel actual. Null = intervalo de madera (sin tile de fin).</summary>
+    public LevelEndTransitionConfig GetCurrentConfig() => GetConfig(currentTransition);
+
+    private LevelEndTransition ResolveTransition(int level)
+    {
+        LevelEndTransition transition = defaultTransition;
+
+        if (levelTransitions != null)
+        {
+            LevelTransitionEntry entry = levelTransitions.FirstOrDefault(e => e != null && e.level == level);
+            if (entry != null) transition = entry.transition;
+        }
+
+        if (transition != LevelEndTransition.WoodenThreshold)
+        {
+            LevelEndTransitionConfig config = GetConfig(transition);
+            if (config == null || config.endTile == null)
+            {
+                Debug.LogWarning($"[CinematicSystem] Nivel {level}: la transición '{transition}' no tiene prefab asignado. Uso el intervalo de madera.");
+                transition = LevelEndTransition.WoodenThreshold;
+            }
+        }
+
+        return transition;
+    }
+
+    private LevelEndTransitionConfig GetConfig(LevelEndTransition transition) => transition switch
+    {
+        LevelEndTransition.DesertToDesert => desertToDesert,
+        LevelEndTransition.DesertToGrass => desertToGrass,
+        LevelEndTransition.GrassToGrass => grassToGrass,
+        LevelEndTransition.GrassToCave => grassToCave,
+        LevelEndTransition.CaveToCave => caveToCave,
+        _ => null
+    };
+
+    // ---------- Entrada ----------
 
     public void CinematicPlay(RunResult result)
     {
@@ -94,8 +164,24 @@ public class CinematicSystem : MonoBehaviour
             return;
         }
 
-        if (victory) StartCoroutine(LevelEndRoutine(locomotive));
-        else StartCoroutine(DefeatRoutine(defeatSequence, locomotive));
+        if (!victory)
+        {
+            StartCoroutine(DefeatRoutine(defeatSequence, locomotive));
+            return;
+        }
+
+        LevelEndTransitionConfig config = GetCurrentConfig();
+
+        if (config == null)
+        {
+            StartCoroutine(WoodenThresholdRoutine());
+            return;
+        }
+
+        // Todas las transiciones con tile: el mapa frena, el tren avanza y la cámara queda fija.
+        // El Style solo cambia qué tiles hay después (MapManager): ocultos (túnel) o del bioma siguiente.
+        float hold = config.style == LevelEndStyle.PassThrough ? holdAfterPassThrough : holdAfterLocomotiveHidden;
+        StartCoroutine(LevelEndTransferRoutine(locomotive, hold));
     }
 
     private bool CamerasAssigned()
@@ -133,7 +219,21 @@ public class CinematicSystem : MonoBehaviour
         return camT;
     }
 
+    /// <summary>La cámara de gameplay sigue al tren: se congela para que el blend no arrastre la imagen.</summary>
+    private void FreezeGameplayCamera()
+    {
+        gameplayCinemachineCamera.Follow = null;
+        gameplayCinemachineCamera.LookAt = null;
+    }
 
+    private void StartThresholdRetreatIfVisible(RunManager run)
+    {
+        if (victoryThreshold != null && victoryThreshold.gameObject.activeInHierarchy &&
+            run != null && run.TrainTail != null)
+            StartCoroutine(ThresholdRetreat(run.TrainTail));
+    }
+
+    // ---------- Derrota ----------
 
     private IEnumerator DefeatRoutine(CameraTravelSequenceSO sequence, Transform target)
     {
@@ -162,34 +262,44 @@ public class CinematicSystem : MonoBehaviour
         Finish();
     }
 
+    // ---------- Victoria: intervalo de madera ----------
 
+    private IEnumerator WoodenThresholdRoutine()
+    {
+        isPlaying = true;
 
-    private IEnumerator LevelEndRoutine(Transform locomotive)
+        StartThresholdRetreatIfVisible(RunManager.Instance);
+
+        TakeOverCamera(out _);
+        FreezeGameplayCamera();
+
+        yield return new WaitForSeconds(woodenThresholdHoldDuration);
+
+        Finish();
+    }
+
+    // ---------- Victoria con tile de fin: el mapa frena, el tren avanza, la cámara queda fija ----------
+
+    private IEnumerator LevelEndTransferRoutine(Transform locomotive, float holdAfterCrossing)
     {
         isPlaying = true;
 
         RunManager run = RunManager.Instance;
         MapManager map = run != null ? run.MapManager : null;
 
-        if (victoryThreshold != null && victoryThreshold.gameObject.activeInHierarchy &&
-            run != null && run.TrainTail != null)
-            StartCoroutine(ThresholdRetreat(run.TrainTail));
-
+        StartThresholdRetreatIfVisible(run);
 
         Transform camT = TakeOverCamera(out _);
+        FreezeGameplayCamera();
 
-        
-        gameplayCinemachineCamera.Follow = null;
-        gameplayCinemachineCamera.LookAt = null;
-
-        Vector3 fwd = trainForward.sqrMagnitude > 0f ? trainForward.normalized : Vector3.right;
+        Vector3 fwd = Forward;
 
         GetEdges(locomotive, fwd, out float locoFront, out float locoRear);
         float locoAlong = Along(locomotive.position, fwd);
         float frontOffset = locoFront - locoAlong;
         float rearOffset = locoRear - locoAlong;
 
-
+        // 1) Esperar a que el Entrance llegue a la trompa (el mapa todavía se mueve).
         Transform entrance = null;
         float waited = 0f;
 
@@ -208,21 +318,21 @@ public class CinematicSystem : MonoBehaviour
 
         if (entrance == null || locomotive == null)
         {
-            Debug.LogWarning("[CinematicSystem] No llegó la entrada de fin de nivel. Termino sin montaña.");
+            Debug.LogWarning("[CinematicSystem] No llegó el tile de fin de nivel. Termino igual.");
             Finish();
             yield break;
         }
 
-
+        // 2) Transferir el movimiento: el mapa frena y el tren acelera, y la cámara queda fija en el mundo.
         List<Transform> trainRoots = CollectTrainRoots(locomotive);
         float speed = run != null ? run.TrainSpeed : 0f;
 
         Vector3 camStart = camT.position;
         float elapsed = 0f;
-        float hiddenTime = 0f;
+        float crossedTime = 0f;
         bool notified = false;
 
-
+        // Sigue durante la transición de escena; el unload corta la corrutina.
         while (locomotive != null)
         {
             float dt = Time.deltaTime;
@@ -234,7 +344,7 @@ public class CinematicSystem : MonoBehaviour
 
             Vector3 step = fwd * (speed * k * dt);
             foreach (Transform part in trainRoots)
-                if (part != null) part.position += step;
+                if (part != null) MoveBy(part, step);
 
             float p = centerPanDuration > 0f ? Mathf.SmoothStep(0f, 1f, elapsed / centerPanDuration) : 1f;
 
@@ -246,11 +356,11 @@ public class CinematicSystem : MonoBehaviour
 
             camT.position = camStart + (pan + lift) * p;
 
-
+            // 3) La cola de la locomotora cruzó el Entrance: hold y pasar a la estación.
             if (!notified && Along(locomotive.position, fwd) + rearOffset >= Along(entrance.position, fwd))
             {
-                hiddenTime += dt;
-                if (hiddenTime >= holdAfterLocomotiveHidden)
+                crossedTime += dt;
+                if (crossedTime >= holdAfterCrossing)
                 {
                     notified = true;
                     Finish();
@@ -261,12 +371,10 @@ public class CinematicSystem : MonoBehaviour
         }
 
         if (!notified) Finish();
-
-
     }
 
-
-    private static List<Transform> CollectTrainRoots(Transform locomotive)
+    /// <summary>Roots a mover: locomotora, vagones, cola y objetos extra (personaje), sin repetir hijos.</summary>
+    private List<Transform> CollectTrainRoots(Transform locomotive)
     {
         var candidates = new List<Transform> { locomotive };
         RunManager run = RunManager.Instance;
@@ -279,16 +387,36 @@ public class CinematicSystem : MonoBehaviour
             if (run.TrainTail != null) candidates.Add(run.TrainTail);
         }
 
+        if (extraTransformsToMove != null)
+            candidates.AddRange(extraTransformsToMove);
+
         candidates = candidates.Where(t => t != null).Distinct().ToList();
         return candidates.Where(t => !candidates.Any(o => o != t && t.IsChildOf(o))).ToList();
     }
 
- 
+    /// <summary>Desplaza respetando CharacterController / Rigidbody, para que no lo devuelvan a su lugar.</summary>
+    private static void MoveBy(Transform t, Vector3 delta)
+    {
+        if (t.TryGetComponent(out CharacterController cc) && cc.enabled)
+        {
+            cc.Move(delta);
+            return;
+        }
+
+        if (t.TryGetComponent(out Rigidbody rb) && !rb.isKinematic)
+        {
+            rb.position += delta;
+            return;
+        }
+
+        t.position += delta;
+    }
+
     private static float PanToCenter(Vector3 camPos, Quaternion camRot, Vector3 point, Vector3 fwd)
     {
         Vector3 right = camRot * Vector3.right;
         float denom = Vector3.Dot(fwd, right);
-        if (Mathf.Abs(denom) < 0.2f) return 0f; 
+        if (Mathf.Abs(denom) < 0.2f) return 0f;
 
         return Vector3.Dot(point - camPos, right) / denom;
     }
@@ -315,6 +443,7 @@ public class CinematicSystem : MonoBehaviour
         rear = center - extent;
     }
 
+    // ---------- Helpers ----------
 
     private IEnumerator ThresholdRetreat(Transform tailTarget)
     {
@@ -323,7 +452,7 @@ public class CinematicSystem : MonoBehaviour
 
         Vector3 startPos = victoryThreshold.position;
 
-
+        // Destino fijo: si siguiera a la cola, avanzaría junto con el tren.
         Vector3 targetPos = new(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
 
         float timer = 0f;

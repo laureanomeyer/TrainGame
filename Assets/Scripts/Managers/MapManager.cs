@@ -13,42 +13,42 @@ public class MapManager : MonoBehaviour
     [SerializeField] private GameObject caveTilePrefab;
     private GameObject currentTile;
 
-    [Header("Level end tiles (montaña)")]
-    [Tooltip("Prefab con MapTile (NO MapChangingTile) + LevelEndTile.")]
-    [SerializeField] private LevelEndTile desertEndTilePrefab;
-    [SerializeField] private LevelEndTile grassEndTilePrefab;
-    [SerializeField] private LevelEndTile caveEndTilePrefab;
+    [Header("Level end")]
+    [Tooltip("Segundos entre el fin del timer y la llegada del Entrance a la locomotora. " +
+             "El tile de fin y su comportamiento se configuran por nivel en CinematicSystem.")]
+    [SerializeField] private float arrivalDelayAfterRunEnd = 0.5f;
 
-    [Tooltip("Segundos entre el fin del timer y la llegada de la entrada a la locomotora. " +
-             "Le da tiempo a la cámara a encuadrar antes de que el tren entre.")]
-    [SerializeField] private float arrivalDelayAfterRunEnd = 1.5f;
-
+    [Header("Runtime")]
     [SerializeField] private Transform endLocation;
     [SerializeField] private Transform startLocation;
     [SerializeField] private List<MapTile> tilesMap;
     [SerializeField] private MapTile head;
     [SerializeField] private GameObject deathWall;
 
-    [Header("Victory threshold (intervalo de madera) por bioma")]
-    [SerializeField] private bool showVictoryThresholdInDesert = true;
-    [SerializeField] private bool showVictoryThresholdInGrass = true;
-    [SerializeField] private bool showVictoryThresholdInCave = true;
-
-    public bool ShowVictoryThreshold { get; private set; } = true;
+    private bool initialized = false;
     public bool IsInitialized => initialized;
 
-    private bool initialized = false;
-
+    private LevelEndTransitionConfig endConfig;
     private LevelEndTile endTilePrefab;
+    private GameObject continueTilePrefab;  
     private LevelEndTile endTileInstance;
     private bool endTileSpawned;
     private SceneRunController runController;
 
     private float scrollMultiplier = 1f;
+
     public void SetScrollMultiplier(float multiplier) => scrollMultiplier = Mathf.Clamp01(multiplier);
 
     private void OnEnable() => EventBus.Subscribe<OnRunEndedEvent>(OnRunEnded);
     private void OnDisable() => EventBus.Unsubscribe<OnRunEndedEvent>(OnRunEnded);
+
+    public GameObject GetTilePrefab(TileBiome biome) => biome switch
+    {
+        TileBiome.Desert => desertTilePrefab,
+        TileBiome.Grass => grassTilePrefab,
+        TileBiome.Cave => caveTilePrefab,
+        _ => desertTilePrefab
+    };
 
     public void Initialize(Transform startLocation)
     {
@@ -62,28 +62,29 @@ public class MapManager : MonoBehaviour
         if (level <= maxLevelWithDesert)
         {
             currentTile = desertTilePrefab;
-            endTilePrefab = desertEndTilePrefab;
         }
         else if (level > maxLevelWithDesert && level < maxLevelWithGrass)
         {
             currentTile = grassTilePrefab;
-            endTilePrefab = grassEndTilePrefab;
         }
         else
         {
             currentTile = caveTilePrefab;
-            endTilePrefab = caveEndTilePrefab;
         }
 
-        if (endTilePrefab == null)
-            Debug.LogWarning($"[MapManager] No hay tile de fin asignado para el nivel {level}.");
+
+        endConfig = ServiceLocator.Get<CinematicSystem>().GetCurrentConfig();
+        endTilePrefab = endConfig != null ? endConfig.endTile : null;
+        continueTilePrefab = endConfig != null && endConfig.style == LevelEndStyle.PassThrough
+            ? GetTilePrefab(endConfig.continueWith)
+            : null;
 
         for (int i = 0; i < RunManager.Instance.ActiveWagons.Count + 3; i++)
         {
             GenerateMap();
         }
 
-        for (int i = 1; i < tilesMap.Count; i++) 
+        for (int i = 1; i < tilesMap.Count; i++)
         {
             if (!tilesMap[i].IsMapHead)
             {
@@ -93,25 +94,6 @@ public class MapManager : MonoBehaviour
                 }
                 tilesMap[i].transform.position = tilesMap[i - 1].Tail.position;
             }
-        }
-
-        if (level <= maxLevelWithDesert)
-        {
-            currentTile = desertTilePrefab;
-            endTilePrefab = desertEndTilePrefab;
-            ShowVictoryThreshold = showVictoryThresholdInDesert;
-        }
-        else if (level > maxLevelWithDesert && level < maxLevelWithGrass)
-        {
-            currentTile = grassTilePrefab;
-            endTilePrefab = grassEndTilePrefab;
-            ShowVictoryThreshold = showVictoryThresholdInGrass;
-        }
-        else
-        {
-            currentTile = caveTilePrefab;
-            endTilePrefab = caveEndTilePrefab;
-            ShowVictoryThreshold = showVictoryThresholdInCave;
         }
 
         GameObject.Instantiate(deathWall, new Vector3(endLocation.position.x - tilesMap[0].Offset * 3, endLocation.position.y, endLocation.position.z), Quaternion.Euler(0, 0, 0));
@@ -145,21 +127,30 @@ public class MapManager : MonoBehaviour
     void RecycleTile()
     {
         if (tilesMap.Count == 0) return;
-        if (head.Tail.position.x <= endLocation.position.x - tilesMap[0].Offset * 3)
+        if (head.Tail.position.x > endLocation.position.x - tilesMap[0].Offset * 3) return;
+
+        MapTile old = head;
+        tilesMap.RemoveAt(0);
+        MapTile last = tilesMap[tilesMap.Count - 1];
+
+        if (endTileSpawned && continueTilePrefab != null)
         {
-            MapTile recycled = head;
 
-            tilesMap.RemoveAt(0);
-            recycled.SetUp(tilesMap[tilesMap.Count - 1].Tail);
-            recycled.transform.position = tilesMap[tilesMap.Count - 1].Tail.position;
-            tilesMap.Add(recycled);
-            head = tilesMap[0];
-            tilesMap[0].SetTail();
-
+            Destroy(old.gameObject);
+            tilesMap.Add(CreateChainedTile(continueTilePrefab, last, true));
+        }
+        else
+        {
+            old.SetUp(last.Tail);
+            old.transform.position = last.Tail.position;
+            tilesMap.Add(old);
 
             if (endTileSpawned)
-                recycled.gameObject.SetActive(false);
+                old.gameObject.SetActive(false);
         }
+
+        head = tilesMap[0];
+        head.SetTail();
     }
 
     void GenerateMap()
@@ -186,6 +177,19 @@ public class MapManager : MonoBehaviour
         tilesMap.Add(mapTile);
     }
 
+    private MapTile CreateChainedTile(GameObject prefab, MapTile last, bool randomizeMesh)
+    {
+        GameObject obj = Instantiate(prefab, last.Tail.position, TileRotation);
+        MapTile tile = obj.GetComponent<MapTile>();
+
+        tile.SetUp(last.Tail);
+        if (randomizeMesh && tile is TileChange change)
+            change.SetUpWithMesh(last.Tail);
+
+        obj.transform.position = last.Tail.position + tile.OffsetVect;
+        return tile;
+    }
+
 
 
     private bool TryGetRunController()
@@ -209,7 +213,6 @@ public class MapManager : MonoBehaviour
 
         float timeToArrive = EstimateEntranceDistanceIfSpawnedNow() / speed;
 
-
         if (runController.RemainingTime + arrivalDelayAfterRunEnd <= timeToArrive)
             SpawnEndTile();
     }
@@ -217,7 +220,6 @@ public class MapManager : MonoBehaviour
 
     private float EstimateEntranceDistanceIfSpawnedNow()
     {
-
         MapTile prefabTile = endTilePrefab.GetComponent<MapTile>();
         float prefabOffset = prefabTile != null && prefabTile.Tail != null
             ? Vector3.Distance(prefabTile.transform.position, prefabTile.Tail.position)
@@ -234,26 +236,18 @@ public class MapManager : MonoBehaviour
         if (endTileSpawned || endTilePrefab == null || tilesMap.Count == 0) return;
         endTileSpawned = true;
 
-        MapTile last = tilesMap[tilesMap.Count - 1];
-
-        GameObject obj = Instantiate(endTilePrefab.gameObject, last.Tail.position, TileRotation);
-        MapTile endTile = obj.GetComponent<MapTile>();
-
-        if (endTile == null)
+        if (endTilePrefab.GetComponent<MapTile>() == null)
         {
             Debug.LogError("[MapManager] El prefab de fin de nivel no tiene MapTile.");
-            Destroy(obj);
             return;
         }
 
+        MapTile endTile = CreateChainedTile(endTilePrefab.gameObject, tilesMap[tilesMap.Count - 1], false);
+
         if (endTile is TileChange)
-            Debug.LogWarning("[MapManager] El tile de fin usa MapChangingTile: usá MapTile, si no se pisa el mesh de la montaña.");
+            Debug.LogWarning("[MapManager] El tile de fin usa MapChangingTile: usá MapTile.");
 
-
-        endTile.SetUp(last.Tail);
-        obj.transform.position = last.Tail.position + endTile.OffsetVect;
-
-        endTileInstance = obj.GetComponent<LevelEndTile>();
+        endTileInstance = endTile.GetComponent<LevelEndTile>();
         tilesMap.Add(endTile);
     }
 
