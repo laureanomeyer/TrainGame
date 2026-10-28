@@ -30,6 +30,10 @@ public class WagonHP : IDamagable
 
         currentHp -= damageToTake / defense;
 
+        if (currentHp < 0)
+        {
+            currentHp = -1;
+        }
 
         if (currentHp <= 0)
         {
