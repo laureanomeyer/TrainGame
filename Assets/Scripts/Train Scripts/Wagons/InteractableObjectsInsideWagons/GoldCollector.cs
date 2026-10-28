@@ -56,7 +56,8 @@ public class GoldCollector
     {
         AudioManager.Instance.Play($"SFXCoinGain{UnityEngine.Random.Range(1, 3)}");
 
-        if (wagonHP.IsBroken == false)
+        //wagonHP.IsBroken == false
+        if (wagonHP.CurrentHp > 0)
         {
             gold += goldEvent.Amount;
 
