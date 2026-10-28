@@ -49,6 +49,7 @@ public class WagonHP : IDamagable
     public void BreakDown()
     {
         if (isBroken) return;
+        if (!canBreak) return;
 
 
         isBroken = true;
