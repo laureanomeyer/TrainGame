@@ -19,19 +19,14 @@ public static class CameraTravel
         return Mathf.Clamp(distance / speed, min, max);
     }
 
-    /// <summary>
-    /// Centro visual del target (bounds combinados de sus renderers), expresado en espacio local
-    /// del target sin escala. Devuelve Vector3.zero (= pivot) si no encuentra renderers.
-    /// </summary>
-    public static Vector3 ComputeLocalAnchor(Transform target)
+
+    public static bool TryGetRendererBounds(Transform target, out Bounds bounds)
     {
-        if (target == null) return Vector3.zero;
+        bounds = default;
+        if (target == null) return false;
 
-        Renderer[] renderers = target.GetComponentsInChildren<Renderer>();
         bool hasBounds = false;
-        Bounds bounds = default;
-
-        foreach (Renderer r in renderers)
+        foreach (Renderer r in target.GetComponentsInChildren<Renderer>())
         {
             if (!r.enabled || r is ParticleSystemRenderer || r is TrailRenderer || r is LineRenderer)
                 continue;
@@ -40,16 +35,22 @@ public static class CameraTravel
             else bounds.Encapsulate(r.bounds);
         }
 
-        if (!hasBounds)
+        return hasBounds;
+    }
+
+    public static Vector3 ComputeLocalAnchor(Transform target)
+    {
+        if (!TryGetRendererBounds(target, out Bounds bounds))
         {
-            Debug.LogWarning($"[CameraTravel] '{target.name}' no tiene renderers; se usa el pivot como ancla.");
+            if (target != null)
+                Debug.LogWarning($"[CameraTravel] '{target.name}' no tiene renderers; se usa el pivot como ancla.");
             return Vector3.zero;
         }
 
         return Quaternion.Inverse(target.rotation) * (bounds.center - target.position);
     }
 
-    /// <summary>Punto = ancla del target + offset, en espacio mundo o relativo a la rotación del target.</summary>
+
     public static Vector3 ResolvePoint(Transform target, Vector3 localAnchor, Vector3 offset, OffsetSpace space)
     {
         Vector3 anchor = target.position + target.rotation * localAnchor;
@@ -110,7 +111,7 @@ public static class CameraTravel
         Vector3 fromPos = camT.position;
         Quaternion fromRot = camT.rotation;
 
-        // Se calcula una sola vez: el vagón recién spawneado ya tiene sus bounds válidos.
+
         Vector3 localAnchor = seq.anchorToBoundsCenter ? ComputeLocalAnchor(target) : Vector3.zero;
 
         Vector3 fixedDest = ResolvePoint(target, localAnchor, seq.offsetFromTarget, seq.offsetSpace);
@@ -124,7 +125,7 @@ public static class CameraTravel
             ? () => target != null ? ResolvePoint(target, localAnchor, seq.lookAtOffset, seq.offsetSpace) : fixedLook
             : () => fixedLook;
 
-        // La rotación se calcula desde donde VA a estar la cámara, no desde donde está ahora.
+
         Func<Vector3> finalCamPos = () => ApplyAxes(fromPos, destination(), seq.travelAxes);
         Func<Quaternion> rotation = BuildRotation(seq, finalCamPos, lookPoint, fromRot);
 

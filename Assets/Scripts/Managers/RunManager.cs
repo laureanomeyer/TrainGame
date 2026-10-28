@@ -22,6 +22,8 @@ public class RunManager : MonoBehaviour
     private Transform trainTail;
     private float speed;
 
+    public MapManager MapManager => mapManager;
+
     public Transform TrainTail => trainTail;
     public float TrainSpeed => speed;
     public List<IWagon> ActiveWagons => activeWagons;

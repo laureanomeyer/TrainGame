@@ -1072,12 +1072,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CinematicSystem
   gameplayCinemachineCamera: {fileID: 1674692455}
   cinematicCinemachineCamera: {fileID: 1402490163}
-  victorySequence: {fileID: 11400000, guid: 8743e4fe2d99480409389038182552e4, type: 2}
   defeatSequence: {fileID: 11400000, guid: 7ca1e35240c637740b1b2afb480dd554, type: 2}
-  tailAnchorKey: TrainTail
   locomotiveAnchorKey: Locomotive
   gameplayPriority: 10
   cinematicPriority: 20
+  trainForward: {x: 1, y: 0, z: 0}
+  transferLeadDistance: 0
+  transferDuration: 0.5
+  holdAfterLocomotiveHidden: 2
+  centerEntranceOnScreen: 1
+  centerPanDuration: 0.8
+  levelEndTimeout: 20
   victoryThreshold: {fileID: 149905227}
   thresholdTailOffset: 200
   thresholdRetreatDuration: 3

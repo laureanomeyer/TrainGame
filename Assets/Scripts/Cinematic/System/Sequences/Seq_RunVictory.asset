@@ -15,6 +15,9 @@ MonoBehaviour:
   travelSpeed: 20
   minTravelDuration: 3
   maxTravelDuration: 3
+  returnSpeed: 15
+  minReturnDuration: 0.3
+  maxReturnDuration: 1.2
   holdDuration: 0
   travelCurve:
     serializedVersion: 2
@@ -67,14 +70,13 @@ MonoBehaviour:
   useFOVZoom: 0
   startFov: 40
   endFov: 18
-  worldOffsetFromTarget: {x: -100, y: 0, z: 0}
-  lookAtTarget: 0
+  offsetSpace: 0
+  offsetFromTarget: {x: -12, y: 22, z: -20}
+  lookAtOffset: {x: 10, y: 0, z: 0}
+  lookAtTarget: 1
   useFixedRotation: 0
   fixedEulerRotation: {x: 20, y: -90, z: 0}
   travelAxes: 1
-  trackTarget: 1
+  trackTarget: 0
   returnToOrigin: 0
-  wagonArrivalWorldOffset: {x: 0, y: 0, z: -8}
-  wagonTravelSpeed: 6
-  wagonMinTravelDuration: 0.5
-  wagonMaxTravelDuration: 3
+  anchorToBoundsCenter: 1

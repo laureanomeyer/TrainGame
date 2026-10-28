@@ -8,10 +8,14 @@ public class SceneRunController : MonoBehaviour
     private bool runStarted = true;
     private RunResult pendingResult = RunResult.None;
 
+    // Cuando la montaña ya está en la cadena, el timer se ajusta para terminar cuando ella lo indique.
+    private float? syncedTimeUntilEnd;
+
     [Header("Cinematic")]
     [SerializeField] private CinematicSystem cinematicSystem;
 
     public float Progress => 1f - Mathf.Clamp01(currentTime / sceneDuration);
+    public float RemainingTime => currentTime;
 
     private void Awake()
     {
@@ -38,7 +42,15 @@ public class SceneRunController : MonoBehaviour
             cinematicSystem.OnCinematicFinished -= FinishRun;
 
         ServiceLocator.Unregister<SceneRunController>();
+    }
 
+    /// <summary>
+    /// Fija en cuántos segundos tiene que terminar el timer. El timer se acelera o frena
+    /// en forma continua para llegar a 0 en ese momento, sin saltos en la barra de progreso.
+    /// </summary>
+    public void SyncTimeUntilEnd(float seconds)
+    {
+        syncedTimeUntilEnd = Mathf.Max(0f, seconds);
     }
 
     private void Update()
@@ -47,12 +59,24 @@ public class SceneRunController : MonoBehaviour
         if (!GameManager.Instance.IsGameplayState) return;
 
         if (runStarted)
-            currentTime -= Time.deltaTime;
+        {
+            if (syncedTimeUntilEnd.HasValue)
+            {
+                float target = syncedTimeUntilEnd.Value;
+                currentTime = target <= 0.0001f
+                    ? 0f
+                    : currentTime - Time.deltaTime * (currentTime / target);
+            }
+            else
+            {
+                currentTime -= Time.deltaTime;
+            }
+        }
 
         if (currentTime <= 0f)
         {
             currentTime = 0f;
-            EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
+            RunManager.Instance.OnRunFinished(); // apaga enemigos y publica la victoria
         }
     }
 
