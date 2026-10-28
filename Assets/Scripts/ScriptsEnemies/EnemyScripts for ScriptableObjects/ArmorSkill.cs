@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
+[Serializable]
 public class ArmorSkill : EnemySkill
 {
     public GameObject armorPrefab;
@@ -106,7 +106,7 @@ public class ArmorSkill : EnemySkill
 
     public override void Begin(Enemy enemy)
     {
-        throw new NotImplementedException();
+        return;
     }
 
 }

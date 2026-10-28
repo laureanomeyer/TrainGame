@@ -115,12 +115,21 @@ public class BulletScript : MonoBehaviour, IBullet
             }
         }
 
-        if (enemyLayerDetection.value == (1 << other.gameObject.layer))
+        Enemy collisionEnemy = other.GetComponentInParent<Enemy>();
+
+        if (collisionEnemy != null)
         {
-            Enemy collisionEnemy = other.gameObject.GetComponent<Enemy>();
-            if (collisionEnemy.HealthState == EnemyHealthState.Dead || collisionEnemy.HealthState == EnemyHealthState.Grace) return;
+            if (collisionEnemy.HealthState == EnemyHealthState.Dead ||
+                collisionEnemy.HealthState == EnemyHealthState.Grace)
+                return;
+
             bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
-            if (destroyOnEnemy) hasHit = true;
+
+            if (destroyOnEnemy)
+            {
+                hasHit = true;
+                Deactivate();
+            }
         }
     }
 

@@ -7,7 +7,7 @@ public static class BehaviorFactory
         return type switch
         {
             InteractableType.GoldBox => new GoldBox(collider),
-            InteractableType.CoalBox => new CoalBox(collider),
+            //InteractableType.CoalBox => new CoalBox(collider),
 
             _ => null
         };

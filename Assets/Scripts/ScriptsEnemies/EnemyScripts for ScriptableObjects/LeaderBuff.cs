@@ -1,6 +1,5 @@
 using System;
-using System.Text;
-using NUnit.Framework;
+using System.Collections;
 using UnityEngine;
 [Serializable]
 public class LeaderBuff : EnemySkill
@@ -9,16 +8,16 @@ public class LeaderBuff : EnemySkill
     public GameObject LeaderParticles;
     private GameObject CurrentParticles;
     private EnemiesController enemies;
-    private bool isActive = false;
     public override void Begin(Enemy enemy)
     {
         CurrentParticles = ObjectPoolManager.SpawnObject(LeaderParticles, enemy.transform.position, enemy.transform.rotation);
-        CurrentParticles.SetActive(true);
+        CurrentParticles.SetActive(false);
     }
 
 
     public override void Play(Enemy enemy)
     {
+        CurrentParticles.SetActive(true);
         if (enemy.HealthState == EnemyHealthState.Dead) return;
         enemies = ServiceLocator.Get<EnemiesController>();
 
@@ -30,6 +29,8 @@ public class LeaderBuff : EnemySkill
                     en.Brain.AddBuff(en, damageIncrease);
             }
         }
+        StopParticles();
+
     }
 
     public override void Stop(Enemy enemy)
@@ -41,4 +42,18 @@ public class LeaderBuff : EnemySkill
         }
         CurrentParticles.SetActive(false);
     }
+
+    private void StopParticles()
+    {
+        float elapsed = 0f;
+        float duration = cooldown / 2f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+        }
+
+        CurrentParticles.SetActive(false);
+    }
+
 }

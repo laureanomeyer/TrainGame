@@ -11,7 +11,7 @@ public class DynamiteSkill : EnemySkill
 
     public override void Begin(Enemy enemy)
     {
-        throw new NotImplementedException();
+        return;
     }
 
 

@@ -55,7 +55,6 @@ public class Enemy : MonoBehaviour
     private EnemyData data;
     private IWagon targetWagon;
     private float currentHealth;
-    private int activeCowboyLayer;
     private Coroutine attackRoutine;
     private TrainRanges trainRanges;
     private (float, float) limits;
@@ -106,8 +105,6 @@ public class Enemy : MonoBehaviour
         rb != null && rb.position.z < 0f;
     public Camera Cam => Camera.main;
     public bool IsTutorialEnemy { get; private set; }
-    int rightLayerIndex;
-    int leftLayerIndex;
     
     #endregion
     public Transform VisualAnchor => visualAnchor;
@@ -131,13 +128,6 @@ public class Enemy : MonoBehaviour
         Weapon = GetComponentInChildren<EnemyWeapon>();
         rb = GetComponent<Rigidbody>();
         boxCollider = GetComponent<BoxCollider>();
-
-        if (animations != null)
-        {
-            rightLayerIndex = animations.CowboyAnimator.GetLayerIndex("Right Layer");
-            leftLayerIndex = animations.CowboyAnimator.GetLayerIndex("Left Layer");
-        }
-
 
     }
     void OnEnable()
@@ -178,13 +168,12 @@ public class Enemy : MonoBehaviour
         SetAnimators();
         SetNewCollider();
 
-        if (enemyRend && data.enemyMesh) enemyRend.sharedMesh = data.enemyMesh.sharedMesh;
-        if (horseRend && data.horseMesh) horseRend.sharedMesh = data.horseMesh.sharedMesh;
-
-        if (healthBar) healthBar.SetHealth(currentHealth, MaxHealth);
-
-        healthBar.ShowArmor(HealthState == EnemyHealthState.Armored);
-        healthBar.ShowBuff(AttackState == EnemyAttackState.Buffed);
+        if (healthBar)
+        {
+            healthBar.SetHealth(currentHealth, MaxHealth);
+            healthBar.ShowArmor(HealthState == EnemyHealthState.Armored);
+            healthBar.ShowBuff(AttackState == EnemyAttackState.Buffed);
+        }
 
         PlayIdleAnimation();
 
@@ -199,31 +188,62 @@ public class Enemy : MonoBehaviour
 
     public void SetNewCollider()
     {
-        BoxCollider visualCollider =
-            activeVisualRoot.GetComponent<BoxCollider>();
-
-        if (visualCollider == null || boxCollider == null)
+        if (activeVisualRoot == null || boxCollider == null)
             return;
 
-        Bounds worldBounds = visualCollider.bounds;
+        BoxCollider visualCollider = activeVisualRoot.GetComponent<BoxCollider>();
 
-        // Convertir el centro al espacio local del collider original.
-        Vector3 localCenter =
-            boxCollider.transform.InverseTransformPoint(worldBounds.center);
+        if (visualCollider == null)
+        {
+            Debug.LogWarning($"No BoxCollider found on {activeVisualRoot.name}");
+            return;
+        }
 
-        // Convertir el tamaño global a tamaño local
-        Vector3 worldSize = worldBounds.size;
+        Transform visualTransform = visualCollider.transform;
+        Transform targetTransform = boxCollider.transform;
 
-        Vector3 localSize = new Vector3(
-            worldSize.x / boxCollider.transform.lossyScale.x,
-            worldSize.y / boxCollider.transform.lossyScale.y,
-            worldSize.z / boxCollider.transform.lossyScale.z
-        );
+        // Convert the visual collider's center to the target's local space.
+        Vector3 worldCenter = visualTransform.TransformPoint(visualCollider.center);
+        Vector3 localCenter = targetTransform.InverseTransformPoint(worldCenter);
 
-        boxCollider.center = localCenter;
-        boxCollider.size = localSize;
+        // Get the eight corners of the visual collider in local space.
+        Vector3 halfSize = visualCollider.size * 0.5f;
+
+        Vector3 min = visualCollider.center - halfSize;
+        Vector3 max = visualCollider.center + halfSize;
+
+        Vector3[] corners =
+        {
+            new Vector3(min.x, min.y, min.z),
+            new Vector3(min.x, min.y, max.z),
+            new Vector3(min.x, max.y, min.z),
+            new Vector3(min.x, max.y, max.z),
+            new Vector3(max.x, min.y, min.z),
+            new Vector3(max.x, min.y, max.z),
+            new Vector3(max.x, max.y, min.z),
+            new Vector3(max.x, max.y, max.z)
+        };
+
+        Bounds localBounds = new Bounds(localCenter, Vector3.zero);
+
+        foreach (Vector3 corner in corners)
+        {
+            Vector3 worldCorner = visualTransform.TransformPoint(corner);
+            Vector3 targetLocalCorner = targetTransform.InverseTransformPoint(worldCorner);
+
+            localBounds.Encapsulate(targetLocalCorner);
+        }
+
+        boxCollider.center = localBounds.center;
+        boxCollider.size = localBounds.size;
 
         visualCollider.enabled = false;
+
+        Debug.Log(
+            $"Collider updated: {boxCollider.name}\n" +
+            $"Center: {boxCollider.center}\n" +
+            $"Size: {boxCollider.size}"
+        );
     }
 
     public void ResetAttackCooldown(float cooldown)
@@ -388,21 +408,22 @@ public class Enemy : MonoBehaviour
 
     private void PlayCowboyAnimation(string stateName)
     {
-        if (string.IsNullOrEmpty(stateName) || animations.CowboyAnimator == null) return;
+        if (animations == null)
+            return;
 
-        activeCowboyLayer = animations.CowboyAnimator.GetLayerIndex(IsOnPositiveZSide ? "Left Layer" : "Right Layer");
+        string layerName = IsOnPositiveZSide
+            ? "Left Layer"
+            : "Right Layer";
 
-        if (activeCowboyLayer < 0) return;
-
-        animations.CowboyAnimator.SetLayerWeight(activeCowboyLayer, 1f);
-        animations.CowboyAnimator.Play(stateName, activeCowboyLayer, 0f);
+        animations.PlayCowboyAnimation(stateName, layerName);
     }
 
     private void PlayHorseAnimation(string stateName)
     {
-        if (string.IsNullOrEmpty(stateName) || animations.HorseAnimator == null) return;
+        if (animations == null)
+            return;
 
-        animations.HorseAnimator.Play(stateName, 0, 0f);
+        animations.PlayHorseAnimation(stateName);
     }
     private IEnumerator ReturnAfterDeathAnimation()
     {

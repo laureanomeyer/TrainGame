@@ -5,16 +5,16 @@ public class MusicManager : MonoBehaviour
     public static MusicManager Instance { get; private set; }
 
     [Header("Playlist (nombres deben coincidir con Sound.name en AudioManager)")]
-    [SerializeField] private int trackCount = 9; // cuántas canciones OST hay (OST1..OST5, por ej.)
+    [SerializeField] private int trackCount;
 
     [Header("Pitch por estado")]
-    [SerializeField] private float shopPitch = 1f;
-    [SerializeField] private float combatPitch = 1f;
-    [SerializeField] private float pitchTransitionSpeed = 1.5f;
+    [SerializeField] private float shopPitch;
+    [SerializeField] private float combatPitch;
+    [SerializeField] private float pitchTransitionSpeed;
 
     [Header("Volumen por estado")]
     [SerializeField] private float musicVolume = 1f;
-    [SerializeField] private float volumeTransitionSpeed = 1f;
+    [SerializeField] private float volumeTransitionSpeed;
 
     [Header("Bandas Sonoras")]
     [SerializeField] Sound[] storeOST;

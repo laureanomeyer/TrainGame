@@ -36,31 +36,45 @@ public class SpawnController : MonoBehaviour
         coalBox = trainDataRef.CoalBoxPosition;
     }
 
-    public Enemy SpawnEnemy(GameObject prefab, EnemyData data, Vector3 position, Quaternion rotation)
+public Enemy SpawnEnemy(GameObject prefab, EnemyData data, Vector3 position, Quaternion rotation)
+{
+    if (prefab == null || data == null)
     {
-        if (prefab == null || data == null)
-        {
-            Debug.LogError("Cannot spawn an enemy without a prefab and EnemyData.", this);
-            return null;
-        }
+        Debug.LogError("Cannot spawn an enemy without a prefab and EnemyData.", this);
+        return null;
+    }
 
-        GameObject enemyGO = ObjectPoolManager.SpawnObject(prefab, position, rotation);
-        if (enemyGO == null)
-        {
-            Debug.LogError($"Failed to spawn enemy prefab '{prefab.name}'.", this);
-            return null;
-        }
+    GameObject enemyGO = ObjectPoolManager.SpawnObject(prefab, position, rotation);
 
-        if (!enemyGO.TryGetComponent(out Enemy enemy))
-        {
-            Debug.LogError($"Enemy prefab '{prefab.name}' does not contain an Enemy component.", enemyGO);
-            ObjectPoolManager.ReturnObjectToPool(enemyGO);
-            return null;
-        }
+    if (enemyGO == null)
+    {
+        Debug.LogError($"Failed to spawn enemy prefab '{prefab.name}'.", this);
+        return null;
+    }
 
+    if (!enemyGO.TryGetComponent(out Enemy enemy))
+    {
+        Debug.LogError($"Enemy prefab '{prefab.name}' does not contain an Enemy component.", enemyGO);
+        ObjectPoolManager.ReturnObjectToPool(enemyGO);
+        return null;
+    }
+
+    try
+    {
         enemy.Initialize(data);
         return enemy;
     }
+    catch (System.Exception e)
+    {
+        Debug.LogError(
+            $"Failed to initialize enemy '{prefab.name}' with data '{data.name}'.\n{e}",
+            enemyGO
+        );
+
+        ObjectPoolManager.ReturnObjectToPool(enemyGO);
+        return null;
+    }
+}
 
     private void SpawnCoin(Vector3 position, Transform goTo, float amount)
     {
