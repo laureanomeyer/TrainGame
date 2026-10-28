@@ -42,11 +42,20 @@ public class LevelEndTransitionConfig
     [Tooltip("Bioma de los tiles que siguen viniendo después del umbral. Solo se usa en PassThrough.")]
     public TileBiome continueWith = TileBiome.Desert;
 
+    [Header("Encuadre de cámara (opcional)")]
+    [Tooltip("La cámara viaja a una pose fija respecto del Entrance y lo mira. Si está apagado, queda la cámara de gameplay con paneo.")]
+    public bool useCustomFraming = false;
+    [Tooltip("Posición de la cámara relativa al Entrance, en ejes del mundo (X = hacia donde avanza el tren).")]
+    public Vector3 cameraOffsetFromEntrance = new(-18f, 34f, -22f);
+    [Tooltip("Punto al que mira la cámara, relativo al Entrance. X negativo deja la boca hacia la derecha de la pantalla.")]
+    public Vector3 lookAtOffsetFromEntrance = new(-10f, 0f, -3f);
+
     public LevelEndTransitionConfig() { }
 
-    public LevelEndTransitionConfig(LevelEndStyle style, TileBiome continueWith)
+    public LevelEndTransitionConfig(LevelEndStyle style, TileBiome continueWith, bool useCustomFraming = false)
     {
         this.style = style;
         this.continueWith = continueWith;
+        this.useCustomFraming = useCustomFraming;
     }
 }

@@ -1104,33 +1104,50 @@ MonoBehaviour:
     endTile: {fileID: 2245284840719975842, guid: 64fbe761076fc4640859186e588c50d6, type: 3}
     style: 1
     continueWith: 0
+    useCustomFraming: 0
+    cameraOffsetFromEntrance: {x: -18, y: 34, z: -22}
+    lookAtOffsetFromEntrance: {x: -10, y: 0, z: -3}
   desertToGrass:
     endTile: {fileID: 2245284840719975842, guid: e484c541ac317574ebd76a8a48530ced, type: 3}
     style: 1
     continueWith: 1
+    useCustomFraming: 0
+    cameraOffsetFromEntrance: {x: -18, y: 34, z: -22}
+    lookAtOffsetFromEntrance: {x: -10, y: 0, z: -3}
   grassToGrass:
     endTile: {fileID: 2245284840719975842, guid: 91a36dc457c5ad74888342497a7b939a, type: 3}
     style: 1
     continueWith: 1
+    useCustomFraming: 0
+    cameraOffsetFromEntrance: {x: -18, y: 34, z: -22}
+    lookAtOffsetFromEntrance: {x: -10, y: 0, z: -3}
   grassToCave:
     endTile: {fileID: 2245284840719975842, guid: 86f052c0f90bba64babe7b8f7110d7f1, type: 3}
     style: 0
     continueWith: 2
+    useCustomFraming: 1
+    cameraOffsetFromEntrance: {x: -22, y: 42, z: -27}
+    lookAtOffsetFromEntrance: {x: -10, y: 0, z: -3}
   caveToCave:
     endTile: {fileID: 2245284840719975842, guid: 51a29dc8f381eee4eac0fa5a2b558e7d, type: 3}
     style: 1
     continueWith: 2
+    useCustomFraming: 1
+    cameraOffsetFromEntrance: {x: -18, y: 34, z: -22}
+    lookAtOffsetFromEntrance: {x: -10, y: 0, z: -3}
   holdAfterPassThrough: 1.5
   extraTransformsToMove:
   - {fileID: 1558271862}
   trainForward: {x: 1, y: 0, z: 0}
   transferLeadDistance: 0
-  transferDuration: 0.5
-  holdAfterLocomotiveHidden: 2
+  transferLeadTime: 0.8
+  transferDuration: 0.4
+  holdAfterLocomotiveHidden: 0.9
   centerEntranceOnScreen: 1
   centerPanDuration: 0.8
   cameraPullBack: 15
   cameraExtraHeight: 0
+  customFramingDuration: 0.7
   levelEndTimeout: 20
   victoryThreshold: {fileID: 149905227}
   thresholdTailOffset: 200
