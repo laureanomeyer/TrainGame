@@ -8,6 +8,8 @@ public class Dynamite : ArcMotion
     private float damage;
     private float adjacentDamageMultiplier;
 
+    [SerializeField] private ParticleSequenceController ParticleSequenceController;
+
     public void SetTarget(IWagon target, List<IWagon> wagons, float dmg, float adjacentMult)
     {
         targetWagon = target;
@@ -28,6 +30,7 @@ public class Dynamite : ArcMotion
 
         int index = allWagons.IndexOf(targetWagon);
         if (index < 0) return;
+
 
         if (index - 1 >= 0)
             ApplyDamage(allWagons[index - 1], damage * adjacentDamageMultiplier);
