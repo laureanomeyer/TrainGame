@@ -158,7 +158,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         currentWeaponprice = stockInfo.Price;
 
         weaponNameText.text = currentWeapon.name;
-        priceText.text = ("$" + currentWeaponprice.ToString());
+        priceText.text = ("Buy for $" + currentWeaponprice.ToString());
 
 
         float cooldown = (stockInfo.WeaponData.rateOfFire + stockInfo.WeaponData.reloadTime) / 2;
