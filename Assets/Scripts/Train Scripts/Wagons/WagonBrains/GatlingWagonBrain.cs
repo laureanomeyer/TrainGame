@@ -9,5 +9,18 @@ public class GatlingWagonBrain : WagonBrain
     private void Awake()
     {
         WagonType = WagonType.ActiveTorret;
+
+
+        if (turret == null)
+            turret = GetComponentInChildren<WagonTurret>(true);
+    }
+
+    public override void Break()
+    {
+        base.Break();
+
+
+        if (turret != null)
+            turret.SetDisabled(true);
     }
 }
