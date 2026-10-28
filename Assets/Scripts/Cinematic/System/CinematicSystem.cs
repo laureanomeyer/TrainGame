@@ -5,7 +5,6 @@ using System.Linq;
 using Unity.Cinemachine;
 using UnityEngine;
 
-// Después de RunManager (-99) y antes de TrainManager (0), que inicializa el MapManager en su Awake.
 [DefaultExecutionOrder(-98)]
 public class CinematicSystem : MonoBehaviour
 {
@@ -36,8 +35,8 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private LevelEndTransitionConfig desertToDesert = new(LevelEndStyle.PassThrough, TileBiome.Desert);
     [SerializeField] private LevelEndTransitionConfig desertToGrass = new(LevelEndStyle.PassThrough, TileBiome.Grass);
     [SerializeField] private LevelEndTransitionConfig grassToGrass = new(LevelEndStyle.PassThrough, TileBiome.Grass);
-    [SerializeField] private LevelEndTransitionConfig grassToCave = new(LevelEndStyle.EnterTunnel, TileBiome.Cave);
-    [SerializeField] private LevelEndTransitionConfig caveToCave = new(LevelEndStyle.EnterTunnel, TileBiome.Cave);
+    [SerializeField] private LevelEndTransitionConfig grassToCave = new(LevelEndStyle.EnterTunnel, TileBiome.Cave, true);
+    [SerializeField] private LevelEndTransitionConfig caveToCave = new(LevelEndStyle.EnterTunnel, TileBiome.Cave, true);
 
     [Header("Pass Through")]
     [Tooltip("Segundos desde que la cola de la locomotora cruza el Entrance hasta pasar a la estación.")]
@@ -52,6 +51,8 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private Vector3 trainForward = Vector3.right;
     [Tooltip("Distancia antes de la trompa a la que el mapa empieza a frenar y el tren a avanzar. 0 = justo en la trompa.")]
     [SerializeField] private float transferLeadDistance = 0f;
+    [Tooltip("Segundos de anticipación: el mapa frena (y arranca la cámara) este tiempo antes de que el Entrance llegue a la trompa.")]
+    [SerializeField] private float transferLeadTime = 1.2f;
     [Tooltip("Segundos en los que el mapa frena y el tren acelera (movimiento relativo constante).")]
     [SerializeField] private float transferDuration = 0.5f;
     [Tooltip("Túnel: segundos desde que la locomotora desaparece hasta pasar a la estación.")]
@@ -63,6 +64,8 @@ public class CinematicSystem : MonoBehaviour
     [SerializeField] private float cameraPullBack = 15f;
     [Tooltip("Altura extra en Y del mundo. Sube la cámara, el Entrance baja en pantalla.")]
     [SerializeField] private float cameraExtraHeight = 0f;
+    [Tooltip("Segundos que tarda la cámara en llegar al encuadre custom (si la transición lo usa).")]
+    [SerializeField] private float customFramingDuration = 0.7f;
     [Tooltip("Si el tile de fin no llega en este tiempo, la cinemática termina igual.")]
     [SerializeField] private float levelEndTimeout = 20f;
 
@@ -107,9 +110,6 @@ public class CinematicSystem : MonoBehaviour
         ServiceLocator.Unregister<CinematicSystem>();
     }
 
-    // ---------- Configuración de transiciones ----------
-
-    /// <summary>Config del nivel actual. Null = intervalo de madera (sin tile de fin).</summary>
     public LevelEndTransitionConfig GetCurrentConfig() => GetConfig(currentTransition);
 
     private LevelEndTransition ResolveTransition(int level)
@@ -145,8 +145,6 @@ public class CinematicSystem : MonoBehaviour
         _ => null
     };
 
-    // ---------- Entrada ----------
-
     public void CinematicPlay(RunResult result)
     {
         if (isPlaying) return;
@@ -178,10 +176,8 @@ public class CinematicSystem : MonoBehaviour
             return;
         }
 
-        // Todas las transiciones con tile: el mapa frena, el tren avanza y la cámara queda fija.
-        // El Style solo cambia qué tiles hay después (MapManager): ocultos (túnel) o del bioma siguiente.
         float hold = config.style == LevelEndStyle.PassThrough ? holdAfterPassThrough : holdAfterLocomotiveHidden;
-        StartCoroutine(LevelEndTransferRoutine(locomotive, hold));
+        StartCoroutine(LevelEndTransferRoutine(locomotive, config, hold));
     }
 
     private bool CamerasAssigned()
@@ -219,7 +215,6 @@ public class CinematicSystem : MonoBehaviour
         return camT;
     }
 
-    /// <summary>La cámara de gameplay sigue al tren: se congela para que el blend no arrastre la imagen.</summary>
     private void FreezeGameplayCamera()
     {
         gameplayCinemachineCamera.Follow = null;
@@ -232,8 +227,6 @@ public class CinematicSystem : MonoBehaviour
             run != null && run.TrainTail != null)
             StartCoroutine(ThresholdRetreat(run.TrainTail));
     }
-
-    // ---------- Derrota ----------
 
     private IEnumerator DefeatRoutine(CameraTravelSequenceSO sequence, Transform target)
     {
@@ -262,8 +255,6 @@ public class CinematicSystem : MonoBehaviour
         Finish();
     }
 
-    // ---------- Victoria: intervalo de madera ----------
-
     private IEnumerator WoodenThresholdRoutine()
     {
         isPlaying = true;
@@ -278,14 +269,13 @@ public class CinematicSystem : MonoBehaviour
         Finish();
     }
 
-    // ---------- Victoria con tile de fin: el mapa frena, el tren avanza, la cámara queda fija ----------
-
-    private IEnumerator LevelEndTransferRoutine(Transform locomotive, float holdAfterCrossing)
+    private IEnumerator LevelEndTransferRoutine(Transform locomotive, LevelEndTransitionConfig config, float holdAfterCrossing)
     {
         isPlaying = true;
 
         RunManager run = RunManager.Instance;
         MapManager map = run != null ? run.MapManager : null;
+        float speed = run != null ? run.TrainSpeed : 0f;
 
         StartThresholdRetreatIfVisible(run);
 
@@ -298,8 +288,8 @@ public class CinematicSystem : MonoBehaviour
         float locoAlong = Along(locomotive.position, fwd);
         float frontOffset = locoFront - locoAlong;
         float rearOffset = locoRear - locoAlong;
+        float lead = transferLeadDistance + speed * transferLeadTime;
 
-        // 1) Esperar a que el Entrance llegue a la trompa (el mapa todavía se mueve).
         Transform entrance = null;
         float waited = 0f;
 
@@ -309,7 +299,7 @@ public class CinematicSystem : MonoBehaviour
                 registry?.TryResolveDynamic(LevelEndTile.EntranceAnchorKey, out entrance);
 
             if (entrance != null &&
-                Along(entrance.position, fwd) <= Along(locomotive.position, fwd) + frontOffset + transferLeadDistance)
+                Along(entrance.position, fwd) <= Along(locomotive.position, fwd) + frontOffset + lead)
                 break;
 
             waited += Time.deltaTime;
@@ -323,16 +313,14 @@ public class CinematicSystem : MonoBehaviour
             yield break;
         }
 
-        // 2) Transferir el movimiento: el mapa frena y el tren acelera, y la cámara queda fija en el mundo.
         List<Transform> trainRoots = CollectTrainRoots(locomotive);
-        float speed = run != null ? run.TrainSpeed : 0f;
 
         Vector3 camStart = camT.position;
+        Quaternion camStartRot = camT.rotation;
         float elapsed = 0f;
         float crossedTime = 0f;
         bool notified = false;
 
-        // Sigue durante la transición de escena; el unload corta la corrutina.
         while (locomotive != null)
         {
             float dt = Time.deltaTime;
@@ -346,17 +334,32 @@ public class CinematicSystem : MonoBehaviour
             foreach (Transform part in trainRoots)
                 if (part != null) MoveBy(part, step);
 
-            float p = centerPanDuration > 0f ? Mathf.SmoothStep(0f, 1f, elapsed / centerPanDuration) : 1f;
+            if (config.useCustomFraming)
+            {
+                float p = customFramingDuration > 0f ? Mathf.SmoothStep(0f, 1f, elapsed / customFramingDuration) : 1f;
 
-            Vector3 pan = centerEntranceOnScreen
-                ? fwd * PanToCenter(camStart, camT.rotation, entrance.position, fwd)
-                : Vector3.zero;
+                Vector3 targetPos = entrance.position + config.cameraOffsetFromEntrance;
+                Vector3 lookPoint = entrance.position + config.lookAtOffsetFromEntrance;
+                Vector3 lookDir = lookPoint - targetPos;
+                Quaternion targetRot = lookDir.sqrMagnitude > 0.0001f ? Quaternion.LookRotation(lookDir, Vector3.up) : camStartRot;
 
-            Vector3 lift = -(camT.rotation * Vector3.forward) * cameraPullBack + Vector3.up * cameraExtraHeight;
+                camT.SetPositionAndRotation(
+                    Vector3.Lerp(camStart, targetPos, p),
+                    Quaternion.Slerp(camStartRot, targetRot, p));
+            }
+            else
+            {
+                float p = centerPanDuration > 0f ? Mathf.SmoothStep(0f, 1f, elapsed / centerPanDuration) : 1f;
 
-            camT.position = camStart + (pan + lift) * p;
+                Vector3 pan = centerEntranceOnScreen
+                    ? fwd * PanToCenter(camStart, camStartRot, entrance.position, fwd)
+                    : Vector3.zero;
 
-            // 3) La cola de la locomotora cruzó el Entrance: hold y pasar a la estación.
+                Vector3 lift = -(camStartRot * Vector3.forward) * cameraPullBack + Vector3.up * cameraExtraHeight;
+
+                camT.position = camStart + (pan + lift) * p;
+            }
+
             if (!notified && Along(locomotive.position, fwd) + rearOffset >= Along(entrance.position, fwd))
             {
                 crossedTime += dt;
@@ -373,7 +376,6 @@ public class CinematicSystem : MonoBehaviour
         if (!notified) Finish();
     }
 
-    /// <summary>Roots a mover: locomotora, vagones, cola y objetos extra (personaje), sin repetir hijos.</summary>
     private List<Transform> CollectTrainRoots(Transform locomotive)
     {
         var candidates = new List<Transform> { locomotive };
@@ -394,7 +396,6 @@ public class CinematicSystem : MonoBehaviour
         return candidates.Where(t => !candidates.Any(o => o != t && t.IsChildOf(o))).ToList();
     }
 
-    /// <summary>Desplaza respetando CharacterController / Rigidbody, para que no lo devuelvan a su lugar.</summary>
     private static void MoveBy(Transform t, Vector3 delta)
     {
         if (t.TryGetComponent(out CharacterController cc) && cc.enabled)
@@ -443,16 +444,12 @@ public class CinematicSystem : MonoBehaviour
         rear = center - extent;
     }
 
-    // ---------- Helpers ----------
-
     private IEnumerator ThresholdRetreat(Transform tailTarget)
     {
         foreach (var mover in thresholdMoversToDisable)
             if (mover != null) mover.enabled = false;
 
         Vector3 startPos = victoryThreshold.position;
-
-        // Destino fijo: si siguiera a la cola, avanzaría junto con el tren.
         Vector3 targetPos = new(tailTarget.position.x - thresholdTailOffset, startPos.y, startPos.z);
 
         float timer = 0f;
