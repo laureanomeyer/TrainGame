@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,13 +20,15 @@ public class PlayerInteractions
 
     public PlayerInventory Inventory => playerInventory;
     public WagonBrain CurrentWagon => currentWagon;
+    public bool IsUsingTurret => isUsingTurret;
 
     private InputAction repairAction;
     private bool buttonIsHold = false;
     private bool isUsingTurret = false;
     private bool activateOnceParticle = true;
+    private bool turretPromptVisible = false;
 
-    public PlayerInteractions (PlayerBrain playerBrain, PlayerMovementController playerMovementController, LookObjectToMouse lookObjectToMouse, InteractionUIManager interactionUIManager, float repairCapacity)
+    public PlayerInteractions(PlayerBrain playerBrain, PlayerMovementController playerMovementController, LookObjectToMouse lookObjectToMouse, InteractionUIManager interactionUIManager, float repairCapacity)
     {
         this.playerBrain = playerBrain;
         this.playerMovementController = playerMovementController;
@@ -52,44 +53,93 @@ public class PlayerInteractions
             repairAction.performed -= ActiveRepairInput;
             repairAction.canceled -= DeactiveRepairInput;
         }
+
+        // Si el player se destruye arriba de la torreta, liberarla
+        if (usingTurret != null)
+        {
+            usingTurret.ExitTurret();
+            usingTurret = null;
+        }
+        isUsingTurret = false;
+
+        SetTurretPrompt(false);
     }
+
     public void Update()
     {
-        if (!buttonIsHold && !activateOnceParticle)
-        {
-            Debug.Log("entre" + activateOnceParticle);
-            activateOnceParticle = true;
-            playerBrain.sequenceController.StopGroup(ParticleGroups.RepairParticles);
-        }
-        Repair();
-        HandleTurretUse();
-    }
+        bool repairingThisFrame = Repair();
 
-    void Repair()
-    {
-        if (isUsingTurret) return;
-        if (!playerBrain.CanRepair) return;
-
-        if (buttonIsHold && currentWagon != null && currentWagon.CanBeRepaired)
+        // Corta partículas y devuelve el movimiento si se dejó de reparar por cualquier motivo
+        if (!repairingThisFrame)
         {
-            currentWagon.Repair(repairCapacity);
-            playerBrain.SetIsRepairing(true);
-            playerMovementController.SetCanMove(false);
-            playerMovementController.SetCanRotate(false);
-            if (activateOnceParticle)
+            if (!activateOnceParticle)
             {
-                playerBrain.sequenceController.PlayGroup(ParticleGroups.RepairParticles);
-                activateOnceParticle = false;
-                Debug.Log("Me apagué" + activateOnceParticle);
+                activateOnceParticle = true;
+                playerBrain.sequenceController.StopGroup(ParticleGroups.RepairParticles);
+            }
+
+            if (playerBrain.IsRepairing)
+            {
+                playerBrain.TryRegainMovementAfterRepairing();
             }
         }
+
+        HandleTurretUse();
+        RefreshTurretPrompt();
     }
+
+    private bool Repair()
+    {
+        if (isUsingTurret) return false;
+        if (!playerBrain.CanRepair) return false;
+        if (!buttonIsHold) return false;
+        if (currentWagon == null || !currentWagon.CanBeRepaired) return false;
+
+        currentWagon.Repair(repairCapacity);
+        playerBrain.SetIsRepairing(true);
+        playerMovementController.SetCanMove(false);
+        playerMovementController.SetCanRotate(false);
+
+        if (activateOnceParticle)
+        {
+            playerBrain.sequenceController.PlayGroup(ParticleGroups.RepairParticles);
+            activateOnceParticle = false;
+        }
+
+        return true;
+    }
+
+    #region Turret prompt (F)
+
+    /// <summary>
+    /// Muestra la F si estás arriba de la torreta (para bajarte) o al lado de una
+    /// torreta usable (para subirte). Solo publica el evento cuando cambia el estado.
+    /// </summary>
+    private void RefreshTurretPrompt()
+    {
+        bool shouldShow =
+            isUsingTurret ||
+            (currentTurret != null && currentTurret.CanBeUsed);
+
+        SetTurretPrompt(shouldShow);
+    }
+
+    private void SetTurretPrompt(bool show)
+    {
+        if (turretPromptVisible == show) return;
+        turretPromptVisible = show;
+
+        if (show) EventBus.Publish(new OnShowInteractEvent());
+        else EventBus.Publish(new OnHideInteractEvent());
+    }
+
+    #endregion
 
     public void OnTriggerEnter(Collider other)
     {
-        WagonBrain wagon = other.GetComponentInParent<WagonBrain>();
         if (other.CompareTag("Train"))
         {
+            WagonBrain wagon = other.GetComponentInParent<WagonBrain>();
             if (wagon != null)
             {
                 if (currentWagon != null)
@@ -117,7 +167,7 @@ public class PlayerInteractions
         {
             currentTurret = other.GetComponentInParent<WagonTurret>();
 
-            if (!isUsingTurret && currentTurret != null && interactionUIManager != null)
+            if (!isUsingTurret && currentTurret != null && currentTurret.CanBeUsed && interactionUIManager != null)
             {
                 interactionUIManager.ShowWagons("Usar torreta");
             }
@@ -128,7 +178,8 @@ public class PlayerInteractions
     {
         if (other.CompareTag("Train"))
         {
-            if (other.TryGetComponent(out WagonBrain wagon) && wagon == currentWagon)
+            WagonBrain wagon = other.GetComponentInParent<WagonBrain>();
+            if (wagon != null && wagon == currentWagon)
             {
                 currentWagon.HideHpBar();
                 currentWagon = null;
@@ -200,14 +251,10 @@ public class PlayerInteractions
     void StartUsingTurret(WagonTurret turret)
     {
         if (turret == null) return;
-        if (turret.IsOccupied) return;
+        if (!turret.EnterTurret()) return;
 
         usingTurret = turret;
         isUsingTurret = true;
-
-        turret.EnterTurret();
-
-        playerBrain.SetCanAttack(false);
 
         if (playerMovementController != null)
         {
@@ -232,14 +279,12 @@ public class PlayerInteractions
         isUsingTurret = false;
         usingTurret = null;
 
-        playerBrain.SetCanAttack(true);
-
         if (playerMovementController != null)
         {
-            playerMovementController.SetCanMove(true);
-            playerMovementController.SetCanRotate(true);
-            playerMovementController.SetFollowTarget(null); //volver al modo normal
+            playerMovementController.SetFollowTarget(null);
         }
+
+        playerBrain.TryRegainMovement();
 
         if (interactionUIManager != null)
         {
@@ -250,10 +295,16 @@ public class PlayerInteractions
     void HandleTurretUse()
     {
         if (!isUsingTurret) return;
-        if (usingTurret == null) return;
+
+        // Torreta destruida o vagón roto -> bajar al player
+        if (usingTurret == null || usingTurret.IsDisabled)
+        {
+            StopUsingTurret();
+            return;
+        }
+
         if (lookObjectToMouse == null) return;
 
-        // Usar el pivot (centro de rotaci�n), NO el firePoint (que orbita al rotar)
         Transform aimOrigin = usingTurret.TurretPivot != null
             ? usingTurret.TurretPivot
             : usingTurret.transform;
@@ -266,7 +317,7 @@ public class PlayerInteractions
 
         usingTurret.Aim(direction);
 
-        if (Mouse.current.leftButton.isPressed)
+        if (playerBrain.CanAttack && playerBrain.PlayerAttackController.IsAttacking)
         {
             usingTurret.TryShoot(direction);
         }
@@ -294,5 +345,4 @@ public class PlayerInteractions
     {
         GameManager.Instance.GoToMainMenu();
     }
-
 }

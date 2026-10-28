@@ -45,10 +45,12 @@ public class PlayerBrain : MonoBehaviour
     public bool IsRepairing => isRepairing;
     public bool CanRepair => canRepair;
     public bool CanInteract => canInteract;
+    public bool CanAttack => canAttack;
+    public bool IsUsingTurret => playerInteractionsController != null && playerInteractionsController.IsUsingTurret;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
-
 
         inventory = new PlayerInventory();
         faceMouse = new LookObjectToMouse(groundMask);
@@ -73,8 +75,8 @@ public class PlayerBrain : MonoBehaviour
 
         isRepairing = false;
         HideInteract();
-
     }
+
     private void OnDestroy()
     {
         playerAttackController.DestroyWeapon();
@@ -91,10 +93,13 @@ public class PlayerBrain : MonoBehaviour
         EventBus.Unsubscribe<OnShowArrowImage>(ShowArrowImages);
         EventBus.Unsubscribe<OnShowClickImage>(ShowClickImage);
     }
+
     private void Update()
     {
         playerInteractionsController.Update();
-        if (!isRepairing && canAttack) playerAttackController.Update();
+
+        // El arma de mano no se usa mientras está en la torreta
+        if (!isRepairing && canAttack && !IsUsingTurret) playerAttackController.Update();
 
         if (Keyboard.current.f8Key.wasPressedThisFrame)
         {
@@ -124,16 +129,12 @@ public class PlayerBrain : MonoBehaviour
 
     private void OnAdvanceStep()
     {
-
         EventBus.Publish(new OnAdvanceTutorialStepByClick());
     }
 
     public void OnSkipTutorial(InputValue value)
     {
-
         EventBus.Publish(new OnSkipTutorial());
-        //EventBus.Publish(new OnForceTutorialStepEvent(17));
-
     }
 
     private void OnSkipScene()
@@ -173,14 +174,15 @@ public class PlayerBrain : MonoBehaviour
 
         if (clickImage.alpha != 0f) clickImage.alpha = 0f;
     }
+
     public void DeactiveAttack(InputAction.CallbackContext context)
     {
         playerAttackController.DeactiveAttack();
     }
+
     /// <summary>
     /// Congela al player cuando se abre una UI
     /// </summary>
-    /// <param name="activateUIEvent"></param>
     public void HandleAttackAndMovementInUi(OnActivateUiEvent activateUIEvent)
     {
         SetCanAttack(activateUIEvent.Activated);
@@ -190,7 +192,6 @@ public class PlayerBrain : MonoBehaviour
     /// <summary>
     /// Congela al player cuando el tutorial lo pide
     /// </summary>
-    /// <param name="ev"></param>
     public void HandleAttackAndMovementInTutorial(OnFreezePlayerEvent ev)
     {
         SetCanMove(ev.Activated);
@@ -203,21 +204,28 @@ public class PlayerBrain : MonoBehaviour
     /// <summary>
     /// Cancela el ataque del player
     /// </summary>
-    /// <param name="AttackEnableEvent"></param>
     public void CallSetCanAttackEvent(OnSetAttackEnabledEvent AttackEnableEvent)
     {
         SetCanAttack(AttackEnableEvent.Can);
     }
 
-    public void TryRegainMovementAfterRepairing()
+    /// <summary>
+    /// Devuelve movimiento y rotación respetando el freeze del tutorial y el bloqueo de UI.
+    /// </summary>
+    public void TryRegainMovement()
     {
-        SetIsRepairing(false);
-
         if (higherLevelFrozen) return;
 
         playerMovementController.SetCanMove(true);
-        playerMovementController.SetCanRotate(true);
+        playerMovementController.SetCanRotate(canAttack); // si una UI bloqueó el ataque, tampoco rota
     }
+
+    public void TryRegainMovementAfterRepairing()
+    {
+        SetIsRepairing(false);
+        TryRegainMovement();
+    }
+
     public void SetCanAttack(bool canAttack)
     {
         this.canAttack = canAttack;
@@ -263,6 +271,7 @@ public class PlayerBrain : MonoBehaviour
         if (ev.show) arrowsImage.alpha = 1f;
         else arrowsImage.alpha = 0f;
     }
+
     private void ShowClickImage(OnShowClickImage ev)
     {
         if (ev.show) clickImage.alpha = 1f;

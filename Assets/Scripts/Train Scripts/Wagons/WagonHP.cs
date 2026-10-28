@@ -24,33 +24,42 @@ public class WagonHP : IDamagable
         this.canBreak = canBreak;
     }
 
-    public void TakeDamage(float damageToTake) 
+    public void TakeDamage(float damageToTake)
     {
+        if (isBroken) return;
+
         currentHp -= damageToTake / defense;
 
-        if (currentHp < 0) 
+
+        if (currentHp <= 0)
         {
+            currentHp = 0;
             BreakDown();
         }
-
     }
-    public void Repair(float repairAmount, float delta) 
+
+    public void Repair(float repairAmount, float delta)
     {
-        if(IsBroken && canBreak) return;
+        if (IsBroken && canBreak) return;
 
         currentHp += repairAmount * delta;
         currentHp = Mathf.Clamp(currentHp, 0, maxHp);
-
     }
-    public void BreakDown() 
+
+    public void BreakDown()
     {
-        die();
+        if (isBroken) return;
 
-        IsBroken = true;
+
+        isBroken = true;
+        die?.Invoke();
     }
+
     public void OnMaxHpChanged(float newMaxHp)
     {
-        float ratio = currentHp / maxHp; 
+        if (maxHp <= 0f) { maxHp = newMaxHp; currentHp = newMaxHp; return; }
+
+        float ratio = currentHp / maxHp;
         maxHp = newMaxHp;
         currentHp = maxHp * ratio;
     }

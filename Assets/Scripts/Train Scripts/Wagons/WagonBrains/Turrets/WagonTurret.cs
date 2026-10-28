@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -24,21 +23,28 @@ public class WagonTurret : MonoBehaviour
     [SerializeField] private int defaultCapacity = 15;
     [SerializeField] private int maxSize = 50;
 
+    [Header("Damage")]
+    [SerializeField] private float damage = 1;
+
     private IObjectPool<GameObject> bulletPool;
+    private StatSystem statSystem;
     private float cooldownTimer;
     private bool isOccupied;
+    private bool isDisabled;
 
     public bool IsOccupied => isOccupied;
+    public bool IsDisabled => isDisabled;
+    public bool CanBeUsed => !isDisabled && !isOccupied;
     public Transform FirePoint => firePoint;
     public Transform PlayerUsePoint => playerUsePoint;
     public Transform TurretPivot => turretPivot;
 
-    [Header("Damage")]
-    [SerializeField] private float damage = 1;
-    private float currentDamage;
-
     private void Awake()
     {
+
+        if (bulletType != null)
+            bulletType = Instantiate(bulletType);
+
         bulletPool = new ObjectPool<GameObject>(
             CreateBullet,
             OnTakeBulletFromPool,
@@ -57,12 +63,13 @@ public class WagonTurret : MonoBehaviour
             cooldownTimer -= Time.deltaTime;
     }
 
-    public void EnterTurret()
+    public bool EnterTurret()
     {
-        if (isOccupied)
-            return;
+        if (!CanBeUsed)
+            return false;
 
         isOccupied = true;
+        return true;
     }
 
     public void ExitTurret()
@@ -70,9 +77,14 @@ public class WagonTurret : MonoBehaviour
         isOccupied = false;
     }
 
+    public void SetDisabled(bool disabled)
+    {
+        isDisabled = disabled;
+    }
+
     public void Aim(Vector3 direction)
     {
-        if (turretPivot == null)
+        if (turretPivot == null || isDisabled)
             return;
 
         direction.y = 0f;
@@ -85,7 +97,7 @@ public class WagonTurret : MonoBehaviour
 
     public void TryShoot(Vector3 direction)
     {
-        if (!isOccupied) return;
+        if (!isOccupied || isDisabled) return;
         if (cooldownTimer > 0f) return;
         if (firePoint == null) return;
 
@@ -100,7 +112,8 @@ public class WagonTurret : MonoBehaviour
 
         GameObject bulletGO = bulletPool.Get();
 
-        sequenceController.Play("shotParticles");
+        if (sequenceController != null)
+            sequenceController.Play("shotParticles");
 
         bulletGO.transform.SetPositionAndRotation(
             firePoint.position,
@@ -109,8 +122,10 @@ public class WagonTurret : MonoBehaviour
 
         if (bulletGO.TryGetComponent(out IBullet bullet))
         {
-            var statsRef = ServiceLocator.Get<StatSystem>();
-            bulletType.Damage = damage * statsRef.GetStat(StatType.DamageMultiplier);
+            if (statSystem == null)
+                statSystem = ServiceLocator.Get<StatSystem>();
+
+            bulletType.Damage = damage * statSystem.GetStat(StatType.DamageMultiplier);
             bullet.ResetState(bulletType);
         }
 
