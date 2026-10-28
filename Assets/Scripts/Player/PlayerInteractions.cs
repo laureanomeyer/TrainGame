@@ -110,16 +110,12 @@ public class PlayerInteractions
     }
 
     #region Turret prompt (F)
-
-    /// <summary>
-    /// Muestra la F si estás arriba de la torreta (para bajarte) o al lado de una
-    /// torreta usable (para subirte). Solo publica el evento cuando cambia el estado.
-    /// </summary>
     private void RefreshTurretPrompt()
     {
         bool shouldShow =
-            isUsingTurret ||
-            (currentTurret != null && currentTurret.CanBeUsed);
+            !isUsingTurret &&
+            currentTurret != null &&
+            currentTurret.CanBeUsed;
 
         SetTurretPrompt(shouldShow);
     }
@@ -296,7 +292,7 @@ public class PlayerInteractions
     {
         if (!isUsingTurret) return;
 
-        // Torreta destruida o vagón roto -> bajar al player
+
         if (usingTurret == null || usingTurret.IsDisabled)
         {
             StopUsingTurret();
