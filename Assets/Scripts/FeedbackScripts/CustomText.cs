@@ -20,7 +20,7 @@ public static class CustomText
         { "chip", "<sprite name=\"chip\">" },
         { "coin", "<sprite name=\"coin\">" },
         { "heart", "<sprite name=\"heart\">" },
-        { "sword", "<sprite name=\"sword\">" }
+        { "damage", "<sprite name=\"damage\">" }
     };
 
     public static string Format(string text, params object[] values)

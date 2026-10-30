@@ -5,12 +5,14 @@ using UnityEngine.UI;
 public class WagonHPWorldUI
 {
     private Image hpImage;
-    private Image hpBackgroundImage;
+    private CanvasGroup canvas;
+    private CanvasGroup repairIcon;
 
-    public WagonHPWorldUI(Image hpImage, Image hpBackgroundImage)
+    public WagonHPWorldUI(Image hpImage, CanvasGroup repairIcon, CanvasGroup canvas)
     {
         this.hpImage = hpImage;
-        this.hpBackgroundImage = hpBackgroundImage;
+        this.repairIcon = repairIcon;
+        this.canvas = canvas;
         SetVisible(false);
     }
 
@@ -26,17 +28,29 @@ public class WagonHPWorldUI
         }
 
         hpImage.fillAmount = Mathf.Clamp01(currentHp / maxHp);
+
+        if (hpImage.fillAmount != 1f)
+        {
+            repairIcon.gameObject.SetActive(true);
+
+        }
+        else
+        {
+            repairIcon.gameObject.SetActive( false);
+        }
     }
 
     public void SetVisible(bool isVisible)
     {
-        if (hpImage != null)
+        if (canvas == null) return;
+
+        if (isVisible)
         {
-            hpImage.gameObject.SetActive(isVisible);
+            canvas.alpha = 1;
         }
-        if (hpBackgroundImage != null)
+        else
         {
-            hpBackgroundImage.gameObject.SetActive(isVisible);
+            canvas.alpha = 0;
         }
     }
 }

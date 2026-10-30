@@ -44,7 +44,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     [Header("UI")]
     [SerializeField] private Image hpImage;
-    [SerializeField] private Image hpBackgroundImage;
+    [SerializeField] private CanvasGroup repairIcon;
+    [SerializeField] private CanvasGroup hpCanvas;
 
     #region Wagon Render/Mesh/Material
     [Header("Wagon renders and materials")]
@@ -115,7 +116,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         SubscribeToStats(); // si Start corrió antes que StartWagon, stats era null y nunca se suscribía
 
         SetUpWagonHP();
-        hpWorldUI = new WagonHPWorldUI(hpImage, hpBackgroundImage);
+        hpWorldUI = new WagonHPWorldUI(hpImage, repairIcon, hpCanvas);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         renderController = new WagonRenderController(this);
     }
