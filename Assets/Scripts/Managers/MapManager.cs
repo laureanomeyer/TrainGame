@@ -267,6 +267,9 @@ public class MapManager : MonoBehaviour
     {
 
         if (evt.Result == RunResult.Victory)
+        {
             SpawnEndTile();
+        }
+            
     }
 }

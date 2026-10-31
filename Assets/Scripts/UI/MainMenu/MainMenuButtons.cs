@@ -27,6 +27,8 @@ public class MainMenuButtons : MonoBehaviour
 
     private void StartGame()
     {
+        AnalyticsManager.Instance.RegisterUserRunPlay();
+
         GameManager.Instance.StartNewSession();
     }
 

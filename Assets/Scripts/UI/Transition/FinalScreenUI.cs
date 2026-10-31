@@ -30,6 +30,7 @@ public class FinalScreenUI : MonoBehaviour
 
     public void Restart()
     {
+        AnalyticsManager.Instance.RegisterUserRunPlay();
         GameManager.Instance.StartNewSession();
     }
 

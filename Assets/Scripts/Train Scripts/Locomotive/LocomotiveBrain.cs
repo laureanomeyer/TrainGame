@@ -114,6 +114,7 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         particleSequence?.PlayGroup(ParticleGroups.LocomotiveDestroy);
 
+        AnalyticsManager.Instance.RegisterDefeat();
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
 
