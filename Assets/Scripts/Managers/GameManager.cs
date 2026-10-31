@@ -33,16 +33,16 @@ public class GameManager : MonoBehaviour
     private GameState stateAfterTransition;
     public bool IsGameplayState => CurrentState == GameState.Gameplay || CurrentState == GameState.Tutorial;
     public bool IsTransitioning => CurrentState == GameState.Transition;
-    public bool IsTutorial => SceneManager.GetActiveScene().name == "SceneTutorial";
-    public bool IsGameplayScene => SceneManager.GetActiveScene().name == "SceneTutorial" || SceneManager.GetActiveScene().name == "SceneLau" || SceneManager.GetActiveScene().name == "SceneShop";
-    public bool IsInShop => SceneManager.GetActiveScene().name == "SceneShop";
-    public bool IsInCombat => SceneManager.GetActiveScene().name == "SceneTutorial" || SceneManager.GetActiveScene().name == "SceneLau";
+    public bool IsTutorial => SceneManager.GetActiveScene().name == "2. Tutorial";
+    public bool IsGameplayScene => SceneManager.GetActiveScene().name == "2. Tutorial" || SceneManager.GetActiveScene().name == "3. Trail" || SceneManager.GetActiveScene().name == "4. Station";
+    public bool IsInShop => SceneManager.GetActiveScene().name == "4. Station";
+    public bool IsInCombat => SceneManager.GetActiveScene().name == "2. Tutorial" || SceneManager.GetActiveScene().name == "3. Trail";
 
-    private const string SceneMainMenu = "SceneMainMenu";
-    private const string SceneShop = "SceneShop";
-    private const string SceneRun = "SceneLau";
-    private const string SceneFinal = "SceneFinal";
-    private const string SceneTutorial = "SceneTutorial";
+    private const string SceneMainMenu = "1. Main Menu";
+    private const string SceneShop = "4. Station";
+    private const string SceneRun = "3. Trail";
+    private const string SceneFinal = "5. Ending";
+    private const string SceneTutorial = "2. Tutorial";
 
     private void Awake()
     {

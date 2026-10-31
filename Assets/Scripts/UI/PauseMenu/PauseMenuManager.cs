@@ -15,7 +15,7 @@ public class PauseMenuManager : MonoBehaviour
 
     [SerializeField] private SettingsPanel settingsPanel;
 
-    private string[] pausableScenes = { "SceneLau", "SceneShop", "SceneTutorial" };
+    private string[] pausableScenes = { "3. Trail", "4. Station", "2. Tutorial" };
 
     private InputAction pauseAction;
     private bool isPaused;

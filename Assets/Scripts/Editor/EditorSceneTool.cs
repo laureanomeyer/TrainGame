@@ -27,6 +27,7 @@ public class EditorSceneTool
         menu.ShowAsContext();
     }
 
+
     private static void OpenScene(string path)
     {
         EditorSceneManager.SaveOpenScenes();
