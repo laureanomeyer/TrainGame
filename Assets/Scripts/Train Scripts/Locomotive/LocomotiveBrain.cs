@@ -114,7 +114,10 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         particleSequence?.PlayGroup(ParticleGroups.LocomotiveDestroy);
 
-        AnalyticsManager.Instance.RegisterDefeat();
+        //Cambiar variable enviada por un String de la estacion de la que vino el jugador 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        AnalyticsManager.Instance.RegisterDefeat(sessionConfigRef.CurrentLevel.ToString());
+
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }
 
