@@ -133,6 +133,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
                 Debug.Log("Vagon " + this.name + "Encontrado en el tren: " +  indexInTrain);
             }
         }
+        
+        
     }
 
     private void SubscribeToStats()
@@ -232,6 +234,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public void SetTrainManagerReference(TrainManager trainManager)
     {
+
         this.trainManager = trainManager;
     }
 

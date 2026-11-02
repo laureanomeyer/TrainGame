@@ -220,6 +220,7 @@ public class GameManager : MonoBehaviour
         Resources.UnloadUnusedAssets();
         GC.Collect();
 
+        Debug.Log(sceneName + ", " + transitionType + ", " + nextSceneCursor);
         SceneTransitionManager.Instance.TransitionToScene(sceneName, transitionType, nextSceneCursor);    
     }
 
