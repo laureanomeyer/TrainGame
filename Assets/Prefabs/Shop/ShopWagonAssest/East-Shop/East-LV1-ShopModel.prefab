@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7307468167461198240}
-  - component: {fileID: 1004581653367513931}
   - component: {fileID: 5276237828083745703}
   - component: {fileID: 5534987692422513604}
   - component: {fileID: -7031518696992644436}
+  - component: {fileID: 4215967106510722718}
   m_Layer: 3
   m_Name: East-LV1-ShopModel
   m_TagString: Untagged
@@ -36,20 +36,6 @@ Transform:
   - {fileID: 5400650059205970589}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1004581653367513931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4710809799844137450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1722daaac90207f45823adcfdd1cb99b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopWagonData
-  tail: {fileID: 1518394095281935960}
-  CinematicKey: 
 --- !u!114 &5276237828083745703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,6 +91,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4215967106510722718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4710809799844137450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603915a582e770142924d19abe8c5ce9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopPassiveWagonData
+  tail: {fileID: 1518394095281935960}
+  CinematicKey: 
+  statUpgrade: 0
+  upgradeAmount: 0.1
 --- !u!1001 &5582299561912135030
 PrefabInstance:
   m_ObjectHideFlags: 0

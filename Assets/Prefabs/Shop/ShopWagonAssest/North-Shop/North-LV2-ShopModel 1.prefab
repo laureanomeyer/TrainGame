@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7307468167461198240}
-  - component: {fileID: 6181645208798004573}
   - component: {fileID: 4014232975937923843}
   - component: {fileID: 6420870292438770637}
   - component: {fileID: 8810677625919021090}
+  - component: {fileID: 6273294231211082129}
   m_Layer: 3
   m_Name: North-LV2-ShopModel 1
   m_TagString: Untagged
@@ -36,20 +36,6 @@ Transform:
   - {fileID: 8993304937057019594}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6181645208798004573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4710809799844137450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1722daaac90207f45823adcfdd1cb99b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ShopWagonData
-  tail: {fileID: 1202434557369041275}
-  CinematicKey: 
 --- !u!65 &4014232975937923843
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -105,6 +91,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6273294231211082129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4710809799844137450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603915a582e770142924d19abe8c5ce9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopPassiveWagonData
+  tail: {fileID: 1202434557369041275}
+  CinematicKey: 
+  statUpgrade: 3
+  upgradeAmount: 0.15
 --- !u!1001 &8882253280624869665
 PrefabInstance:
   m_ObjectHideFlags: 0

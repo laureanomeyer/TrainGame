@@ -74,11 +74,14 @@ public class DisplayTrain : MonoBehaviour
     public int DraggedSlot => draggedSlot;
     public ShopWagonData DraggedWagon => draggedWagon;
 
+    private StatSystem statSystem;
+
     #region Init
 
     public void Initialize(IEnumerable<IWagonID> wagonsInTrain)
     {
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
+        statSystem = ServiceLocator.Get<StatSystem>();
 
         wagonAssetsReference = new Dictionary<string, GameObject>();
         upgradeLookup = new Dictionary<string, (WagonUpgradePathSO, int)>();
@@ -154,6 +157,12 @@ public class DisplayTrain : MonoBehaviour
         GameObject go = Instantiate(model, layoutOrigin, layoutRot);
         var data = go.GetComponent<ShopWagonData>();
         data.SetID(id);
+
+        if(data is ShopPassiveWagonData passiveWagon)
+        {
+            statSystem.AddModifier(passiveWagon.ApplyPassiveStats());
+        }
+
         return data;
     }
 
@@ -241,6 +250,14 @@ public class DisplayTrain : MonoBehaviour
         moveTweens.Remove(t);
         rotTweens.Remove(t);
         t.DOKill();
+
+        if(w is ShopPassiveWagonData passiveWagon)
+        {
+            statSystem.RemoveModifiersFromSource(passiveWagon);
+        }
+
+        GameManager.Instance.Session.RebuildStatsSystem();
+
         Destroy(w.gameObject);
     }
 
@@ -464,7 +481,19 @@ public class DisplayTrain : MonoBehaviour
 
     #endregion
 
-    public List<IWagonID> ChangeWagonIDList() => new List<IWagonID>(wagonList);
+    public List<IWagonID> ChangeWagonIDList()
+    {
+        foreach (ShopWagonData slot in slots)
+        {
+            if(slot is ShopPassiveWagonData passiveWagon)
+            {
+                statSystem.RemoveModifiersFromSource(passiveWagon);
+            }
+        }
+
+        return new List<IWagonID>(wagonList);
+    }
+        
 
     private void SpawnTile()
     {
