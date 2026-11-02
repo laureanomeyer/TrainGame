@@ -39,7 +39,7 @@ public class PlayerBrain : MonoBehaviour
     [SerializeField] private bool higherLevelFrozen = false;
 
     public PlayerInventory Inventory => inventory;
-    public LookObjectToMouse FaceMouse => faceMouse;
+    public PlayerMovementController MovementController => playerMovementController;
     public InteractionUIManager InteractionUIManager => interactionUIManager;
     public PlayerAttackController PlayerAttackController => playerAttackController;
     public bool IsRepairing => isRepairing;

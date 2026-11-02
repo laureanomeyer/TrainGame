@@ -343,7 +343,7 @@ public class ReorderManager : MonoBehaviour
     private string BuildUpgradeText(WagonInStockSO next, float cost, bool canAfford)
     {
         string price = $"Upgrade for {hudRef.FormatMoney(cost, canAfford)}";
-        return string.IsNullOrEmpty(next.Description) ? price : $"{next.Description}\n<b>{price}</b>";
+        return string.IsNullOrEmpty(next.Description) ? price : $"{next.Description}\n\n<b>{price}</b>";
     }
 
     private void ExecuteSelectedOption()
