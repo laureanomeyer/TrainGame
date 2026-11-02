@@ -173,7 +173,7 @@ public class ReorderHUD : MonoBehaviour
         target = wagon;
 
 
-        SetName(selected == Option.Upgrade ? null : wagonName);
+        SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
         SetOptions((int)selected, upgradeEnabled);
 
@@ -199,7 +199,7 @@ public class ReorderHUD : MonoBehaviour
 
     public void PreviewOption(string wagonName, Option option, string description, bool upgradeEnabled)
     {
-        SetName(option == Option.Upgrade ? null : wagonName);
+        SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
         SetOptions((int)option, upgradeEnabled);
 
