@@ -143,6 +143,10 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         {
             Sprite boughtWeaponSprite = currentCollection[selectedWeapon].WeaponSprite;
 
+            var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+            string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+            AnalyticsManager.Instance.RegisterOwnedWeapon(stationName, currentWeapon.name);
+
             playerDataRef.ChangeWeaponData(currentWeapon);
             playerReference.ChangeWeapon(currentWeapon);
             EventBus.Publish(new OnWeaponChangedEvent(boughtWeaponSprite));

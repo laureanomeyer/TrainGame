@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +22,10 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public Transform Head => transform;
     public Transform Tail => tail;
+
+    //Variable para Analytics
+    private TrainManager trainManager;
+    private int indexInTrain;
 
     // Calculado en vez de cacheado: antes solo se actualizaba en TakeDamage, así que
     // quedaba en true con el vagón lleno o roto y el player se "trababa" reparando.
@@ -119,6 +124,15 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         hpWorldUI = new WagonHPWorldUI(hpImage, repairIcon, hpCanvas);
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         renderController = new WagonRenderController(this);
+
+        foreach (var wagon in trainManager.WagonBrains.Select((item, index) => new { Index = index, Value = item }))
+        {
+            if(this == wagon.Value)
+            {
+                indexInTrain = wagon.Index;
+                Debug.Log("Vagon " + this.name + "Encontrado en el tren: " +  indexInTrain);
+            }
+        }
     }
 
     private void SubscribeToStats()
@@ -157,6 +171,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         if (hpController == null) return;
         if (isBroken || hpController.IsBroken) return;
         if (animator != null) animator.SetTrigger("Damage");
+
+
+        AnalyticsManager.Instance.RegisterWagonHit(indexInTrain);
 
         // Puede disparar Break() vía el callback de WagonHP
         hpController.TakeDamage(damageAmount);
@@ -213,6 +230,11 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         this.wagonID = wagon;
     }
 
+    public void SetTrainManagerReference(TrainManager trainManager)
+    {
+        this.trainManager = trainManager;
+    }
+
     private void OnStatChanged(StatType type, float newValue)
     {
         if (hpController == null) return;
@@ -238,6 +260,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         EventBus.Publish(new OnWagonDestroyedEvent(this));
 
         RunManager.Instance.OnWagonDestroyed(wagonID, this);
+
+        AnalyticsManager.Instance.RegisterWagonDestroy(indexInTrain);
     }
 
     public virtual void SetDestroyed(bool destroyed)

@@ -8,6 +8,8 @@ public class TrainManager : MonoBehaviour
 
     private List<IWagon> wagonsCreated = new();
     private List<WagonBrain> wagonBrains = new();
+    public List<WagonBrain> WagonBrains { get => wagonBrains; }
+
     private Transform tail;
     private WagonBrain lastWagon;
 

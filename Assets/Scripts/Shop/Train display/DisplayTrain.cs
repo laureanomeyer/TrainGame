@@ -288,6 +288,8 @@ public class DisplayTrain : MonoBehaviour
     {
         if (!IsValidSlot(slotIndex)) return null;
 
+        AnalyticsManager.Instance.RegisterSellInteract();
+
         var wagonData = slots[slotIndex];
         wagonList.Remove(wagonData.IDReference);
 
@@ -312,6 +314,8 @@ public class DisplayTrain : MonoBehaviour
     public void BeginDrag(int slotIndex)
     {
         if (!IsValidSlot(slotIndex)) return;
+
+        AnalyticsManager.Instance.RegisterMoveInteract();
 
         draggedSlot = slotIndex;
         dragOriginSlot = slotIndex;
@@ -413,6 +417,8 @@ public class DisplayTrain : MonoBehaviour
     public ShopWagonData UpgradeWagon(int slotIndex)
     {
         if (!TryGetUpgradeInfo(slotIndex, out var next, out _)) return null;
+
+        AnalyticsManager.Instance.RegisterUpgradeInteract();
 
         var oldWagon = slots[slotIndex];
 

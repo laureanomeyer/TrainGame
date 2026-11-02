@@ -116,7 +116,8 @@ public class LocomotiveBrain : MonoBehaviour, IDamagable, IWagon
 
         //Cambiar variable enviada por un String de la estacion de la que vino el jugador 
         var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
-        AnalyticsManager.Instance.RegisterDefeat(sessionConfigRef.CurrentLevel.ToString());
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterDefeat(stationName);
 
         EventBus.Publish(new OnRunEndedEvent(RunResult.Defeat));
     }

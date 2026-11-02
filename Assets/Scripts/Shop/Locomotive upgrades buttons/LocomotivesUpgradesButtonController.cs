@@ -90,6 +90,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.MaxHp, stationName);
+
         GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void AttackSpeedUpgrade()
@@ -97,6 +101,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         locomotiveUpgrade.attackSpeed = GetCurrentUpgrade(StatType.AttackSpeed).attackSpeed;
         trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
+
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.AttackSpeed, stationName);
 
         GameManager.Instance.Session.RebuildStatsSystem();
     }
@@ -106,6 +114,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.DamageMultiplier, stationName);
+
         GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void DefenseUpgrade()
@@ -114,6 +126,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.Defense, stationName);
+
         GameManager.Instance.Session.RebuildStatsSystem();
     }
     public void GoldMultiplierUpgrade()
@@ -121,6 +137,10 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         locomotiveUpgrade.goldBonus = GetCurrentUpgrade(StatType.GoldMultiplier).goldMultiplier;
         trainDataRef.AddStats(locomotiveUpgrade);
         DeactivateAllButtons();
+
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.GoldMultiplier, stationName);
 
         GameManager.Instance.Session.RebuildStatsSystem();
     }

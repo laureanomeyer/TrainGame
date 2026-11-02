@@ -420,6 +420,8 @@ public class ReorderManager : MonoBehaviour
 
         if (toggled)
         {
+            AnalyticsManager.Instance.RegisterWagonManagerInteract();
+
             int count = trainDisplayRef.InstantiatedWagonReferences.Count;
             if (count <= 0) return;
 

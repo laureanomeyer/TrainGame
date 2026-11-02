@@ -465,6 +465,9 @@ public class Enemy : MonoBehaviour
     {
         if (HealthState == EnemyHealthState.Dead) return;
 
+        Debug.Log("Enemy dead: " + dataName);
+        AnalyticsManager.Instance.RegisterEnemyDead(dataName);
+
         ChangeState(EnemyHealthState.Grace);
         PlayDeathSound();
         PlayCowboyAnimation(GetAnimationName(
@@ -505,8 +508,6 @@ public class Enemy : MonoBehaviour
 
         ObjectPoolManager.ReturnObjectToPool(gameObject);
     }
-
-
 
     private void PublishBecameInactive()
     {

@@ -19,6 +19,17 @@ public class StoreManager : MonoBehaviour
         playerDataRef = ServiceLocator.Get<PlayerData>();
         wagonsInTrain = trainDataRef.WagonsIDList;
 
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+
+        foreach (var wagon in wagonsInTrain)
+        {
+            AnalyticsManager.Instance.RegisterWagonOnArrival(stationName, wagon.WagonName);
+        }
+
+        int goldInt = (int)playerDataRef.Gold;
+        AnalyticsManager.Instance.RegisterGoldInStationOnArrival(stationName, goldInt);
+
         displayTrain.Initialize(wagonsInTrain);
         bulletPool.InitializePool();
     }
@@ -50,10 +61,16 @@ public class StoreManager : MonoBehaviour
     {
         trainDataRef.SetNewWagonIDList(displayTrain.ChangeWagonIDList());
 
-/*         foreach (var w in trainDataRef.WagonsIDList)
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+
+        foreach (var wagon in trainDataRef.WagonsIDList)
         {
-            Debug.Log("Store Manager: " + w.WagonName);
-        } */
+            AnalyticsManager.Instance.RegisterWagonOnDeparture(stationName , wagon.WagonName);
+        }
+
+        int goldInt = (int)playerDataRef.Gold;
+        AnalyticsManager.Instance.RegisterGoldInStationOnDeparture(stationName , goldInt);
 
         GameManager.Instance.Session.RebuildStatsSystem();
     }
