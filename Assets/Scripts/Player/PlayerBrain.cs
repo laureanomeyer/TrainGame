@@ -47,6 +47,7 @@ public class PlayerBrain : MonoBehaviour
     public bool CanInteract => canInteract;
     public bool CanAttack => canAttack;
     public bool IsUsingTurret => playerInteractionsController != null && playerInteractionsController.IsUsingTurret;
+    public float Speed => speed;
 
     void Awake()
     {
