@@ -7,7 +7,6 @@ public class PlayerAttackController
 
     private GameObject weaponItem;
     private IWeapons weapon;
-    public IWeapons Weapon { get => weapon; }
 
     private BulletPool pool;
     private LookObjectToMouse lookToMouseController;
@@ -16,6 +15,9 @@ public class PlayerAttackController
 
     private bool isAttacking = false;
     public bool IsAttacking { get => isAttacking; }
+    public IWeapons Weapon { get => weapon; }
+
+    public WeaponType CurrentWeaponType { get => weapon.WeaponData.type; }
 
     public PlayerAttackController(Transform spawnPoint, GameObject weaponItem, BulletPool pool, PlayerBrain brain, LookObjectToMouse look)
     {

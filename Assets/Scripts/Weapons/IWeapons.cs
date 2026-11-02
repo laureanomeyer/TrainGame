@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum WeaponType { Revolver, Rifle, Escopeta }
+public enum WeaponType { Revolver, Rifle, Escopeta, Colt }
 
 public interface IWeapons
 {
