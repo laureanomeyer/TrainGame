@@ -74,6 +74,7 @@ public class TrainManager : MonoBehaviour
             addMaxCapacityToPool += poolData.MaxCapacity;
             Debug.Log(poolData.DefaultCapacity + " | " + poolData.MaxCapacity);
         }
+        wagonBrain.SetTrainManagerReference(this);
 
         wagonsCreated.Add(wagonBrain);
         wagonBrains.Add(wagonBrain);
@@ -89,6 +90,8 @@ public class TrainManager : MonoBehaviour
         wagonsCreated.Add(brain);
         wagonBrains.Add(brain);
         AttachWagon(tail, brain);
+        brain.SetTrainManagerReference(this);
+
     }
 
     private void AttachWagon(Transform head, WagonBrain wagon)

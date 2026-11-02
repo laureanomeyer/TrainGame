@@ -125,6 +125,8 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         hpWorldUI.UpdateHp(hpController.CurrentHp, hpController.MaxHp);
         renderController = new WagonRenderController(this);
 
+        if (trainManager == null) Debug.Log("trainmanager no esta");
+
         foreach (var wagon in trainManager.WagonBrains.Select((item, index) => new { Index = index, Value = item }))
         {
             if(this == wagon.Value)
@@ -236,6 +238,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     {
 
         this.trainManager = trainManager;
+        Debug.Log("Seteado");
     }
 
     private void OnStatChanged(StatType type, float newValue)
