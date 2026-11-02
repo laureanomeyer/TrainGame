@@ -94,7 +94,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
 
         PlayerData playerData = ServiceLocator.Get<PlayerData>();
 
-        if (playerData.unlockedLegado.UnlockedCoach)
+        if (playerData.unlockedLegado.UnlockedColt)
         {
             reloadTime = 0f;
             unlockedLegacy = true;
