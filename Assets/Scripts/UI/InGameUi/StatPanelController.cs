@@ -44,6 +44,9 @@ public class StatPanelController : MonoBehaviour
         EventBus.Subscribe<OnAmmoChangedEvent>(UpdateAmmoText);
         EventBus.Subscribe<OnWeaponChangedEvent>(SetWeaponImage);
 
+        EventBus.Subscribe<OnCallActiveStatsPanelUI>(CallShowPanel);
+        EventBus.Subscribe<OnCallDeactiveStatsPanelUI>(CallHidePanel);
+
         SetupTexts();
     }
 
@@ -55,6 +58,9 @@ public class StatPanelController : MonoBehaviour
         EventBus.Unsubscribe<OnStatChangedEvent>(CallSetUpTextEvent);
         EventBus.Unsubscribe<OnAmmoChangedEvent>(UpdateAmmoText);
         EventBus.Unsubscribe<OnWeaponChangedEvent>(SetWeaponImage);
+
+        EventBus.Unsubscribe<OnCallActiveStatsPanelUI>(CallShowPanel);
+        EventBus.Unsubscribe<OnCallDeactiveStatsPanelUI>(CallHidePanel);
     }
 
     private void SetupSlide()
@@ -82,6 +88,17 @@ public class StatPanelController : MonoBehaviour
         if (isVisible) HidePanel();
         else ShowPanel();
     }
+
+    private void CallShowPanel(OnCallActiveStatsPanelUI gameEvent)
+    {
+        ShowPanel();
+    }
+
+    private void CallHidePanel(OnCallDeactiveStatsPanelUI gameEvent)
+    {
+        HidePanel();
+    }
+
 
     private void ShowPanel()
     {

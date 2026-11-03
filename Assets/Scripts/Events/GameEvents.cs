@@ -367,6 +367,10 @@ public readonly struct OnRunEndedEvent : IGameEvent
     }
 }
 
+public readonly struct OnCallActiveStatsPanelUI : IGameEvent { }
+
+public readonly struct OnCallDeactiveStatsPanelUI : IGameEvent { }
+
 #region Tutorial Events
 
 public readonly struct OnShowCoalWaypointEvent : IGameEvent { }

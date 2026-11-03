@@ -288,6 +288,8 @@ public class WagonShopButton : MonoBehaviour
 
         GameManager.Instance.Session.RebuildStatsSystem();
 
+        EventBus.Publish(new OnCallActiveStatsPanelUI());
+
         SetWagonInStock(false);
 
         if (wagonShopParticleSystem != null)
@@ -296,6 +298,8 @@ public class WagonShopButton : MonoBehaviour
         }
 
         yield return new WaitForSeconds(waitTimeToBuy);
+
+        EventBus.Publish(new OnCallDeactiveStatsPanelUI());
 
         isBuyingWagon = false;
         interacZone.ShowUi();
