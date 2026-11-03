@@ -34,6 +34,11 @@ public class GameSession
         _StatSystem.RecalculateAll();
         EventBus.Publish(new OnStatChangedEvent());
     }
+    public void ClearStatsSystem()
+    {
+        _StatSystem.ClearStats();
+        EventBus.Publish(new OnStatChangedEvent());
+    }
 
     public void Reset()
     {

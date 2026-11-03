@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
     public void SkipRun()
     {
         Session._SessionConfig.AdvanceRun();
-        Session.RebuildStatsSystem();
+        Session.ClearStatsSystem();
 
         ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI, CursorType.Real);
     }
@@ -121,7 +121,7 @@ public class GameManager : MonoBehaviour
         if (isChangingScene) return;
 
         Session._SessionConfig.AdvanceRun();
-        Session.RebuildStatsSystem();
+        Session.ClearStatsSystem();
 
         ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI, CursorType.Real);
         ShowCursor(CursorType.Gameplay);
@@ -131,7 +131,7 @@ public class GameManager : MonoBehaviour
     {
         if (isChangingScene) return;
 
-        Session.RebuildStatsSystem();
+        Session.ClearStatsSystem();
 
         ChangeScene(SceneRun, SceneTransitionType.StartingRun, GameState.Gameplay, CursorType.Gameplay);
         ShowCursor(CursorType.Gameplay);

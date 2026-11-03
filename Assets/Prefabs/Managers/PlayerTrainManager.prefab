@@ -31,7 +31,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1955360240730528750}
+  - {fileID: 7043290616175750471}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1796221933432963558
@@ -46,14 +46,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e23089a242bbee4db792299e95bf6c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DisplayTrain
-  currentTail: {fileID: 8555586691965588015}
+  currentTail: {fileID: 875829716605346950}
+  floorTile: {fileID: 5620964985880902850, guid: 9d11cf70f538eeb4db483bd9ab800e0b, type: 3}
+  lastEndTileConector: {fileID: 0}
+  numOfWagonsPerTile: 10
+  wagonGap: 0
+  popInDelay: 0.5
+  popInDuration: 0.4
+  popInEase: 27
+  shiftDuration: 0.4
+  shiftEase: 6
+  dragLiftHeight: 5
+  dragMoveDuration: 0.3
+  dragMoveEase: 6
+  upgradePaths:
+  - {fileID: 11400000, guid: d1daaad67f677854d9a30d63be9b55e3, type: 2}
+  - {fileID: 11400000, guid: 848b9914264dc904d8462382c2c39c2f, type: 2}
+  - {fileID: 11400000, guid: 2754fc45c93ac08498439f35a57ddeda, type: 2}
+  - {fileID: 11400000, guid: 1d43e2826e4765f4aacc802e7f83f414, type: 2}
+  - {fileID: 11400000, guid: e4ef4ac1490384f4e845f0da18a160bc, type: 2}
+  - {fileID: 11400000, guid: 3eac6aa5cda68554799a501a8d565664, type: 2}
+  - {fileID: 11400000, guid: 5016b7cd51c43f144abe9bb912dd28cf, type: 2}
+  - {fileID: 11400000, guid: 07ee1a33596c6404080a649cbf7c771f, type: 2}
+  - {fileID: 11400000, guid: 4abbe601e8352394b98ecc12f3360947, type: 2}
+  - {fileID: 11400000, guid: 6659f1f123b59b740aa1eca43e2ed773, type: 2}
+  - {fileID: 11400000, guid: 428a30155e116bd4a9098b3e604b97c2, type: 2}
+  - {fileID: 11400000, guid: 5a556054faaee8848a1622a439cb9395, type: 2}
+  upgradePunchScale: 0.15
+  upgradePunchDuration: 0.35
+  goldWagonShopModel: {fileID: 5189475862246834822, guid: 33e23bb89837afd4d8fd124c9df02944, type: 3}
   wagonAssets:
   - {fileID: 11400000, guid: 1c018fec4b9a794479c9b3debdec30d0, type: 2}
   - {fileID: 11400000, guid: eca4772a8c0c5fe47b79d30a891736b0, type: 2}
+  - {fileID: 11400000, guid: 3448625fa7e9ad14383a7c02a27329d7, type: 2}
   - {fileID: 11400000, guid: 98eacd1c34655eb418ba7e1afb6df679, type: 2}
+  - {fileID: 11400000, guid: c8ca6a327f332e9498767d6d181da099, type: 2}
+  - {fileID: 11400000, guid: 634f484a186bbf646924d2fb6235df0e, type: 2}
+  - {fileID: 11400000, guid: 9a7df71b8526d9d49b94e4b5a3c80e8e, type: 2}
   - {fileID: 11400000, guid: 13756da67bf6f34488262dfd59734305, type: 2}
   - {fileID: 11400000, guid: 80206949286be384fa95dd3172597d7b, type: 2}
   - {fileID: 11400000, guid: 2bda8e7a182aee1458f2d3054110342f, type: 2}
+  - {fileID: 11400000, guid: d9544b1bb4f81ea4e9185e0d063f82cb, type: 2}
+  - {fileID: 11400000, guid: f47d8ce9ad3fcf74385e1be4cc2d0739, type: 2}
 --- !u!114 &6253352574531689969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,8 +100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2958f11dc5d849c49b0f33a2fdf93aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReorderManager
+  storeManagerRef: {fileID: 0}
   inputRef: {fileID: 0}
---- !u!1001 &2065019975572601861
+  sellRefundFraction: 0.5
+  moveDescription: Change wagon order
+  maxLevelDescription: Max level
+  rightClickCancels: 1
+--- !u!1001 &7364636647402637996
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -190,15 +229,84 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4255925754694031935}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4230937223670346637}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3485214843159540985}
   m_SourcePrefab: {fileID: 100100000, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
---- !u!4 &1955360240730528750 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
-  m_PrefabInstance: {fileID: 2065019975572601861}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8555586691965588015 stripped
+--- !u!4 &875829716605346950 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1579672211403559382, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
-  m_PrefabInstance: {fileID: 2065019975572601861}
+  m_PrefabInstance: {fileID: 7364636647402637996}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &7043290616175750471 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
+  m_PrefabInstance: {fileID: 7364636647402637996}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7707096930371713021 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 0f617dcd310224e43a1bd2f8e78deba6, type: 3}
+  m_PrefabInstance: {fileID: 7364636647402637996}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4255925754694031935
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707096930371713021}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.3963926, y: 4.9875536, z: 17.768866}
+  m_Center: {x: -0.28936958, y: 1.9937768, z: 8.384437}
+--- !u!95 &4230937223670346637
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707096930371713021}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 90120189f6356bc46ba3c2a7ee84d3f4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3485214843159540985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7707096930371713021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d719b10a1cd57ea48a2058245ab13b6a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WagonReaction

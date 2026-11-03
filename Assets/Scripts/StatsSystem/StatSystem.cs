@@ -16,6 +16,12 @@ public class StatSystem
         this.trainData = trainData;
     }
 
+    public void ClearStats()
+    {
+        modifiers.Clear();
+        RecalculateAll();
+    }
+
     public void AddModifier(StatModifier mod)
     {
         modifiers.Add(mod);
