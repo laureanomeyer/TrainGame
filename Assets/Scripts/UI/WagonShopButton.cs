@@ -229,7 +229,7 @@ public class WagonShopButton : MonoBehaviour
             {
                 storeManager.rerollButton.interactable = false;
             }
-            else
+            else if(!usedReroll && storeManager.rerollButton.interactable == false)
             {
                 storeManager.rerollButton.interactable = true;
             }

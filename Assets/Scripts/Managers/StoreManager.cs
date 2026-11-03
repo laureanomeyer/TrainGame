@@ -1,13 +1,18 @@
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class StoreManager : MonoBehaviour
 {
+    [Header("Store assets")]
     [SerializeField] private GoldUIDisplay goldDisplay;
     [SerializeField] private DisplayTrain displayTrain;
     [SerializeField] private RectTransform nameStationTransform;
     [SerializeField] private Transform exitStationTransform;
+
+    [Header("Wagon Store slots")]
+    [SerializeField] public Transform wagonSlot1Transform;
+    [SerializeField] public Transform wagonSlot2Transform;
+    [SerializeField] public Transform wagonSlot3Transform;
 
     [Header("Desert station")]
     [SerializeField] private int maxLevelWithDesert = 2;
@@ -52,25 +57,40 @@ public class StoreManager : MonoBehaviour
         if(sessionConfigRef.CurrentLevel <= maxLevelWithDesert)
         {
             desertStation.SetActive(true);
-            nameStationTransform.position = desertShopInfo.stationNamePosition;
-            nameStationTransform.rotation = desertShopInfo.stationNameRotation;
+            nameStationTransform.localPosition = desertShopInfo.stationNamePosition;
+            nameStationTransform.localRotation = Quaternion.Euler(desertShopInfo.stationNameRotation);
             exitStationTransform.position = desertShopInfo.exitStationPosition;
+
+            wagonSlot1Transform.localPosition = desertShopInfo.wagonSlot1Position;
+            wagonSlot2Transform.localPosition = desertShopInfo.wagonSlot2Position;
+            wagonSlot3Transform.localPosition = desertShopInfo.wagonSlot3Position;
+
             displayTrain.Initialize(wagonsInTrain, desertShopInfo.floorTile, desertShopInfo.spawnTilePosition, desertShopInfo.locomotivePosition);
         }
         else if (sessionConfigRef.CurrentLevel > maxLevelWithDesert && sessionConfigRef.CurrentLevel <= maxLevelWithGrass)
         {
             grassStation.SetActive(true);
-            nameStationTransform.position = grassShopInfo.stationNamePosition;
-            nameStationTransform.rotation = grassShopInfo.stationNameRotation;
+            nameStationTransform.localPosition = grassShopInfo.stationNamePosition;
+            nameStationTransform.localRotation = Quaternion.Euler(grassShopInfo.stationNameRotation);
             exitStationTransform.position = grassShopInfo.exitStationPosition;
+
+            wagonSlot1Transform.localPosition = grassShopInfo.wagonSlot1Position;
+            wagonSlot2Transform.localPosition = grassShopInfo.wagonSlot2Position;
+            wagonSlot3Transform.localPosition = grassShopInfo.wagonSlot3Position;
+
             displayTrain.Initialize(wagonsInTrain, grassShopInfo.floorTile, grassShopInfo.spawnTilePosition, grassShopInfo.locomotivePosition);
         }
         else if (sessionConfigRef.CurrentLevel > maxLevelWithGrass && sessionConfigRef.CurrentLevel <= maxLevelWithCave)
         {
             caveStation.SetActive(true);
-            nameStationTransform.position = caveShopInfo.stationNamePosition;
-            nameStationTransform.rotation = caveShopInfo.stationNameRotation;
+            nameStationTransform.localPosition = caveShopInfo.stationNamePosition;
+            nameStationTransform.localRotation = Quaternion.Euler(caveShopInfo.stationNameRotation);
             exitStationTransform.position = caveShopInfo.exitStationPosition;
+
+            wagonSlot1Transform.localPosition = caveShopInfo.wagonSlot1Position;
+            wagonSlot2Transform.localPosition = caveShopInfo.wagonSlot2Position;
+            wagonSlot3Transform.localPosition = caveShopInfo.wagonSlot3Position;
+
             displayTrain.Initialize(wagonsInTrain, caveShopInfo.floorTile, caveShopInfo.spawnTilePosition, caveShopInfo.locomotivePosition);
         }
 
@@ -137,5 +157,9 @@ public class StoreAssetsData
     [SerializeField] public Vector3 exitStationPosition;
 
     [SerializeField] public Vector3 stationNamePosition;
-    [SerializeField] public quaternion stationNameRotation;
+    [SerializeField] public Vector3 stationNameRotation;
+
+    [SerializeField] public Vector3 wagonSlot1Position;
+    [SerializeField] public Vector3 wagonSlot2Position;
+    [SerializeField] public Vector3 wagonSlot3Position;
 }
