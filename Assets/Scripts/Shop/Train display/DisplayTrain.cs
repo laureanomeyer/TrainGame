@@ -78,8 +78,12 @@ public class DisplayTrain : MonoBehaviour
 
     #region Init
 
-    public void Initialize(IEnumerable<IWagonID> wagonsInTrain)
+    public void Initialize(IEnumerable<IWagonID> wagonsInTrain, GameObject floorTile, Vector3 tileConectorPostion, Vector3 locomtivePosition)
     {
+        transform.position = locomtivePosition;
+        this.floorTile = floorTile;
+        lastEndTileConector.position = tileConectorPostion;
+
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
         statSystem = ServiceLocator.Get<StatSystem>();
 

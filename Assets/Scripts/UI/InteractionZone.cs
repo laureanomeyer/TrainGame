@@ -69,7 +69,10 @@ public class InteractionZone : MonoBehaviour
 
         foreach (GameObject obj in interactObjects)
         {
-            obj.layer = LayerMaskToLayer(interactLayer);
+            if (obj.activeInHierarchy)
+            {
+                obj.layer = LayerMaskToLayer(interactLayer);
+            } 
         }
 
         ui = playerBrain.InteractionUIManager;
@@ -83,7 +86,10 @@ public class InteractionZone : MonoBehaviour
 
         foreach (GameObject obj in interactObjects)
         {
-            obj.layer = LayerMaskToLayer(noInteractLayer);
+            if (obj.activeInHierarchy)
+            {
+                obj.layer = LayerMaskToLayer(noInteractLayer);
+            }
         }
 
         playerInZone = false;

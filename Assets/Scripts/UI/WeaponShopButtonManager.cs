@@ -15,12 +15,22 @@ public class WeaponShopButtonManager : MonoBehaviour
     [SerializeField] private int level;
 
     [SerializeField] private Button closeButton;
-    [SerializeField] private InteractionZone interacZone;
+    [SerializeField] private GameObject[] interacZoneObjects;
+
+    private InteractionZone interacZone;
 
     void Start()
     {
        PlayerBrain playerAtk = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerBrain>();
        closeButton.onClick.AddListener(CloseButton);
+
+        foreach(var item in interacZoneObjects)
+        {
+            if (item.activeInHierarchy)
+            {
+                interacZone = item.GetComponent<InteractionZone>();
+            }
+        }
 
         var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
         level = sessionConfigRef.CurrentLevel;
