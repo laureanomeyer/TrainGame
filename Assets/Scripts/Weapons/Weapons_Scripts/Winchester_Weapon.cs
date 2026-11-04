@@ -81,6 +81,7 @@ public class Winchester_Weapon : MonoBehaviour, IWeapons
         }
         Debug.Log(playerData.unlockedLegado.LeftWinchesterPoints);
 
+        EventBus.Publish(new OnWeaponChangedEvent(weaponData.weaponSprite));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 

@@ -63,17 +63,18 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         var statsRef = ServiceLocator.Get<StatSystem>();
 
         //Rate of fire set up
-        rateOfFire = WeaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
+        rateOfFire = weaponData.rateOfFire / statsRef.GetStat(StatType.AttackSpeed);
         baseRateOfFire = rateOfFire;
 
         //Reload time set up
-        reloadTime = WeaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
+        reloadTime = weaponData.reloadTime / statsRef.GetStat(StatType.AttackSpeed);
 
         //Damage set up
         damage = WeaponData.damage * statsRef.GetStat(StatType.DamageMultiplier);
         shotStrengh = weaponData.shotStrenght;
         baseDamage = damage;
 
+        EventBus.Publish(new OnWeaponChangedEvent(weaponData.weaponSprite));
         EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
