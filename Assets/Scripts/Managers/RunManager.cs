@@ -108,7 +108,6 @@ public class RunManager : MonoBehaviour
     {
         EventBus.Publish(new OnSetEnemiesFlags(false));
 
-        AnalyticsManager.Instance.RegisterWin();
         EventBus.Publish(new OnRunEndedEvent(RunResult.Victory));
     }
 }

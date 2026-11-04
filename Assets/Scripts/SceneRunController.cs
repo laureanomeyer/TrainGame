@@ -117,9 +117,15 @@ public class SceneRunController : MonoBehaviour
         }
 
         if (GameManager.Instance.IsFinalStation())
+        {
+            AnalyticsManager.Instance.RegisterWin();
             GameManager.Instance.Victory();
+        }
         else
+        {
             GameManager.Instance.GoToStore();
+        }
+            
     }
 
     private void CallSetRunStartedEvent(OnSetTimerStartedEvent startTimerEvent)

@@ -152,13 +152,16 @@ public class StoreAssetsData
 {
     [SerializeField] public GameObject floorTile;
 
+    [Header("Tile, Locomotive, Interact locmotive position")]
     [SerializeField] public Vector3 spawnTilePosition;
     [SerializeField] public Vector3 locomotivePosition;
     [SerializeField] public Vector3 exitStationPosition;
 
+    [Header("Station name position")]
     [SerializeField] public Vector3 stationNamePosition;
     [SerializeField] public Vector3 stationNameRotation;
 
+    [Header("Wagon slots position")]
     [SerializeField] public Vector3 wagonSlot1Position;
     [SerializeField] public Vector3 wagonSlot2Position;
     [SerializeField] public Vector3 wagonSlot3Position;
