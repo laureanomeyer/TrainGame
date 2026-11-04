@@ -100,6 +100,7 @@ public class Coach_Weapon : MonoBehaviour, IWeapons
             currentBulletUse = bulletData;
         }
 
+        EventBus.Publish(new OnWeaponChangedEvent(weaponData.weaponSprite));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 

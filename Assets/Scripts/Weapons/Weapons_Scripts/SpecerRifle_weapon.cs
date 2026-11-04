@@ -105,6 +105,7 @@ public class SpecerRifle_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
             currentBulletUse = bulletData;
         }
 
+        EventBus.Publish(new OnWeaponChangedEvent(weaponData.weaponSprite));
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));
     }
 

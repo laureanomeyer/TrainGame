@@ -88,6 +88,7 @@ public class Colt_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         baseDamage = damage;
         shotStrenght = WeaponData.shotStrenght;
 
+        EventBus.Publish(new OnWeaponChangedEvent(weaponData.weaponSprite));
         EventBus.Subscribe<OnColtDetectedDeadEnemy>(UpdateDefeteadEnemies);
         EventBus.Subscribe<OnUnlockColtLegado>(UpdateCurrentBullet);
         EventBus.Subscribe<OnStatChangedEvent>(UpdateStats);
