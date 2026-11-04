@@ -69,6 +69,12 @@ public class CinematicSystem : MonoBehaviour
     [Tooltip("Si el tile de fin no llega en este tiempo, la cinemática termina igual.")]
     [SerializeField] private float levelEndTimeout = 20f;
 
+    [Tooltip("Segundos que la cámara acompaña al tren antes de empezar a ir al encuadre custom.")]
+    [SerializeField] private float customFramingDelay = 0.6f;
+    [Tooltip("Velocidad del tren durante la cinemática. Menor a 1 = entra más lento a la cueva.")]
+    [Range(0.1f, 1f)]
+    [SerializeField] private float cinematicTrainSpeedMultiplier = 0.7f;
+
     [Header("Victory Threshold (intervalo de madera)")]
     [SerializeField] private Transform victoryThreshold;
     [SerializeField] private float thresholdTailOffset = 200f;
@@ -317,6 +323,7 @@ public class CinematicSystem : MonoBehaviour
 
         Vector3 camStart = camT.position;
         Quaternion camStartRot = camT.rotation;
+        Vector3 trainOffset = Vector3.zero;
         float elapsed = 0f;
         float crossedTime = 0f;
         bool notified = false;
@@ -330,13 +337,17 @@ public class CinematicSystem : MonoBehaviour
 
             map?.SetScrollMultiplier(1f - k);
 
-            Vector3 step = fwd * (speed * k * dt);
+            Vector3 step = fwd * (speed * cinematicTrainSpeedMultiplier * k * dt);
+            trainOffset += step;
             foreach (Transform part in trainRoots)
                 if (part != null) MoveBy(part, step);
 
             if (config.useCustomFraming)
             {
-                float p = customFramingDuration > 0f ? Mathf.SmoothStep(0f, 1f, elapsed / customFramingDuration) : 1f;
+                float t = customFramingDuration > 0f ? (elapsed - customFramingDelay) / customFramingDuration : 1f;
+                float p = Mathf.SmoothStep(0f, 1f, t);
+
+                Vector3 followPos = camStart + trainOffset;
 
                 Vector3 targetPos = entrance.position + config.cameraOffsetFromEntrance;
                 Vector3 lookPoint = entrance.position + config.lookAtOffsetFromEntrance;
@@ -344,7 +355,7 @@ public class CinematicSystem : MonoBehaviour
                 Quaternion targetRot = lookDir.sqrMagnitude > 0.0001f ? Quaternion.LookRotation(lookDir, Vector3.up) : camStartRot;
 
                 camT.SetPositionAndRotation(
-                    Vector3.Lerp(camStart, targetPos, p),
+                    Vector3.Lerp(followPos, targetPos, p),
                     Quaternion.Slerp(camStartRot, targetRot, p));
             }
             else
