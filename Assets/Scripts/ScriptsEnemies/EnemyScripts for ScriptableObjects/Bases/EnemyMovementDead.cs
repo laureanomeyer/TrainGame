@@ -7,7 +7,6 @@ public class EnemyMovementDead : EnemyMovementSO
     [SerializeField] private float acceleration = 50f;
 
     private float trainSpeed;
-    private float currentSpeed;
 
     public override void Knockback(Enemy enemy) { }
 
@@ -15,22 +14,22 @@ public class EnemyMovementDead : EnemyMovementSO
     {
         trainSpeed = RunManager.Instance.TrainSpeed;
 
-        currentSpeed = useAcceleration ? 0f : trainSpeed;
+        enemy.CurrentMovementSpeed = useAcceleration ? 0f : trainSpeed;
     }
 
     protected override void MoveBehaviour(Enemy enemy)
     {
         if (useAcceleration)
         {
-            currentSpeed = Mathf.MoveTowards(
-                currentSpeed,
+            enemy.CurrentMovementSpeed = Mathf.MoveTowards(
+                enemy.CurrentMovementSpeed,
                 trainSpeed,
                 acceleration * Time.fixedDeltaTime
             );
         }
 
         Vector3 nextPos = enemy.rb.position +
-            Vector3.left * currentSpeed * Time.fixedDeltaTime;
+            Vector3.left * enemy.CurrentMovementSpeed * Time.fixedDeltaTime;
 
         enemy.rb.MovePosition(nextPos);
     }

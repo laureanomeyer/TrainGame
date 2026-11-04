@@ -354,7 +354,7 @@ public class EnemiesController : MonoBehaviour
 
         if (data.movement is EnemyMovementSlow)
         {
-            position.x = 75f;
+            position.x = Random.Range(75, 90);
             position.z = position.z < 0
                 ? Random.Range(-(float)RangeType.Long, -(float)RangeType.Long*1.5f)
                 : Random.Range((float)RangeType.Long, (float)RangeType.Long*1.5f);

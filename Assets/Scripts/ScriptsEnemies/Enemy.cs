@@ -74,7 +74,7 @@ public class Enemy : MonoBehaviour
     public DropType Drop => data.drop;
     public IWagon TargetWagon => targetWagon;
     public EnemyData Data => data;
-
+    public float CurrentMovementSpeed { get; set; }
     public float Range => (float)data.rangeType;
     private EnemyHealthState healthState;
     private EnemyMovementState movementState;
