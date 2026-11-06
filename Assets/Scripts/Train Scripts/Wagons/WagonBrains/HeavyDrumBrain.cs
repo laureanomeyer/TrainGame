@@ -24,7 +24,7 @@ public class HeavyDrumBrain : WagonBrain
     {
         playerWeapon = GameObject.FindWithTag("Player").GetComponent<PlayerBrain>().PlayerAttackController.Weapon;
 
-        if (playerWeapon.WeaponData.type == WeaponType.Revolver && playerWeapon is IWeaponBuffer weaponBuffer)
+        if ((playerWeapon.WeaponData.type == WeaponType.Revolver || playerWeapon.WeaponData.type == WeaponType.Colt) && playerWeapon is IWeaponBuffer weaponBuffer)
         {
             weaponBuffer.BufferDamage(damageUpgrade);
         }

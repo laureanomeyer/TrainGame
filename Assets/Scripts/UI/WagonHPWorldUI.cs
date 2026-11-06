@@ -7,6 +7,7 @@ public class WagonHPWorldUI
     private Image hpImage;
     private CanvasGroup canvas;
     private CanvasGroup repairIcon;
+//    private bool isFull;
 
     public WagonHPWorldUI(Image hpImage, CanvasGroup repairIcon, CanvasGroup canvas)
     {
@@ -32,11 +33,14 @@ public class WagonHPWorldUI
         if (hpImage.fillAmount != 1f)
         {
             repairIcon.gameObject.SetActive(true);
+            //isFull = false;
 
         }
         else
         {
-            repairIcon.gameObject.SetActive( false);
+            repairIcon.gameObject.SetActive(false);
+            SetVisible(false);
+            //isFull = true;
         }
     }
 
