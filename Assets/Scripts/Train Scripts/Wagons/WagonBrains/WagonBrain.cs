@@ -27,8 +27,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     private TrainManager trainManager;
     private int indexInTrain;
 
-    // Calculado en vez de cacheado: antes solo se actualizaba en TakeDamage, así que
-    // quedaba en true con el vagón lleno o roto y el player se "trababa" reparando.
+
     public bool CanBeRepaired =>
         hpController != null &&
         !hpController.IsBroken &&
@@ -65,6 +64,9 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public GameObject WagonNormal;
     public GameObject[] WagonsDestroyed;
+
+    [Tooltip("Opcional. Si está asignado, el vagón roto se instancia como hijo de este transform (posición/escala). Si está vacío, usa el root como antes.")]
+    [SerializeField] private Transform destroyedAnchor;
 
     private GameObject wagonDestroyReference;
 
@@ -103,14 +105,16 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         {
             WagonNormal.SetActive(true);
             int selectedWagon = Random.Range(0, WagonsDestroyed.Length);
-            wagonDestroyReference = Instantiate(WagonsDestroyed[selectedWagon], transform);
+
+            Transform destroyedParent = destroyedAnchor != null ? destroyedAnchor : transform;
+            wagonDestroyReference = Instantiate(WagonsDestroyed[selectedWagon], destroyedParent);
             wagonDestroyReference.SetActive(false);
         }
     }
 
     public void FixedUpdate()
     {
-        // Puede correr antes de InitializeWagonMovement
+
         if (wagonMovement != null)
             wagonMovement.Move();
     }
@@ -118,7 +122,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
     public virtual void StartWagon()
     {
         if (stats == null) { stats = ServiceLocator.Get<StatSystem>(); }
-        SubscribeToStats(); // si Start corrió antes que StartWagon, stats era null y nunca se suscribía
+        SubscribeToStats();
 
         SetUpWagonHP();
         hpWorldUI = new WagonHPWorldUI(hpImage, repairIcon, hpCanvas);
@@ -129,14 +133,14 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
         foreach (var wagon in trainManager.WagonBrains.Select((item, index) => new { Index = index, Value = item }))
         {
-            if(this == wagon.Value)
+            if (this == wagon.Value)
             {
                 indexInTrain = wagon.Index;
-                Debug.Log("Vagon " + this.name + "Encontrado en el tren: " +  indexInTrain);
+                Debug.Log("Vagon " + this.name + "Encontrado en el tren: " + indexInTrain);
             }
         }
-        
-        
+
+
     }
 
     private void SubscribeToStats()
@@ -160,7 +164,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public void RegisterModifiers(StatSystem stats)
     {
-        // Antes: si venía null se asignaba al PARÁMETRO, no al campo, y this.stats quedaba null
+
         this.stats = stats != null ? stats : ServiceLocator.Get<StatSystem>();
         SubscribeToStats();
 
@@ -179,7 +183,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
         AnalyticsManager.Instance.RegisterWagonHit(indexInTrain);
 
-        // Puede disparar Break() vía el callback de WagonHP
+
         hpController.TakeDamage(damageAmount);
         isOnScreen = CameraView.IsInsideCamera(transform.position, Cam);
         AudioManager.Instance.PlayOnScreen($"SFXWagonHit{UnityEngine.Random.Range(1, 4)}", isOnScreen);
@@ -200,7 +204,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
         }
         else
         {
-            Break(); // protegido por isBroken, no se ejecuta dos veces
+            Break();
         }
     }
 
@@ -254,8 +258,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
     public virtual void Break()
     {
-        // Guard propio: WagonHP ya marca IsBroken antes de llamar a este callback,
-        // así que no se puede usar hpController.IsBroken acá.
+
         if (isBroken) return;
         isBroken = true;
 
