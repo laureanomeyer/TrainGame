@@ -80,8 +80,6 @@ public class ReorderHUD : MonoBehaviour
     private CanvasGroup rightArrowGroup;
     private CanvasGroup hintGroup;
     private CanvasGroup[] highlightGroups;
-    private CanvasGroup moveOptionGroup;
-    private CanvasGroup sellOptionGroup;
 
     private static readonly Vector3[] cornersBuffer = new Vector3[4];
 
@@ -141,9 +139,6 @@ public class ReorderHUD : MonoBehaviour
         highlightGroups = new CanvasGroup[optionHighlights.Length];
         for (int i = 0; i < optionHighlights.Length; i++)
             highlightGroups[i] = optionHighlights[i] != null ? GetOrAddGroup(optionHighlights[i]) : null;
-
-        moveOptionGroup = GetOrAddGroup(moveButton != null ? moveButton.gameObject : null);
-        sellOptionGroup = GetOrAddGroup(sellButton != null ? sellButton.gameObject : null);
 
         optionGraphics = new Graphic[]
         {
@@ -249,9 +244,9 @@ public class ReorderHUD : MonoBehaviour
 
         SetAlpha(upgradeOptionGroup, upgradeEnabled ? 1f : disabledAlpha);
 
-        // Move y Sell siguen visibles, pero atenuados y sin poder clickearse.
-        SetOptionEnabled(moveButton, moveOptionGroup, moveSellEnabled);
-        SetOptionEnabled(sellButton, sellOptionGroup, moveSellEnabled);
+        // Vagón de oro: Move y Sell no aparecen.
+        SetOptionVisible(moveButton, moveSellEnabled);
+        SetOptionVisible(sellButton, moveSellEnabled);
 
         TintOptions(selectedIndex, instant: false);
     }
@@ -473,10 +468,10 @@ public class ReorderHUD : MonoBehaviour
         if (g != null && !Mathf.Approximately(g.alpha, alpha)) g.alpha = alpha;
     }
 
-    private void SetOptionEnabled(Button button, CanvasGroup group, bool enabled)
+    private static void SetOptionVisible(Button button, bool visible)
     {
-        SetAlpha(group, enabled ? 1f : disabledAlpha);
-        if (button != null && button.interactable != enabled) button.interactable = enabled;
+        if (button != null && button.gameObject.activeSelf != visible)
+            button.gameObject.SetActive(visible);
     }
 
     private static void SetPositionIfChanged(RectTransform rt, Vector3 worldPos)
