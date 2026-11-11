@@ -9,9 +9,9 @@ public class ReorderHUD : MonoBehaviour
     public enum Option { Move = 0, Upgrade = 1, Sell = 2 }
 
     [Header("Canvas")]
-    [SerializeField] private RectTransform canvasRect; 
-    [SerializeField] private Camera uiCamera;         
-    [SerializeField] private Camera worldCamera;         
+    [SerializeField] private RectTransform canvasRect;
+    [SerializeField] private Camera uiCamera;
+    [SerializeField] private Camera worldCamera;
 
     [Header("Sign")]
     [SerializeField] private RectTransform signRoot;
@@ -63,7 +63,7 @@ public class ReorderHUD : MonoBehaviour
     public event Action<Option> OptionHovered;
     public event Action<Option> OptionClicked;
     public event Action<Option> OptionUnhovered;
-    public event Action<int> ArrowClicked;  
+    public event Action<int> ArrowClicked;
     public event Action ConfirmClicked;
     public event Action CancelClicked;
 
@@ -80,6 +80,8 @@ public class ReorderHUD : MonoBehaviour
     private CanvasGroup rightArrowGroup;
     private CanvasGroup hintGroup;
     private CanvasGroup[] highlightGroups;
+    private CanvasGroup moveOptionGroup;
+    private CanvasGroup sellOptionGroup;
 
     private static readonly Vector3[] cornersBuffer = new Vector3[4];
 
@@ -140,6 +142,9 @@ public class ReorderHUD : MonoBehaviour
         for (int i = 0; i < optionHighlights.Length; i++)
             highlightGroups[i] = optionHighlights[i] != null ? GetOrAddGroup(optionHighlights[i]) : null;
 
+        moveOptionGroup = GetOrAddGroup(moveButton != null ? moveButton.gameObject : null);
+        sellOptionGroup = GetOrAddGroup(sellButton != null ? sellButton.gameObject : null);
+
         optionGraphics = new Graphic[]
         {
             moveButton    != null ? moveButton.targetGraphic    : null,
@@ -159,23 +164,23 @@ public class ReorderHUD : MonoBehaviour
 
     #region API
 
-    public void ShowHover(ShopWagonData wagon, string wagonName, string description, bool upgradeEnabled)
+    public void ShowHover(ShopWagonData wagon, string wagonName, string description, bool upgradeEnabled, bool moveSellEnabled = true)
     {
         target = wagon;
         SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
-        SetOptions(-1, upgradeEnabled); 
+        SetOptions(-1, upgradeEnabled, moveSellEnabled);
         ApplyMode(Mode.Hover);
     }
 
-    public void ShowPanel(ShopWagonData wagon, string wagonName, Option selected, string description, bool upgradeEnabled)
+    public void ShowPanel(ShopWagonData wagon, string wagonName, Option selected, string description, bool upgradeEnabled, bool moveSellEnabled = true)
     {
         target = wagon;
 
 
         SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
-        SetOptions((int)selected, upgradeEnabled);
+        SetOptions((int)selected, upgradeEnabled, moveSellEnabled);
 
         ApplyMode(Mode.Panel);
     }
@@ -197,13 +202,13 @@ public class ReorderHUD : MonoBehaviour
         return "<color=#" + (affordable ? affordHex : cantAffordHex) + ">$" + amount + "</color>";
     }
 
-    public void PreviewOption(string wagonName, Option option, string description, bool upgradeEnabled)
+    public void PreviewOption(string wagonName, Option option, string description, bool upgradeEnabled, bool moveSellEnabled = true)
     {
         SetName(wagonName);
         SetTextIfChanged(descriptionText, description);
-        SetOptions((int)option, upgradeEnabled);
+        SetOptions((int)option, upgradeEnabled, moveSellEnabled);
 
-        forcedRefreshFrames = 2; 
+        forcedRefreshFrames = 2;
     }
 
     #endregion
@@ -237,12 +242,16 @@ public class ReorderHUD : MonoBehaviour
     }
 
 
-    private void SetOptions(int selectedIndex, bool upgradeEnabled)
+    private void SetOptions(int selectedIndex, bool upgradeEnabled, bool moveSellEnabled)
     {
         for (int i = 0; i < highlightGroups.Length; i++)
             SetAlpha(highlightGroups[i], i == selectedIndex ? 1f : 0f);
 
         SetAlpha(upgradeOptionGroup, upgradeEnabled ? 1f : disabledAlpha);
+
+        // Move y Sell siguen visibles, pero atenuados y sin poder clickearse.
+        SetOptionEnabled(moveButton, moveOptionGroup, moveSellEnabled);
+        SetOptionEnabled(sellButton, sellOptionGroup, moveSellEnabled);
 
         TintOptions(selectedIndex, instant: false);
     }
@@ -462,6 +471,12 @@ public class ReorderHUD : MonoBehaviour
     private static void SetAlpha(CanvasGroup g, float alpha)
     {
         if (g != null && !Mathf.Approximately(g.alpha, alpha)) g.alpha = alpha;
+    }
+
+    private void SetOptionEnabled(Button button, CanvasGroup group, bool enabled)
+    {
+        SetAlpha(group, enabled ? 1f : disabledAlpha);
+        if (button != null && button.interactable != enabled) button.interactable = enabled;
     }
 
     private static void SetPositionIfChanged(RectTransform rt, Vector3 worldPos)

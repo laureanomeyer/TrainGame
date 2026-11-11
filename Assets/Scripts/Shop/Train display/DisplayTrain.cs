@@ -40,8 +40,22 @@ public class DisplayTrain : MonoBehaviour
     [Header("Gold Wagon")]
     [Tooltip("Shop model del vagón de oro")]
     [SerializeField] private GameObject goldWagonShopModel;
+    [SerializeField] private string goldWagonName = "Gold Wagon";
+    [TextArea]
+    [SerializeField] private string goldWagonDescription = "Increases the gold you earn.";
 
+    [Header("Gold Wagon Upgrades")]
+    [Tooltip("Los mismos LevelX_Upgrades que tiene LocomotivesUpgradesButtonController.")]
+    [SerializeField] private LevelLocomotivesUpgradesSO[] goldUpgradeLevels;
+    [Tooltip("Precio de cada mejora del vagón de oro, en orden de compra.\n" +
+             "Elemento 0 = 1ra mejora, Elemento 1 = 2da mejora, etc.\n" +
+             "Si hay más niveles que precios, se repite el último.")]
+    [SerializeField] private float[] goldUpgradePrices = { 100f, 150f, 200f, 250f, 300f, 350f, 400f, 450f, 500f };
+
+    private Dictionary<int, LevelLocomotivesUpgradesSO> goldUpgradesDictionary;
     private ShopWagonData goldWagon;
+    private TrainData trainData;
+    private Tween goldPunchTween;
 
     [SerializeField] private List<WagonInStockSO> wagonAssets;
 
@@ -86,6 +100,16 @@ public class DisplayTrain : MonoBehaviour
 
         cinematicActorRegistry = ServiceLocator.Get<ICinematicActorRegistry>();
         statSystem = ServiceLocator.Get<StatSystem>();
+        trainData = ServiceLocator.Get<TrainData>();
+
+        goldUpgradesDictionary = new Dictionary<int, LevelLocomotivesUpgradesSO>();
+        if (goldUpgradeLevels != null)
+        {
+            foreach (var upgrade in goldUpgradeLevels)
+            {
+                if (upgrade != null) goldUpgradesDictionary[upgrade.level] = upgrade;
+            }
+        }
 
         wagonAssetsReference = new Dictionary<string, GameObject>();
         upgradeLookup = new Dictionary<string, (WagonUpgradePathSO, int)>();
@@ -162,7 +186,7 @@ public class DisplayTrain : MonoBehaviour
         var data = go.GetComponent<ShopWagonData>();
         data.SetID(id);
 
-        if(data is ShopPassiveWagonData passiveWagon)
+        if (data is ShopPassiveWagonData passiveWagon)
         {
             statSystem.AddModifier(passiveWagon.ApplyPassiveStats());
         }
@@ -255,7 +279,7 @@ public class DisplayTrain : MonoBehaviour
         rotTweens.Remove(t);
         t.DOKill();
 
-        if(w is ShopPassiveWagonData passiveWagon)
+        if (w is ShopPassiveWagonData passiveWagon)
         {
             statSystem.RemoveModifiersFromSource(passiveWagon);
         }
@@ -485,11 +509,79 @@ public class DisplayTrain : MonoBehaviour
 
     #endregion
 
+    #region Gold wagon (slot virtual al final: índice == slots.Count)
+
+    public string GoldWagonName => goldWagonName;
+    public string GoldWagonDescription => goldWagonDescription;
+
+    /// <summary>Vagones navegables en Manage Train: los normales + el de oro.</summary>
+    public int SelectableCount => slots.Count + (goldWagon != null ? 1 : 0);
+
+    public bool IsGoldSlot(int slotIndex) => goldWagon != null && slotIndex == slots.Count;
+
+    public ShopWagonData GetSelectable(int slotIndex)
+    {
+        if (IsValidSlot(slotIndex)) return slots[slotIndex];
+        return IsGoldSlot(slotIndex) ? goldWagon : null;
+    }
+
+    public int GetGoldWagonLevel() =>
+        trainData != null ? trainData.PeekNextStatLevel(StatType.GoldMultiplier) - 1 : 0;
+
+    /// <summary>Consulta la próxima mejora SIN consumir el nivel (seguro para hovers).</summary>
+    public bool TryGetGoldUpgradeInfo(out float cost, out float bonus)
+    {
+        cost = 0f;
+        bonus = 0f;
+        if (goldWagon == null || trainData == null) return false;
+
+        int nextLevel = trainData.PeekNextStatLevel(StatType.GoldMultiplier);
+        if (!goldUpgradesDictionary.TryGetValue(nextLevel, out var next) || next == null) return false;
+
+        cost = GetGoldUpgradePrice(nextLevel);
+        bonus = next.goldMultiplier;
+        return true;
+    }
+
+    private float GetGoldUpgradePrice(int level)
+    {
+        if (goldUpgradePrices == null || goldUpgradePrices.Length == 0) return 0f;
+        return goldUpgradePrices[Mathf.Clamp(level - 1, 0, goldUpgradePrices.Length - 1)];
+    }
+
+    /// <summary>
+    /// Misma lógica que tenía GoldMultiplierUpgrade() en LocomotivesUpgradesButtonController.
+    /// No cobra: el oro lo descuenta ReorderManager antes de llamar.
+    /// </summary>
+    public bool UpgradeGoldWagon()
+    {
+        if (!TryGetGoldUpgradeInfo(out _, out _)) return false;
+
+        var locomotiveUpgrade = new TrainStats();
+        locomotiveUpgrade.goldBonus = goldUpgradesDictionary[trainData.GetStatLevel(StatType.GoldMultiplier)].goldMultiplier;
+        trainData.AddStats(locomotiveUpgrade);
+
+        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.GoldMultiplier, stationName);
+
+        GameManager.Instance.Session.RebuildStatsSystem();
+
+        if (goldPunchTween != null && goldPunchTween.IsActive()) goldPunchTween.Complete();
+        goldPunchTween = goldWagon.transform
+            .DOPunchScale(Vector3.one * upgradePunchScale, upgradePunchDuration, 6, 0.5f)
+            .SetLink(goldWagon.gameObject);
+
+        return true;
+    }
+
+    #endregion
+
     public List<IWagonID> ChangeWagonIDList()
     {
         foreach (ShopWagonData slot in slots)
         {
-            if(slot is ShopPassiveWagonData passiveWagon)
+            if (slot is ShopPassiveWagonData passiveWagon)
             {
                 statSystem.RemoveModifiersFromSource(passiveWagon);
             }
@@ -497,7 +589,7 @@ public class DisplayTrain : MonoBehaviour
 
         return new List<IWagonID>(wagonList);
     }
-        
+
 
     private void SpawnTile()
     {

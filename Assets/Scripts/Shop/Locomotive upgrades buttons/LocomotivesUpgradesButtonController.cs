@@ -6,7 +6,7 @@ using UnityEngine;
 public class LocomotivesUpgradesButtonController : MonoBehaviour
 {
     #region Buttons
-    
+
     [Header("Max HP Button")]
     [SerializeField] private LocomotiveUpgradeButton maxHPButton;
 
@@ -19,18 +19,15 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
     [Header("Max defense Button")]
     [SerializeField] private LocomotiveUpgradeButton defenseButton;
 
-    [Header("Gold multiplier Button")]
-    [SerializeField] private LocomotiveUpgradeButton goldMultiplierButton;
-    
     #endregion
 
 
     [Header("Level Upgrades")]
     [SerializeField] private LevelLocomotivesUpgradesSO[] upgradesLevel;
-    private Dictionary <int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary;
+    private Dictionary<int, LevelLocomotivesUpgradesSO> upgradesLevelDictionary;
 
     private LevelLocomotivesUpgradesSO currentLevelUpgrades;
-    
+
     private GameObject self;
 
     private int currentLevel = 1;
@@ -55,7 +52,7 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
                 upgradesLevelDictionary.Add(upgrade.level, upgrade);
             }
         }
-        
+
         currentLevelUpgrades = upgradesLevelDictionary[currentLevel];
 
         locomotiveUpgrade = new TrainStats();
@@ -65,7 +62,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         //Line 67
         damageMultiplierButton.ButtonManager = this;
         defenseButton.ButtonManager = this;
-        goldMultiplierButton.ButtonManager = this;
 
         if (currentLevelUpgrades)
         {
@@ -73,7 +69,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
             attackSpeedButton.button.onClick.AddListener(AttackSpeedUpgrade);
             damageMultiplierButton.button.onClick.AddListener(DamageMultiplierUpgrade);
             defenseButton.button.onClick.AddListener(DefenseUpgrade);
-            goldMultiplierButton.button.onClick.AddListener(GoldMultiplierUpgrade);
         }
         else
         {
@@ -132,19 +127,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
 
         GameManager.Instance.Session.RebuildStatsSystem();
     }
-    public void GoldMultiplierUpgrade()
-    {
-        locomotiveUpgrade.goldBonus = GetCurrentUpgrade(StatType.GoldMultiplier).goldMultiplier;
-        trainDataRef.AddStats(locomotiveUpgrade);
-        DeactivateAllButtons();
-
-        var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
-        string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
-        AnalyticsManager.Instance.RegisterLocmotiveUpgradeInRun(StatType.GoldMultiplier, stationName);
-
-        GameManager.Instance.Session.RebuildStatsSystem();
-    }
-
     private LevelLocomotivesUpgradesSO GetCurrentUpgrade(StatType type)
     {
         int levelT = trainDataRef.GetStatLevel(type);
@@ -157,7 +139,6 @@ public class LocomotivesUpgradesButtonController : MonoBehaviour
         attackSpeedButton.DeactivateButton();
         damageMultiplierButton.DeactivateButton();
         defenseButton.DeactivateButton();
-        goldMultiplierButton.DeactivateButton();
 
         DeactivateUpgradesUi();
 

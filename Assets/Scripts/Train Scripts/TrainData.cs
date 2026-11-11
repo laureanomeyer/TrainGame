@@ -18,7 +18,7 @@ public class TrainData
     private List<IWagonID> wagonsIDList;
 
     public TrainStats LocomotiveStatsMultiplicator => locomotiveStatsMultiplicator;
-    public List<IWagonID> WagonsIDList => wagonsIDList; 
+    public List<IWagonID> WagonsIDList => wagonsIDList;
     public Transform TailPosition => tailPosition;
     public Transform GoldBoxPosition => goldBoxPosition;
     public Transform CoalBoxPosition => coalBoxPosition;
@@ -72,6 +72,13 @@ public class TrainData
     {
         wagonsIDList = wagonIDs;
     }
+
+    public int PeekNextStatLevel(StatType type)
+    {
+        return multiplicatorLevel.TryGetValue(type, out int level) ? level + 1 : 1;
+    }
+
+
     public int GetStatLevel(StatType type)
     {
         if (!multiplicatorLevel.ContainsKey(type))
@@ -86,8 +93,7 @@ public class TrainData
         }
     }
     public void AddStats(TrainStats stats)
-    {       
+    {
         locomotiveStatsMultiplicator += stats;
     }
 }
-
