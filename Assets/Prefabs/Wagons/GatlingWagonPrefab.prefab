@@ -481,7 +481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GatlingWagonBrain
   currentHp: 0
   canBreak: 1
-  SM: 10
+  SM: 15
   RES: 2
   tail: {fileID: 5746100811880833844}
   wagonBack: {fileID: 5775317610391304763}
@@ -5819,11 +5819,11 @@ MonoBehaviour:
   minAimRadius: 1.5
   bulletType: {fileID: 11400000, guid: a7d0293816c0e2741a76fe8126b4c722, type: 2}
   bulletPrefab: {fileID: 751579678887233810, guid: 90d7062da2899f5429e873d87d4f048c, type: 3}
-  fireCooldown: 0.2
+  fireCooldown: 0.1
   sequenceController: {fileID: 5810002436952863048}
   defaultCapacity: 15
   maxSize: 50
-  damage: 1
+  damage: 3
 --- !u!114 &5810002436952863048
 MonoBehaviour:
   m_ObjectHideFlags: 0
