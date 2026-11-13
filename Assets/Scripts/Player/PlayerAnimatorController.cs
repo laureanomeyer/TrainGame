@@ -9,6 +9,13 @@ public class PlayerAnimationController : MonoBehaviour
     [SerializeField] private PlayerBrain brain;
     [SerializeField] private Rigidbody rb;
 
+    [Header("Locomotion")]
+    [Tooltip("Por debajo de este Speed (0-1) se mantiene la última dirección en vez de recalcularla, " +
+             "así el blend tree no tiembla cuando el jugador frena.")]
+    [SerializeField, Range(0f, 0.3f)] private float directionMinSpeed = 0.05f;
+    [Tooltip("Suavizado del cambio de dirección (MoveX/MoveY). 0 = sin suavizado.")]
+    [SerializeField, Min(0f)] private float directionDampTime = 0.06f;
+
     [Header("Weapon overrides")]
     [Tooltip("Un Animator Override Controller por tipo de arma, en el mismo orden que el enum (índice = valor del enum). " +
              "Todos deben apuntar al mismo controller base que tiene el Animator.")]
@@ -16,15 +23,18 @@ public class PlayerAnimationController : MonoBehaviour
 
     private float maxSpeed;
 
-    private int SpeedHash = Animator.StringToHash("Speed");
-    private int IsRepairingHash = Animator.StringToHash("IsRepairing");
+    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    private static readonly int MoveXHash = Animator.StringToHash("MoveX");
+    private static readonly int MoveYHash = Animator.StringToHash("MoveY");
+    private static readonly int IsRepairingHash = Animator.StringToHash("IsRepairing");
 
     private AnimatorOverrideController runtimeOverride;
-    private List<KeyValuePair<AnimationClip, AnimationClip>> runtimePairs = new();
-    private List<KeyValuePair<AnimationClip, AnimationClip>> sourcePairs = new();
-    private Dictionary<AnimationClip, AnimationClip> lookup = new();
+    private readonly List<KeyValuePair<AnimationClip, AnimationClip>> runtimePairs = new();
+    private readonly List<KeyValuePair<AnimationClip, AnimationClip>> sourcePairs = new();
+    private readonly Dictionary<AnimationClip, AnimationClip> lookup = new();
 
     private bool lastRepairing;
+    private Vector2 lastDirection = Vector2.up; // por defecto: hacia adelante
 
     private void Awake()
     {
@@ -34,6 +44,8 @@ public class PlayerAnimationController : MonoBehaviour
 
         maxSpeed = brain.Speed;
 
+        // Una única instancia de override: se le cambian los clips sin reasignar el controller,
+        // así el Animator no reinicia su state machine ni sus parámetros.
         runtimeOverride = new AnimatorOverrideController(animator.runtimeAnimatorController);
         animator.runtimeAnimatorController = runtimeOverride;
 
@@ -42,6 +54,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     private void Start()
     {
+        // Aplica el arma con la que arranca el jugador.
         RefreshWeapon();
     }
 
@@ -55,8 +68,10 @@ public class PlayerAnimationController : MonoBehaviour
         if (animator == null || brain == null) return;
 
         UpdateRepairing();
-        UpdateSpeed();
+        UpdateLocomotion();
     }
+
+    #region Weapon
 
     private void HandleWeaponChanged(OnWeaponChangedEvent ev)
     {
@@ -101,6 +116,10 @@ public class PlayerAnimationController : MonoBehaviour
         runtimeOverride.ApplyOverrides(runtimePairs);
     }
 
+    #endregion
+
+    #region Parámetros
+
     private void UpdateRepairing()
     {
         bool repairing = brain.IsRepairing;
@@ -110,17 +129,39 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetBool(IsRepairingHash, repairing);
     }
 
-    private void UpdateSpeed()
+    private void UpdateLocomotion()
     {
-        float normalized = 0f;
+        float normalizedSpeed = 0f;
+        Vector3 worldVelocity = Vector3.zero;
 
         if (!brain.IsRepairing && rb != null && maxSpeed > 0f)
         {
-            Vector3 v = rb.linearVelocity;
-            v.y = 0f;
-            normalized = Mathf.Clamp01(v.magnitude / maxSpeed);
+            worldVelocity = rb.linearVelocity;
+            worldVelocity.y = 0f;
+            normalizedSpeed = Mathf.Clamp01(worldVelocity.magnitude / maxSpeed);
         }
 
-        animator.SetFloat(SpeedHash, normalized);
+        animator.SetFloat(SpeedHash, normalizedSpeed);
+
+        // Dirección del movimiento relativa a hacia dónde mira el player (mouse).
+        // x = lateral (derecha +), y = adelante/atrás (adelante +).
+        if (normalizedSpeed >= directionMinSpeed)
+        {
+            Vector3 local = transform.InverseTransformDirection(worldVelocity.normalized);
+            lastDirection = new Vector2(local.x, local.z);
+        }
+
+        if (directionDampTime > 0f)
+        {
+            animator.SetFloat(MoveXHash, lastDirection.x, directionDampTime, Time.deltaTime);
+            animator.SetFloat(MoveYHash, lastDirection.y, directionDampTime, Time.deltaTime);
+        }
+        else
+        {
+            animator.SetFloat(MoveXHash, lastDirection.x);
+            animator.SetFloat(MoveYHash, lastDirection.y);
+        }
     }
+
+    #endregion
 }
