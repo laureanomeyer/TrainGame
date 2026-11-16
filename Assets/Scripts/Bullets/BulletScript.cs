@@ -20,6 +20,7 @@ public class BulletScript : MonoBehaviour, IBullet
     public BulletTypeScriptable bulletType;
 
     [SerializeField] private LayerMask enemyLayerDetection;
+    [SerializeField] private GameObject hitEffectPrefab;
 
     private Rigidbody rb;
     private BoxCollider bc;
@@ -93,6 +94,39 @@ public class BulletScript : MonoBehaviour, IBullet
         bulletPool.Release(gameObject);
     }
 
+    private void GetImpactData(Collider other, out Vector3 point, out Vector3 normal)
+    {
+        Vector3 dir = transform.forward;
+
+        // Distancia que la bala recorre por step de física + margen,
+        // para asegurar que el origen del rayo quede fuera del collider
+        float backDistance = speed * Time.fixedDeltaTime * 2f + 0.1f;
+
+        Ray ray = new Ray(transform.position - dir * backDistance, dir);
+
+        if (other.Raycast(ray, out RaycastHit hit, backDistance * 2f))
+        {
+            point = hit.point;
+            normal = hit.normal;
+        }
+        else
+        {
+            // Fallback: si el raycast falla (bala ya muy adentro, MeshCollider, etc.)
+            point = other.ClosestPoint(transform.position);
+            normal = -dir;
+        }
+    }
+
+    private void SpawnHitEffect(Collider other)
+    {
+        GetImpactData(other, out Vector3 point, out Vector3 normal);
+
+        Vector3 spawnPos = point + normal * 0.01f;
+        Quaternion rot = Quaternion.LookRotation(normal);
+
+        Instantiate(hitEffectPrefab, spawnPos, rot); // luego lo cambias por tu pool
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!isActive) return;
@@ -105,8 +139,9 @@ public class BulletScript : MonoBehaviour, IBullet
 
         if (other.gameObject.TryGetComponent<IReactiveObject>(out IReactiveObject reactive))
         {
-            // El objeto SÍ tiene la interfaz. Aquí puedes usarla directamente.
+            SpawnHitEffect(other);
             reactive.OnDamage();
+
             if (destroyOnEnemy)
             {
                 hasHit = true;
@@ -123,6 +158,7 @@ public class BulletScript : MonoBehaviour, IBullet
                 collisionEnemy.HealthState == EnemyHealthState.Grace)
                 return;
 
+            SpawnHitEffect(other);
             bulletType.typeOfCollsion.BulletCollision(collisionEnemy, this);
 
             if (destroyOnEnemy)
