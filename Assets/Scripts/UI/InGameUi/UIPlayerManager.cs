@@ -138,9 +138,6 @@ public class UIPlayerManager : MonoBehaviour
     {
         var currentShield = fuel.CurrentShield / fuel.MaxShield;
         lerpedShield = Mathf.MoveTowards(lerpedShield, currentShield, Time.deltaTime);
-
-        if (lerpedShield == currentShield) return;
-
         shieldImage.fillAmount = lerpedShield;
     }
     void ForceUpdateShieldUI()
