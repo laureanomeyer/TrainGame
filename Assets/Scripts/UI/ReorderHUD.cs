@@ -33,12 +33,41 @@ public class ReorderHUD : MonoBehaviour
     [SerializeField] private float arrowPadding = 40f;
 
     [Header("Hints")]
-    [Tooltip("Objeto que se muestra/oculta entero (ej: la barra con fondo). Si está vacío, se usa Hint Text.")]
+    [Tooltip("Barra completa de hints. Se muestra/oculta entera según el modo.")]
     [SerializeField] private GameObject hintRoot;
-    [SerializeField] private TextMeshProUGUI hintText;
-    [SerializeField] private string hoverHint = "A/D: Move     F: Select     esc: Cancel";
-    [SerializeField] private string panelHint = "F: Select     esc: Cancel";
-    [SerializeField] private string dragHint = "A/D: Move     F: Confirm     esc: Cancel";
+    [Tooltip("Caja de la tecla de dirección (A/D).")]
+    [SerializeField] private HintSlot directionHint = new();
+    [Tooltip("Caja de la tecla de selección (Space).")]
+    [SerializeField] private HintSlot selectHint = new();
+    [Tooltip("Caja de la tecla de cancelar (Escape).")]
+    [SerializeField] private HintSlot cancelHint = new();
+
+    [Tooltip("Texto de cada tecla por modo. Vacío = esa caja se oculta.")]
+    [SerializeField] private HintTexts hoverHints = new("Move", "Select", "Cancel");
+    [SerializeField] private HintTexts panelHints = new("", "Select", "Cancel");
+    [SerializeField] private HintTexts dragHints = new("Move", "Confirm", "Cancel");
+
+    [Serializable]
+    private class HintSlot
+    {
+        public GameObject root;
+        public TMP_Text actionText;
+    }
+
+    [Serializable]
+    private struct HintTexts
+    {
+        public string direction;
+        public string select;
+        public string cancel;
+
+        public HintTexts(string direction, string select, string cancel)
+        {
+            this.direction = direction;
+            this.select = select;
+            this.cancel = cancel;
+        }
+    }
 
     [Header("Option tint (mouse y teclado)")]
     [SerializeField] private Color optionNormalColor = Color.white;
@@ -130,7 +159,7 @@ public class ReorderHUD : MonoBehaviour
         optionsGroup = GetOrAddGroup(optionsRow);
         leftArrowGroup = GetOrAddGroup(leftArrow.gameObject);
         rightArrowGroup = GetOrAddGroup(rightArrow.gameObject);
-        hintGroup = GetOrAddGroup(hintRoot != null ? hintRoot : hintText.gameObject);
+        hintGroup = GetOrAddGroup(hintRoot);
 
         GameObject nameGo = nameRoot != null ? nameRoot : nameText.gameObject;
         nameGroup = GetOrAddGroup(nameGo);
@@ -223,19 +252,38 @@ public class ReorderHUD : MonoBehaviour
         SetVisible(rightArrowGroup, showArrows);
         SetVisible(hintGroup, mode != Mode.Hidden);
 
-        SetTextIfChanged(hintText, mode switch
-        {
-            Mode.Hover => hoverHint,
-            Mode.Panel => panelHint,
-            Mode.Drag => dragHint,
-            _ => string.Empty
-        });
+        ApplyHints();
 
 
         forcedRefreshFrames = 2;
         UpdatePositions();
     }
 
+
+    private void ApplyHints()
+    {
+        HintTexts texts = mode switch
+        {
+            Mode.Hover => hoverHints,
+            Mode.Panel => panelHints,
+            Mode.Drag => dragHints,
+            _ => default
+        };
+
+        SetHint(directionHint, texts.direction);
+        SetHint(selectHint, texts.select);
+        SetHint(cancelHint, texts.cancel);
+    }
+
+    private static void SetHint(HintSlot slot, string action)
+    {
+        if (slot == null || slot.root == null) return;
+
+        bool show = !string.IsNullOrEmpty(action);
+        if (slot.root.activeSelf != show) slot.root.SetActive(show);
+
+        if (show) SetTextIfChanged(slot.actionText, action);
+    }
 
     private void SetOptions(int selectedIndex, bool upgradeEnabled, bool moveSellEnabled)
     {
