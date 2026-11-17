@@ -56,6 +56,8 @@ public class GoldenWagonBrain : WagonBrain
         ChangeBrokenState();
 
         hpController.Repair(repairAmount, Time.deltaTime);
+        sequenceController.StopGroup(ParticleGroups.DoorSparks);
+
         if (GameManager.Instance.CurrentState == GameState.Tutorial && !firstRepair && hpController.CurrentHp == hpController.MaxHp)
         {
             EventBus.Publish(new OnAdvanceTutorialStep());    
