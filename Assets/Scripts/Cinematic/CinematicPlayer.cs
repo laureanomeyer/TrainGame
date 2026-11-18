@@ -16,13 +16,27 @@ public class CinematicPlayer : MonoBehaviour
     private void Start()
     {
         videoPlayer.loopPointReached += OnVideoFinished;
+        videoPlayer.prepareCompleted += OnPrepared;
         videoPlayer.Prepare();
-        videoPlayer.prepareCompleted += _ => videoPlayer.Play();
     }
 
     private void OnDestroy()
     {
-        if (videoPlayer != null) videoPlayer.loopPointReached -= OnVideoFinished;
+        if (videoPlayer != null)
+        {
+            videoPlayer.loopPointReached -= OnVideoFinished;
+            videoPlayer.prepareCompleted -= OnPrepared;
+        }
+    }
+
+    private void OnPrepared(VideoPlayer vp)
+    {
+        float volume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+
+        for (ushort i = 0; i < vp.audioTrackCount; i++)
+            vp.SetDirectAudioVolume(i, volume);
+
+        vp.Play();
     }
 
     private void Update()
