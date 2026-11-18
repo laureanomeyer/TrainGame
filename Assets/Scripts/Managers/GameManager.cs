@@ -39,10 +39,12 @@ public class GameManager : MonoBehaviour
     public bool IsInCombat => SceneManager.GetActiveScene().name == "2. Tutorial" || SceneManager.GetActiveScene().name == "3. Trail";
 
     private const string SceneMainMenu = "1. Main Menu";
-    private const string SceneShop = "4. Station";
-    private const string SceneRun = "3. Trail";
-    private const string SceneFinal = "5. Ending";
+    private const string SceneIntroCinematic = "1.5 Intro Cinematic";
     private const string SceneTutorial = "2. Tutorial";
+    private const string SceneRun = "3. Trail";
+    private const string SceneShop = "4. Station";
+    private const string SceneVictoryCinematic = "4.5 Victory Cinematic";
+    private const string SceneFinal = "5. Ending";
 
     private void Awake()
     {
@@ -116,6 +118,29 @@ public class GameManager : MonoBehaviour
         ChangeScene(SceneShop, SceneTransitionType.EndingRun, GameState.UI, CursorType.Real);
     }
 
+    public void GoToIntroCinematic()
+    {
+        if (isChangingScene) return;
+
+        gameEnded = false;
+        LastRunResult = RunResult.None;
+
+        ChangeScene(SceneIntroCinematic, SceneTransitionType.Cinematic, GameState.Cinematic, CursorType.HiddenAndFrozen);
+    }
+
+    public void FinishIntroCinematic()
+    {
+        GoToTutorial();
+    }
+
+    public void FinishVictoryCinematic()
+    {
+        if (isChangingScene) return;
+
+        ChangeScene(SceneFinal, SceneTransitionType.Final, GameState.Menu, CursorType.Real);
+        ShowCursor(CursorType.Real);
+    }
+
     public void GoToStore()
     {
         if (isChangingScene) return;
@@ -181,8 +206,8 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
-        ChangeScene(SceneFinal, SceneTransitionType.Final, GameState.Menu, CursorType.Real);
-        ShowCursor(CursorType.Real);
+        ChangeScene(SceneVictoryCinematic, SceneTransitionType.Cinematic, GameState.Cinematic, CursorType.HiddenAndFrozen);
+        ShowCursor(CursorType.HiddenAndFrozen);
     }
 
     public void StartNewSession()
@@ -199,7 +224,7 @@ public class GameManager : MonoBehaviour
         Session = new GameSession(baseStats, baseMultStats);
 
         if (PlayerPrefs.GetInt("TutorialCompleted") != 0) GoToRun();
-        else GoToTutorial();
+        else GoToIntroCinematic();
     }
 
     public void EndSession()
@@ -231,6 +256,7 @@ public class GameManager : MonoBehaviour
 
         if (IsInCombat) MusicManager.Instance.SetGameplayMusic();
         else if (IsInShop) MusicManager.Instance.SetStoreMusic();
+        else if (CurrentState == GameState.Cinematic) MusicManager.Instance.Stop();
         else MusicManager.Instance.SetMenuMusic();
 
         currentCursor = newSceneCursor;

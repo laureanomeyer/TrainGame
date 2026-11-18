@@ -191,6 +191,9 @@ public class SceneTransitionManager : MonoBehaviour
             case SceneTransitionType.Final:
                 return "The journey ends...";
 
+            case SceneTransitionType.Cinematic:
+                return "";
+
             default:
                 return "Loading...";
         }

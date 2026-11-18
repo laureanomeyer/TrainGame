@@ -4,5 +4,6 @@ public enum SceneTransitionType
     StartingRun,
     EndingRun,
     MainMenu,
-    Final
+    Final,
+    Cinematic
 }

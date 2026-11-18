@@ -51,10 +51,15 @@ public class MusicManager : MonoBehaviour
         SetMenuMusic();
     }
 
-
-    public void SetStoreMusic()
+    public void Stop()
     {
         AudioManager.Instance.Stop(currentOST);
+        currentOST = null;
+    }
+    public void SetStoreMusic()
+    {
+        if(currentOST != null)
+            AudioManager.Instance.Stop(currentOST);
 
         currentOST = storeOST[Random.Range(0, storeOST.Length)];
 
@@ -64,7 +69,8 @@ public class MusicManager : MonoBehaviour
 
     public void SetGameplayMusic()
     {
-        AudioManager.Instance.Stop(currentOST);
+        if (currentOST != null)
+            AudioManager.Instance.Stop(currentOST);
 
         currentOST = gameplayOST[Random.Range(0, gameplayOST.Length)];
 
@@ -74,7 +80,8 @@ public class MusicManager : MonoBehaviour
 
     public void SetMenuMusic()
     {
-        AudioManager.Instance.Stop(currentOST);
+        if (currentOST != null)
+            AudioManager.Instance.Stop(currentOST);
 
         currentOST = menuOST[Random.Range(0, menuOST.Length)];
 

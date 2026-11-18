@@ -3,7 +3,7 @@
 public enum InteractableType { CoalBox, GoldBox }
 public enum ModifierType { Additive, Multipicaive}
 public enum StatType { MaxHp, Defense, GoldMultiplier, DamageMultiplier, AttackSpeed, FuelOptimizer, Speed }
-public enum GameState { Tutorial, Gameplay, Menu, Transition, UI}
+public enum GameState { Tutorial, Gameplay, Menu, Transition, UI, Cinematic}
 public enum CursorType { Real, HiddenAndFrozen, Gameplay, HiddenAndMoveable, RealAndFrozen}
 public enum TutorialStep
 {
