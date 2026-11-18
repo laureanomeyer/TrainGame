@@ -14,6 +14,7 @@ public class WagonTurret : MonoBehaviour
     [Header("Weapon Data")]
     [SerializeField] private BulletTypeScriptable bulletType;
     [SerializeField] private GameObject bulletPrefab;
+    [Tooltip("Segundos entre disparos SIN mejoras (X de la planilla).")]
     [SerializeField] private float fireCooldown = 0.03f;
 
     [Header("Particle Sequence Controller")]
@@ -25,6 +26,13 @@ public class WagonTurret : MonoBehaviour
 
     [Header("Damage")]
     [SerializeField] private float damage = 1;
+
+    [Header("Locomotive Upgrades")]
+    [Tooltip("Off = la torreta ignora las mejoras de daño y cadencia (torretas manuales según la planilla).")]
+    [SerializeField] private bool applyLocomotiveUpgrades = true;
+    [Tooltip("Stat de cadencia de la locomotora (CD). Divide el cooldown: stat 1 = igual, stat 2 = el doble de rápido.")]
+    [SerializeField] private bool useFireRateStat = true;
+    [SerializeField] private StatType fireRateStat;
 
     private IObjectPool<GameObject> bulletPool;
     private StatSystem statSystem;
@@ -122,14 +130,36 @@ public class WagonTurret : MonoBehaviour
 
         if (bulletGO.TryGetComponent(out IBullet bullet))
         {
-            if (statSystem == null)
-                statSystem = ServiceLocator.Get<StatSystem>();
-
-            bulletType.Damage = damage * statSystem.GetStat(StatType.DamageMultiplier);
+            bulletType.Damage = GetDamage();
             bullet.ResetState(bulletType);
         }
 
-        cooldownTimer = fireCooldown;
+        cooldownTimer = GetCooldown();
+    }
+
+    private StatSystem Stats
+    {
+        get
+        {
+            if (statSystem == null) statSystem = ServiceLocator.Get<StatSystem>();
+            return statSystem;
+        }
+    }
+
+
+    private float GetDamage()
+    {
+        if (!applyLocomotiveUpgrades || Stats == null) return damage;
+        return damage * Stats.GetStat(StatType.DamageMultiplier);
+    }
+
+
+    private float GetCooldown()
+    {
+        if (!applyLocomotiveUpgrades || !useFireRateStat || Stats == null) return fireCooldown;
+
+        float rate = Stats.GetStat(fireRateStat);
+        return rate > 0.0001f ? fireCooldown / rate : fireCooldown;
     }
 
     private GameObject CreateBullet()

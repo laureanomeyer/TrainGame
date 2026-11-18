@@ -5819,11 +5819,14 @@ MonoBehaviour:
   minAimRadius: 1.5
   bulletType: {fileID: 11400000, guid: a7d0293816c0e2741a76fe8126b4c722, type: 2}
   bulletPrefab: {fileID: 751579678887233810, guid: 90d7062da2899f5429e873d87d4f048c, type: 3}
-  fireCooldown: 0.1
+  fireCooldown: 0.2
   sequenceController: {fileID: 5810002436952863048}
   defaultCapacity: 15
   maxSize: 50
-  damage: 3
+  damage: 1
+  applyLocomotiveUpgrades: 1
+  useFireRateStat: 1
+  fireRateStat: 4
 --- !u!114 &5810002436952863048
 MonoBehaviour:
   m_ObjectHideFlags: 0

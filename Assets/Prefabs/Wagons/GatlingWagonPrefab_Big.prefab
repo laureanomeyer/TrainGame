@@ -357,8 +357,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GatlingWagonBrain
   currentHp: 0
   canBreak: 1
-  SM: 10
-  RES: 2
+  SM: 22
+  RES: 3
   tail: {fileID: 3812085090369802928}
   wagonBack: {fileID: 5775317610391304763}
   hpImage: {fileID: 8175261951456748105}
@@ -5695,11 +5695,14 @@ MonoBehaviour:
   minAimRadius: 1.5
   bulletType: {fileID: 11400000, guid: a7d0293816c0e2741a76fe8126b4c722, type: 2}
   bulletPrefab: {fileID: 751579678887233810, guid: 90d7062da2899f5429e873d87d4f048c, type: 3}
-  fireCooldown: 0.2
+  fireCooldown: 0.225
   sequenceController: {fileID: 5810002436952863048}
   defaultCapacity: 15
   maxSize: 50
-  damage: 1
+  damage: 3
+  applyLocomotiveUpgrades: 1
+  useFireRateStat: 1
+  fireRateStat: 4
 --- !u!114 &5810002436952863048
 MonoBehaviour:
   m_ObjectHideFlags: 0
