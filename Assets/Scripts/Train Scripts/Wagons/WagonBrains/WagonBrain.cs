@@ -186,7 +186,7 @@ public class WagonBrain : MonoBehaviour, IDamagable, IWagon
 
         hpController.TakeDamage(damageAmount);
         isOnScreen = CameraView.IsInsideCamera(transform.position, Cam);
-        AudioManager.Instance.PlayOnScreen($"SFXWagonHit{UnityEngine.Random.Range(1, 4)}", isOnScreen);
+        AudioManager.Instance.PlayOnScreen($"SFXWagonHit{UnityEngine.Random.Range(1, 5)}", isOnScreen);
 
         currentHp = hpController.CurrentHp;
 
