@@ -29,7 +29,7 @@ public class WagonShopButton : MonoBehaviour
 
     [SerializeField] private Transform spawnWagonPoint;
 
-    [SerializeField] private ParticleSystem wagonShopParticleSystem;
+    //[SerializeField] private ParticleSystem wagonShopParticleSystem;
 
     private GameObject modelReference;
 
@@ -212,10 +212,12 @@ public class WagonShopButton : MonoBehaviour
     {
         SetWagonInStock(true);
 
+        /*
         if (wagonShopParticleSystem)
         {
             wagonShopParticleSystem.Play();
         }
+        */
 
         usedReroll = true;
         storeManager.rerollButton.interactable = false;
@@ -292,10 +294,12 @@ public class WagonShopButton : MonoBehaviour
 
         SetWagonInStock(false);
 
+        /*
         if (wagonShopParticleSystem != null)
         {
             wagonShopParticleSystem.Play();
         }
+        */
 
         yield return new WaitForSeconds(waitTimeToBuy);
 
