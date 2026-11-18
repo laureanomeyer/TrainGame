@@ -141,6 +141,7 @@ public class WeaponShopButton : MonoBehaviour, IWeaponShopButton
         }
         else
         {
+            AudioManager.Instance.Play($"SFXItemPurchase");
             Sprite boughtWeaponSprite = currentCollection[selectedWeapon].WeaponSprite;
 
             var sessionConfigRef = ServiceLocator.Get<SessionConfig>();

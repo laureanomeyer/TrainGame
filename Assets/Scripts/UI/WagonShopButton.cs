@@ -128,6 +128,7 @@ public class WagonShopButton : MonoBehaviour
             return;
         }
 
+        AudioManager.Instance.Play($"SFXItemPurchase");
         StartCoroutine(BuyWagonCoroutine());
     }
 

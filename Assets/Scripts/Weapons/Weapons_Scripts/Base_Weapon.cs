@@ -151,7 +151,6 @@ public class Base_Weapon : MonoBehaviour, IWeapons, IWeaponBuffer
         }
 
     }
-
     public void ResetWaitToFire()
     {
         EventBus.Publish(new OnAmmoChangedEvent(currentAmmunition));

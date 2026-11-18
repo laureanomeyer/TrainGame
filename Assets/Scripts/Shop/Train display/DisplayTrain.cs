@@ -183,6 +183,7 @@ public class DisplayTrain : MonoBehaviour
     private ShopWagonData SpawnWagon(GameObject model, IWagonID id)
     {
         GameObject go = Instantiate(model, layoutOrigin, layoutRot);
+        AudioManager.Instance.Play($"SFXWagonAppear");
         var data = go.GetComponent<ShopWagonData>();
         data.SetID(id);
 
@@ -347,6 +348,8 @@ public class DisplayTrain : MonoBehaviour
         slots.RemoveAt(slotIndex);
 
         DestroyWagon(wagonData);
+        AudioManager.Instance.Play($"SFXWagonDisappear");
+
         ApplyLayout(shiftDuration, shiftEase);
 
         return wagonData;
