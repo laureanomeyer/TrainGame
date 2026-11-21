@@ -1,5 +1,9 @@
 using System.Collections.Generic;
 
+// =========================================================
+//  CONTENEDORES (reemplazan a los Dictionary, que JsonUtility no serializa)
+// =========================================================
+
 /// <summary>
 /// Un par índice-cantidad (reemplaza a una entrada de Dictionary).
 /// </summary>
@@ -11,13 +15,16 @@ public class WagonCountEntry
 }
 
 /// <summary>
-/// Un par índice-cantidad (reemplaza a una entrada de Dictionary).
+/// Resultado de UNA partida: número de run, si ganó o perdió, y la última estación en la que estuvo.
 /// </summary>
 [System.Serializable]
 public class RunResultsEntry
 {
     public int runPlay = 0;
     public bool result;
+
+    // Las partidas guardadas antes de este cambio no tienen este campo: quedan en "unknown".
+    public string lastStationName = "unknown";
 }
 
 /// <summary>
@@ -220,6 +227,21 @@ public class GlobalResumen
     public List<string> wagonDestroyText = new List<string>();
 }
 
+// =========================================================
+//  JSON GLOBAL: FILE
+// =========================================================
+
+/// <summary>
+/// Estructura completa del archivo JSON global.
+/// - Datos: lo que lee el código del juego.
+/// - Resumen: lo que lee una persona al abrir el archivo.
+/// </summary>
+[System.Serializable]
+public class GlobalAnalyticsFile
+{
+    public GlobalAnalyticsData Datos = new GlobalAnalyticsData();
+    public GlobalResumen Resumen = new GlobalResumen();
+}
 
 // =========================================================
 //  JSON DE USUARIOS: DATA
@@ -336,3 +358,16 @@ public class UserResumen
     public List<UserSummaryEntry> usersSummary = new List<UserSummaryEntry>();
 }
 
+// =========================================================
+//  JSON DE USUARIOS: FILE
+// =========================================================
+
+/// <summary>
+/// Estructura completa del archivo JSON de usuarios.
+/// </summary>
+[System.Serializable]
+public class UserAnalyticsFile
+{
+    public UserAnalyticsData Datos = new UserAnalyticsData();
+    public UserResumen Resumen = new UserResumen();
+}

@@ -114,6 +114,13 @@ public class AnalyticsManager : MonoBehaviour
         foreach (RunResultsEntry entry in results)
         {
             texts.Add("-Partida " + entry.runPlay + " : " + (entry.result ? "victoria" : "derrota"));
+
+            // Cubre también los datos viejos o vacíos.
+            string station = string.IsNullOrEmpty(entry.lastStationName)
+                ? "unknown"
+                : entry.lastStationName;
+
+            texts.Add("ultima estacion: " + station);
         }
 
         return texts;
@@ -304,39 +311,37 @@ public class AnalyticsManager : MonoBehaviour
 
     /// <summary>
     /// Llamar cuando el player pierde la partida.
-    /// Suma la derrota al global y al usuario actual.
+    /// Suma la derrota al global y al usuario actual, y registra la estación.
     /// </summary>
     public void RegisterDefeat(string stationName)
     {
         PlayerDefeat++;
-
-        //SaveGlobalData();
+        SaveGlobalData();
 
         if (!HasCurrentUser()) return;
 
         CurrentUser.defeats++;
-        AddRunResult(false);
+        AddRunResult(false, stationName);
         AddStationDefeat(stationName);
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     /// <summary>
     /// Llamar cuando el player gana la partida.
-    /// Suma la victoria al global y al usuario actual.
+    /// Suma la victoria al global y al usuario actual, y registra la estación.
     /// </summary>
-    public void RegisterWin()
+    public void RegisterWin(string stationName)
     {
         PlayerWin++;
-
-        //SaveGlobalData();
+        SaveGlobalData();
 
         if (!HasCurrentUser()) return;
 
         CurrentUser.wins++;
-        AddRunResult(true);
+        AddRunResult(true, stationName);
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     /// <summary>
@@ -357,7 +362,7 @@ public class AnalyticsManager : MonoBehaviour
         CurrentUser.weaponsPerRun.Add(new RunWeaponsEntry { runPlay = CurrentUser.runsPlay });
         CurrentUser.goldPerRun.Add(new RunGoldEntry { runPlay = CurrentUser.runsPlay });
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     //Llamar funcion en Take Damage de Wagon
@@ -377,7 +382,7 @@ public class AnalyticsManager : MonoBehaviour
             WagonInLocomotiveHit.Add(index, 1);
         }
 
-        //SaveGlobalData();
+        SaveGlobalData();
     }
 
     //Llamar funcion en Break de Wagon
@@ -397,13 +402,16 @@ public class AnalyticsManager : MonoBehaviour
             WagonInLocomotiveDestroy.Add(index, 1);
         }
 
-        //SaveGlobalData();
+        SaveGlobalData();
     }
 
     // Guarda el resultado de la partida actual (el número de partida es runsPlay).
-    private void AddRunResult(bool isWin)
+    private void AddRunResult(bool isWin, string stationName)
     {
         int runNumber = CurrentUser.runsPlay;
+
+        // Si no llega un nombre de estación, se guarda "unknown".
+        string station = string.IsNullOrEmpty(stationName) ? "unknown" : stationName;
 
         // Si por error se registra dos veces la misma partida, se reemplaza en vez de duplicar.
         RunResultsEntry existing = CurrentUser.runResults.Find(r => r.runPlay == runNumber);
@@ -411,10 +419,16 @@ public class AnalyticsManager : MonoBehaviour
         if (existing != null)
         {
             existing.result = isWin;
+            existing.lastStationName = station;
             return;
         }
 
-        CurrentUser.runResults.Add(new RunResultsEntry { runPlay = runNumber, result = isWin });
+        CurrentUser.runResults.Add(new RunResultsEntry
+        {
+            runPlay = runNumber,
+            result = isWin,
+            lastStationName = station
+        });
     }
 
     private void AddStationDefeat(string stationName)
@@ -460,7 +474,7 @@ public class AnalyticsManager : MonoBehaviour
             AddEnemyKill(runEntry.enemies, enemyName);
         }
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     // Suma una muerte al enemigo (si no está en la lista, lo agrega con 1).
@@ -487,7 +501,7 @@ public class AnalyticsManager : MonoBehaviour
         RunWagonManagerEntry run = GetCurrentRunWagonManagerEntry();
         if (run != null) run.interactions.managerClick++;
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     public void RegisterMoveInteract()
@@ -499,7 +513,7 @@ public class AnalyticsManager : MonoBehaviour
         RunWagonManagerEntry run = GetCurrentRunWagonManagerEntry();
         if (run != null) run.interactions.moveClick++;
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     public void RegisterSellInteract()
@@ -511,7 +525,7 @@ public class AnalyticsManager : MonoBehaviour
         RunWagonManagerEntry run = GetCurrentRunWagonManagerEntry();
         if (run != null) run.interactions.sellClick++;
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     public void RegisterUpgradeInteract()
@@ -523,7 +537,7 @@ public class AnalyticsManager : MonoBehaviour
         RunWagonManagerEntry run = GetCurrentRunWagonManagerEntry();
         if (run != null) run.interactions.upgradesClick++;
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     // Devuelve la entrada de la run actual (null si todavía no empezó ninguna run).
@@ -573,7 +587,7 @@ public class AnalyticsManager : MonoBehaviour
 
         ApplyUpgrade(ref station.upgrades, statType);
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     private bool IsTrackedUpgrade(StatType statType)
@@ -639,7 +653,7 @@ public class AnalyticsManager : MonoBehaviour
         foreach (string wagonName in wagonNames)
             AddWagonType(station.arrivalWagons, wagonName);
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     // ---------- Al IRSE de una estación ----------
@@ -659,7 +673,7 @@ public class AnalyticsManager : MonoBehaviour
         foreach (string wagonName in wagonNames)
             AddWagonType(station.departureWagons, wagonName);
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     // Suma +1 al vagón (si no está en la lista, lo agrega con 1).
@@ -734,7 +748,7 @@ public class AnalyticsManager : MonoBehaviour
             run.stations.Add(new StationWeaponEntry { stationName = stationName, weaponName = weaponName });
         }
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     /// <summary>
@@ -750,7 +764,7 @@ public class AnalyticsManager : MonoBehaviour
         station.goldOnArrival = gold;
         station.arrivalRegistered = true;
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     /// <summary>
@@ -766,7 +780,7 @@ public class AnalyticsManager : MonoBehaviour
         station.goldOnDeparture = gold;
         station.departureRegistered = true;
 
-        //SaveUserData();
+        SaveUserData();
     }
 
     // Devuelve la estación dentro de la run actual (la crea si no existe).
@@ -856,7 +870,7 @@ public class AnalyticsManager : MonoBehaviour
     {
         PlayerDefeat = 0;
         PlayerWin = 0;
-        
+
         WagonInLocomotiveHit.Clear();
         WagonInLocomotiveDestroy.Clear();
 
@@ -936,7 +950,6 @@ public class AnalyticsManager : MonoBehaviour
 
         SaveUserData();
         Debug.Log($"[Analytics] Usuario nuevo creado: {newId}");
-        Debug.Log($"[Analytics] Cantidad de usuarios: {users.Count.ToString()}");
 
         return newUser;
     }

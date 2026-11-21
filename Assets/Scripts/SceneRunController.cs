@@ -118,7 +118,9 @@ public class SceneRunController : MonoBehaviour
 
         if (GameManager.Instance.IsFinalStation())
         {
-            AnalyticsManager.Instance.RegisterWin();
+            var sessionConfigRef = ServiceLocator.Get<SessionConfig>();
+            string stationName = GameManager.Instance.GetStationNameByLevel(sessionConfigRef.CurrentLevel);
+            AnalyticsManager.Instance.RegisterWin(stationName);
             GameManager.Instance.Victory();
         }
         else
