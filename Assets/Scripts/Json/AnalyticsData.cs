@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Un par índice-cantidad (reemplaza a una entrada de Dictionary).
+/// Se usará en la parte global.
 /// </summary>
 [System.Serializable]
 public class WagonCountEntry
@@ -166,7 +167,7 @@ public class RunWeaponsEntry
 }
 
 /// <summary>
-/// Oro del jugador en UNA estación (reemplaza a Dictionary<string, int>, una vez para entrar y otra para salir).
+/// Oro del jugador en UNA estación (una vez para entrar y otra para salir).
 /// </summary>
 [System.Serializable]
 public class StationGoldEntry
@@ -191,11 +192,11 @@ public class RunGoldEntry
 }
 
 // =========================================================
-//  JSON GLOBAL: DATA
+//  DATOS GLOBALES (pendiente: se retomará más adelante)
 // =========================================================
 
 /// <summary>
-/// Datos "crudos" globales que el juego usa y carga/guarda.
+/// Datos globales. Por ahora no se envían a Firebase.
 /// </summary>
 [System.Serializable]
 public class GlobalAnalyticsData
@@ -208,55 +209,25 @@ public class GlobalAnalyticsData
     public List<WagonCountEntry> wagonInLocomotiveDestroy = new List<WagonCountEntry>();
 }
 
-/// <summary>
-/// Texto legible para personas (JSON global).
-/// </summary>
-[System.Serializable]
-public class GlobalResumen
-{
-    // JsonUtility no permite espacios en los nombres de campos,
-    // por eso el texto legible se arma como valor del campo.
-    public string playerDefeatText = "Total de derrotas: 0";
-    public string playerWinText = "Total de victorias: 0";
-
-    // Un título y una línea de texto por cada elemento del diccionario.
-    public string wagonHitTitle = "Golpes por vagón:";
-    public List<string> wagonHitText = new List<string>();
-
-    public string wagonDestroyTitle = "Destrucciones por vagón:";
-    public List<string> wagonDestroyText = new List<string>();
-}
-
 // =========================================================
-//  JSON GLOBAL: FILE
+//  DATOS DE USUARIO
 // =========================================================
 
 /// <summary>
-/// Estructura completa del archivo JSON global.
-/// - Datos: lo que lee el código del juego.
-/// - Resumen: lo que lee una persona al abrir el archivo.
-/// </summary>
-[System.Serializable]
-public class GlobalAnalyticsFile
-{
-    public GlobalAnalyticsData Datos = new GlobalAnalyticsData();
-    public GlobalResumen Resumen = new GlobalResumen();
-}
-
-// =========================================================
-//  JSON DE USUARIOS: DATA
-// =========================================================
-
-/// <summary>
-/// Información de UN usuario.
-/// Todas las variables empiezan en 0 al crear un usuario nuevo;
-/// si el usuario ya existe en el JSON, se cargan sus valores guardados.
+/// Información de UN usuario. Es el JSON que se sube a Firebase en users/{userId}.
+/// Todas las variables empiezan en 0 al crear un usuario nuevo.
 /// </summary>
 [System.Serializable]
 public class UserData
 {
-    //Nombre de usuario
+    // ID único numérico asignado por Firebase (0 = todavía pendiente de asignar)
     public int userId = 0;
+
+    // Uid anónimo del equipo que creó al usuario (lo usan las reglas de seguridad de Firebase)
+    public string ownerUid = "";
+
+    // Fecha de creación en UTC (formato ISO 8601)
+    public string createdAt = "";
 
     //Muestra de informacion del usuario 
     public int runsPlay = 0;
@@ -284,90 +255,4 @@ public class UserData
     public List<RunWeaponsEntry> weaponsPerRun = new List<RunWeaponsEntry>();
 
     public List<RunGoldEntry> goldPerRun = new List<RunGoldEntry>();
-}
-
-/// <summary>
-/// Datos "crudos" de todos los usuarios.
-/// </summary>
-[System.Serializable]
-public class UserAnalyticsData
-{
-    public List<UserData> users = new List<UserData>();
-}
-
-/// <summary>
-/// Texto legible de UN usuario: un string por variable.
-/// </summary>
-[System.Serializable]
-public class UserSummaryEntry
-{
-    //Nombre de usuario
-    public string userText = "Usuario 0";
-
-    //Muestra de informacion del usuario 
-    public string runPlayText = "Cantidad de partidas jugadas: 0";
-    public string defeatsText = "Cantidad de derrotas: 0";
-    public string winsText = "Cantidad de victorias: 0";
-
-    public string runResultsTitle = "Resultados de partidas del jugador";
-    public List<string> runResultsText = new List<string>();
-
-    public string stationDefeatsTitle = "Cantidad de derrotas en estaciones";
-    public List<string> stationDefeatsText = new List<string>();
-
-    public string enemyKillsTitle = "Muertes de enemigos";
-
-    public string enemyKillsTotalTitle = "Enemigos muertos durante el juego";
-    public string enemyKillsRunsPlayedText = "Total de partidas jugadas: 0";
-    public List<string> enemyKillsTotalText = new List<string>();
-
-    public string enemyKillsPerRunTitle = "Enemigos muertos por Run";
-    public List<string> enemyKillsPerRunText = new List<string>();
-
-    public string wagonManagerTitle = "Interaccion con Manage Wagon";
-
-    public string wagonManagerTotalTitle = "Durante todo el juego";
-    public List<string> wagonManagerTotalText = new List<string>();
-
-    public string wagonManagerPerRunTitle = "Durante la Partida";
-    public List<string> wagonManagerPerRunText = new List<string>();
-
-    public string locomotiveUpgradesTitle = "Mejoras de locomotora en partida";
-    public List<string> locomotiveUpgradesText = new List<string>();
-
-    public string wagonsBetweenStationsTitle = "Vagones entre estaciones";
-    public List<string> wagonsBetweenStationsText = new List<string>();
-
-    public string weaponsTitle = "Armas que compro en partidas";
-    public List<string> weaponsText = new List<string>();
-
-    public string goldTitle = "Oro en partida";
-    public List<string> goldText = new List<string>();
-
-    // Línea decorativa para separar visualmente a un usuario del siguiente.
-    public string separatorText = "-----------------------------------------------------";
-}
-
-/// <summary>
-/// Texto legible para personas (JSON de usuarios).
-/// </summary>
-[System.Serializable]
-public class UserResumen
-{
-    public string totalUsersText = "Total de usuarios registrados: 0";
-    public List<UserSummaryEntry> usersSummary = new List<UserSummaryEntry>();
-}
-
-// =========================================================
-//  JSON DE USUARIOS: FILE
-// =========================================================
-
-/// <summary>
-/// Estructura completa del archivo JSON de usuarios.
-/// </summary>
-[System.Serializable]
-public class UserAnalyticsFile
-{
-    public UserAnalyticsData Datos = new UserAnalyticsData();
-    public UserResumen Resumen = new UserResumen();
 }
