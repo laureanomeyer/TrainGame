@@ -47,6 +47,13 @@ public class CinematicPlayer : MonoBehaviour
             Finish();
     }
 
+    public void OnInteract(InputValue value)
+    {
+        if (!value.isPressed) return;
+        if (timer < skipLockTime) return;
+
+        Finish();
+    }
     public void OnJump(InputValue value)
     {
         if (!value.isPressed) return;

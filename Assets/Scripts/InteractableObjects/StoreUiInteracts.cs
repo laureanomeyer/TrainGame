@@ -109,9 +109,6 @@ public class StoreUiInteracts : MonoBehaviour
         EventBus.Publish(new OnShowCursorEvent(CursorType.Gameplay));
         EventBus.Publish(new OnActivateUiEvent(true));
         EventBus.Publish(new OnActivateNonPausableUI(true));
-
-        //Debug.Log("Is open: " + uiOpen);
-        //Debug.Log("Is hidden: " + isHidden); 
     }
 
     public void HideUI()
@@ -123,9 +120,6 @@ public class StoreUiInteracts : MonoBehaviour
         GameManager.Instance.ChangeGameState(GameState.Gameplay);
 
         EventBus.Publish(new OnShowCursorEvent(CursorType.HiddenAndFrozen));
-
-        //Debug.Log("Is open: " + uiOpen);
-        //Debug.Log("Is hidden: " + isHidden);
     }
 
     public void OnPlayerInteractEvent(OnInteractPressedEvent interactPressedEvent)
@@ -139,7 +133,6 @@ public class StoreUiInteracts : MonoBehaviour
 
         if (!uiOpen)
         {
-            //Debug.Log("Interact");
 
             if (isHidden) return;
 
@@ -152,9 +145,6 @@ public class StoreUiInteracts : MonoBehaviour
             EventBus.Publish(new OnActivateNonPausableUI(false));
 
             GameManager.Instance.ChangeGameState(GameState.UI);
-
-            //Debug.Log("Is open: " + uiOpen);
-            //Debug.Log("Is hidden: " + isHidden);
         }
     }
 

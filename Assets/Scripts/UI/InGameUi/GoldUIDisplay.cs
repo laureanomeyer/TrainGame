@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoldUIDisplay : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI[] GoldTextUI;
+    [SerializeField] private TextMeshProUGUI GoldTextUI;
 
     [SerializeField] public float speed = 1f;
     public float minAlpha = 0f;
@@ -15,19 +15,14 @@ public class GoldUIDisplay : MonoBehaviour
 
     public void UpdatedGold(float gold)
     {
-        foreach (var t in GoldTextUI)
-        {
-            t.text = gold.ToString();
-        }
+        GoldTextUI.text = gold.ToString();
+
     }
 
     public void UpdatedGoldMesseg(float gold)
     {
 
-        foreach (var t in GoldTextUI)
-        {
-            t.text = gold.ToString();
-        }
+        GoldTextUI.text = gold.ToString();
         PlayFade();
     }
 

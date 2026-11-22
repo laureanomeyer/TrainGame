@@ -74,6 +74,8 @@ public class InteractionUIManager : MonoBehaviour
         wagonsPanel.SetActive(true);
 
         wagonsTween = wagonsRect.DOAnchorPos(wagonsOriginalPos, wagonsSlideDuration).SetEase(wagonsSlideEase).SetUpdate(true).SetLink(gameObject);
+
+        EventBus.Publish(new OnCallActiveStatsPanelUI());
     }
 
     public void ShowWeapons()
@@ -89,6 +91,9 @@ public class InteractionUIManager : MonoBehaviour
         weaponsPanel.SetActive(true);
 
         weaponsTween = weaponsRect.DOAnchorPos(weaponsOriginalPos, weaponsSlideDuration).SetEase(weaponsSlideEase).SetUpdate(true).SetLink(gameObject);
+
+        EventBus.Publish(new OnSwitchStatsSide());
+        EventBus.Publish(new OnCallActiveStatsPanelUI());
     }
 
     public void HideAll()
@@ -103,6 +108,8 @@ public class InteractionUIManager : MonoBehaviour
         wagonsTween.Kill();
         wagonsRect.anchoredPosition = wagonsOriginalPos;
         wagonsPanel.SetActive(false);
+        EventBus.Publish(new OnCallDeactiveStatsPanelUI());
+
     }
 
     private void HideWeaponsPanel()
@@ -110,5 +117,8 @@ public class InteractionUIManager : MonoBehaviour
         weaponsTween.Kill();
         weaponsRect.anchoredPosition = weaponsOriginalPos;
         weaponsPanel.SetActive(false);
+        EventBus.Publish(new OnCallDeactiveStatsPanelUI());
+        EventBus.Publish(new OnResetStatsSide());
+
     }
 }

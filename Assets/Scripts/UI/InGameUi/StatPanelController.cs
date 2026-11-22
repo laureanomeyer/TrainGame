@@ -8,6 +8,7 @@ public class StatPanelController : MonoBehaviour
 {
     [Header("Object References")]
     [SerializeField] private CanvasGroup stats;
+    [SerializeField] private RectTransform panelTransform;
     [SerializeField] private InputActionAsset inputActions;
 
     [Header("Slide Animation")]
@@ -32,6 +33,10 @@ public class StatPanelController : MonoBehaviour
     private bool isVisible;
     private Tween slideTween;
 
+    private bool isOnRight;    
+    private bool targetRight;  
+    private float canvasWidth;
+
     void Awake()
     {
         SetupSlide();
@@ -46,6 +51,8 @@ public class StatPanelController : MonoBehaviour
 
         EventBus.Subscribe<OnCallActiveStatsPanelUI>(CallShowPanel);
         EventBus.Subscribe<OnCallDeactiveStatsPanelUI>(CallHidePanel);
+        EventBus.Subscribe<OnSwitchStatsSide>(CallSwitchSide);
+        EventBus.Subscribe<OnResetStatsSide>(CallResetSide);
 
         SetupTexts();
     }
@@ -61,6 +68,8 @@ public class StatPanelController : MonoBehaviour
 
         EventBus.Unsubscribe<OnCallActiveStatsPanelUI>(CallShowPanel);
         EventBus.Unsubscribe<OnCallDeactiveStatsPanelUI>(CallHidePanel);
+        EventBus.Unsubscribe<OnSwitchStatsSide>(CallSwitchSide);
+        EventBus.Unsubscribe<OnResetStatsSide>(CallResetSide);
     }
 
     private void SetupSlide()
@@ -70,11 +79,19 @@ public class StatPanelController : MonoBehaviour
         shownPosition = statsRect.anchoredPosition;
 
         RectTransform canvasRect = stats.GetComponentInParent<Canvas>().rootCanvas.GetComponent<RectTransform>();
-        hiddenPosition = shownPosition + Vector2.left * canvasRect.rect.width;
+        canvasWidth = canvasRect.rect.width;
+
+        UpdateHiddenPosition();
 
         statsRect.anchoredPosition = hiddenPosition;
         stats.alpha = 0f;
         isVisible = false;
+    }
+
+    private void UpdateHiddenPosition()
+    {
+        Vector2 dir = isOnRight ? Vector2.right : Vector2.left;
+        hiddenPosition = shownPosition + dir * canvasWidth;
     }
 
     private void OnToggleStats(InputAction.CallbackContext ctx)
@@ -99,9 +116,75 @@ public class StatPanelController : MonoBehaviour
         HidePanel();
     }
 
+    private void CallSwitchSide(OnSwitchStatsSide ev)
+    {
+        SetTargetSide(true);
+    }
+
+    private void CallResetSide(OnResetStatsSide ev)
+    {
+        SetTargetSide(false);
+    }
+
+    private void SetTargetSide(bool right)
+    {
+        targetRight = right;
+
+        if (targetRight == isOnRight)
+        {
+            if (isVisible) ShowPanel();
+            return;
+        }
+
+        slideTween?.Kill();
+
+        if (!isVisible)
+        {
+            ApplyPendingSide();
+            return;
+        }
+
+        slideTween = statsRect
+            .DOAnchorPos(hiddenPosition, slideDuration)
+            .SetEase(hideEase)
+            .SetUpdate(true)
+            .OnComplete(() =>
+            {
+                ApplyPendingSide();
+                ShowPanel();
+            });
+    }
+
+    private void ApplyPendingSide()
+    {
+        if (targetRight == isOnRight) return;
+        isOnRight = targetRight;
+
+        if (panelTransform != null)
+            MirrorRect(panelTransform);
+
+        statsRect.anchoredPosition = shownPosition;
+        MirrorRect(statsRect);
+        shownPosition = statsRect.anchoredPosition;
+        UpdateHiddenPosition();
+        statsRect.anchoredPosition = hiddenPosition;
+    }
+
+    private static void MirrorRect(RectTransform r)
+    {
+        Vector2 min = r.anchorMin, max = r.anchorMax;
+        Vector2 omin = r.offsetMin, omax = r.offsetMax;
+
+        r.anchorMin = new Vector2(1f - max.x, min.y);
+        r.anchorMax = new Vector2(1f - min.x, max.y);
+        r.offsetMin = new Vector2(-omax.x, omin.y);
+        r.offsetMax = new Vector2(-omin.x, omax.y);
+        r.pivot = new Vector2(1f - r.pivot.x, r.pivot.y);
+    }
 
     private void ShowPanel()
     {
+        if (!isVisible) ApplyPendingSide();   
         isVisible = true;
         slideTween?.Kill();
 
@@ -118,7 +201,11 @@ public class StatPanelController : MonoBehaviour
             .DOAnchorPos(hiddenPosition, slideDuration)
             .SetEase(hideEase)
             .SetUpdate(true)
-            .OnComplete(() => stats.alpha = 0f);
+            .OnComplete(() =>
+            {
+                stats.alpha = 0f;
+                ApplyPendingSide();   
+            });
     }
 
     private void CallSetUpTextEvent(OnStatChangedEvent statsChagedEvent)
