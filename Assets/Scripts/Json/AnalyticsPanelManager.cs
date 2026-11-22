@@ -15,7 +15,7 @@ public class AnalyticsPanelManager : MonoBehaviour
 
     void Start()
     {
-        AnalyticsManager.Instance.SaveGlobalData();
+        //AnalyticsManager.Instance.SaveGlobalData();
         AnalyticsManager.Instance.SaveUserData();
 
         opencloseButton.onClick.AddListener(CallOpenClose);
@@ -46,11 +46,11 @@ public class AnalyticsPanelManager : MonoBehaviour
 
     private void CallClearGlobalData()
     {
-        AnalyticsManager.Instance.ClearGlobalData();
+        //AnalyticsManager.Instance.ClearGlobalData();
     }
 
     private void CallClearUserData()
     {
-        AnalyticsManager.Instance.ClearUserData();
+        //AnalyticsManager.Instance.ClearUserData();
     }
 }

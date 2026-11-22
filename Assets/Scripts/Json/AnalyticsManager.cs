@@ -1,11 +1,18 @@
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Firebase;
+using Firebase.Auth;
+using Firebase.Database;
 using UnityEngine;
 
-
 // =========================================================
-//  MANAGER
+//  MANAGER: gestiona la conexión con Firebase y el envío
+//  del JSON de cada usuario.
+//
+//  Estructura en Firebase:
+//    analytics/meta/nextUserId   -> contador que garantiza IDs únicos
+//    users/{userId}              -> JSON de UN usuario (userId = 1, 2, 3...)
 // =========================================================
 
 public class AnalyticsManager : MonoBehaviour
@@ -13,30 +20,33 @@ public class AnalyticsManager : MonoBehaviour
     // ----------------- Singleton -----------------
     public static AnalyticsManager Instance { get; private set; }
 
-    // ----------------- Datos globales en memoria -----------------
-    public int PlayerDefeat { get; private set; } = 0;
-    public int PlayerWin { get; private set; } = 0;
+    // ----------------- Configuración -----------------
+    [Header("Firebase")]
+    [Tooltip("Dejar vacío si tu base está en us-central1. Si no, pegá la URL completa de Realtime Database.")]
+    [SerializeField] private string databaseUrl = "";
 
-    public Dictionary<int, int> WagonInLocomotiveHit = new Dictionary<int, int>();
-    public Dictionary<int, int> WagonInLocomotiveDestroy = new Dictionary<int, int>();
+    [Tooltip("Cada cuántos segundos se suben los cambios pendientes.")]
+    [SerializeField] private float autoFlushSeconds = 10f;
 
-    // ----------------- Datos de usuarios en memoria -----------------
-    private const int MinUserId = 1;
-    private const int MaxUserId = 1000;
-
-    // Todos los usuarios que jugaron en este equipo.
-    private readonly List<UserData> users = new List<UserData>();
-    public IReadOnlyList<UserData> Users => users;
-
-    // Usuario que está jugando ahora (se actualiza mientras se juega).
+    // ----------------- Usuario actual -----------------
     public UserData CurrentUser { get; private set; }
 
-    // ----------------- Archivos -----------------
-    private const string GlobalFileName = "analytics_globalData.json";
-    private const string UserFileName = "analytics_usersData.json";
+    // ----------------- Firebase -----------------
+    private DatabaseReference root;
+    private string authUid;
+    private bool firebaseReady;
 
-    private string GlobalFilePath => Path.Combine(Application.persistentDataPath, GlobalFileName);
-    private string UserFilePath => Path.Combine(Application.persistentDataPath, UserFileName);
+    // ----------------- Sincronización -----------------
+    // Usuarios con cambios que todavía no se subieron.
+    private readonly HashSet<UserData> dirtyUsers = new HashSet<UserData>();
+    private bool flushing;
+    private float timer;
+
+    public bool IsFirebaseReady => firebaseReady;
+
+    // =====================================================
+    //  CICLO DE VIDA
+    // =====================================================
 
     private void Awake()
     {
@@ -49,260 +59,202 @@ public class AnalyticsManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Al iniciar, cargamos lo que ya estaba guardado.
-        LoadGlobalData();
-        LoadUserData();
-
-        // Cada vez que se abre el juego arranca con un usuario nuevo.
+        // El usuario se crea en memoria ya mismo (userId = 0 = "pendiente").
+        // Cuando Firebase esté listo se le asigna su ID único y se sube.
         CreateNewUser();
+        _ = InitFirebaseAsync();
     }
 
+    private void Update()
+    {
+        timer += Time.unscaledDeltaTime;
+
+        if (timer >= autoFlushSeconds)
+        {
+            timer = 0f;
+            _ = FlushAllAsync();
+        }
+    }
+
+    private void OnApplicationPause(bool paused)
+    {
+        if (paused) _ = FlushAllAsync();
+    }
+
+    // Mejor esfuerzo: puede que no alcance a terminar al cerrar.
+    private void OnApplicationQuit()
+    {
+        _ = FlushAllAsync();
+    }
 
     // =====================================================
-    //  FUNCIONES DE CONVERSION 
+    //  CONEXIÓN CON FIREBASE
     // =====================================================
 
-    // Dictionary -> lista para el JSON (ordenada por índice para que se lea bien)
-    private List<WagonCountEntry> DictionaryToList(Dictionary<int, int> dictionary)
+    private async Task InitFirebaseAsync()
     {
-        List<WagonCountEntry> list = new List<WagonCountEntry>();
-
-        List<int> keys = new List<int>(dictionary.Keys);
-        keys.Sort();
-
-        foreach (int key in keys)
+        try
         {
-            list.Add(new WagonCountEntry { wagonIndex = key, count = dictionary[key] });
-        }
+            DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
 
-        return list;
-    }
-
-    // Lista del JSON -> Dictionary
-    private void ListToDictionary(List<WagonCountEntry> list, Dictionary<int, int> dictionary)
-    {
-        dictionary.Clear();
-
-        if (list == null) return;
-
-        foreach (WagonCountEntry entry in list)
-        {
-            dictionary[entry.wagonIndex] = entry.count;
-        }
-    }
-
-    // Dictionary -> una línea de texto por elemento, para la parte legible
-    private List<string> BuildWagonTexts(Dictionary<int, int> dictionary, string unit)
-    {
-        List<string> texts = new List<string>();
-
-        List<int> keys = new List<int>(dictionary.Keys);
-        keys.Sort();
-
-        foreach (int key in keys)
-        {
-            texts.Add("Vagón " + key + " -> " + dictionary[key] + " " + unit);
-        }
-
-        return texts;
-    }
-
-    private List<string> BuildRunResultsTexts(List<RunResultsEntry> results)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (RunResultsEntry entry in results)
-        {
-            texts.Add("-Partida " + entry.runPlay + " : " + (entry.result ? "victoria" : "derrota"));
-
-            // Cubre también los datos viejos o vacíos.
-            string station = string.IsNullOrEmpty(entry.lastStationName)
-                ? "unknown"
-                : entry.lastStationName;
-
-            texts.Add("ultima estacion: " + station);
-        }
-
-        return texts;
-    }
-
-    private List<string> BuildStationDefeatsTexts(List<StationDefeatEntry> entries)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (StationDefeatEntry entry in entries)
-        {
-            texts.Add("-" + entry.stationName + ": " + entry.defeats);
-        }
-
-        return texts;
-    }
-
-    private List<string> BuildEnemyKillsTexts(List<EnemyKillEntry> entries)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (EnemyKillEntry entry in entries)
-        {
-            texts.Add("-" + entry.enemyName + ": " + entry.kills);
-        }
-
-        return texts;
-    }
-
-    // Las 4 líneas de un struct
-    private List<string> BuildWagonManagerTexts(WagonManagerInteraction data)
-    {
-        return new List<string>
-    {
-        "-Manage Wagon = " + data.managerClick,
-        "-Move = " + data.moveClick,
-        "-Sell = " + data.sellClick,
-        "-Upgrade = " + data.upgradesClick
-    };
-    }
-
-    // "Run 1" y debajo sus 4 líneas, para cada run
-    private List<string> BuildWagonManagerPerRunTexts(List<RunWagonManagerEntry> runs)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (RunWagonManagerEntry run in runs)
-        {
-            texts.Add("Run " + run.runPlay);
-            texts.AddRange(BuildWagonManagerTexts(run.interactions));
-        }
-
-        return texts;
-    }
-
-    // "-Run 1" y debajo "--Goblin: 3"
-    private List<string> BuildEnemyKillsPerRunTexts(List<RunEnemyKillsEntry> runs)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (RunEnemyKillsEntry run in runs)
-        {
-            texts.Add("-Run " + run.runPlay);
-
-            foreach (EnemyKillEntry entry in run.enemies)
+            if (status != DependencyStatus.Available)
             {
-                texts.Add("--" + entry.enemyName + ": " + entry.kills);
-            }
-        }
-
-        return texts;
-    }
-
-    private List<string> BuildLocomotiveUpgradesTexts(List<RunUpgradesEntry> runs)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (RunUpgradesEntry run in runs)
-        {
-            texts.Add("Partida " + run.runPlay);
-
-            foreach (StationUpgradesEntry station in run.stations)
-            {
-                texts.Add("-" + station.stationName);
-                texts.Add("--Vida Maxima = " + station.upgrades.maxHPUpgrade);
-                texts.Add("--Placas = " + station.upgrades.defenseUpgrade);
-                texts.Add("--Vagon de oro = " + station.upgrades.goldUpgrade);
-                texts.Add("--Mejora de daño = " + station.upgrades.damageUpgrade);
-                texts.Add("--Mejora de cadencia = " + station.upgrades.rofUpgrade);
-            }
-        }
-
-        return texts;
-    }
-
-    private List<string> BuildWagonsBetweenStationsTexts(List<RunStationWagonsEntry> runs)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (RunStationWagonsEntry run in runs)
-        {
-            texts.Add("Partida " + run.runPlay);
-
-            foreach (StationWagonsEntry station in run.stations)
-            {
-                texts.Add("Estacion " + station.stationName);
-
-                texts.Add("Vagones al llegar");
-                texts.AddRange(BuildWagonTypeTexts(station.arrivalWagons));
-
-                texts.Add("Vagones al irse");
-                texts.AddRange(BuildWagonTypeTexts(station.departureWagons));
-            }
-        }
-
-        return texts;
-    }
-
-    // "-Cañon: 3"
-    private List<string> BuildWagonTypeTexts(List<WagonTypeCountEntry> entries)
-    {
-        List<string> texts = new List<string>();
-
-        if (entries.Count == 0)
-        {
-            texts.Add("tren sin vagones");
-            return texts;
-        }
-
-        foreach (WagonTypeCountEntry entry in entries)
-        {
-            texts.Add("-" + entry.wagonName + ": " + entry.count);
-        }
-
-        return texts;
-    }
-
-    private List<string> BuildWeaponsTexts(List<RunWeaponsEntry> runs)
-    {
-        List<string> texts = new List<string>();
-
-        foreach (RunWeaponsEntry run in runs)
-        {
-            texts.Add("Partida " + run.runPlay);
-
-            if (run.stations.Count == 0)
-            {
-                texts.Add("El jugador no compro armas nuevas");
-                continue;
+                Debug.LogError($"[Analytics] Firebase no disponible: {status}");
+                return;
             }
 
-            foreach (StationWeaponEntry station in run.stations)
-            {
-                texts.Add("Estacion " + station.stationName);
-                texts.Add("-" + station.weaponName);
-            }
-        }
+            // Login anónimo: sin esto las reglas de la base rechazan las escrituras.
+            AuthResult result = await FirebaseAuth.DefaultInstance.SignInAnonymouslyAsync();
+            authUid = result.User.UserId;
 
-        return texts;
+            FirebaseDatabase database = string.IsNullOrEmpty(databaseUrl)
+                ? FirebaseDatabase.DefaultInstance
+                : FirebaseDatabase.GetInstance(databaseUrl);
+
+            root = database.RootReference;
+            firebaseReady = true;
+
+            Debug.Log($"[Analytics] Firebase listo. Uid: {authUid}");
+
+            await FlushAllAsync();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Analytics] Error iniciando Firebase: {e.Message}");
+        }
     }
 
-    private List<string> BuildGoldTexts(List<RunGoldEntry> runs)
+    // =====================================================
+    //  USUARIOS: CREAR
+    // =====================================================
+
+    /// <summary>
+    /// Crea un usuario nuevo y lo deja como CurrentUser.
+    /// Su userId definitivo (único) se pide a Firebase y se asigna al subirlo.
+    /// El usuario anterior se sube con sus datos finales.
+    /// </summary>
+    public UserData CreateNewUser()
     {
-        List<string> texts = new List<string>();
-
-        foreach (RunGoldEntry run in runs)
+        CurrentUser = new UserData
         {
-            texts.Add("Partida " + run.runPlay);
+            userId = 0,                                // 0 = pendiente de asignar
+            ownerUid = authUid ?? "",                  // se completa al subir si todavía no hay login
+            createdAt = DateTime.UtcNow.ToString("o")
+        };
 
-            foreach (StationGoldEntry station in run.stations)
-            {
-                texts.Add("Estacion " + station.stationName);
+        SaveUserData();
+        _ = FlushAllAsync();
 
-                texts.Add("-Oro al entrar: " +
-                    (station.arrivalRegistered ? station.goldOnArrival.ToString() : "sin registrar"));
+        Debug.Log("[Analytics] Usuario nuevo creado (esperando ID de Firebase).");
+        return CurrentUser;
+    }
 
-                texts.Add("-Oro al salir: " +
-                    (station.departureRegistered ? station.goldOnDeparture.ToString() : "sin registrar"));
-            }
+    private bool HasCurrentUser()
+    {
+        if (CurrentUser == null)
+        {
+            Debug.LogWarning("[Analytics] No hay usuario actual. Llamá a CreateNewUser() primero.");
+            return false;
         }
 
-        return texts;
+        return true;
+    }
+
+    // =====================================================
+    //  SINCRONIZACIÓN: ENVÍO DE JSON A FIREBASE
+    // =====================================================
+
+    /// <summary>
+    /// Marca al usuario actual como "con cambios".
+    /// El envío real lo hace FlushAllAsync (cada pocos segundos o en momentos clave).
+    /// </summary>
+    public void SaveUserData()
+    {
+        if (CurrentUser != null)
+            dirtyUsers.Add(CurrentUser);
+    }
+
+    /// <summary>
+    /// Sube todos los usuarios con cambios pendientes.
+    /// </summary>
+    public async Task FlushAllAsync()
+    {
+        if (!firebaseReady || flushing) return;
+
+        flushing = true;
+
+        try
+        {
+            // Copia, porque dirtyUsers puede cambiar mientras se espera a la red.
+            List<UserData> pending = new List<UserData>(dirtyUsers);
+
+            foreach (UserData user in pending)
+            {
+                await UploadUserAsync(user);
+            }
+        }
+        finally
+        {
+            flushing = false;
+        }
+    }
+
+    private async Task UploadUserAsync(UserData user)
+    {
+        // 1) Si todavía no tiene ID único, se lo pedimos a Firebase.
+        if (user.userId <= 0)
+        {
+            bool assigned = await AssignUniqueUserIdAsync(user);
+            if (!assigned) return; // se reintenta en el próximo flush
+        }
+
+        if (string.IsNullOrEmpty(user.ownerUid))
+            user.ownerUid = authUid;
+
+        // 2) Se marca como limpio ANTES de subir: si cambia mientras se sube, vuelve a quedar sucio.
+        dirtyUsers.Remove(user);
+
+        try
+        {
+            string json = JsonUtility.ToJson(user);
+
+            await root.Child("users").Child(user.userId.ToString())
+                      .SetRawJsonValueAsync(json);
+
+            Debug.Log($"[Analytics] Usuario {user.userId} subido a Firebase.");
+        }
+        catch (Exception e)
+        {
+            dirtyUsers.Add(user); // reintenta en el próximo flush
+            Debug.LogWarning($"[Analytics] No se pudo subir el usuario {user.userId}: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Pide el siguiente número libre a Firebase con una transacción atómica.
+    /// Dos equipos jamás reciben el mismo número, así no se repite ningún ID.
+    /// </summary>
+    private async Task<bool> AssignUniqueUserIdAsync(UserData user)
+    {
+        try
+        {
+            DataSnapshot result = await root.Child("analytics").Child("meta").Child("nextUserId")
+                .RunTransaction(data =>
+                {
+                    long current = data.Value != null ? Convert.ToInt64(data.Value) : 0;
+                    data.Value = current + 1;
+                    return TransactionResult.Success(data);
+                });
+
+            user.userId = Convert.ToInt32(result.Value);
+            Debug.Log($"[Analytics] ID asignado: {user.userId}");
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[Analytics] No se pudo asignar un ID: {e.Message}");
+            return false;
+        }
     }
 
     // =====================================================
@@ -311,13 +263,9 @@ public class AnalyticsManager : MonoBehaviour
 
     /// <summary>
     /// Llamar cuando el player pierde la partida.
-    /// Suma la derrota al global y al usuario actual, y registra la estación.
     /// </summary>
     public void RegisterDefeat(string stationName)
     {
-        PlayerDefeat++;
-        SaveGlobalData();
-
         if (!HasCurrentUser()) return;
 
         CurrentUser.defeats++;
@@ -325,28 +273,25 @@ public class AnalyticsManager : MonoBehaviour
         AddStationDefeat(stationName);
 
         SaveUserData();
+        _ = FlushAllAsync(); // momento importante: se sube ya
     }
 
     /// <summary>
     /// Llamar cuando el player gana la partida.
-    /// Suma la victoria al global y al usuario actual, y registra la estación.
     /// </summary>
     public void RegisterWin(string stationName)
     {
-        PlayerWin++;
-        SaveGlobalData();
-
         if (!HasCurrentUser()) return;
 
         CurrentUser.wins++;
         AddRunResult(true, stationName);
 
         SaveUserData();
+        _ = FlushAllAsync();
     }
 
     /// <summary>
-    /// Llamar cuando el player inicia una partida
-    /// Suma la cantidad de veces que el jugador jugo una partida.
+    /// Llamar cuando el player inicia una partida.
     /// </summary>
     public void RegisterUserRunPlay()
     {
@@ -354,7 +299,6 @@ public class AnalyticsManager : MonoBehaviour
 
         CurrentUser.runsPlay++;
 
-        // Nueva run -> se agrega un elemento al "diccionario" de enemigos por run.
         CurrentUser.enemyKillsPerRun.Add(new RunEnemyKillsEntry { runPlay = CurrentUser.runsPlay });
         CurrentUser.wagonManagerPerRun.Add(new RunWagonManagerEntry { runPlay = CurrentUser.runsPlay });
         CurrentUser.locomotiveUpgradesPerRun.Add(new RunUpgradesEntry { runPlay = CurrentUser.runsPlay });
@@ -365,52 +309,19 @@ public class AnalyticsManager : MonoBehaviour
         SaveUserData();
     }
 
-    //Llamar funcion en Take Damage de Wagon
+    // --- Datos globales: se retomarán más adelante. Se dejan vacíos para no romper las llamadas existentes. ---
 
-    /// <summary>
-    /// Llamar cuando un vagon es golpeado
-    /// Suma la cantidad de veces que un vagon fue golpeado
-    /// </summary>
-    public void RegisterWagonHit(int index)
-    {
-        if (WagonInLocomotiveHit.ContainsKey(index))
-        {
-            WagonInLocomotiveHit[index]++;
-        }
-        else
-        {
-            WagonInLocomotiveHit.Add(index, 1);
-        }
+    /// <summary>Llamar cuando un vagón es golpeado (global: pendiente).</summary>
+    public void RegisterWagonHit(int index) { }
 
-        SaveGlobalData();
-    }
-
-    //Llamar funcion en Break de Wagon
-
-    /// <summary>
-    /// Llamar cuando un vagon es golpeado
-    /// Suma la cantidad de veces que un vagon fue destruido
-    /// </summary>
-    public void RegisterWagonDestroy(int index)
-    {
-        if (WagonInLocomotiveDestroy.ContainsKey(index))
-        {
-            WagonInLocomotiveDestroy[index]++;
-        }
-        else
-        {
-            WagonInLocomotiveDestroy.Add(index, 1);
-        }
-
-        SaveGlobalData();
-    }
+    /// <summary>Llamar cuando un vagón es destruido (global: pendiente).</summary>
+    public void RegisterWagonDestroy(int index) { }
 
     // Guarda el resultado de la partida actual (el número de partida es runsPlay).
     private void AddRunResult(bool isWin, string stationName)
     {
         int runNumber = CurrentUser.runsPlay;
 
-        // Si no llega un nombre de estación, se guarda "unknown".
         string station = string.IsNullOrEmpty(stationName) ? "unknown" : stationName;
 
         // Si por error se registra dos veces la misma partida, se reemplaza en vez de duplicar.
@@ -445,26 +356,20 @@ public class AnalyticsManager : MonoBehaviour
         }
     }
 
-    //Llamar funcion cuando muere un enemigo 
-
     /// <summary>
     /// Llamar cuando muere un enemigo.
-    /// Lo suma al total del juego y a la run actual del usuario actual.
     /// </summary>
     public void RegisterEnemyDead(string enemyName)
     {
         if (!HasCurrentUser()) return;
 
-        // Total durante todo el juego
         AddEnemyKill(CurrentUser.enemyKillsTotal, enemyName);
 
-        // Run actual (solo si ya empezó una run)
         if (CurrentUser.runsPlay > 0)
         {
             RunEnemyKillsEntry runEntry = CurrentUser.enemyKillsPerRun
                 .Find(r => r.runPlay == CurrentUser.runsPlay);
 
-            // Por si la entrada de la run no existe, se crea.
             if (runEntry == null)
             {
                 runEntry = new RunEnemyKillsEntry { runPlay = CurrentUser.runsPlay };
@@ -477,7 +382,6 @@ public class AnalyticsManager : MonoBehaviour
         SaveUserData();
     }
 
-    // Suma una muerte al enemigo (si no está en la lista, lo agrega con 1).
     private void AddEnemyKill(List<EnemyKillEntry> list, string enemyName)
     {
         EnemyKillEntry entry = list.Find(e => e.enemyName == enemyName);
@@ -540,7 +444,6 @@ public class AnalyticsManager : MonoBehaviour
         SaveUserData();
     }
 
-    // Devuelve la entrada de la run actual (null si todavía no empezó ninguna run).
     private RunWagonManagerEntry GetCurrentRunWagonManagerEntry()
     {
         if (CurrentUser.runsPlay <= 0) return null;
@@ -548,7 +451,6 @@ public class AnalyticsManager : MonoBehaviour
         RunWagonManagerEntry run = CurrentUser.wagonManagerPerRun
             .Find(r => r.runPlay == CurrentUser.runsPlay);
 
-        // Por si la entrada de la run no existe, se crea.
         if (run == null)
         {
             run = new RunWagonManagerEntry { runPlay = CurrentUser.runsPlay };
@@ -560,13 +462,10 @@ public class AnalyticsManager : MonoBehaviour
 
     /// <summary>
     /// Llamar cuando el jugador consigue una mejora de locomotora.
-    /// Suma 1 al valor correspondiente en la estación indicada, dentro de la run actual.
     /// </summary>
     public void RegisterLocmotiveUpgradeInRun(StatType statType, string stationName)
     {
         if (!HasCurrentUser()) return;
-
-        // Solo se registran los 5 tipos que importan (FuelOptimizer y Speed se ignoran).
         if (!IsTrackedUpgrade(statType)) return;
 
         RunUpgradesEntry run = GetCurrentRunUpgradesEntry();
@@ -605,7 +504,6 @@ public class AnalyticsManager : MonoBehaviour
         }
     }
 
-    // Suma 1 al campo del struct que corresponde al tipo de mejora.
     private void ApplyUpgrade(ref LocomotiveUpgrades upgrades, StatType statType)
     {
         switch (statType)
@@ -618,7 +516,6 @@ public class AnalyticsManager : MonoBehaviour
         }
     }
 
-    // Devuelve la entrada de la run actual (null si todavía no empezó ninguna run).
     private RunUpgradesEntry GetCurrentRunUpgradesEntry()
     {
         if (CurrentUser.runsPlay <= 0) return null;
@@ -626,7 +523,6 @@ public class AnalyticsManager : MonoBehaviour
         RunUpgradesEntry run = CurrentUser.locomotiveUpgradesPerRun
             .Find(r => r.runPlay == CurrentUser.runsPlay);
 
-        // Por si la entrada de la run no existe, se crea.
         if (run == null)
         {
             run = new RunUpgradesEntry { runPlay = CurrentUser.runsPlay };
@@ -676,7 +572,6 @@ public class AnalyticsManager : MonoBehaviour
         SaveUserData();
     }
 
-    // Suma +1 al vagón (si no está en la lista, lo agrega con 1).
     private void AddWagonType(List<WagonTypeCountEntry> list, string wagonName)
     {
         WagonTypeCountEntry entry = list.Find(w => w.wagonName == wagonName);
@@ -691,8 +586,6 @@ public class AnalyticsManager : MonoBehaviour
         }
     }
 
-    // Devuelve la estación dentro de la run actual (la crea si no existe).
-    // Devuelve null si todavía no empezó ninguna run.
     private StationWagonsEntry GetCurrentStationWagonsEntry(string stationName)
     {
         if (CurrentUser.runsPlay <= 0) return null;
@@ -700,7 +593,6 @@ public class AnalyticsManager : MonoBehaviour
         RunStationWagonsEntry run = CurrentUser.wagonsBetweenStations
             .Find(r => r.runPlay == CurrentUser.runsPlay);
 
-        // Por si la entrada de la run no existe, se crea.
         if (run == null)
         {
             run = new RunStationWagonsEntry { runPlay = CurrentUser.runsPlay };
@@ -729,7 +621,6 @@ public class AnalyticsManager : MonoBehaviour
         RunWeaponsEntry run = CurrentUser.weaponsPerRun
             .Find(r => r.runPlay == CurrentUser.runsPlay);
 
-        // Por si la entrada de la run no existe, se crea.
         if (run == null)
         {
             run = new RunWeaponsEntry { runPlay = CurrentUser.runsPlay };
@@ -740,7 +631,6 @@ public class AnalyticsManager : MonoBehaviour
 
         if (station != null)
         {
-            // Como en un Dictionary<string, string>: la misma key reemplaza el valor.
             station.weaponName = weaponName;
         }
         else
@@ -783,8 +673,6 @@ public class AnalyticsManager : MonoBehaviour
         SaveUserData();
     }
 
-    // Devuelve la estación dentro de la run actual (la crea si no existe).
-    // Devuelve null si todavía no empezó ninguna run.
     private StationGoldEntry GetCurrentStationGoldEntry(string stationName)
     {
         if (CurrentUser.runsPlay <= 0) return null;
@@ -792,7 +680,6 @@ public class AnalyticsManager : MonoBehaviour
         RunGoldEntry run = CurrentUser.goldPerRun
             .Find(r => r.runPlay == CurrentUser.runsPlay);
 
-        // Por si la entrada de la run no existe, se crea.
         if (run == null)
         {
             run = new RunGoldEntry { runPlay = CurrentUser.runsPlay };
@@ -808,311 +695,5 @@ public class AnalyticsManager : MonoBehaviour
         }
 
         return station;
-    }
-
-    // =====================================================
-    //  JSON GLOBAL: GUARDAR / CARGAR / BORRAR
-    // =====================================================
-
-    /// <summary>
-    /// Escribe (o edita) el JSON global con los valores actuales de la clase.
-    /// </summary>
-    public void SaveGlobalData()
-    {
-        GlobalAnalyticsFile file = new GlobalAnalyticsFile();
-
-        FillGlobalFile(file);
-
-        string json = JsonUtility.ToJson(file, true); // true = formato indentado
-        File.WriteAllText(GlobalFilePath, json);
-
-        Debug.Log($"[Analytics] Datos globales guardados en: {GlobalFilePath}");
-    }
-
-    /// <summary>
-    /// Lee el JSON global y carga los valores en esta clase.
-    /// Si el archivo no existe, lo crea con valores en 0.
-    /// </summary>
-    public void LoadGlobalData()
-    {
-        if (!File.Exists(GlobalFilePath))
-        {
-            SaveGlobalData();
-            return;
-        }
-
-        GlobalAnalyticsFile file = null;
-
-        try
-        {
-            string json = File.ReadAllText(GlobalFilePath);
-            file = JsonUtility.FromJson<GlobalAnalyticsFile>(json);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning($"[Analytics] Error leyendo JSON global: {e.Message}");
-        }
-
-        if (file == null || file.Datos == null)
-        {
-            Debug.LogWarning("[Analytics] JSON global inválido, se reinicia.");
-            ClearGlobalData();
-            return;
-        }
-
-        RestoreGlobalData(file);
-    }
-
-    /// <summary>
-    /// Borra la información global acumulada y deja el JSON limpio.
-    /// </summary>
-    public void ClearGlobalData()
-    {
-        PlayerDefeat = 0;
-        PlayerWin = 0;
-
-        WagonInLocomotiveHit.Clear();
-        WagonInLocomotiveDestroy.Clear();
-
-        SaveGlobalData();
-        Debug.Log("[Analytics] Datos globales borrados.");
-    }
-
-    // Pasa los valores de la clase -> archivo
-    private void FillGlobalFile(GlobalAnalyticsFile file)
-    {
-        // Sección para el código
-        file.Datos.playerDefeatData = PlayerDefeat;
-        file.Datos.playerWinData = PlayerWin;
-
-        file.Datos.wagonInLocomotiveHit = DictionaryToList(WagonInLocomotiveHit);
-        file.Datos.wagonInLocomotiveDestroy = DictionaryToList(WagonInLocomotiveDestroy);
-
-        // Sección para humanos
-        file.Resumen.playerDefeatText = "Total de derrotas: " + PlayerDefeat;
-        file.Resumen.playerWinText = "Total de victorias: " + PlayerWin;
-
-        file.Resumen.wagonHitText = BuildWagonTexts(WagonInLocomotiveHit, "golpes");
-        file.Resumen.wagonDestroyText = BuildWagonTexts(WagonInLocomotiveDestroy, "destrucciones");
-    }
-
-    // Pasa los valores del archivo -> clase
-    private void RestoreGlobalData(GlobalAnalyticsFile file)
-    {
-        PlayerDefeat = file.Datos.playerDefeatData;
-        PlayerWin = file.Datos.playerWinData;
-
-        ListToDictionary(file.Datos.wagonInLocomotiveHit, WagonInLocomotiveHit);
-        ListToDictionary(file.Datos.wagonInLocomotiveDestroy, WagonInLocomotiveDestroy);
-
-        Debug.Log($"[Analytics] Datos globales cargados. Derrotas: {PlayerDefeat} | Victorias: {PlayerWin}");
-    }
-
-    // =====================================================
-    //  USUARIOS: CREAR
-    // =====================================================
-
-    /// <summary>
-    /// Crea un usuario nuevo con un número libre entre 1 y 1000 y lo deja como CurrentUser.
-    /// Sus variables empiezan en 0.
-    /// El usuario anterior queda guardado en la lista con su información.
-    /// Devuelve null si ya están ocupados los 1000 números.
-    /// </summary>
-    public UserData CreateNewUser()
-    {
-        // Armamos la lista de números que todavía no se usaron.
-        List<int> availableIds = new List<int>();
-        for (int id = MinUserId; id <= MaxUserId; id++)
-        {
-            if (!users.Exists(u => u.userId == id))
-                availableIds.Add(id);
-        }
-
-        if (availableIds.Count == 0)
-        {
-            Debug.LogWarning("[Analytics] No quedan nombres de usuario disponibles (1-1000).");
-            return null;
-        }
-
-        int newId = availableIds[Random.Range(0, availableIds.Count)];
-
-        // Usuario nuevo: todas sus variables arrancan en 0.
-        UserData newUser = new UserData
-        {
-            userId = newId,
-            wins = 0,
-            defeats = 0,
-            runsPlay = 0,
-        };
-
-        users.Add(newUser);
-        CurrentUser = newUser;
-
-        SaveUserData();
-        Debug.Log($"[Analytics] Usuario nuevo creado: {newId}");
-
-        return newUser;
-    }
-
-    private bool HasCurrentUser()
-    {
-        if (CurrentUser == null)
-        {
-            Debug.LogWarning("[Analytics] No hay usuario actual. Llamá a CreateNewUser() primero.");
-            return false;
-        }
-
-        return true;
-    }
-
-    // =====================================================
-    //  JSON DE USUARIOS: GUARDAR / CARGAR / BORRAR
-    // =====================================================
-
-    /// <summary>
-    /// Escribe (o edita) el JSON de usuarios con la lista actual.
-    /// </summary>
-    public void SaveUserData()
-    {
-        UserAnalyticsFile file = new UserAnalyticsFile();
-
-        FillUserFile(file);
-
-        string json = JsonUtility.ToJson(file, true);
-        json = AddReadableSpacing(json);
-        File.WriteAllText(UserFilePath, json);
-
-        Debug.Log($"[Analytics] Datos de usuarios guardados en: {UserFilePath}");
-    }
-
-    /// <summary>
-    /// Agrega líneas en blanco al JSON de usuarios para que el resumen se lea mejor:
-    /// una después de "userText" y otra antes del separador.
-    /// Las líneas en blanco son espacios en blanco válidos en JSON, no afectan la carga.
-    /// </summary>
-    private string AddReadableSpacing(string json)
-    {
-        // Línea en blanco después de "userText": "...",
-        json = Regex.Replace(json, "(\"userText\": \"[^\"]*\",)(\\r?\\n)", "$1$2$2");
-
-        // Línea en blanco antes de "separatorText"
-        json = Regex.Replace(json, "(\\r?\\n)([ \\t]*\"separatorText\")", "$1$1$2");
-
-        // Línea en blanco antes de cada título de sección
-        json = Regex.Replace(json,
-            "(\\r?\\n)([ \\t]*\"(runResultsTitle|stationDefeatsTitle|enemyKillsTitle|enemyKillsPerRunTitle|wagonManagerTitle|locomotiveUpgradesTitle|wagonsBetweenStationsTitle|weaponsTitle|goldTitle)\")",
-            "$1$1$2");
-
-        // Línea en blanco entre "Partida N" y su primera estación
-        json = Regex.Replace(json, "(\"Partida \\d+\",)(\\r?\\n)", "$1$2$2");
-
-        // Línea en blanco antes de cada "Partida N" que no sea la primera
-        json = Regex.Replace(json, "(?<=\",)(\\r?\\n)([ \\t]*\"Partida \\d+\")", "$1$1$2");
-
-        // Vagones: línea en blanco entre "Estacion ..." y "Vagones al llegar"
-        json = Regex.Replace(json,
-            "^([ \\t]*\"Estacion [^\"]*\",)(\\r?\\n)(?=[ \\t]*\"Vagones al llegar\")",
-            "$1$2$2", RegexOptions.Multiline);
-
-        // Oro: línea en blanco entre una estación y la siguiente
-        json = Regex.Replace(json,
-            "(\"-Oro al salir: [^\"]*\",)(\\r?\\n)([ \\t]*\"Estacion )",
-            "$1$2$2$3");
-
-        return json;
-    }
-
-    /// <summary>
-    /// Lee el JSON de usuarios y carga la lista en esta clase.
-    /// Si el archivo no existe, lo crea vacío.
-    /// </summary>
-    public void LoadUserData()
-    {
-        if (!File.Exists(UserFilePath))
-        {
-            SaveUserData();
-            return;
-        }
-
-        UserAnalyticsFile file = null;
-
-        try
-        {
-            string json = File.ReadAllText(UserFilePath);
-            file = JsonUtility.FromJson<UserAnalyticsFile>(json);
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogWarning($"[Analytics] Error leyendo JSON de usuarios: {e.Message}");
-        }
-
-        if (file == null || file.Datos == null || file.Datos.users == null)
-        {
-            Debug.LogWarning("[Analytics] JSON de usuarios inválido, se reinicia.");
-            ClearUserData();
-            return;
-        }
-
-        RestoreUserData(file);
-    }
-
-    /// <summary>
-    /// Borra todos los usuarios y deja el JSON de usuarios limpio.
-    /// </summary>
-    public void ClearUserData()
-    {
-        users.Clear();
-        CurrentUser = null;
-        SaveUserData();
-        Debug.Log("[Analytics] Datos de usuarios borrados.");
-    }
-
-    // Pasa la lista de la clase -> archivo
-    private void FillUserFile(UserAnalyticsFile file)
-    {
-        // Sección para el código
-        file.Datos.users = new List<UserData>(users);
-
-        // Sección para humanos
-        file.Resumen.totalUsersText = "Total de usuarios registrados: " + users.Count;
-        file.Resumen.usersSummary.Clear();
-
-        foreach (UserData user in users)
-        {
-            file.Resumen.usersSummary.Add(new UserSummaryEntry
-            {
-                userText = "Usuario " + user.userId,
-
-                runPlayText = "Cantidad de partidas jugadas: " + user.runsPlay,
-                defeatsText = "Cantidad de derrotas: " + user.defeats,
-                winsText = "Cantidad de victorias: " + user.wins,
-                runResultsText = BuildRunResultsTexts(user.runResults),
-                stationDefeatsText = BuildStationDefeatsTexts(user.stationDefeats),
-                enemyKillsRunsPlayedText = "Total de partidas jugadas: " + user.runsPlay,
-                enemyKillsTotalText = BuildEnemyKillsTexts(user.enemyKillsTotal),
-                enemyKillsPerRunText = BuildEnemyKillsPerRunTexts(user.enemyKillsPerRun),
-                wagonManagerTotalText = BuildWagonManagerTexts(user.wagonManagerTotal),
-                wagonManagerPerRunText = BuildWagonManagerPerRunTexts(user.wagonManagerPerRun),
-                locomotiveUpgradesText = BuildLocomotiveUpgradesTexts(user.locomotiveUpgradesPerRun),
-                wagonsBetweenStationsText = BuildWagonsBetweenStationsTexts(user.wagonsBetweenStations),
-                weaponsText = BuildWeaponsTexts(user.weaponsPerRun),
-                goldText = BuildGoldTexts(user.goldPerRun),
-                separatorText = "-----------------------------------------------------"
-            });
-        }
-    }
-
-    // Pasa la lista del archivo -> clase
-    private void RestoreUserData(UserAnalyticsFile file)
-    {
-        // Los usuarios cargados conservan los valores guardados en el JSON.
-        users.Clear();
-        users.AddRange(file.Datos.users);
-
-        // Ninguno de los cargados es el actual:
-        // el usuario actual lo define CreateNewUser() (se llama en Awake).
-        CurrentUser = null;
-
-        Debug.Log($"[Analytics] Datos de usuarios cargados. Total usuarios: {users.Count}");
     }
 }
