@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Firebase;
-using Firebase.Auth;
-using Firebase.Database;
 using UnityEngine;
 
 // =========================================================
@@ -25,6 +22,9 @@ public class AnalyticsManager : MonoBehaviour
     [Tooltip("Dejar vacío si tu base está en us-central1. Si no, pegá la URL completa de Realtime Database.")]
     [SerializeField] private string databaseUrl = "";
 
+    [Tooltip("SOLO WebGL: Web API Key (Configuración del proyecto > General). Se usa con la API REST.")]
+    [SerializeField] private string webApiKey = "";
+
     [Tooltip("Cada cuántos segundos se suben los cambios pendientes.")]
     [SerializeField] private float autoFlushSeconds = 10f;
 
@@ -32,9 +32,9 @@ public class AnalyticsManager : MonoBehaviour
     public UserData CurrentUser { get; private set; }
 
     // ----------------- Firebase -----------------
-    private DatabaseReference root;
-    private string authUid;
-    private bool firebaseReady;
+    private IAnalyticsBackend backend;
+    private string authUid => backend?.Uid;
+    private bool firebaseReady => backend != null && backend.IsReady;
 
     // ----------------- Sincronización -----------------
     // Usuarios con cambios que todavía no se subieron.
@@ -95,24 +95,14 @@ public class AnalyticsManager : MonoBehaviour
     {
         try
         {
-            DependencyStatus status = await FirebaseApp.CheckAndFixDependenciesAsync();
+#if UNITY_WEBGL
+            backend = new FirebaseRestBackend(webApiKey, databaseUrl);
+#else
+            backend = new FirebaseSdkBackend(databaseUrl);
+#endif
 
-            if (status != DependencyStatus.Available)
-            {
-                Debug.LogError($"[Analytics] Firebase no disponible: {status}");
-                return;
-            }
-
-            // Login anónimo: sin esto las reglas de la base rechazan las escrituras.
-            AuthResult result = await FirebaseAuth.DefaultInstance.SignInAnonymouslyAsync();
-            authUid = result.User.UserId;
-
-            FirebaseDatabase database = string.IsNullOrEmpty(databaseUrl)
-                ? FirebaseDatabase.DefaultInstance
-                : FirebaseDatabase.GetInstance(databaseUrl);
-
-            root = database.RootReference;
-            firebaseReady = true;
+            bool ok = await backend.InitAsync();
+            if (!ok) return;
 
             Debug.Log($"[Analytics] Firebase listo. Uid: {authUid}");
 
@@ -120,7 +110,7 @@ public class AnalyticsManager : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"[Analytics] Error iniciando Firebase: {e.Message}");
+            Debug.LogError($"[Analytics] Error iniciando Firebase: {e}");
         }
     }
 
@@ -214,20 +204,13 @@ public class AnalyticsManager : MonoBehaviour
         // 2) Se marca como limpio ANTES de subir: si cambia mientras se sube, vuelve a quedar sucio.
         dirtyUsers.Remove(user);
 
-        try
-        {
-            string json = JsonUtility.ToJson(user);
+        string json = JsonUtility.ToJson(user);
+        bool ok = await backend.SetUserJsonAsync(user.userId, json);
 
-            await root.Child("users").Child(user.userId.ToString())
-                      .SetRawJsonValueAsync(json);
-
+        if (ok)
             Debug.Log($"[Analytics] Usuario {user.userId} subido a Firebase.");
-        }
-        catch (Exception e)
-        {
+        else
             dirtyUsers.Add(user); // reintenta en el próximo flush
-            Debug.LogWarning($"[Analytics] No se pudo subir el usuario {user.userId}: {e.Message}");
-        }
     }
 
     /// <summary>
@@ -236,25 +219,12 @@ public class AnalyticsManager : MonoBehaviour
     /// </summary>
     private async Task<bool> AssignUniqueUserIdAsync(UserData user)
     {
-        try
-        {
-            DataSnapshot result = await root.Child("analytics").Child("meta").Child("nextUserId")
-                .RunTransaction(data =>
-                {
-                    long current = data.Value != null ? Convert.ToInt64(data.Value) : 0;
-                    data.Value = current + 1;
-                    return TransactionResult.Success(data);
-                });
+        int id = await backend.GetNextUserIdAsync();
+        if (id <= 0) return false;
 
-            user.userId = Convert.ToInt32(result.Value);
-            Debug.Log($"[Analytics] ID asignado: {user.userId}");
-            return true;
-        }
-        catch (Exception e)
-        {
-            Debug.LogWarning($"[Analytics] No se pudo asignar un ID: {e.Message}");
-            return false;
-        }
+        user.userId = id;
+        Debug.Log($"[Analytics] ID asignado: {user.userId}");
+        return true;
     }
 
     // =====================================================
